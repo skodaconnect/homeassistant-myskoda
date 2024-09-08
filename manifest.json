@@ -3,9 +3,7 @@
   "name": "MySkoda Enyaq",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/enyaq",
-  "requirements": [
-    "beautifulsoup4==4.12.3"
-  ],
+  "requirements": ["beautifulsoup4==4.12.3"],
   "ssdp": [],
   "zeroconf": [],
   "homekit": {},
