@@ -256,6 +256,7 @@ class EnyaqSensorMilage(EnyaqSensor):
 
         return self.vehicle.health.mileage_km
 
+
 class EnyaqSensorChargeType(EnyaqSensor):
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
         super().__init__(

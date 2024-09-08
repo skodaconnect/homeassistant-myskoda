@@ -1,8 +1,10 @@
+from datetime import datetime, timedelta
 from typing import Dict
 from aiohttp import ClientSession, FormData
 import logging
 from bs4 import BeautifulSoup
 import re
+import jwt
 import yaml
 import json
 import hashlib
@@ -57,6 +59,26 @@ class IDKSession:
         self.refresh_token = dict.get("refreshToken")
         self.id_token = dict.get("idToken")
 
+    async def perform_refresh(self, session: ClientSession):
+        json_data = {
+            "token": self.refresh_token
+        }
+        async with session.post(
+            f"{BASE_URL_SKODA}/api/v1/authentication/refresh-token?tokenType=CONNECT",
+            json=json_data
+        ) as response:
+            dict = json.loads(await response.text())
+            self.access_token = dict.get("accessToken")
+            self.refresh_token = dict.get("refreshToken")
+            self.id_token = dict.get("idToken")
+
+    async def get_access_token(self, session: ClientSession) -> str:
+        meta = jwt.decode(self.access_token, options={"verify_signature": False})
+        expiry = datetime.fromtimestamp(cast(float, meta.get("exp")))
+        if datetime.now() + timedelta(minutes=10) > expiry:
+            _LOGGER.info("Refreshing IDK access token")
+            await self.perform_refresh(session)
+        return self.access_token
 
 def _extract_states_from_website(html) -> Dict[str, str]:
     """

@@ -1,6 +1,6 @@
 {
-  "domain": "enyaq",
-  "name": "Enyaq",
+  "domain": "myskoda",
+  "name": "MySkoda Enyaq",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/enyaq",
   "requirements": [

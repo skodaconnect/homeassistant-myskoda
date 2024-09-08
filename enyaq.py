@@ -3,6 +3,7 @@ from datetime import datetime
 from aiohttp import ClientSession
 from .authorization import IDKSession, idk_authorize
 import logging
+import json
 from .const import BASE_URL_SKODA
 
 _LOGGER = logging.getLogger(__name__)
@@ -207,35 +208,35 @@ class EnyaqHub:
 
     async def get_info(self, vin):
         async with self.session.get(
-            f"{BASE_URL_SKODA}/api/v2/garage/vehicles/{vin}", headers=self._headers()
+            f"{BASE_URL_SKODA}/api/v2/garage/vehicles/{vin}", headers=await self._headers()
         ) as response:
             _LOGGER.info(f"Received info for vin {vin}")
             return Info(await response.json())
 
     async def get_charging(self, vin):
         async with self.session.get(
-            f"{BASE_URL_SKODA}/api/v1/charging/{vin}", headers=self._headers()
+            f"{BASE_URL_SKODA}/api/v1/charging/{vin}", headers=await self._headers()
         ) as response:
             _LOGGER.info(f"Received charging for vin {vin}")
             return Charging(await response.json())
 
     async def get_status(self, vin):
         async with self.session.get(
-            f"{BASE_URL_SKODA}/api/v2/vehicle-status/{vin}", headers=self._headers()
+            f"{BASE_URL_SKODA}/api/v2/vehicle-status/{vin}", headers=await self._headers()
         ) as response:
             _LOGGER.info(f"Received status for vin {vin}")
             return Status(await response.json())
 
     async def get_air_conditioning(self, vin):
         async with self.session.get(
-            f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}", headers=self._headers()
+            f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}", headers=await self._headers()
         ) as response:
             _LOGGER.info(f"Received air conditioning for vin {vin}")
             return AirConditioning(await response.json())
 
     async def get_position(self, vin):
         async with self.session.get(
-            f"{BASE_URL_SKODA}/api/v1/maps/positions?vin={vin}", headers=self._headers()
+            f"{BASE_URL_SKODA}/api/v1/maps/positions?vin={vin}", headers=await self._headers()
         ) as response:
             _LOGGER.info(f"Received position for vin {vin}")
             return Position(await response.json())
@@ -243,14 +244,14 @@ class EnyaqHub:
     async def get_health(self, vin):
         async with self.session.get(
             f"{BASE_URL_SKODA}/api/v1/vehicle-health-report/warning-lights/{vin}",
-            headers=self._headers(),
+            headers=await self._headers(),
         ) as response:
             _LOGGER.info(f"Received health for vin {vin}")
             return Health(await response.json())
 
     async def list_vehicles(self):
         async with self.session.get(
-            f"{BASE_URL_SKODA}/api/v2/garage", headers=self._headers()
+            f"{BASE_URL_SKODA}/api/v2/garage", headers=await self._headers()
         ) as response:
             json = await response.json()
             vehicles = []
@@ -283,13 +284,13 @@ class EnyaqHub:
             *[self.get_vehicle(vehicle) for vehicle in await self.list_vehicles()]
         )
 
-    def _headers(self):
-        return {"authorization": f"Bearer {self.idk_session.access_token}"}
+    async def _headers(self):
+        return {"authorization": f"Bearer {await self.idk_session.get_access_token(self.session)}"}
 
     async def stop_air_conditioning(self, vin):
         async with self.session.post(
             f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/stop",
-            headers=self._headers(),
+            headers=await self._headers(),
         ) as response:
             await response.text()
 
@@ -303,7 +304,7 @@ class EnyaqHub:
         }
         async with self.session.post(
             f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/start",
-            headers=self._headers(),
+            headers=await self._headers(),
             json=json_data,
         ) as response:
             await response.text()
@@ -312,7 +313,7 @@ class EnyaqHub:
         json_data = {"temperatureValue": temperature, "unitInCar": "CELSIUS"}
         async with self.session.post(
             f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/settings/target-temperature",
-            headers=self._headers(),
+            headers=await self._headers(),
             json=json_data,
         ) as response:
             await response.text()
@@ -320,14 +321,14 @@ class EnyaqHub:
     async def start_window_heating(self, vin):
         async with self.session.post(
             f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/start-window-heating",
-            headers=self._headers(),
+            headers=await self._headers(),
         ) as response:
             await response.text()
 
     async def stop_window_heating(self, vin):
         async with self.session.post(
             f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/stop-window-heating",
-            headers=self._headers(),
+            headers=await self._headers(),
         ) as response:
             await response.text()
 
@@ -337,7 +338,7 @@ class EnyaqHub:
         }
         async with self.session.put(
             f"{BASE_URL_SKODA}/api/v1/charging/{vin}/set-charge-limit",
-            headers=self._headers(),
+            headers=await self._headers(),
             json=json_data
         ) as response:
             await response.text()
@@ -348,7 +349,7 @@ class EnyaqHub:
         }
         async with self.session.put(
             f"{BASE_URL_SKODA}/api/v1/charging/{vin}/set-care-mode",
-            headers=self._headers(),
+            headers=await self._headers(),
             json=json_data
         ) as response:
             await response.text()
@@ -359,7 +360,7 @@ class EnyaqHub:
         }
         async with self.session.put(
             f"{BASE_URL_SKODA}/api/v1/charging/{vin}/set-charging-current",
-            headers=self._headers(),
+            headers=await self._headers(),
             json=json_data
         ) as response:
             await response.text()
