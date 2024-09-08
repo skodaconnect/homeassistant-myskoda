@@ -1,33 +1,25 @@
 """Number entities for Enyaq."""
 
 from asyncio import sleep
-from pickle import TRUE
 import logging
 
 from homeassistant.const import PERCENTAGE
-
-from .entity import EnyaqDataEntity, EnyaqEntity
-
-from .enyaq import EnyaqHub, Vehicle
-from .const import DATA_COODINATOR, DOMAIN
 from homeassistant.components.number import (
     NumberDeviceClass,
     NumberEntity,
     NumberEntityDescription,
-    NumberMode,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import DeviceInfo, EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-)
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+
+from .entity import EnyaqDataEntity
+from .enyaq import Vehicle
+from .const import DATA_COODINATOR, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
-
 
 async def async_setup_entry(
     hass: HomeAssistant,

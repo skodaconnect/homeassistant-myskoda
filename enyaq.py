@@ -1,9 +1,9 @@
 from asyncio import gather
 from datetime import datetime
 from aiohttp import ClientSession
-from .authorization import IDKSession, idk_authorize
 import logging
-import json
+
+from .authorization import IDKSession, idk_authorize
 from .const import BASE_URL_SKODA
 
 _LOGGER = logging.getLogger(__name__)

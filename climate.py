@@ -1,15 +1,9 @@
-"""Oilfox metering."""
-
-from pickle import TRUE
+"""Enyaq Climate."""
 
 from asyncio import sleep
-from homeassistant.const import UnitOfTemperature, ATTR_TEMPERATURE
 import logging
 
-from .entity import EnyaqDataEntity, EnyaqEntity
-
-from .enyaq import EnyaqHub, Vehicle
-from .const import DATA_COODINATOR, DOMAIN
+from homeassistant.const import UnitOfTemperature, ATTR_TEMPERATURE
 from homeassistant.components.climate import (
     ClimateEntity,
     ClimateEntityDescription,
@@ -19,13 +13,13 @@ from homeassistant.components.climate import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import DeviceInfo, EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-)
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+
+from .entity import EnyaqDataEntity, EnyaqEntity
+from .enyaq import EnyaqHub, Vehicle
+from .const import DATA_COODINATOR, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 

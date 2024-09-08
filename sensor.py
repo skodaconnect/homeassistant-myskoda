@@ -1,11 +1,5 @@
-"""Oilfox metering."""
+"""Enyaq Sensors."""
 
-from pickle import TRUE
-
-from .entity import EnyaqDataEntity, EnyaqEntity
-
-from .enyaq import EnyaqHub, Vehicle
-from .const import DATA_COODINATOR, DOMAIN
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntityDescription,
@@ -15,14 +9,14 @@ from homeassistant.components.sensor import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE, UnitOfTime, UnitOfPower, UnitOfLength
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import DeviceInfo, EntityDescription
+from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-)
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
+from .entity import EnyaqDataEntity
+from .enyaq import EnyaqHub, Vehicle
+from .const import DATA_COODINATOR, DOMAIN
 
 async def async_setup_entry(
     hass: HomeAssistant,

@@ -1,13 +1,13 @@
 """Enyaq Entity."""
 
-from .enyaq import EnyaqHub, Vehicle
-from .const import DOMAIN
 from homeassistant.helpers.entity import Entity, DeviceInfo, EntityDescription
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
 )
 
+from .enyaq import Vehicle
+from .const import DOMAIN
 
 class EnyaqEntity(Entity):
     vehicle: Vehicle

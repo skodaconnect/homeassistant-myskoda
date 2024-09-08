@@ -1,13 +1,8 @@
-"""Oilfox metering."""
+"""Enyaq Switches."""
 
 from asyncio import sleep
-from pickle import TRUE
 import logging
 
-from .entity import EnyaqDataEntity, EnyaqEntity
-
-from .enyaq import EnyaqHub, Vehicle
-from .const import DATA_COODINATOR, DOMAIN
 from homeassistant.components.switch import (
     SwitchDeviceClass,
     SwitchEntity,
@@ -15,13 +10,13 @@ from homeassistant.components.switch import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import DeviceInfo, EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-)
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+
+from .entity import EnyaqDataEntity
+from .enyaq import Vehicle
+from .const import DATA_COODINATOR, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -1,9 +1,8 @@
-"""The Oilfox integration."""
+"""The MySkoda Enyaq integration."""
 
 from __future__ import annotations
 from datetime import timedelta
 import logging
-from pickle import FALSE
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -12,7 +11,6 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .enyaq import EnyaqHub, Vehicle
-
 from .const import DATA_COODINATOR, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)

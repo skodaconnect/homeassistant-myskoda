@@ -1,23 +1,17 @@
-"""Oilfox metering."""
-
-from pickle import TRUE
+"""Enyaq Device Tracker."""
 
 from homeassistant.components.device_tracker.const import SourceType
-
-from .entity import EnyaqDataEntity
-
-from .enyaq import EnyaqHub, Vehicle
-from .const import DATA_COODINATOR, DOMAIN
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import DeviceInfo, EntityDescription
+from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-)
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+
+from .entity import EnyaqDataEntity
+from .enyaq import EnyaqHub, Vehicle
+from .const import DATA_COODINATOR, DOMAIN
 
 
 async def async_setup_entry(
