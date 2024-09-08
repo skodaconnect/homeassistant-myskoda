@@ -36,17 +36,19 @@ class Info:
 class Charging:
     remaining_distance_m: int
     battery_percent: int
+    charging_care_mode: bool
     charging_power_kw: float
     charge_type: str
     charging_rate_in_km_h: float
     remaining_time_min: str
     state: str
-    target_percent: str
+    target_percent: int
 
     def __init__(self, dict):
         self.target_percent = dict.get("settings", {}).get(
             "targetStateOfChargeInPercent"
         )
+        self.charging_care_mode = dict.get("settings", {}).get("chargingCareMode") == "ACTIVATED"
 
         dict = dict.get("status")
         self.remaining_distance_m = dict.get("battery", {}).get(
@@ -54,33 +56,38 @@ class Charging:
         )
         self.battery_percent = dict.get("battery", {}).get("stateOfChargeInPercent")
         self.charging_power_kw = dict.get("chargePowerInKw")
+
+        # "AC"
         self.charge_type = dict.get("chargeType")
+
         self.charging_rate_in_km_h = dict.get("chargingRateInKilometersPerHour")
         self.remaining_time_min = dict.get("remainingTimeToFullyChargedInMinutes")
 
-        # "READY_FOR_CHARGING": Is connected, but full
         # "CONNECT_CABLE": Not connected
+        # "READY_FOR_CHARGING": Connected, but full
+        # "CONSERVING": Connected, but full
+        # "CHARGING": Connected and charging
         self.state = dict.get("state")
 
 
 class Status:
-    bonnet: str
-    doors: str
-    trunk: str
+    doors_open: bool
+    bonnet_open: bool
+    trunk_open: bool
     doors_locked: bool
     lights_on: bool
     locked: bool
-    windows: str
+    windows_open: bool
     car_captured: datetime
 
     def __init__(self, dict):
-        self.bonnet = dict.get("detail", {}).get("bonnet")
-        self.doors = dict.get("overall", {}).get("doors")
-        self.trunk = dict.get("detail", {}).get("trunk")
-        self.doors_locked = dict.get("overall", {}).get("doorsLocked")
+        self.bonnet_open = dict.get("detail", {}).get("bonnet") == "OPEN"
+        self.doors_open = dict.get("overall", {}).get("doors") == "OPEN"
+        self.trunk_open = dict.get("detail", {}).get("trunk") == "OPEN"
+        self.doors_locked = dict.get("overall", {}).get("doorsLocked") == "YES"
         self.lights_on = dict.get("overall", {}).get("lights") == "ON"
         self.locked = dict.get("overall", {}).get("locked") == "YES"
-        self.windows = dict.get("overall", {}).get("windows")
+        self.windows_open = dict.get("overall", {}).get("windows") == "OPEN"
         self.car_captured = datetime.fromisoformat(dict.get("carCapturedTimestamp"))
 
 
@@ -319,5 +326,16 @@ class EnyaqHub:
         async with self.session.post(
             f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/stop-window-heating",
             headers=self._headers(),
+        ) as response:
+            await response.text()
+
+    async def set_charge_limit(self, vin, limit: int):
+        json_data = {
+            "targetSOCInPercent": limit
+        }
+        async with self.session.put(
+            f"{BASE_URL_SKODA}/api/v1/charging/{vin}/set-charge-limit",
+            headers=self._headers(),
+            json=json_data
         ) as response:
             await response.text()

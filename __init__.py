@@ -22,6 +22,7 @@ PLATFORMS: list[Platform] = [
     Platform.DEVICE_TRACKER,
     Platform.CLIMATE,
     Platform.SWITCH,
+    Platform.NUMBER,
 ]
 
 
