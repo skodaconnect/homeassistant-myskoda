@@ -1,4 +1,5 @@
 from asyncio import gather
+from datetime import datetime
 from aiohttp import ClientSession
 from .authorization import IDKSession, idk_authorize
 import logging
@@ -48,6 +49,9 @@ class Charging:
         self.charge_type = dict.get("chargeType")
         self.charging_rate_in_km_h = dict.get("chargingRateInKilometersPerHour")
         self.remaining_time_min = dict.get("remainingTimeToFullyChargedInMinutes")
+
+        # "READY_FOR_CHARGING": Is connected, but full
+        # "CONNECT_CABLE": Not connected
         self.state = dict.get("state")
 
 class Status:
@@ -58,6 +62,7 @@ class Status:
     lights_on: bool
     locked: bool
     windows: str
+    car_captured: datetime
 
     def __init__(self, dict):
         self.bonnet = dict.get("detail", {}).get("bonnet")
@@ -67,6 +72,7 @@ class Status:
         self.lights_on = dict.get("overall", {}).get("lights") == "ON"
         self.locked = dict.get("overall", {}).get("locked") == "YES"
         self.windows = dict.get("overall", {}).get("windows")
+        self.car_captured = datetime.fromisoformat(dict.get("carCapturedTimestamp"))
 
 class AirConditioning:
     window_heating_enabled: bool
