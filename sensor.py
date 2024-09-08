@@ -2,17 +2,19 @@
 
 from pickle import TRUE
 
+from .entity import EnyaqDataEntity, EnyaqEntity
+
 from .enyaq import EnyaqHub, Vehicle
 from .const import DATA_COODINATOR, DOMAIN
 from homeassistant.components.sensor import (
-    SensorDeviceClass,
+    SensorEntityDescription,
     SensorEntity,
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE, UnitOfPower, UnitOfLength
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.entity import DeviceInfo, EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator
@@ -41,40 +43,22 @@ async def async_setup_entry(
     async_add_entities(entities, update_before_add=True)
 
 
-class EnyaqSensor(CoordinatorEntity, SensorEntity):
-    hub: EnyaqHub
-    vehicle: Vehicle
-
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
-        super().__init__(coordinator)
-
-        self.vehicle = vehicle
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        return {
-            "identifiers": {(DOMAIN, self.vehicle.info.vin)},
-            "name": self.vehicle.info.title,
-            "manufacturer": "Škoda",
-            "sw_version": self.vehicle.info.software_version,
-            "hw_version": f"{self.vehicle.info.model_id}-{self.vehicle.info.model_year}",
-            "model": self.vehicle.info.model,
-        }
-
-    def _update_device_from_coordinator(self) -> None:
-        for vehicle in self.coordinator.data:
-            if vehicle.info.vin == self.vehicle.info.vin:
-                self.vehicle = vehicle
-                return
+class EnyaqSensor(EnyaqDataEntity, SensorEntity):
+    """Base class for all Enyaq sensors."""
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle, entity_description: EntityDescription) -> None:
+        super().__init__(coordinator, vehicle, entity_description)
+        SensorEntity.__init__(self)
 
 class EnyaqSensorSoftwareVersion(EnyaqSensor):
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
-        super().__init__(coordinator, vehicle)
+        super().__init__(coordinator, vehicle, SensorEntityDescription(
+            key="software_version",
+            name=f"{vehicle.info.title} Software Version",
+            icon="mdi:update",
+            state_class = SensorStateClass.MEASUREMENT,
+        ))
+        self._attr_unique_id = f"{vehicle.info.vin}_software_version"
 
-        self._attr_name = f"{self.vehicle.info.title} Software Version"
-        self._attr_unique_id = f"{self.vehicle.info.vin}_software_version"
-        self._attr_state_class = SensorStateClass.MEASUREMENT
-        self._attr_icon = "mdi:update"
 
     @property
     def native_value(self):
@@ -87,13 +71,15 @@ class EnyaqSensorSoftwareVersion(EnyaqSensor):
 
 class EnyaqSensorBatteryPercentage(EnyaqSensor):
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
-        super().__init__(coordinator, vehicle)
+        super().__init__(coordinator, vehicle, SensorEntityDescription(
+            key = "battery_percentage",
+            name = f"{vehicle.info.title} Battery Percentage",
+            icon = "mdi:battery",
+            state_class = SensorStateClass.MEASUREMENT,
+            native_unit_of_measurement = PERCENTAGE,
+        ))
+        self._attr_unique_id = f"{vehicle.info.vin}_battery_percentage"
 
-        self._attr_name = f"{self.vehicle.info.title} Battery Percentage"
-        self._attr_unique_id = f"{self.vehicle.info.vin}_battery_percentage"
-        self._attr_state_class = SensorStateClass.MEASUREMENT
-        self._attr_native_unit_of_measurement = PERCENTAGE
-        self._attr_icon = "mdi:battery"
 
     @property
     def native_value(self):
@@ -145,13 +131,15 @@ class EnyaqSensorBatteryPercentage(EnyaqSensor):
 
 class EnyaqSensorChargingPower(EnyaqSensor):
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
-        super().__init__(coordinator, vehicle)
+        super().__init__(coordinator, vehicle, SensorEntityDescription(
+            key = "charging_power",
+            name = f"{vehicle.info.title} Charging Power",
+            icon = "mdi:lightning-bolt",
+            state_class = SensorStateClass.MEASUREMENT,
+            native_unit_of_measurement = UnitOfPower.KILO_WATT,
+        ))
+        self._attr_unique_id = f"{vehicle.info.vin}_charging_power"
 
-        self._attr_name = f"{self.vehicle.info.title} Charging Power"
-        self._attr_unique_id = f"{self.vehicle.info.vin}_charging_power"
-        self._attr_state_class = SensorStateClass.MEASUREMENT
-        self._attr_native_unit_of_measurement = UnitOfPower.KILO_WATT
-        self._attr_icon = "mdi:lightning-bolt"
 
     @property
     def native_value(self):
@@ -164,13 +152,15 @@ class EnyaqSensorChargingPower(EnyaqSensor):
 
 class EnyaqSensorRemainingDistance(EnyaqSensor):
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
-        super().__init__(coordinator, vehicle)
+        super().__init__(coordinator, vehicle, SensorEntityDescription(
+            key = "range",
+            name = f"{vehicle.info.title} Range",
+            icon = "mdi:speedometer",
+            state_class = SensorStateClass.MEASUREMENT,
+            native_unit_of_measurement = UnitOfLength.KILOMETERS,
+        ))
+        self._attr_unique_id = f"{vehicle.info.vin}_range"
 
-        self._attr_name = f"{self.vehicle.info.title} Range"
-        self._attr_unique_id = f"{self.vehicle.info.vin}_range"
-        self._attr_state_class = SensorStateClass.MEASUREMENT
-        self._attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
-        self._attr_icon = "mdi:speedometer"
 
     @property
     def native_value(self):
@@ -183,13 +173,15 @@ class EnyaqSensorRemainingDistance(EnyaqSensor):
 
 class EnyaqSensorTargetBatteryPercentage(EnyaqSensor):
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
-        super().__init__(coordinator, vehicle)
+        super().__init__(coordinator, vehicle, SensorEntityDescription(
+            key = "target_battery_percentage",
+            name = f"{vehicle.info.title} Target Battery Percentage",
+            state_class = SensorStateClass.MEASUREMENT,
+            native_unit_of_measurement = PERCENTAGE,
+            icon = "mdi:percent",
+        ))
+        self._attr_unique_id = f"{vehicle.info.vin}_target_battery_percentage"
 
-        self._attr_name = f"{self.vehicle.info.title} Target Battery Percentage"
-        self._attr_unique_id = f"{self.vehicle.info.vin}_target_battery_percentage"
-        self._attr_state_class = SensorStateClass.MEASUREMENT
-        self._attr_native_unit_of_measurement = PERCENTAGE
-        self._attr_icon = "mdi:percent"
 
     @property
     def native_value(self):

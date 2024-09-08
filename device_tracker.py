@@ -4,6 +4,8 @@ from pickle import TRUE
 
 from homeassistant.components.device_tracker.const import SourceType
 
+from .entity import EnyaqDataEntity
+
 from .enyaq import EnyaqHub, Vehicle
 from .const import DATA_COODINATOR, DOMAIN
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
@@ -34,29 +36,19 @@ async def async_setup_entry(
     async_add_entities(entities, update_before_add=True)
 
 
-class EnyaqSensorDeviceTracker(CoordinatorEntity, TrackerEntity):
+class EnyaqSensorDeviceTracker(EnyaqDataEntity, TrackerEntity):
     hub: EnyaqHub
     vehicle: Vehicle
 
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
-        super().__init__(coordinator)
-        self.vehicle = vehicle
-        self._attr_name = self.vehicle.info.title
+        super().__init__(coordinator, vehicle, EntityDescription(
+            name = vehicle.info.title,
+            key = f"{vehicle.info.vin}_device_tracker",
+        ))
 
     @property
     def source_type(self) -> SourceType:
         return SourceType.GPS
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        return {
-            "identifiers": {(DOMAIN, self.vehicle.info.vin)},
-            "name": self.vehicle.info.title,
-            "manufacturer": "Škoda",
-            "sw_version": self.vehicle.info.software_version,
-            "hw_version": f"{self.vehicle.info.model_id}-{self.vehicle.info.model_year}",
-            "model": self.vehicle.info.model,
-        }
 
     @property
     def latitude(self) -> float | None:
@@ -75,10 +67,3 @@ class EnyaqSensorDeviceTracker(CoordinatorEntity, TrackerEntity):
         self._update_device_from_coordinator()
 
         return self.vehicle.position.lng
-
-
-    def _update_device_from_coordinator(self) -> None:
-        for vehicle in self.coordinator.data:
-            if vehicle.info.vin == self.vehicle.info.vin:
-                self.vehicle = vehicle
-                return
