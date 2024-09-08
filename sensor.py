@@ -29,11 +29,12 @@ async def async_setup_entry(
     
     await coordinator.hub.authenticate(config.data["email"], config.data["password"]);
 
-    vehicle = coordinator.data
+    vehicles = coordinator.data
 
     entities = []
 
-    entities.append(EnyaqSensorSoftwareVersion(coordinator, vehicle))
+    for vehicle in vehicles:
+        entities.append(EnyaqSensorSoftwareVersion(coordinator, vehicle))
 
     async_add_entities(entities, update_before_add=True)
 
@@ -50,20 +51,23 @@ class EnyaqSensor(CoordinatorEntity, SensorEntity):
     @property
     def device_info(self) -> DeviceInfo:
         return {
-            "identifiers": {(DOMAIN, self.vehicle.vin)},
-            "name": self.vehicle.title,
+            "identifiers": {(DOMAIN, self.vehicle.info.vin)},
+            "name": self.vehicle.info.title,
             "manufacturer": "Škoda",
         }
 
     def _update_device_from_coordinator(self) -> None:
-        self.vehicle = self.coordinator.data
+        for vehicle in self.coordinator.data:
+            if vehicle.info.vin == self.vehicle.info.vin:
+                self.vehicle = vehicle
+                return
 
 class EnyaqSensorSoftwareVersion(EnyaqSensor):
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
         super().__init__(coordinator, vehicle)
 
-        self._attr_name = f"{self.vehicle.title} Software Version"
-        self._attr_unique_id = f"{self.vehicle.vin}_software_version"
+        self._attr_name = f"{self.vehicle.info.title} Software Version"
+        self._attr_unique_id = f"{self.vehicle.info.vin}_software_version"
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_icon = "mdi:update"
 
@@ -74,4 +78,4 @@ class EnyaqSensorSoftwareVersion(EnyaqSensor):
         
         self._update_device_from_coordinator()
 
-        return self.vehicle.software_version
+        return self.vehicle.info.software_version

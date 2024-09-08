@@ -57,8 +57,8 @@ class EnyaqDataUpdateCoordinator(DataUpdateCoordinator):
         login_success = await self.hub.authenticate(self.config.data["email"], self.config.data["password"])
         return login_success
     
-    async def _async_update_data(self) -> Vehicle:
-        return await self.hub.get_vehicle()
+    async def _async_update_data(self) -> list[Vehicle]:
+        return await self.hub.get_all_vehicles()
 
     def _unsub_refresh(self):
         return
