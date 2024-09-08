@@ -1,6 +1,6 @@
 """Constants for the Enyaq integration."""
 
-DOMAIN = "enyaq"
+DOMAIN = "myskoda"
 
 DATA_COODINATOR = "coordinator"
 
