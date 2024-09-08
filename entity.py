@@ -3,10 +3,13 @@
 from .enyaq import EnyaqHub, Vehicle
 from .const import DOMAIN
 from homeassistant.helpers.entity import Entity, DeviceInfo, EntityDescription
-from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import (
+    CoordinatorEntity,
+    DataUpdateCoordinator,
+)
+
 
 class EnyaqEntity(Entity):
-    hub: EnyaqHub
     vehicle: Vehicle
 
     def __init__(self, vehicle: Vehicle, entity_description: EntityDescription) -> None:
@@ -25,8 +28,14 @@ class EnyaqEntity(Entity):
             "model": self.vehicle.info.model,
         }
 
+
 class EnyaqDataEntity(CoordinatorEntity, EnyaqEntity):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle, entity_description: EntityDescription) -> None:
+    def __init__(
+        self,
+        coordinator: DataUpdateCoordinator,
+        vehicle: Vehicle,
+        entity_description: EntityDescription,
+    ) -> None:
         super().__init__(coordinator)
         EnyaqEntity.__init__(self, vehicle, entity_description)
 

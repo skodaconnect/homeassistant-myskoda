@@ -14,7 +14,11 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import DeviceInfo, EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import (
+    CoordinatorEntity,
+    DataUpdateCoordinator,
+)
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -22,8 +26,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    """Set up the sensor platform."""\
-    
+    """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
 
     vehicles = coordinator.data
@@ -41,10 +44,14 @@ class EnyaqSensorDeviceTracker(EnyaqDataEntity, TrackerEntity):
     vehicle: Vehicle
 
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
-        super().__init__(coordinator, vehicle, EntityDescription(
-            name = vehicle.info.title,
-            key = f"{vehicle.info.vin}_device_tracker",
-        ))
+        super().__init__(
+            coordinator,
+            vehicle,
+            EntityDescription(
+                name=vehicle.info.title,
+                key=f"{vehicle.info.vin}_device_tracker",
+            ),
+        )
 
     @property
     def source_type(self) -> SourceType:
@@ -54,7 +61,7 @@ class EnyaqSensorDeviceTracker(EnyaqDataEntity, TrackerEntity):
     def latitude(self) -> float | None:
         if not self.coordinator.data:
             return None
-        
+
         self._update_device_from_coordinator()
 
         return self.vehicle.position.lat
@@ -63,7 +70,7 @@ class EnyaqSensorDeviceTracker(EnyaqDataEntity, TrackerEntity):
     def longitude(self) -> float | None:
         if not self.coordinator.data:
             return None
-        
+
         self._update_device_from_coordinator()
 
         return self.vehicle.position.lng

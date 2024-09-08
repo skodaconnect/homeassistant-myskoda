@@ -7,6 +7,7 @@ from .const import BASE_URL_SKODA
 
 _LOGGER = logging.getLogger(__name__)
 
+
 class Info:
     battery_capacity_kwh: int
     engine_power_kw: int
@@ -31,6 +32,7 @@ class Info:
         self.model_id = dict.get("systemModelId")
         self.title = dict.get("title")
 
+
 class Charging:
     remaining_distance_m: int
     battery_percent: int
@@ -42,10 +44,14 @@ class Charging:
     target_percent: str
 
     def __init__(self, dict):
-        self.target_percent = dict.get("settings", {}).get("targetStateOfChargeInPercent")
+        self.target_percent = dict.get("settings", {}).get(
+            "targetStateOfChargeInPercent"
+        )
 
         dict = dict.get("status")
-        self.remaining_distance_m = dict.get("battery", {}).get("remainingCruisingRangeInMeters")
+        self.remaining_distance_m = dict.get("battery", {}).get(
+            "remainingCruisingRangeInMeters"
+        )
         self.battery_percent = dict.get("battery", {}).get("stateOfChargeInPercent")
         self.charging_power_kw = dict.get("chargePowerInKw")
         self.charge_type = dict.get("chargeType")
@@ -55,6 +61,7 @@ class Charging:
         # "READY_FOR_CHARGING": Is connected, but full
         # "CONNECT_CABLE": Not connected
         self.state = dict.get("state")
+
 
 class Status:
     bonnet: str
@@ -76,6 +83,7 @@ class Status:
         self.windows = dict.get("overall", {}).get("windows")
         self.car_captured = datetime.fromisoformat(dict.get("carCapturedTimestamp"))
 
+
 class AirConditioning:
     window_heating_enabled: bool
     window_heating_front_on: bool
@@ -83,20 +91,36 @@ class AirConditioning:
     target_temperature_celsius: float
     steering_wheel_position: str
     air_conditioning_on: bool
+    state: bool
     charger_connection_state: str
     charger_lock_state: str
     time_to_reach_target_temperature: str
 
     def __init__(self, dict):
         self.window_heating_enabled = dict.get("windowHeatingEnabled")
-        self.window_heating_front_on = dict.get("windowHeatingState", {}).get("front") == "ON"
-        self.window_heating_rear_on = dict.get("windowHeatingState", {}).get("rear") == "ON"
-        self.target_temperature_celsius = dict.get("targetTemperature", {}).get("temperatureValue")
+        self.window_heating_front_on = (
+            dict.get("windowHeatingState", {}).get("front") == "ON"
+        )
+        self.window_heating_rear_on = (
+            dict.get("windowHeatingState", {}).get("rear") == "ON"
+        )
+        self.target_temperature_celsius = dict.get("targetTemperature", {}).get(
+            "temperatureValue"
+        )
         self.steering_wheel_position = dict.get("steeringWheelPosition")
-        self.air_conditioning_on = dict.get("state") == "ON"
+        self.air_conditioning_on = (
+            dict.get("state") == "ON"
+            or dict.get("state") == "COOLING"
+            or dict.get("state") == "HEATING"
+        )
+        # COOLING, HEATING, OFF, ON
+        self.state = dict.get("state")
         self.charger_connection_state = dict.get("chargerConnectionState")
         self.charger_lock_state = dict.get("chargerLockState")
-        self.time_to_reach_target_temperature = dict.get("estimatedDateTimeToReachTargetTemperature")
+        self.time_to_reach_target_temperature = dict.get(
+            "estimatedDateTimeToReachTargetTemperature"
+        )
+
 
 class Position:
     city: str
@@ -119,11 +143,13 @@ class Position:
         self.lat = dict.get("gpsCoordinates", {}).get("latitude")
         self.lng = dict.get("gpsCoordinates", {}).get("longitude")
 
+
 class Health:
     mileage_km: int
 
     def __init__(self, dict):
         self.mileage_km = dict.get("mileageInKm")
+
 
 class Vehicle:
     info: Info
@@ -149,13 +175,14 @@ class Vehicle:
         self.position = position
         self.health = health
 
+
 class EnyaqHub:
     session: ClientSession
     idk_session: IDKSession
 
     def __init__(self, session: ClientSession) -> None:
         self.session = session
-    
+
     async def authenticate(self, email: str, password: str) -> bool:
         """
         Perform the full login process.
@@ -170,52 +197,69 @@ class EnyaqHub:
         return True
 
     async def get_info(self, vin):
-        async with self.session.get(f"{BASE_URL_SKODA}/api/v2/garage/vehicles/{vin}", headers=self._headers()) as response:
+        async with self.session.get(
+            f"{BASE_URL_SKODA}/api/v2/garage/vehicles/{vin}", headers=self._headers()
+        ) as response:
             _LOGGER.info(f"Received info for vin {vin}")
             return Info(await response.json())
 
     async def get_charging(self, vin):
-        async with self.session.get(f"{BASE_URL_SKODA}/api/v1/charging/{vin}", headers=self._headers()) as response:
+        async with self.session.get(
+            f"{BASE_URL_SKODA}/api/v1/charging/{vin}", headers=self._headers()
+        ) as response:
             _LOGGER.info(f"Received charging for vin {vin}")
             return Charging(await response.json())
 
     async def get_status(self, vin):
-        async with self.session.get(f"{BASE_URL_SKODA}/api/v2/vehicle-status/{vin}", headers=self._headers()) as response:
+        async with self.session.get(
+            f"{BASE_URL_SKODA}/api/v2/vehicle-status/{vin}", headers=self._headers()
+        ) as response:
             _LOGGER.info(f"Received status for vin {vin}")
             return Status(await response.json())
 
     async def get_air_conditioning(self, vin):
-        async with self.session.get(f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}", headers=self._headers()) as response:
+        async with self.session.get(
+            f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}", headers=self._headers()
+        ) as response:
             _LOGGER.info(f"Received air conditioning for vin {vin}")
             return AirConditioning(await response.json())
 
     async def get_position(self, vin):
-        async with self.session.get(f"{BASE_URL_SKODA}/api/v1/maps/positions?vin={vin}", headers=self._headers()) as response:
+        async with self.session.get(
+            f"{BASE_URL_SKODA}/api/v1/maps/positions?vin={vin}", headers=self._headers()
+        ) as response:
             _LOGGER.info(f"Received position for vin {vin}")
             return Position(await response.json())
 
     async def get_health(self, vin):
-        async with self.session.get(f"{BASE_URL_SKODA}/api/v1/vehicle-health-report/warning-lights/{vin}", headers=self._headers()) as response:
+        async with self.session.get(
+            f"{BASE_URL_SKODA}/api/v1/vehicle-health-report/warning-lights/{vin}",
+            headers=self._headers(),
+        ) as response:
             _LOGGER.info(f"Received health for vin {vin}")
             return Health(await response.json())
 
     async def list_vehicles(self):
-        async with self.session.get(f"{BASE_URL_SKODA}/api/v2/garage", headers=self._headers()) as response:
+        async with self.session.get(
+            f"{BASE_URL_SKODA}/api/v2/garage", headers=self._headers()
+        ) as response:
             json = await response.json()
             vehicles = []
             for vehicle in json["vehicles"]:
                 vehicles.append(vehicle["vin"])
             return vehicles
 
-    async def get_vehicle(self, vin)-> Vehicle:
-        [info, charging, status, air_conditioning,position,health] = await gather(*[
-            self.get_info(vin),
-            self.get_charging(vin),
-            self.get_status(vin),
-            self.get_air_conditioning(vin),
-            self.get_position(vin),
-            self.get_health(vin),
-        ])
+    async def get_vehicle(self, vin) -> Vehicle:
+        [info, charging, status, air_conditioning, position, health] = await gather(
+            *[
+                self.get_info(vin),
+                self.get_charging(vin),
+                self.get_status(vin),
+                self.get_air_conditioning(vin),
+                self.get_position(vin),
+                self.get_health(vin),
+            ]
+        )
         return Vehicle(
             info=info,
             charging=charging,
@@ -226,9 +270,54 @@ class EnyaqHub:
         )
 
     async def get_all_vehicles(self) -> list[Vehicle]:
-        return await gather(*[self.get_vehicle(vehicle) for vehicle in await self.list_vehicles()])
+        return await gather(
+            *[self.get_vehicle(vehicle) for vehicle in await self.list_vehicles()]
+        )
 
     def _headers(self):
-        return {
-            "authorization": f"Bearer {self.idk_session.access_token}"
+        return {"authorization": f"Bearer {self.idk_session.access_token}"}
+
+    async def stop_air_conditioning(self, vin):
+        async with self.session.post(
+            f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/stop",
+            headers=self._headers(),
+        ) as response:
+            await response.text()
+
+    async def start_air_conditioning(self, vin, temperature):
+        json_data = {
+            "heaterSource": "ELECTRIC",
+            "targetTemperature": {
+                "temperatureValue": temperature,
+                "unitInCar": "CELSIUS",
+            },
         }
+        async with self.session.post(
+            f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/start",
+            headers=self._headers(),
+            json=json_data,
+        ) as response:
+            await response.text()
+
+    async def set_target_temperature(self, vin, temperature):
+        json_data = {"temperatureValue": temperature, "unitInCar": "CELSIUS"}
+        async with self.session.post(
+            f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/settings/target-temperature",
+            headers=self._headers(),
+            json=json_data,
+        ) as response:
+            await response.text()
+
+    async def start_window_heating(self, vin):
+        async with self.session.post(
+            f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/start-window-heating",
+            headers=self._headers(),
+        ) as response:
+            await response.text()
+
+    async def stop_window_heating(self, vin):
+        async with self.session.post(
+            f"{BASE_URL_SKODA}/api/v2/air-conditioning/{vin}/stop-window-heating",
+            headers=self._headers(),
+        ) as response:
+            await response.text()

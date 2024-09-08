@@ -14,15 +14,8 @@ from typing import cast
 from .const import CLIENT_ID, BASE_URL_SKODA, BASE_URL_IDENT
 from homeassistant.exceptions import HomeAssistantError
 
-# "charset-normalizer==3.3.2",
-# "frozenlist==1.4.1",
-# "idna==3.7",
-# "multidict==6.0.5",
-# "aiosignal==1.3.1",
-# "async-timeout==4.0.3",
-# "soupsieve==2.5"
-
 _LOGGER = logging.getLogger(__name__)
+
 
 class IDKCredentials:
     hmac: str
@@ -35,22 +28,24 @@ class IDKCredentials:
         self.email = email
         self.password = password
         self.update(dict)
-    
+
     def update(self, dict: Dict):
         self.csrf = cast(str, dict.get("csrf_token"))
         self.hmac = cast(str, dict.get("templateModel", {}).get("hmac"))
         self.relay_state = dict.get("templateModel", {}).get("relayState")
- 
+
+
 class IDKAuthorizationCodes:
     code: str
     token_type: str
     id_token: str
 
     def __init__(self, dict):
-        self.code = dict.get("code") 
+        self.code = dict.get("code")
         self.token_type = dict.get("token_type")
         self.id_token = dict.get("id_token")
         self.relay_state = dict.get("templateModel", {}).get("relayState")
+
 
 class IDKSession:
     access_token: str
@@ -58,9 +53,10 @@ class IDKSession:
     id_token: str
 
     def __init__(self, dict):
-        self.access_token = dict.get("accessToken") 
+        self.access_token = dict.get("accessToken")
         self.refresh_token = dict.get("refreshToken")
         self.id_token = dict.get("idToken")
+
 
 def _extract_states_from_website(html) -> Dict[str, str]:
     """
@@ -68,7 +64,7 @@ def _extract_states_from_website(html) -> Dict[str, str]:
 
     This method will parse the information from a `<script>` tag in the HTML using BS4.
     """
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(html, "html.parser")
 
     # Regex to extract the information assigned to `window._IDK` from the script tag.
     json_object = re.compile(r"window\._IDK\s=\s((?:\n|.)*?)$")
@@ -76,7 +72,7 @@ def _extract_states_from_website(html) -> Dict[str, str]:
     dict = None
 
     # Search through all script tags and find the first one to match the Regex.
-    for script in soup.find_all('script'):
+    for script in soup.find_all("script"):
         if len(script.contents) != 1:
             continue
         content = script.contents[0].strip()
@@ -94,7 +90,10 @@ def _extract_states_from_website(html) -> Dict[str, str]:
 
     return dict
 
-async def _initial_oidc_authorize(session: ClientSession, verifier: str, email: str, password: str) -> IDKCredentials:
+
+async def _initial_oidc_authorize(
+    session: ClientSession, verifier: str, email: str, password: str
+) -> IDKCredentials:
     """
     First step of the login process.
 
@@ -104,8 +103,14 @@ async def _initial_oidc_authorize(session: ClientSession, verifier: str, email: 
 
     # A SHA256 hash of the random "verifier" string will be transmitted as a challenge.
     # This is part of the OAUTH2 PKCE process. It is described here in detail: https://www.oauth.com/oauth2-servers/pkce/authorization-request/
-    verifier_hash = hashlib.sha256(verifier.encode('utf-8')).digest()
-    challenge = base64.b64encode(verifier_hash).decode("utf-8").replace("+", "-").replace("/", "_").rstrip("=")
+    verifier_hash = hashlib.sha256(verifier.encode("utf-8")).digest()
+    challenge = (
+        base64.b64encode(verifier_hash)
+        .decode("utf-8")
+        .replace("+", "-")
+        .replace("/", "_")
+        .rstrip("=")
+    )
 
     params = {
         "client_id": CLIENT_ID,
@@ -118,11 +123,16 @@ async def _initial_oidc_authorize(session: ClientSession, verifier: str, email: 
         "code_challenge_method": "s256",
         "prompt": "login",
     }
-    async with session.get(f"{BASE_URL_IDENT}/oidc/v1/authorize", params=params) as response:
+    async with session.get(
+        f"{BASE_URL_IDENT}/oidc/v1/authorize", params=params
+    ) as response:
         dict = _extract_states_from_website(await response.text())
         return IDKCredentials(dict, email, password)
 
-async def _enter_email_address(session: ClientSession, login_meta: IDKCredentials) -> IDKCredentials:
+
+async def _enter_email_address(
+    session: ClientSession, login_meta: IDKCredentials
+) -> IDKCredentials:
     """
     Second step in the login process.
 
@@ -134,12 +144,18 @@ async def _enter_email_address(session: ClientSession, login_meta: IDKCredential
     form_data.add_field("hmac", login_meta.hmac)
     form_data.add_field("_csrf", login_meta.csrf)
 
-    async with session.post(f"{BASE_URL_IDENT}/signin-service/v1/{CLIENT_ID}/login/identifier", data=form_data()) as response:
+    async with session.post(
+        f"{BASE_URL_IDENT}/signin-service/v1/{CLIENT_ID}/login/identifier",
+        data=form_data(),
+    ) as response:
         dict = _extract_states_from_website(await response.text())
         login_meta.update(dict)
         return login_meta
 
-async def _enter_password(session: ClientSession, login_meta: IDKCredentials) -> IDKAuthorizationCodes:
+
+async def _enter_password(
+    session: ClientSession, login_meta: IDKCredentials
+) -> IDKAuthorizationCodes:
     """
     Third step in the login process.
 
@@ -158,7 +174,11 @@ async def _enter_password(session: ClientSession, login_meta: IDKCredentials) ->
     # The last redirect will redirect back to the `MySkoda` app in Android, using the `myskoda://` URL prefix.
     # The following loop will follow all redirects until the last redirect to `myskoda://` is encountered.
     # This last URL will contain the token.
-    async with session.post(f"{BASE_URL_IDENT}/signin-service/v1/{CLIENT_ID}/login/authenticate", data=form_data(), allow_redirects=False) as response:
+    async with session.post(
+        f"{BASE_URL_IDENT}/signin-service/v1/{CLIENT_ID}/login/authenticate",
+        data=form_data(),
+        allow_redirects=False,
+    ) as response:
         location = response.headers["Location"]
         while not location.startswith("myskoda://"):
             async with session.get(location, allow_redirects=False) as response:
@@ -174,7 +194,10 @@ async def _enter_password(session: ClientSession, login_meta: IDKCredentials) ->
 
         return IDKAuthorizationCodes(dict)
 
-async def _exchange_auth_code_for_idk_session(session: ClientSession, code: str, verifier: str) -> IDKSession:
+
+async def _exchange_auth_code_for_idk_session(
+    session: ClientSession, code: str, verifier: str
+) -> IDKSession:
     """
     Exchange the ident login code for an auth token from Skoda.
 
@@ -183,14 +206,21 @@ async def _exchange_auth_code_for_idk_session(session: ClientSession, code: str,
     json_data = {
         "code": code,
         "redirectUri": "myskoda://redirect/login/",
-        "verifier": verifier
+        "verifier": verifier,
     }
 
-    async with session.post(f"{BASE_URL_SKODA}/api/v1/authentication/exchange-authorization-code?tokenType=CONNECT", json=json_data, allow_redirects=False) as response:
+    async with session.post(
+        f"{BASE_URL_SKODA}/api/v1/authentication/exchange-authorization-code?tokenType=CONNECT",
+        json=json_data,
+        allow_redirects=False,
+    ) as response:
         login_data = json.loads(await response.text())
         return IDKSession(login_data)
 
-async def idk_authorize(session: ClientSession, email: str, password: str) -> IDKSession:
+
+async def idk_authorize(
+    session: ClientSession, email: str, password: str
+) -> IDKSession:
     """
     Perform the full login process.
 
@@ -211,9 +241,12 @@ async def idk_authorize(session: ClientSession, email: str, password: str) -> ID
     authentication = await _enter_password(session, login_meta)
 
     # Exchange the token for access and refresh tokens (JWT format).
-    idk_session = await _exchange_auth_code_for_idk_session(session, authentication.code, verifier)
+    idk_session = await _exchange_auth_code_for_idk_session(
+        session, authentication.code, verifier
+    )
 
     return idk_session
+
 
 class InternalAuthorizationError(HomeAssistantError):
     """Error to indicate that something unexpected happened during authorization."""
