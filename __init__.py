@@ -10,7 +10,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .enyaq import EnyaqHub
+from .enyaq import EnyaqHub, Vehicle
 
 from .const import DATA_COODINATOR, DOMAIN
 
@@ -57,8 +57,8 @@ class EnyaqDataUpdateCoordinator(DataUpdateCoordinator):
         login_success = await self.hub.authenticate(self.config.data["email"], self.config.data["password"])
         return login_success
     
-    async def _async_update_data(self) -> list[str]:
-        return ["test"]
+    async def _async_update_data(self) -> Vehicle:
+        return await self.hub.get_vehicle()
 
     def _unsub_refresh(self):
         return
