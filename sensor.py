@@ -13,7 +13,7 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, UnitOfPower, UnitOfLength
+from homeassistant.const import PERCENTAGE, UnitOfTime, UnitOfPower, UnitOfLength
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import DeviceInfo, EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -46,6 +46,8 @@ async def async_setup_entry(
         entities.append(EnyaqSensorMilage(coordinator, vehicle))
         entities.append(EnyaqSensorChargeType(coordinator, vehicle))
         entities.append(EnyaqSensorChargingState(coordinator, vehicle))
+        entities.append(EnyaqSensorRemainingChargingTime(coordinator, vehicle))
+        entities.append(EnyaqSensorCarCaptured(coordinator, vehicle))
 
     async_add_entities(entities, update_before_add=True)
 
@@ -228,6 +230,7 @@ class EnyaqSensorTargetBatteryPercentage(EnyaqSensor):
 
         return self.vehicle.charging.target_percent
 
+
 class EnyaqSensorMilage(EnyaqSensor):
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
         super().__init__(
@@ -286,6 +289,7 @@ class EnyaqSensorChargeType(EnyaqSensor):
         else:
             return "mdi:ev-plug-ccs2"
 
+
 class EnyaqSensorChargingState(EnyaqSensor):
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
         super().__init__(
@@ -298,7 +302,12 @@ class EnyaqSensorChargingState(EnyaqSensor):
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_charging_state"
-        self._attr_options = ["CONNECT_CABLE", "READY_FOR_CHARGING", "CONSERVING", "CHARGING"]
+        self._attr_options = [
+            "CONNECT_CABLE",
+            "READY_FOR_CHARGING",
+            "CONSERVING",
+            "CHARGING",
+        ]
 
     @property
     def native_value(self):
@@ -320,3 +329,52 @@ class EnyaqSensorChargingState(EnyaqSensor):
             return "mdi:power-plug-off"
         else:
             return "mdi:power-plug"
+
+
+class EnyaqSensorRemainingChargingTime(EnyaqSensor):
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+        super().__init__(
+            coordinator,
+            vehicle,
+            SensorEntityDescription(
+                key="remaining_charging_time",
+                name=f"{vehicle.info.title} Remaining Charging Time",
+                device_class=SensorDeviceClass.DURATION,
+                native_unit_of_measurement=UnitOfTime.MINUTES,
+                icon="mdi:timer",
+            ),
+        )
+        self._attr_unique_id = f"{vehicle.info.vin}_remaining_charging_time"
+
+    @property
+    def native_value(self):
+        if not self.coordinator.data:
+            return None
+
+        self._update_device_from_coordinator()
+
+        return self.vehicle.charging.remaining_time_min
+
+
+class EnyaqSensorCarCaptured(EnyaqSensor):
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+        super().__init__(
+            coordinator,
+            vehicle,
+            SensorEntityDescription(
+                key="car_captured",
+                name=f"{vehicle.info.title} Last Updated",
+                device_class=SensorDeviceClass.TIMESTAMP,
+                icon="mdi:clock",
+            ),
+        )
+        self._attr_unique_id = f"{vehicle.info.vin}_car_captured"
+
+    @property
+    def native_value(self):
+        if not self.coordinator.data:
+            return None
+
+        self._update_device_from_coordinator()
+
+        return self.vehicle.status.car_captured
