@@ -43,12 +43,14 @@ class Charging:
     remaining_time_min: str
     state: str
     target_percent: int
+    use_reduced_current: bool
 
     def __init__(self, dict):
         self.target_percent = dict.get("settings", {}).get(
             "targetStateOfChargeInPercent"
         )
         self.charging_care_mode = dict.get("settings", {}).get("chargingCareMode") == "ACTIVATED"
+        self.use_reduced_current = dict.get("settings", {}).get("maxChargeCurrentAc") == "REDUCED"
 
         dict = dict.get("status")
         self.remaining_distance_m = dict.get("battery", {}).get(
@@ -68,7 +70,6 @@ class Charging:
         # "CONSERVING": Connected, but full
         # "CHARGING": Connected and charging
         self.state = dict.get("state")
-
 
 class Status:
     doors_open: bool
@@ -336,6 +337,28 @@ class EnyaqHub:
         }
         async with self.session.put(
             f"{BASE_URL_SKODA}/api/v1/charging/{vin}/set-charge-limit",
+            headers=self._headers(),
+            json=json_data
+        ) as response:
+            await response.text()
+
+    async def set_battery_care_mode(self, vin, enabled: bool):
+        json_data = {
+            "chargingCareMode": "ACTIVATED" if enabled else "DEACTIVATED"
+        }
+        async with self.session.put(
+            f"{BASE_URL_SKODA}/api/v1/charging/{vin}/set-care-mode",
+            headers=self._headers(),
+            json=json_data
+        ) as response:
+            await response.text()
+
+    async def set_reduced_current_limit(self, vin, reduced: bool):
+        json_data = {
+            "chargingCurrent": "REDUCED" if reduced else "MAXIMUM"
+        }
+        async with self.session.put(
+            f"{BASE_URL_SKODA}/api/v1/charging/{vin}/set-charging-current",
             headers=self._headers(),
             json=json_data
         ) as response:
