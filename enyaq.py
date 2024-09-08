@@ -99,8 +99,8 @@ class AirConditioning:
     steering_wheel_position: str
     air_conditioning_on: bool
     state: bool
-    charger_connection_state: str
-    charger_lock_state: str
+    charger_connected: bool
+    charger_locked: bool
     time_to_reach_target_temperature: str
 
     def __init__(self, dict):
@@ -122,8 +122,9 @@ class AirConditioning:
         )
         # COOLING, HEATING, OFF, ON
         self.state = dict.get("state")
-        self.charger_connection_state = dict.get("chargerConnectionState")
-        self.charger_lock_state = dict.get("chargerLockState")
+
+        self.charger_connected = dict.get("chargerConnectionState") == "CONNECTED"
+        self.charger_locked = dict.get("chargerLockState") == "LOCKED"
         self.time_to_reach_target_temperature = dict.get(
             "estimatedDateTimeToReachTargetTemperature"
         )
