@@ -12,6 +12,7 @@ class Info:
     engine_power_kw: int
     engine_type: str
     model: str
+    model_id: str
     model_year: str
     title: str
     vin: str
@@ -27,6 +28,7 @@ class Info:
         self.engine_type = dict.get("engine", {}).get("type")
         self.model = dict.get("model")
         self.model_year = dict.get("modelYear")
+        self.model_id = dict.get("systemModelId")
         self.title = dict.get("title")
 
 class Charging:

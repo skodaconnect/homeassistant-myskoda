@@ -26,8 +26,6 @@ async def async_setup_entry(
     """Set up the sensor platform."""\
     
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
-    
-    await coordinator.hub.authenticate(config.data["email"], config.data["password"]);
 
     vehicles = coordinator.data
 
@@ -58,6 +56,9 @@ class EnyaqSensor(CoordinatorEntity, SensorEntity):
             "identifiers": {(DOMAIN, self.vehicle.info.vin)},
             "name": self.vehicle.info.title,
             "manufacturer": "Škoda",
+            "sw_version": self.vehicle.info.software_version,
+            "hw_version": f"{self.vehicle.info.model_id}-{self.vehicle.info.model_year}",
+            "model": self.vehicle.info.model,
         }
 
     def _update_device_from_coordinator(self) -> None:
