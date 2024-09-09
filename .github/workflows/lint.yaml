@@ -4,10 +4,6 @@ on:
   push:
   pull_request:
 
-defaults:
-  run:
-    working-directory: myskoda
-
 jobs:
   lint:
     runs-on: ubuntu-latest
