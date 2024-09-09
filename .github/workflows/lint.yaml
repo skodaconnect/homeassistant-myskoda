@@ -28,13 +28,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version-file: pyproject.toml
           cache: "poetry"
 
       - name: Install Python dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          poetry install
+          poetry install --no-root
 
       - name: Lint
         run: |
