@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "myskoda"
+version = "0.1.0"
+description = ""
+authors = ["Frederick Gnodtke <frederick@gnodtke.net>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+beautifulsoup4 = "^4.12.3"
+homeassistant = "^2024.9.1"
+aiohttp = "^3.10.5"
+pyjwt = "^2.9.0"
+pyyaml = "^6.0.2"
+asyncio = "^3.4.3"
+voluptuous = "^0.15.2"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.11.2"
+ruff = "^0.6.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
