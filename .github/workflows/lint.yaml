@@ -23,7 +23,7 @@ jobs:
         run: sudo apt install just
 
       - name: Install Poetry
-        uses: snok/install-poetry@v1
+        run: pipx install poetry
 
       - name: Set up Python
         uses: actions/setup-python@v5
