@@ -1,6 +1,6 @@
 {
   "domain": "myskoda",
-  "name": "MySkoda Enyaq",
+  "name": "MySkoda",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/enyaq",
   "requirements": ["beautifulsoup4==4.12.3"],
