@@ -364,3 +364,17 @@ class EnyaqHub:
             json=json_data
         ) as response:
             await response.text()
+
+    async def start_charging(self, vin):
+        async with self.session.post(
+            f"{BASE_URL_SKODA}/api/v1/charging/{vin}/start",
+            headers=await self._headers(),
+        ) as response:
+            await response.text()
+
+    async def stop_charging(self, vin):
+        async with self.session.post(
+            f"{BASE_URL_SKODA}/api/v1/charging/{vin}/stop",
+            headers=await self._headers(),
+        ) as response:
+            await response.text()
