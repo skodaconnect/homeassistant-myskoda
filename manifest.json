@@ -2,13 +2,12 @@
   "domain": "myskoda",
   "name": "MySkoda",
   "config_flow": true,
-  "documentation": "https://www.home-assistant.io/integrations/enyaq",
+  "documentation": "https://github.com/Prior99/myskoda/blob/master/README.md",
   "requirements": ["beautifulsoup4==4.12.3"],
-  "ssdp": [],
-  "zeroconf": [],
-  "homekit": {},
   "dependencies": [],
   "codeowners": ["@prior99"],
   "iot_class": "cloud_polling",
-  "version": "1.2.0"
+  "version": "1.2.0",
+  "integration_type": "hub",
+  "issue_tracker": "https://github.com/Prior99/myskoda/issues",
 }
