@@ -38,6 +38,7 @@ async def async_setup_entry(
         entities.append(EnyaqWindowHeatingSwitch(coordinator, vehicle))
         entities.append(EnyaqReducedCurrentSwitch(coordinator, vehicle))
         entities.append(EnyaqBatteryCareModeSwitch(coordinator, vehicle))
+        entities.append(EnyaqChargingSwitch(coordinator, vehicle))
 
     async_add_entities(entities, update_before_add=True)
 
@@ -178,3 +179,44 @@ class EnyaqReducedCurrentSwitch(EnyaqSwitch):
                 break
             await self.coordinator.async_refresh()
         _LOGGER.info("Reduced current limit enabled.")
+
+class EnyaqChargingSwitch(EnyaqSwitch):
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+        super().__init__(
+            coordinator,
+            vehicle,
+            SwitchEntityDescription(
+                key="charging",
+                name=f"{vehicle.info.title} Charging",
+                icon="mdi:power-plug-battery",
+                device_class=SwitchDeviceClass.SWITCH,
+            ),
+        )
+        self._attr_unique_id = f"{vehicle.info.vin}_charging"
+
+    @property
+    def is_on(self) -> bool | None:
+        if not self.coordinator.data:
+            return None
+
+        self._update_device_from_coordinator()
+
+        return self.vehicle.charging.state == "CHARGING"
+
+    async def async_turn_off(self, **kwargs):
+        await self.coordinator.hub.stop_charging(self.vehicle.info.vin)
+        for i in range(0, 10):
+            await sleep(15)
+            if not self.is_on:
+                break
+            await self.coordinator.async_refresh()
+        _LOGGER.info("Charging stopped.")
+
+    async def async_turn_on(self, **kwargs):
+        await self.coordinator.hub.start_charging(self.vehicle.info.vin)
+        for i in range(0, 10):
+            await sleep(15)
+            if self.is_on:
+                break
+            await self.coordinator.async_refresh()
+        _LOGGER.info("Charging started.")
