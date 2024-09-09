@@ -9,5 +9,5 @@
   "iot_class": "cloud_polling",
   "version": "1.2.0",
   "integration_type": "hub",
-  "issue_tracker": "https://github.com/Prior99/myskoda/issues",
+  "issue_tracker": "https://github.com/Prior99/myskoda/issues"
 }
