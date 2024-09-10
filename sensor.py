@@ -306,8 +306,7 @@ class ChargeType(MySkodaSensor):
 
         if self.vehicle.charging.charge_type == "AC":
             return "mdi:ev-plug-type2"
-        else:
-            return "mdi:ev-plug-ccs2"
+        return "mdi:ev-plug-ccs2"
 
 
 class ChargingState(MySkodaSensor):

@@ -95,7 +95,7 @@ class WindowHeating(MySkodaSwitch):
             await self.coordinator.async_refresh()
         _LOGGER.debug("Window heating disabled.")
 
-    async def async_turn_on(self, **kwargs):  #noqa: D102
+    async def async_turn_on(self, **kwargs):  # noqa: D102
         await self.coordinator.hub.start_window_heating(self.vehicle.info.vin)
         for _ in range(10):
             await sleep(15)
@@ -103,6 +103,7 @@ class WindowHeating(MySkodaSwitch):
                 break
             await self.coordinator.async_refresh()
         _LOGGER.debug("Window heating enabled.")
+
 
 class BatteryCareMode(MySkodaSwitch):
     """Controls battery care mode."""
@@ -139,7 +140,7 @@ class BatteryCareMode(MySkodaSwitch):
             await self.coordinator.async_refresh()
         _LOGGER.info("Battery care mode disabled.")
 
-    async def async_turn_on(self, **kwargs): #noqa: D102
+    async def async_turn_on(self, **kwargs):  # noqa: D102
         await self.coordinator.hub.set_battery_care_mode(self.vehicle.info.vin, True)
         for _ in range(10):
             await sleep(15)
@@ -147,6 +148,7 @@ class BatteryCareMode(MySkodaSwitch):
                 break
             await self.coordinator.async_refresh()
         _LOGGER.info("Battery care mode enabled.")
+
 
 class ReducedCurrent(MySkodaSwitch):
     """Control whether to charge with reduced current."""
@@ -174,8 +176,10 @@ class ReducedCurrent(MySkodaSwitch):
 
         return self.vehicle.charging.use_reduced_current
 
-    async def async_turn_off(self, **kwargs): # noqa: D102
-        await self.coordinator.hub.set_reduced_current_limit(self.vehicle.info.vin, False)
+    async def async_turn_off(self, **kwargs):  # noqa: D102
+        await self.coordinator.hub.set_reduced_current_limit(
+            self.vehicle.info.vin, False
+        )
         for _ in range(10):
             await sleep(15)
             if not self.is_on:
@@ -183,14 +187,17 @@ class ReducedCurrent(MySkodaSwitch):
             await self.coordinator.async_refresh()
         _LOGGER.info("Reduced current limit disabled.")
 
-    async def async_turn_on(self, **kwargs): #noqa: D102
-        await self.coordinator.hub.set_reduced_current_limit(self.vehicle.info.vin, True)
+    async def async_turn_on(self, **kwargs):  # noqa: D102
+        await self.coordinator.hub.set_reduced_current_limit(
+            self.vehicle.info.vin, True
+        )
         for _ in range(10):
             await sleep(15)
             if self.is_on:
                 break
             await self.coordinator.async_refresh()
         _LOGGER.info("Reduced current limit enabled.")
+
 
 class Charging(MySkodaSwitch):
     """Control whether the vehicle should be charging."""
@@ -218,7 +225,7 @@ class Charging(MySkodaSwitch):
 
         return self.vehicle.charging.state == "CHARGING"
 
-    async def async_turn_off(self, **kwargs): # noqa: D102
+    async def async_turn_off(self, **kwargs):  # noqa: D102
         await self.coordinator.hub.stop_charging(self.vehicle.info.vin)
         for _ in range(10):
             await sleep(15)
@@ -227,7 +234,7 @@ class Charging(MySkodaSwitch):
             await self.coordinator.async_refresh()
         _LOGGER.info("Charging stopped.")
 
-    async def async_turn_on(self, **kwargs): #noqa: D102
+    async def async_turn_on(self, **kwargs):  # noqa: D102
         await self.coordinator.hub.start_charging(self.vehicle.info.vin)
         for _ in range(10):
             await sleep(15)

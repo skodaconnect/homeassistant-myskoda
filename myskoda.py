@@ -1,3 +1,5 @@
+"""Contains API representation for the MySkoda REST API."""
+
 from asyncio import gather
 from datetime import datetime
 import logging
@@ -158,16 +160,16 @@ class Position:
     lat: float
     lng: float
 
-    def __init__(self, dict):  # noqa: D107
-        dict = dict.get("positions")[0]
-        self.city = dict.get("address", {}).get("city")
-        self.country = dict.get("address", {}).get("country")
-        self.country_code = dict.get("address", {}).get("countryCode")
-        self.house_number = dict.get("address", {}).get("houseNumber")
-        self.street = dict.get("address", {}).get("street")
-        self.zip_code = dict.get("address", {}).get("zipCode")
-        self.lat = dict.get("gpsCoordinates", {}).get("latitude")
-        self.lng = dict.get("gpsCoordinates", {}).get("longitude")
+    def __init__(self, data):  # noqa: D107
+        data = data.get("positions")[0]
+        self.city = data.get("address", {}).get("city")
+        self.country = data.get("address", {}).get("country")
+        self.country_code = data.get("address", {}).get("countryCode")
+        self.house_number = data.get("address", {}).get("houseNumber")
+        self.street = data.get("address", {}).get("street")
+        self.zip_code = data.get("address", {}).get("zipCode")
+        self.lat = data.get("gpsCoordinates", {}).get("latitude")
+        self.lng = data.get("gpsCoordinates", {}).get("longitude")
 
 
 class Health:
@@ -207,6 +209,8 @@ class Vehicle:
 
 
 class MySkodaHub:
+    """API hub class that can perform all calls to the MySkoda API."""
+
     session: ClientSession
     idk_session: IDKSession
 

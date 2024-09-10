@@ -24,6 +24,7 @@ from .myskoda import Vehicle
 
 _LOGGER = logging.getLogger(__name__)
 
+
 async def async_setup_entry(
     hass: HomeAssistant,
     config: ConfigEntry,
@@ -133,4 +134,3 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
                 break
             await self.coordinator.async_refresh()
         _LOGGER.info("AC disabled.")
-

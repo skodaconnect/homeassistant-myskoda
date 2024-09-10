@@ -22,6 +22,7 @@ from .myskoda import Vehicle
 
 _LOGGER = logging.getLogger(__name__)
 
+
 async def async_setup_entry(
     hass: HomeAssistant,
     config: ConfigEntry,
@@ -93,7 +94,7 @@ class ChargeLimit(MySkodaNumber):
 
     async def async_set_native_value(self, value: float):  # noqa: D102
         await self.coordinator.hub.set_charge_limit(self.vehicle.info.vin, value)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if self.native_value == value:
                 break

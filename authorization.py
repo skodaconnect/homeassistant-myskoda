@@ -298,6 +298,5 @@ async def idk_authorize(
     )
 
 
-
 class InternalAuthorizationError(HomeAssistantError):
     """Error to indicate that something unexpected happened during authorization."""
