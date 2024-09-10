@@ -1,9 +1,11 @@
-"""Oilfox metering."""
+"""Binary Sensors for MySkoda."""
+
+from typing import overload
 
 from homeassistant.components.binary_sensor import (
-    BinarySensorEntityDescription,
-    BinarySensorEntity,
     BinarySensorDeviceClass,
+    BinarySensorEntity,
+    BinarySensorEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -12,9 +14,10 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .entity import EnyaqDataEntity
-from .enyaq import Vehicle
 from .const import DATA_COODINATOR, DOMAIN
+from .entity import MySkodaDataEntity
+from .myskoda import Vehicle
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -30,23 +33,23 @@ async def async_setup_entry(
     entities = []
 
     for vehicle in vehicles:
-        entities.append(EnyaqBinarySensorChargerConnected(coordinator, vehicle))
-        entities.append(EnyaqBinarySensorChargerLocked(coordinator, vehicle))
-        entities.append(EnyaqBinarySensorLocked(coordinator, vehicle))
-        entities.append(EnyaqBinarySensorDoorsLocked(coordinator, vehicle))
-        entities.append(EnyaqBinarySensorDoorsOpen(coordinator, vehicle))
-        entities.append(EnyaqBinarySensorWindowsOpen(coordinator, vehicle))
-        entities.append(EnyaqBinarySensorTrunkOpen(coordinator, vehicle))
-        entities.append(EnyaqBinarySensorBonnetOpen(coordinator, vehicle))
-        entities.append(EnyaqBinarySensorLightsOn(coordinator, vehicle))
+        entities.append(ChargerConnected(coordinator, vehicle))
+        entities.append(ChargerLocked(coordinator, vehicle))
+        entities.append(Locked(coordinator, vehicle))
+        entities.append(DoorsLocked(coordinator, vehicle))
+        entities.append(DoorsOpen(coordinator, vehicle))
+        entities.append(WindowsOpen(coordinator, vehicle))
+        entities.append(TrunkOpen(coordinator, vehicle))
+        entities.append(BonnetOpen(coordinator, vehicle))
+        entities.append(LightsOn(coordinator, vehicle))
 
     async_add_entities(entities, update_before_add=True)
 
 
-class EnyaqBinarySensor(EnyaqDataEntity, BinarySensorEntity):
-    """Base class for all Enyaq binary sensors."""
+class MySkodaBinarySensor(MySkodaDataEntity, BinarySensorEntity):
+    """Base class for all MySkoda binary sensors."""
 
-    def __init__(
+    def __init__(  # noqa: D107
         self,
         coordinator: DataUpdateCoordinator,
         vehicle: Vehicle,
@@ -56,8 +59,10 @@ class EnyaqBinarySensor(EnyaqDataEntity, BinarySensorEntity):
         BinarySensorEntity.__init__(self)
 
 
-class EnyaqBinarySensorChargerConnected(EnyaqBinarySensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class ChargerConnected(MySkodaBinarySensor):
+    """Detects if the charger is connected to the car."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -70,6 +75,7 @@ class EnyaqBinarySensorChargerConnected(EnyaqBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_charger_connected"
 
     @property
+    @overload
     def is_on(self):
         if not self.coordinator.data:
             return None
@@ -79,6 +85,7 @@ class EnyaqBinarySensorChargerConnected(EnyaqBinarySensor):
         return self.vehicle.air_conditioning.charger_connected
 
     @property
+    @overload
     def icon(self):
         if not self.coordinator.data:
             return "mdi:power_plug"
@@ -87,12 +94,13 @@ class EnyaqBinarySensorChargerConnected(EnyaqBinarySensor):
 
         if self.vehicle.charging.state == "CONNECT_CABLE":
             return "mdi:power-plug-off"
-        else:
-            return "mdi:power-plug"
+        return "mdi:power-plug"
 
 
-class EnyaqBinarySensorChargerLocked(EnyaqBinarySensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class ChargerLocked(MySkodaBinarySensor):
+    """Detect if the charger is locked on the car, or whether it can be unplugged."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -105,6 +113,7 @@ class EnyaqBinarySensorChargerLocked(EnyaqBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_charger_locked"
 
     @property
+    @overload
     def is_on(self):
         if not self.coordinator.data:
             return None
@@ -114,6 +123,7 @@ class EnyaqBinarySensorChargerLocked(EnyaqBinarySensor):
         return not self.vehicle.air_conditioning.charger_locked
 
     @property
+    @overload
     def icon(self):
         if not self.coordinator.data:
             return "mdi:lock"
@@ -122,12 +132,13 @@ class EnyaqBinarySensorChargerLocked(EnyaqBinarySensor):
 
         if self.vehicle.air_conditioning.charger_locked:
             return "mdi:lock"
-        else:
-            return "mdi:lock-open"
+        return "mdi:lock-open"
 
 
-class EnyaqBinarySensorLocked(EnyaqBinarySensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class Locked(MySkodaBinarySensor):
+    """Detects whether the vehicle is fully locked."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -140,6 +151,7 @@ class EnyaqBinarySensorLocked(EnyaqBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_locked"
 
     @property
+    @overload
     def is_on(self):
         if not self.coordinator.data:
             return None
@@ -149,6 +161,7 @@ class EnyaqBinarySensorLocked(EnyaqBinarySensor):
         return not self.vehicle.status.locked
 
     @property
+    @overload
     def icon(self):
         if not self.coordinator.data:
             return "mdi:lock"
@@ -157,12 +170,13 @@ class EnyaqBinarySensorLocked(EnyaqBinarySensor):
 
         if self.is_on:
             return "mdi:lock-open"
-        else:
-            return "mdi:lock"
+        return "mdi:lock"
 
 
-class EnyaqBinarySensorDoorsLocked(EnyaqBinarySensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class DoorsLocked(MySkodaBinarySensor):
+    """Detect whether the doors are locked."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -175,6 +189,7 @@ class EnyaqBinarySensorDoorsLocked(EnyaqBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_doors_locked"
 
     @property
+    @overload
     def is_on(self):
         if not self.coordinator.data:
             return None
@@ -184,6 +199,7 @@ class EnyaqBinarySensorDoorsLocked(EnyaqBinarySensor):
         return not self.vehicle.status.doors_locked
 
     @property
+    @overload
     def icon(self):
         if not self.coordinator.data:
             return "mdi:lock"
@@ -192,12 +208,13 @@ class EnyaqBinarySensorDoorsLocked(EnyaqBinarySensor):
 
         if self.is_on:
             return "mdi:car-door-lock-open"
-        else:
-            return "mdi:car-door-lock"
+        return "mdi:car-door-lock"
 
 
-class EnyaqBinarySensorDoorsOpen(EnyaqBinarySensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class DoorsOpen(MySkodaBinarySensor):
+    """Detects whether at least one door is open."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -211,6 +228,7 @@ class EnyaqBinarySensorDoorsOpen(EnyaqBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_doors_open"
 
     @property
+    @overload
     def is_on(self):
         if not self.coordinator.data:
             return None
@@ -220,8 +238,10 @@ class EnyaqBinarySensorDoorsOpen(EnyaqBinarySensor):
         return self.vehicle.status.doors_open
 
 
-class EnyaqBinarySensorWindowsOpen(EnyaqBinarySensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class WindowsOpen(MySkodaBinarySensor):
+    """Detects whether at least one window is open."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -235,6 +255,7 @@ class EnyaqBinarySensorWindowsOpen(EnyaqBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_windows_open"
 
     @property
+    @overload
     def is_on(self):
         if not self.coordinator.data:
             return None
@@ -244,8 +265,10 @@ class EnyaqBinarySensorWindowsOpen(EnyaqBinarySensor):
         return self.vehicle.status.windows_open
 
 
-class EnyaqBinarySensorTrunkOpen(EnyaqBinarySensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class TrunkOpen(MySkodaBinarySensor):
+    """Detects whether the trunk is open."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -259,6 +282,7 @@ class EnyaqBinarySensorTrunkOpen(EnyaqBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_trunk_open"
 
     @property
+    @overload
     def is_on(self):
         if not self.coordinator.data:
             return None
@@ -268,8 +292,10 @@ class EnyaqBinarySensorTrunkOpen(EnyaqBinarySensor):
         return self.vehicle.status.trunk_open
 
 
-class EnyaqBinarySensorBonnetOpen(EnyaqBinarySensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class BonnetOpen(MySkodaBinarySensor):
+    """Detects whether the bonnet is open."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -283,6 +309,7 @@ class EnyaqBinarySensorBonnetOpen(EnyaqBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_bonnet_open"
 
     @property
+    @overload
     def is_on(self):
         if not self.coordinator.data:
             return None
@@ -292,8 +319,10 @@ class EnyaqBinarySensorBonnetOpen(EnyaqBinarySensor):
         return self.vehicle.status.bonnet_open
 
 
-class EnyaqBinarySensorLightsOn(EnyaqBinarySensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class LightsOn(MySkodaBinarySensor):
+    """Detects whether the lights are on."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -307,6 +336,7 @@ class EnyaqBinarySensorLightsOn(EnyaqBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_lights_on"
 
     @property
+    @overload
     def is_on(self):
         if not self.coordinator.data:
             return None

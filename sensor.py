@@ -1,22 +1,25 @@
-"""Enyaq Sensors."""
+"""Sensors for the MySkoda integration."""
+
+from typing import overload
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
-    SensorEntityDescription,
     SensorEntity,
+    SensorEntityDescription,
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, UnitOfTime, UnitOfPower, UnitOfLength
+from homeassistant.const import PERCENTAGE, UnitOfLength, UnitOfPower, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .entity import EnyaqDataEntity
-from .enyaq import EnyaqHub, Vehicle
 from .const import DATA_COODINATOR, DOMAIN
+from .entity import MySkodaDataEntity
+from .myskoda import Vehicle
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -32,24 +35,24 @@ async def async_setup_entry(
     entities = []
 
     for vehicle in vehicles:
-        entities.append(EnyaqSensorSoftwareVersion(coordinator, vehicle))
-        entities.append(EnyaqSensorBatteryPercentage(coordinator, vehicle))
-        entities.append(EnyaqSensorChargingPower(coordinator, vehicle))
-        entities.append(EnyaqSensorRemainingDistance(coordinator, vehicle))
-        entities.append(EnyaqSensorTargetBatteryPercentage(coordinator, vehicle))
-        entities.append(EnyaqSensorMilage(coordinator, vehicle))
-        entities.append(EnyaqSensorChargeType(coordinator, vehicle))
-        entities.append(EnyaqSensorChargingState(coordinator, vehicle))
-        entities.append(EnyaqSensorRemainingChargingTime(coordinator, vehicle))
-        entities.append(EnyaqSensorCarCaptured(coordinator, vehicle))
+        entities.append(SoftwareVersion(coordinator, vehicle))
+        entities.append(BatteryPercentage(coordinator, vehicle))
+        entities.append(ChargingPower(coordinator, vehicle))
+        entities.append(RemainingDistance(coordinator, vehicle))
+        entities.append(TargetBatteryPercentage(coordinator, vehicle))
+        entities.append(Mileage(coordinator, vehicle))
+        entities.append(ChargeType(coordinator, vehicle))
+        entities.append(ChargingState(coordinator, vehicle))
+        entities.append(RemainingChargingTime(coordinator, vehicle))
+        entities.append(LastUpdated(coordinator, vehicle))
 
     async_add_entities(entities, update_before_add=True)
 
 
-class EnyaqSensor(EnyaqDataEntity, SensorEntity):
-    """Base class for all Enyaq sensors."""
+class MySkodaSensor(MySkodaDataEntity, SensorEntity):
+    """Base class for all MySkoda sensors."""
 
-    def __init__(
+    def __init__(  # noqa: D107
         self,
         coordinator: DataUpdateCoordinator,
         vehicle: Vehicle,
@@ -59,8 +62,10 @@ class EnyaqSensor(EnyaqDataEntity, SensorEntity):
         SensorEntity.__init__(self)
 
 
-class EnyaqSensorSoftwareVersion(EnyaqSensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class SoftwareVersion(MySkodaSensor):
+    """Current software version of a vehicle."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -73,6 +78,7 @@ class EnyaqSensorSoftwareVersion(EnyaqSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_software_version"
 
     @property
+    @overload
     def native_value(self):
         if not self.coordinator.data:
             return None
@@ -82,8 +88,10 @@ class EnyaqSensorSoftwareVersion(EnyaqSensor):
         return self.vehicle.info.software_version
 
 
-class EnyaqSensorBatteryPercentage(EnyaqSensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class BatteryPercentage(MySkodaSensor):
+    """Battery charging state in percent."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -99,6 +107,7 @@ class EnyaqSensorBatteryPercentage(EnyaqSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_battery_percentage"
 
     @property
+    @overload
     def native_value(self):
         if not self.coordinator.data:
             return None
@@ -108,6 +117,7 @@ class EnyaqSensorBatteryPercentage(EnyaqSensor):
         return self.vehicle.charging.battery_percent
 
     @property
+    @overload
     def icon(self):
         if not self.coordinator.data:
             return "mdi:battery-unknown"
@@ -141,14 +151,15 @@ class EnyaqSensorBatteryPercentage(EnyaqSensor):
 
         if self.vehicle.charging.state != "CONNECT_CABLE":
             return f"mdi:battery-charging-{suffix}"
-        else:
-            if suffix == "100":
-                return "mdi:battery"
-            return f"mdi:battery-{suffix}"
+        if suffix == "100":
+            return "mdi:battery"
+        return f"mdi:battery-{suffix}"
 
 
-class EnyaqSensorChargingPower(EnyaqSensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class ChargingPower(MySkodaSensor):
+    """How fast the car is charging in kW."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -164,6 +175,7 @@ class EnyaqSensorChargingPower(EnyaqSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_charging_power"
 
     @property
+    @overload
     def native_value(self):
         if not self.coordinator.data:
             return None
@@ -173,8 +185,10 @@ class EnyaqSensorChargingPower(EnyaqSensor):
         return self.vehicle.charging.charging_power_kw
 
 
-class EnyaqSensorRemainingDistance(EnyaqSensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class RemainingDistance(MySkodaSensor):
+    """Estimated range of an electric vehicle in km."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -190,6 +204,7 @@ class EnyaqSensorRemainingDistance(EnyaqSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_range"
 
     @property
+    @overload
     def native_value(self):
         if not self.coordinator.data:
             return None
@@ -199,8 +214,10 @@ class EnyaqSensorRemainingDistance(EnyaqSensor):
         return self.vehicle.charging.remaining_distance_m / 1000
 
 
-class EnyaqSensorTargetBatteryPercentage(EnyaqSensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class TargetBatteryPercentage(MySkodaSensor):
+    """Charging target of the EV's battery in percent."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -216,6 +233,7 @@ class EnyaqSensorTargetBatteryPercentage(EnyaqSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_target_battery_percentage"
 
     @property
+    @overload
     def native_value(self):
         if not self.coordinator.data:
             return None
@@ -225,8 +243,10 @@ class EnyaqSensorTargetBatteryPercentage(EnyaqSensor):
         return self.vehicle.charging.target_percent
 
 
-class EnyaqSensorMilage(EnyaqSensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class Mileage(MySkodaSensor):
+    """The vehicle's mileage (total kilometers driven)."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -242,6 +262,7 @@ class EnyaqSensorMilage(EnyaqSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_milage"
 
     @property
+    @overload
     def native_value(self):
         if not self.coordinator.data:
             return None
@@ -251,8 +272,10 @@ class EnyaqSensorMilage(EnyaqSensor):
         return self.vehicle.health.mileage_km
 
 
-class EnyaqSensorChargeType(EnyaqSensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class ChargeType(MySkodaSensor):
+    """How the vehicle is being charged (AC/DC)."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -264,6 +287,7 @@ class EnyaqSensorChargeType(EnyaqSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_charge_type"
 
     @property
+    @overload
     def native_value(self):
         if not self.coordinator.data:
             return None
@@ -273,6 +297,7 @@ class EnyaqSensorChargeType(EnyaqSensor):
         return self.vehicle.charging.charge_type
 
     @property
+    @overload
     def icon(self):
         if not self.coordinator.data:
             return "mdi:ev-plug-type2"
@@ -285,8 +310,10 @@ class EnyaqSensorChargeType(EnyaqSensor):
             return "mdi:ev-plug-ccs2"
 
 
-class EnyaqSensorChargingState(EnyaqSensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class ChargingState(MySkodaSensor):
+    """Current state of charging (ready, charging, conserving, ...)."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -305,6 +332,7 @@ class EnyaqSensorChargingState(EnyaqSensor):
         ]
 
     @property
+    @overload
     def native_value(self):
         if not self.coordinator.data:
             return None
@@ -314,6 +342,7 @@ class EnyaqSensorChargingState(EnyaqSensor):
         return self.vehicle.charging.state
 
     @property
+    @overload
     def icon(self):
         if not self.coordinator.data:
             return "mdi:power_plug"
@@ -322,12 +351,13 @@ class EnyaqSensorChargingState(EnyaqSensor):
 
         if self.vehicle.charging.state == "CONNECT_CABLE":
             return "mdi:power-plug-off"
-        else:
-            return "mdi:power-plug"
+        return "mdi:power-plug"
 
 
-class EnyaqSensorRemainingChargingTime(EnyaqSensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class RemainingChargingTime(MySkodaSensor):
+    """Estimation on when the vehicle will be fully charged."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -342,6 +372,7 @@ class EnyaqSensorRemainingChargingTime(EnyaqSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_remaining_charging_time"
 
     @property
+    @overload
     def native_value(self):
         if not self.coordinator.data:
             return None
@@ -351,8 +382,10 @@ class EnyaqSensorRemainingChargingTime(EnyaqSensor):
         return self.vehicle.charging.remaining_time_min
 
 
-class EnyaqSensorCarCaptured(EnyaqSensor):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class LastUpdated(MySkodaSensor):
+    """Timestamp of when the car has sent the last update to the MySkoda server."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -366,6 +399,7 @@ class EnyaqSensorCarCaptured(EnyaqSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_car_captured"
 
     @property
+    @overload
     def native_value(self):
         if not self.coordinator.data:
             return None

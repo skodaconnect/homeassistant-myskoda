@@ -1,28 +1,28 @@
-"""Enyaq Climate."""
+"""Climate entities for MySkoda."""
 
 from asyncio import sleep
 import logging
+from typing import overload
 
-from homeassistant.const import UnitOfTemperature, ATTR_TEMPERATURE
 from homeassistant.components.climate import (
     ClimateEntity,
     ClimateEntityDescription,
-    HVACMode,
-    HVACAction,
     ClimateEntityFeature,
+    HVACAction,
+    HVACMode,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .entity import EnyaqDataEntity, EnyaqEntity
-from .enyaq import EnyaqHub, Vehicle
 from .const import DATA_COODINATOR, DOMAIN
+from .entity import MySkodaDataEntity
+from .myskoda import Vehicle
 
 _LOGGER = logging.getLogger(__name__)
-
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -35,16 +35,15 @@ async def async_setup_entry(
 
     vehicles = coordinator.data
 
-    entities = []
-
-    for vehicle in vehicles:
-        entities.append(EnyaqClimate(coordinator, vehicle))
+    entities = [MySkodaClimate(coordinator, vehicle) for vehicle in vehicles]
 
     async_add_entities(entities, update_before_add=True)
 
 
-class EnyaqClimate(EnyaqDataEntity, ClimateEntity):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
+    """Climate control for MySkoda vehicles."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -64,10 +63,12 @@ class EnyaqClimate(EnyaqDataEntity, ClimateEntity):
         self._attr_unique_id = f"{self.vehicle.info.vin}_climate"
 
     @property
+    @overload
     def hvac_modes(self) -> list[HVACMode]:
         return [HVACMode.AUTO, HVACMode.OFF]
 
     @property
+    @overload
     def hvac_mode(self) -> HVACMode | None:
         if not self.coordinator.data:
             return None
@@ -76,10 +77,10 @@ class EnyaqClimate(EnyaqDataEntity, ClimateEntity):
 
         if self.vehicle.air_conditioning.air_conditioning_on:
             return HVACMode.AUTO
-        else:
-            return HVACMode.OFF
+        return HVACMode.OFF
 
     @property
+    @overload
     def hvac_action(self) -> HVACAction | None:
         if not self.coordinator.data:
             return None
@@ -88,12 +89,12 @@ class EnyaqClimate(EnyaqDataEntity, ClimateEntity):
 
         if self.vehicle.air_conditioning.state == "HEATING":
             return HVACAction.HEATING
-        elif self.vehicle.air_conditioning.state == "COOLING":
+        if self.vehicle.air_conditioning.state == "COOLING":
             return HVACAction.COOLING
-        elif self.vehicle.air_conditioning.state == "OFF":
-            return HVACAction.OFF
+        return HVACAction.OFF
 
     @property
+    @overload
     def target_temperature(self) -> None | float:
         if not self.coordinator.data:
             return None
@@ -102,7 +103,7 @@ class EnyaqClimate(EnyaqDataEntity, ClimateEntity):
 
         return self.vehicle.air_conditioning.target_temperature_celsius
 
-    async def async_set_hvac_mode(self, hvac_mode: HVACMode):
+    async def async_set_hvac_mode(self, hvac_mode: HVACMode):  # noqa: D102
         if hvac_mode == HVACMode.AUTO:
             await self.coordinator.hub.start_air_conditioning(
                 self.vehicle.info.vin,
@@ -110,23 +111,23 @@ class EnyaqClimate(EnyaqDataEntity, ClimateEntity):
             )
         else:
             await self.coordinator.hub.stop_air_conditioning(self.vehicle.info.vin)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if self.hvac_mode == hvac_mode:
                 break
             await self.coordinator.async_refresh()
-        _LOGGER.info(f"HVAC mode set to {hvac_mode}.")
+        _LOGGER.info("HVAC mode set to %s.", hvac_mode)
 
-    async def async_turn_on(self):
+    async def async_turn_on(self):  # noqa: D102
         await self.set_hvac_mode(HVACMode.AUTO)
 
-    async def async_turn_off(self):
+    async def async_turn_off(self):  # noqa: D102
         await self.set_hvac_mode(HVACMode.OFF)
 
-    async def async_set_temperature(self, **kwargs):
+    async def async_set_temperature(self, **kwargs):  # noqa: D102
         temp = kwargs[ATTR_TEMPERATURE]
         await self.coordinator.hub.set_target_temperature(self.vehicle.info.vin, temp)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if self.target_temperature == temp:
                 break

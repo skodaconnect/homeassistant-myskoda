@@ -1,7 +1,8 @@
-"""Enyaq Switches."""
+"""Switches for the MySkoda integration."""
 
 from asyncio import sleep
 import logging
+from typing import overload
 
 from homeassistant.components.switch import (
     SwitchDeviceClass,
@@ -14,9 +15,9 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .entity import EnyaqDataEntity
-from .enyaq import Vehicle
 from .const import DATA_COODINATOR, DOMAIN
+from .entity import MySkodaDataEntity
+from .myskoda import Vehicle
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,16 +36,18 @@ async def async_setup_entry(
     entities = []
 
     for vehicle in vehicles:
-        entities.append(EnyaqWindowHeatingSwitch(coordinator, vehicle))
-        entities.append(EnyaqReducedCurrentSwitch(coordinator, vehicle))
-        entities.append(EnyaqBatteryCareModeSwitch(coordinator, vehicle))
-        entities.append(EnyaqChargingSwitch(coordinator, vehicle))
+        entities.append(WindowHeating(coordinator, vehicle))
+        entities.append(ReducedCurrent(coordinator, vehicle))
+        entities.append(BatteryCareMode(coordinator, vehicle))
+        entities.append(Charging(coordinator, vehicle))
 
     async_add_entities(entities, update_before_add=True)
 
 
-class EnyaqSwitch(EnyaqDataEntity, SwitchEntity):
-    def __init__(
+class MySkodaSwitch(MySkodaDataEntity, SwitchEntity):
+    """Base class for all switches in the MySkoda integration."""
+
+    def __init__(  # noqa: D107
         self,
         coordinator: DataUpdateCoordinator,
         vehicle: Vehicle,
@@ -54,8 +57,10 @@ class EnyaqSwitch(EnyaqDataEntity, SwitchEntity):
         SwitchEntity.__init__(self)
 
 
-class EnyaqWindowHeatingSwitch(EnyaqSwitch):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class WindowHeating(MySkodaSwitch):
+    """Controls window heating."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -69,6 +74,7 @@ class EnyaqWindowHeatingSwitch(EnyaqSwitch):
         self._attr_unique_id = f"{vehicle.info.vin}_window_heating"
 
     @property
+    @overload
     def is_on(self) -> bool | None:
         if not self.coordinator.data:
             return None
@@ -80,26 +86,28 @@ class EnyaqWindowHeatingSwitch(EnyaqSwitch):
             or self.vehicle.air_conditioning.window_heating_rear_on
         )
 
-    async def async_turn_off(self, **kwargs):
+    async def async_turn_off(self, **kwargs):  # noqa: D102
         await self.coordinator.hub.stop_window_heating(self.vehicle.info.vin)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if not self.is_on:
                 break
             await self.coordinator.async_refresh()
-        _LOGGER.info("Window heating disabled.")
+        _LOGGER.debug("Window heating disabled.")
 
-    async def async_turn_on(self, **kwargs):
+    async def async_turn_on(self, **kwargs):  #noqa: D102
         await self.coordinator.hub.start_window_heating(self.vehicle.info.vin)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if self.is_on:
                 break
             await self.coordinator.async_refresh()
-        _LOGGER.info("Window heating enabled.")
+        _LOGGER.debug("Window heating enabled.")
 
-class EnyaqBatteryCareModeSwitch(EnyaqSwitch):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class BatteryCareMode(MySkodaSwitch):
+    """Controls battery care mode."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -113,6 +121,7 @@ class EnyaqBatteryCareModeSwitch(EnyaqSwitch):
         self._attr_unique_id = f"{vehicle.info.vin}_battery_care_mode"
 
     @property
+    @overload
     def is_on(self) -> bool | None:
         if not self.coordinator.data:
             return None
@@ -121,26 +130,28 @@ class EnyaqBatteryCareModeSwitch(EnyaqSwitch):
 
         return self.vehicle.charging.charging_care_mode
 
-    async def async_turn_off(self, **kwargs):
+    async def async_turn_off(self, **kwargs):  # noqa: D102 # noqa: D102
         await self.coordinator.hub.set_battery_care_mode(self.vehicle.info.vin, False)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if not self.is_on:
                 break
             await self.coordinator.async_refresh()
         _LOGGER.info("Battery care mode disabled.")
 
-    async def async_turn_on(self, **kwargs):
+    async def async_turn_on(self, **kwargs): #noqa: D102
         await self.coordinator.hub.set_battery_care_mode(self.vehicle.info.vin, True)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if self.is_on:
                 break
             await self.coordinator.async_refresh()
         _LOGGER.info("Battery care mode enabled.")
 
-class EnyaqReducedCurrentSwitch(EnyaqSwitch):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class ReducedCurrent(MySkodaSwitch):
+    """Control whether to charge with reduced current."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -154,6 +165,7 @@ class EnyaqReducedCurrentSwitch(EnyaqSwitch):
         self._attr_unique_id = f"{vehicle.info.vin}_reduced_current"
 
     @property
+    @overload
     def is_on(self) -> bool | None:
         if not self.coordinator.data:
             return None
@@ -162,26 +174,28 @@ class EnyaqReducedCurrentSwitch(EnyaqSwitch):
 
         return self.vehicle.charging.use_reduced_current
 
-    async def async_turn_off(self, **kwargs):
+    async def async_turn_off(self, **kwargs): # noqa: D102
         await self.coordinator.hub.set_reduced_current_limit(self.vehicle.info.vin, False)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if not self.is_on:
                 break
             await self.coordinator.async_refresh()
         _LOGGER.info("Reduced current limit disabled.")
 
-    async def async_turn_on(self, **kwargs):
+    async def async_turn_on(self, **kwargs): #noqa: D102
         await self.coordinator.hub.set_reduced_current_limit(self.vehicle.info.vin, True)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if self.is_on:
                 break
             await self.coordinator.async_refresh()
         _LOGGER.info("Reduced current limit enabled.")
 
-class EnyaqChargingSwitch(EnyaqSwitch):
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+class Charging(MySkodaSwitch):
+    """Control whether the vehicle should be charging."""
+
+    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
         super().__init__(
             coordinator,
             vehicle,
@@ -195,6 +209,7 @@ class EnyaqChargingSwitch(EnyaqSwitch):
         self._attr_unique_id = f"{vehicle.info.vin}_charging"
 
     @property
+    @overload
     def is_on(self) -> bool | None:
         if not self.coordinator.data:
             return None
@@ -203,18 +218,18 @@ class EnyaqChargingSwitch(EnyaqSwitch):
 
         return self.vehicle.charging.state == "CHARGING"
 
-    async def async_turn_off(self, **kwargs):
+    async def async_turn_off(self, **kwargs): # noqa: D102
         await self.coordinator.hub.stop_charging(self.vehicle.info.vin)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if not self.is_on:
                 break
             await self.coordinator.async_refresh()
         _LOGGER.info("Charging stopped.")
 
-    async def async_turn_on(self, **kwargs):
+    async def async_turn_on(self, **kwargs): #noqa: D102
         await self.coordinator.hub.start_charging(self.vehicle.info.vin)
-        for i in range(0, 10):
+        for _ in range(10):
             await sleep(15)
             if self.is_on:
                 break

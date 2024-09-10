@@ -1,9 +1,10 @@
-"""Config flow for Enyaq integration."""
+"""Config flow for the MySkoda integration."""
 
 from __future__ import annotations
 
 import logging
 from typing import Any
+
 import voluptuous as vol
 
 from homeassistant import config_entries
@@ -13,7 +14,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import DOMAIN
-from .enyaq import EnyaqHub
+from .myskoda import MySkodaHub
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,14 +27,15 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
-    hub = EnyaqHub(async_get_clientsession(hass))
+    """Check that the inputs are valid."""
+    hub = MySkodaHub(async_get_clientsession(hass))
 
     if not await hub.authenticate(data["email"], data["password"]):
         raise InvalidAuth
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Enyaq."""
+    """Handle a config flow for MySkoda."""
 
     VERSION = 1
 

@@ -1,17 +1,19 @@
 """The MySkoda Enyaq integration."""
 
 from __future__ import annotations
+
 from datetime import timedelta
 import logging
+from typing import overload
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .enyaq import EnyaqHub, Vehicle
 from .const import DATA_COODINATOR, DOMAIN
+from .myskoda import MySkodaHub, Vehicle
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -28,7 +30,7 @@ PLATFORMS: list[Platform] = [
 async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     """Set up Enyaq integration from a config entry."""
 
-    coordinator = EnyaqDataUpdateCoordinator(hass, config)
+    coordinator = MySkodaDataUpdateCoordinator(hass, config)
 
     if not await coordinator.async_login():
         return False
@@ -52,22 +54,31 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return unload_ok
 
 
-class EnyaqDataUpdateCoordinator(DataUpdateCoordinator):
+class MySkodaDataUpdateCoordinator(DataUpdateCoordinator):
+    """See `DataUpdateCoordinator`.
+
+    This class manages all data from the MySkoda API.
+    """
+
     def __init__(self, hass: HomeAssistant, config: ConfigEntry) -> None:
+        """Create a new coordinator."""
+
         super().__init__(
             hass, _LOGGER, name=DOMAIN, update_interval=timedelta(minutes=5)
         )
-        self.hub = EnyaqHub(async_get_clientsession(hass))
+        self.hub = MySkodaHub(async_get_clientsession(hass))
         self.config = config
 
     async def async_login(self) -> bool:
-        login_success = await self.hub.authenticate(
+        """Login to the MySkoda API. Will return `True` if successful."""
+
+        return await self.hub.authenticate(
             self.config.data["email"], self.config.data["password"]
         )
-        return login_success
 
     async def _async_update_data(self) -> list[Vehicle]:
         return await self.hub.get_all_vehicles()
 
+    @overload
     def _unsub_refresh(self):
         return

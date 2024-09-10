@@ -2,22 +2,23 @@
 
 from asyncio import sleep
 import logging
+from typing import overload
 
-from homeassistant.const import PERCENTAGE
 from homeassistant.components.number import (
     NumberDeviceClass,
     NumberEntity,
     NumberEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import PERCENTAGE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .entity import EnyaqDataEntity
-from .enyaq import Vehicle
 from .const import DATA_COODINATOR, DOMAIN
+from .entity import MySkodaDataEntity
+from .myskoda import Vehicle
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -32,27 +33,38 @@ async def async_setup_entry(
 
     vehicles = coordinator.data
 
-    entities = []
-
-    for vehicle in vehicles:
-        entities.append(EnyaqChargeLimitNumber(coordinator, vehicle))
+    entities = [ChargeLimit(coordinator, vehicle) for vehicle in vehicles]
 
     async_add_entities(entities, update_before_add=True)
 
 
-class EnyaqNumber(EnyaqDataEntity, NumberEntity):
+class MySkodaNumber(MySkodaDataEntity, NumberEntity):
+    """Number Entity.
+
+    Base class for all number entities in the MySkoda integration.
+    """
+
     def __init__(
         self,
         coordinator: DataUpdateCoordinator,
         vehicle: Vehicle,
         entity_description: NumberEntityDescription,
     ) -> None:
+        """Create new Number."""
+
         super().__init__(coordinator, vehicle, entity_description)
         NumberEntity.__init__(self)
 
 
-class EnyaqChargeLimitNumber(EnyaqNumber):
+class ChargeLimit(MySkodaNumber):
+    """Charge limit.
+
+    Represents the maximum value in percent that the car can be charged to.
+    """
+
     def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
+        """Create new ChargeLimit."""
+
         super().__init__(
             coordinator,
             vehicle,
@@ -70,6 +82,7 @@ class EnyaqChargeLimitNumber(EnyaqNumber):
         self._attr_device_class = NumberDeviceClass.BATTERY
 
     @property
+    @overload
     def native_value(self) -> float | None:
         if not self.coordinator.data:
             return None
@@ -78,11 +91,11 @@ class EnyaqChargeLimitNumber(EnyaqNumber):
 
         return self.vehicle.charging.target_percent
 
-    async def async_set_native_value(self, value: float):
+    async def async_set_native_value(self, value: float):  # noqa: D102
         await self.coordinator.hub.set_charge_limit(self.vehicle.info.vin, value)
         for i in range(0, 10):
             await sleep(15)
             if self.native_value == value:
                 break
             await self.coordinator.async_refresh()
-        _LOGGER.info(f"Changed charge limit to {value}.")
+        _LOGGER.debug("Changed charge limit to %s.", value)
