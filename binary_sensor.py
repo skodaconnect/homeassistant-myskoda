@@ -1,7 +1,5 @@
 """Binary Sensors for MySkoda."""
 
-from typing import overload
-
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
@@ -28,7 +26,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
 
-    vehicles = coordinator.data
+    vehicles = coordinator.data.get("vehicles")
 
     entities = []
 
@@ -75,8 +73,7 @@ class ChargerConnected(MySkodaBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_charger_connected"
 
     @property
-    @overload
-    def is_on(self):
+    def is_on(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -85,8 +82,7 @@ class ChargerConnected(MySkodaBinarySensor):
         return self.vehicle.air_conditioning.charger_connected
 
     @property
-    @overload
-    def icon(self):
+    def icon(self):  # noqa: D102
         if not self.coordinator.data:
             return "mdi:power_plug"
 
@@ -113,8 +109,7 @@ class ChargerLocked(MySkodaBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_charger_locked"
 
     @property
-    @overload
-    def is_on(self):
+    def is_on(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -123,8 +118,7 @@ class ChargerLocked(MySkodaBinarySensor):
         return not self.vehicle.air_conditioning.charger_locked
 
     @property
-    @overload
-    def icon(self):
+    def icon(self):  # noqa: D102
         if not self.coordinator.data:
             return "mdi:lock"
 
@@ -151,8 +145,7 @@ class Locked(MySkodaBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_locked"
 
     @property
-    @overload
-    def is_on(self):
+    def is_on(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -161,8 +154,7 @@ class Locked(MySkodaBinarySensor):
         return not self.vehicle.status.locked
 
     @property
-    @overload
-    def icon(self):
+    def icon(self):  # noqa: D102
         if not self.coordinator.data:
             return "mdi:lock"
 
@@ -189,8 +181,7 @@ class DoorsLocked(MySkodaBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_doors_locked"
 
     @property
-    @overload
-    def is_on(self):
+    def is_on(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -199,8 +190,7 @@ class DoorsLocked(MySkodaBinarySensor):
         return not self.vehicle.status.doors_locked
 
     @property
-    @overload
-    def icon(self):
+    def icon(self):  # noqa: D102
         if not self.coordinator.data:
             return "mdi:lock"
 
@@ -228,8 +218,7 @@ class DoorsOpen(MySkodaBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_doors_open"
 
     @property
-    @overload
-    def is_on(self):
+    def is_on(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -255,8 +244,7 @@ class WindowsOpen(MySkodaBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_windows_open"
 
     @property
-    @overload
-    def is_on(self):
+    def is_on(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -282,8 +270,7 @@ class TrunkOpen(MySkodaBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_trunk_open"
 
     @property
-    @overload
-    def is_on(self):
+    def is_on(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -309,8 +296,7 @@ class BonnetOpen(MySkodaBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_bonnet_open"
 
     @property
-    @overload
-    def is_on(self):
+    def is_on(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -336,8 +322,7 @@ class LightsOn(MySkodaBinarySensor):
         self._attr_unique_id = f"{vehicle.info.vin}_lights_on"
 
     @property
-    @overload
-    def is_on(self):
+    def is_on(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 

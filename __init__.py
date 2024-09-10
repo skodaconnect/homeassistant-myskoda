@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from datetime import timedelta
 import logging
-from typing import overload
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -76,9 +75,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator):
             self.config.data["email"], self.config.data["password"]
         )
 
-    async def _async_update_data(self) -> list[Vehicle]:
-        return await self.hub.get_all_vehicles()
+    async def _async_update_data(self) -> dict[str, list[Vehicle]]:
+        return {
+            "vehicles": await self.hub.get_all_vehicles(),
+        }
 
-    @overload
     def _unsub_refresh(self):
         return

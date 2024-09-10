@@ -2,7 +2,6 @@
 
 from asyncio import sleep
 import logging
-from typing import overload
 
 from homeassistant.components.switch import (
     SwitchDeviceClass,
@@ -31,7 +30,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
 
-    vehicles = coordinator.data
+    vehicles = coordinator.data.get("vehicles")
 
     entities = []
 
@@ -74,8 +73,7 @@ class WindowHeating(MySkodaSwitch):
         self._attr_unique_id = f"{vehicle.info.vin}_window_heating"
 
     @property
-    @overload
-    def is_on(self) -> bool | None:
+    def is_on(self) -> bool | None:  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -122,8 +120,7 @@ class BatteryCareMode(MySkodaSwitch):
         self._attr_unique_id = f"{vehicle.info.vin}_battery_care_mode"
 
     @property
-    @overload
-    def is_on(self) -> bool | None:
+    def is_on(self) -> bool | None:  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -167,8 +164,7 @@ class ReducedCurrent(MySkodaSwitch):
         self._attr_unique_id = f"{vehicle.info.vin}_reduced_current"
 
     @property
-    @overload
-    def is_on(self) -> bool | None:
+    def is_on(self) -> bool | None:  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -216,8 +212,7 @@ class Charging(MySkodaSwitch):
         self._attr_unique_id = f"{vehicle.info.vin}_charging"
 
     @property
-    @overload
-    def is_on(self) -> bool | None:
+    def is_on(self) -> bool | None:  # noqa: D102
         if not self.coordinator.data:
             return None
 

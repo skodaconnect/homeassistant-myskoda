@@ -1,7 +1,5 @@
 """MySkoda Entity base classes."""
 
-from typing import overload
-
 from homeassistant.helpers.entity import DeviceInfo, Entity, EntityDescription
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
@@ -23,8 +21,7 @@ class MySkodaEntity(Entity):
         self.entity_description = entity_description
 
     @property
-    @overload
-    def device_info(self) -> DeviceInfo:
+    def device_info(self) -> DeviceInfo:  # noqa: D102
         return {
             "identifiers": {(DOMAIN, self.vehicle.info.vin)},
             "name": self.vehicle.info.title,
@@ -48,7 +45,7 @@ class MySkodaDataEntity(CoordinatorEntity, MySkodaEntity):
         MySkodaEntity.__init__(self, vehicle, entity_description)
 
     def _update_device_from_coordinator(self) -> None:
-        for vehicle in self.coordinator.data:
+        for vehicle in self.coordinator.data.get("vehicles"):
             if vehicle.info.vin == self.vehicle.info.vin:
                 self.vehicle = vehicle
                 return

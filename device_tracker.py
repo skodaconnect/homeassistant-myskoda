@@ -1,7 +1,5 @@
 """Device Tracker entities for MySkoda."""
 
-from typing import overload
-
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
 from homeassistant.components.device_tracker.const import SourceType
 from homeassistant.config_entries import ConfigEntry
@@ -25,7 +23,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
 
-    vehicles = coordinator.data
+    vehicles = coordinator.data.get("vehicles")
 
     entities = [DeviceTracker(coordinator, vehicle) for vehicle in vehicles]
 
@@ -48,13 +46,11 @@ class DeviceTracker(MySkodaDataEntity, TrackerEntity):
         )
 
     @property
-    @overload
-    def source_type(self) -> SourceType:
+    def source_type(self) -> SourceType:  # noqa: D102
         return SourceType.GPS
 
     @property
-    @overload
-    def latitude(self) -> float | None:
+    def latitude(self) -> float | None:  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -63,8 +59,7 @@ class DeviceTracker(MySkodaDataEntity, TrackerEntity):
         return self.vehicle.position.lat
 
     @property
-    @overload
-    def longitude(self) -> float | None:
+    def longitude(self) -> float | None:  # noqa: D102
         if not self.coordinator.data:
             return None
 

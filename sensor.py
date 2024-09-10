@@ -1,7 +1,5 @@
 """Sensors for the MySkoda integration."""
 
-from typing import overload
-
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
@@ -30,7 +28,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
 
-    vehicles = coordinator.data
+    vehicles = coordinator.data.get("vehicles")
 
     entities = []
 
@@ -78,8 +76,7 @@ class SoftwareVersion(MySkodaSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_software_version"
 
     @property
-    @overload
-    def native_value(self):
+    def native_value(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -107,8 +104,7 @@ class BatteryPercentage(MySkodaSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_battery_percentage"
 
     @property
-    @overload
-    def native_value(self):
+    def native_value(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -117,8 +113,7 @@ class BatteryPercentage(MySkodaSensor):
         return self.vehicle.charging.battery_percent
 
     @property
-    @overload
-    def icon(self):
+    def icon(self):  # noqa: D102
         if not self.coordinator.data:
             return "mdi:battery-unknown"
 
@@ -175,8 +170,7 @@ class ChargingPower(MySkodaSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_charging_power"
 
     @property
-    @overload
-    def native_value(self):
+    def native_value(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -204,8 +198,7 @@ class RemainingDistance(MySkodaSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_range"
 
     @property
-    @overload
-    def native_value(self):
+    def native_value(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -233,8 +226,7 @@ class TargetBatteryPercentage(MySkodaSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_target_battery_percentage"
 
     @property
-    @overload
-    def native_value(self):
+    def native_value(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -262,8 +254,7 @@ class Mileage(MySkodaSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_milage"
 
     @property
-    @overload
-    def native_value(self):
+    def native_value(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -287,8 +278,7 @@ class ChargeType(MySkodaSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_charge_type"
 
     @property
-    @overload
-    def native_value(self):
+    def native_value(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -297,8 +287,7 @@ class ChargeType(MySkodaSensor):
         return self.vehicle.charging.charge_type
 
     @property
-    @overload
-    def icon(self):
+    def icon(self):  # noqa: D102
         if not self.coordinator.data:
             return "mdi:ev-plug-type2"
 
@@ -331,8 +320,7 @@ class ChargingState(MySkodaSensor):
         ]
 
     @property
-    @overload
-    def native_value(self):
+    def native_value(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -341,8 +329,7 @@ class ChargingState(MySkodaSensor):
         return self.vehicle.charging.state
 
     @property
-    @overload
-    def icon(self):
+    def icon(self):  # noqa: D102
         if not self.coordinator.data:
             return "mdi:power_plug"
 
@@ -371,8 +358,7 @@ class RemainingChargingTime(MySkodaSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_remaining_charging_time"
 
     @property
-    @overload
-    def native_value(self):
+    def native_value(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -398,8 +384,7 @@ class LastUpdated(MySkodaSensor):
         self._attr_unique_id = f"{vehicle.info.vin}_car_captured"
 
     @property
-    @overload
-    def native_value(self):
+    def native_value(self):  # noqa: D102
         if not self.coordinator.data:
             return None
 

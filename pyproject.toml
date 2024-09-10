@@ -17,10 +17,13 @@ voluptuous = "^0.15.2"
 
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.11.2"
 ruff = "^0.6.4"
 homeassistant-stubs = "^2024.9.1"
+pyright = "^1.1.379"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+reportIncompatibleVariableOverride = "none"

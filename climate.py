@@ -2,7 +2,6 @@
 
 from asyncio import sleep
 import logging
-from typing import overload
 
 from homeassistant.components.climate import (
     ClimateEntity,
@@ -34,7 +33,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
 
-    vehicles = coordinator.data
+    vehicles = coordinator.data.get("vehicles")
 
     entities = [MySkodaClimate(coordinator, vehicle) for vehicle in vehicles]
 
@@ -64,13 +63,11 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
         self._attr_unique_id = f"{self.vehicle.info.vin}_climate"
 
     @property
-    @overload
-    def hvac_modes(self) -> list[HVACMode]:
+    def hvac_modes(self) -> list[HVACMode]:  # noqa: D102
         return [HVACMode.AUTO, HVACMode.OFF]
 
     @property
-    @overload
-    def hvac_mode(self) -> HVACMode | None:
+    def hvac_mode(self) -> HVACMode | None:  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -81,8 +78,7 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
         return HVACMode.OFF
 
     @property
-    @overload
-    def hvac_action(self) -> HVACAction | None:
+    def hvac_action(self) -> HVACAction | None:  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -95,8 +91,7 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
         return HVACAction.OFF
 
     @property
-    @overload
-    def target_temperature(self) -> None | float:
+    def target_temperature(self) -> None | float:  # noqa: D102
         if not self.coordinator.data:
             return None
 
@@ -120,10 +115,10 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
         _LOGGER.info("HVAC mode set to %s.", hvac_mode)
 
     async def async_turn_on(self):  # noqa: D102
-        await self.set_hvac_mode(HVACMode.AUTO)
+        await self.async_set_hvac_mode(HVACMode.AUTO)
 
     async def async_turn_off(self):  # noqa: D102
-        await self.set_hvac_mode(HVACMode.OFF)
+        await self.async_set_hvac_mode(HVACMode.OFF)
 
     async def async_set_temperature(self, **kwargs):  # noqa: D102
         temp = kwargs[ATTR_TEMPERATURE]

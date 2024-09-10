@@ -2,7 +2,6 @@
 
 from asyncio import sleep
 import logging
-from typing import overload
 
 from homeassistant.components.number import (
     NumberDeviceClass,
@@ -32,7 +31,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
 
-    vehicles = coordinator.data
+    vehicles = coordinator.data.get("vehicles")
 
     entities = [ChargeLimit(coordinator, vehicle) for vehicle in vehicles]
 
@@ -83,8 +82,7 @@ class ChargeLimit(MySkodaNumber):
         self._attr_device_class = NumberDeviceClass.BATTERY
 
     @property
-    @overload
-    def native_value(self) -> float | None:
+    def native_value(self) -> float | None:  # noqa: D102
         if not self.coordinator.data:
             return None
 
