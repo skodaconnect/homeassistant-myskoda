@@ -4,10 +4,10 @@
   "codeowners": ["@prior99"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/Prior99/myskoda/blob/master/README.md",
+  "documentation": "https://github.com/skodaconnect/homeassistant-myskoda/blob/main/README.md",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/Prior99/myskoda/issues",
-  "requirements": ["beautifulsoup4==4.12.3", "myskoda==0.1.0"],
-  "version": "1.2.3"
+  "issue_tracker": "https://github.com/skodaconnect/homeassistant-myskoda/issues",
+  "requirements": ["myskoda==0.1.5"],
+  "version": "1.2.4"
 }
