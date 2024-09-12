@@ -5,9 +5,9 @@ from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
 )
+from myskoda import Vehicle
 
 from .const import DOMAIN
-from .myskoda import Vehicle
 
 
 class MySkodaEntity(Entity):

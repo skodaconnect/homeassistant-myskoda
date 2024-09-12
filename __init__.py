@@ -10,9 +10,9 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from myskoda import MySkodaHub, Vehicle
 
 from .const import DATA_COODINATOR, DOMAIN
-from .myskoda import MySkodaHub, Vehicle
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -8,10 +8,10 @@ from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from myskoda import Vehicle
 
 from .const import DATA_COODINATOR, DOMAIN
 from .entity import MySkodaDataEntity
-from .myskoda import Vehicle
 
 
 async def async_setup_entry(

@@ -1671,6 +1671,24 @@ files = [
 ]
 
 [[package]]
+name = "myskoda"
+version = "0.1.0"
+description = "Library for interaction with the MySkoda APIs."
+optional = false
+python-versions = "<3.13,>=3.12"
+files = [
+    {file = "myskoda-0.1.0-py3-none-any.whl", hash = "sha256:c7c04f2629f964abc332ac78525d12af4e7309744cb355f93762f7bce752ebe2"},
+    {file = "myskoda-0.1.0.tar.gz", hash = "sha256:45f3c70837910b1bbdeed6d1a44097f981fb5abd3543186a8202fe9f7cbe7563"},
+]
+
+[package.dependencies]
+aiohttp = ">=3.10.5,<4.0.0"
+asyncio = ">=3.4.3,<4.0.0"
+beautifulsoup4 = ">=4.12.3,<5.0.0"
+pyjwt = ">=2.9.0,<3.0.0"
+pyyaml = ">=6.0.2,<7.0.0"
+
+[[package]]
 name = "nodeenv"
 version = "1.9.1"
 description = "Node.js virtual environment builder"
@@ -2981,4 +2999,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.12"
-content-hash = "974b806e3c16ecce65d625cd8b1a6c0833d20aa59346ce9d8f6938c3e9309cdb"
+content-hash = "1e70a4108691c3dea98eb1dced5fb86adbb309e9ed9d068532557bc26311d68e"
