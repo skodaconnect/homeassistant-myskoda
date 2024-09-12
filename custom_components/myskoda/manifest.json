@@ -8,6 +8,6 @@
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/Prior99/myskoda/issues",
-  "requirements": ["beautifulsoup4==4.12.3"],
+  "requirements": ["beautifulsoup4==4.12.3", "myskoda~0.1.0"],
   "version": "1.2.2"
 }
