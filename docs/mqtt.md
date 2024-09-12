@@ -2,8 +2,6 @@
 
 This is a specification for the MQTT protocol that the server uses to communicate with the app.
 
-[[TOC]]
-
 ## Connection
 
 **Host:**
