@@ -5,6 +5,7 @@ from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
 )
+
 from myskoda import Vehicle
 
 from .const import DOMAIN
@@ -24,11 +25,11 @@ class MySkodaEntity(Entity):
     def device_info(self) -> DeviceInfo:  # noqa: D102
         return {
             "identifiers": {(DOMAIN, self.vehicle.info.vin)},
-            "name": self.vehicle.info.title,
+            "name": self.vehicle.info.specification.title,
             "manufacturer": "Škoda",
             "sw_version": self.vehicle.info.software_version,
-            "hw_version": f"{self.vehicle.info.model_id}-{self.vehicle.info.model_year}",
-            "model": self.vehicle.info.model,
+            "hw_version": f"{self.vehicle.info.specification.system_model_id}-{self.vehicle.info.specification.model_year}",
+            "model": self.vehicle.info.specification.model,
         }
 
 

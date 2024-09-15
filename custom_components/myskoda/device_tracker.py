@@ -40,7 +40,7 @@ class DeviceTracker(MySkodaDataEntity, TrackerEntity):
             coordinator,
             vehicle,
             EntityDescription(
-                name=vehicle.info.title,
+                name=vehicle.info.specification.title,
                 key=f"{vehicle.info.vin}_device_tracker",
             ),
         )
@@ -56,7 +56,7 @@ class DeviceTracker(MySkodaDataEntity, TrackerEntity):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.position.lat
+        return self.vehicle.position.positions[0].gps_coordinates.latitude
 
     @property
     def longitude(self) -> float | None:  # noqa: D102
@@ -65,4 +65,4 @@ class DeviceTracker(MySkodaDataEntity, TrackerEntity):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.position.lng
+        return self.vehicle.position.positions[0].gps_coordinates.longitude
