@@ -8,6 +8,6 @@
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/skodaconnect/homeassistant-myskoda/issues",
-  "requirements": ["myskoda==0.2.2"],
-  "version": "1.2.5"
+  "requirements": ["myskoda==0.2.3"],
+  "version": "1.2.6"
 }
