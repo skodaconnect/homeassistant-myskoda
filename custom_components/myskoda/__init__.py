@@ -1,4 +1,4 @@
-"""The MySkoda Enyaq integration."""
+"""The MySkoda integration."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ PLATFORMS: list[Platform] = [
 
 
 async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
-    """Set up Enyaq integration from a config entry."""
+    """Set up MySkoda integration from a config entry."""
 
     coordinator = MySkodaDataUpdateCoordinator(hass, config)
 

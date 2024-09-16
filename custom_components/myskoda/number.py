@@ -1,4 +1,4 @@
-"""Number entities for Enyaq."""
+"""Number entities for MySkoda."""
 
 from asyncio import sleep
 import logging
