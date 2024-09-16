@@ -1,5 +1,6 @@
 """Sensors for the MySkoda integration."""
 
+from typing import cast
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
@@ -28,21 +29,23 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
 
-    vehicles = coordinator.data.get("vehicles")
+    vehicles = cast(list[Vehicle], coordinator.data.get("vehicles"))
 
     entities = []
 
     for vehicle in vehicles:
         entities.append(SoftwareVersion(coordinator, vehicle))
-        entities.append(BatteryPercentage(coordinator, vehicle))
-        entities.append(ChargingPower(coordinator, vehicle))
         entities.append(RemainingDistance(coordinator, vehicle))
-        entities.append(TargetBatteryPercentage(coordinator, vehicle))
         entities.append(Mileage(coordinator, vehicle))
-        entities.append(ChargeType(coordinator, vehicle))
-        entities.append(ChargingState(coordinator, vehicle))
-        entities.append(RemainingChargingTime(coordinator, vehicle))
         entities.append(LastUpdated(coordinator, vehicle))
+
+        if vehicle.charging and vehicle.charging.status:
+            entities.append(TargetBatteryPercentage(coordinator, vehicle))
+            entities.append(ChargeType(coordinator, vehicle))
+            entities.append(ChargingState(coordinator, vehicle))
+            entities.append(RemainingChargingTime(coordinator, vehicle))
+            entities.append(BatteryPercentage(coordinator, vehicle))
+            entities.append(ChargingPower(coordinator, vehicle))
 
     async_add_entities(entities, update_before_add=True)
 
@@ -105,7 +108,7 @@ class BatteryPercentage(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
@@ -114,7 +117,7 @@ class BatteryPercentage(MySkodaSensor):
 
     @property
     def icon(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return "mdi:battery-unknown"
 
         self._update_device_from_coordinator()
@@ -171,7 +174,7 @@ class ChargingPower(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
@@ -199,7 +202,7 @@ class RemainingDistance(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
@@ -282,21 +285,21 @@ class ChargeType(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.charge_type
+        return self.vehicle.charging.status.charge_type
 
     @property
     def icon(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return "mdi:ev-plug-type2"
 
         self._update_device_from_coordinator()
 
-        if self.vehicle.charging.charge_type == "AC":
+        if self.vehicle.charging.status.charge_type == "AC":
             return "mdi:ev-plug-type2"
         return "mdi:ev-plug-ccs2"
 
@@ -324,7 +327,7 @@ class ChargingState(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
@@ -333,7 +336,7 @@ class ChargingState(MySkodaSensor):
 
     @property
     def icon(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return "mdi:power_plug"
 
         self._update_device_from_coordinator()
@@ -362,7 +365,7 @@ class RemainingChargingTime(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()

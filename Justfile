@@ -3,3 +3,5 @@ lint:
     poetry run ruff format . --diff
     poetry run pyright
 
+format:
+    poetry run ruff format .
