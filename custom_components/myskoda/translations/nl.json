@@ -1,0 +1,79 @@
+{
+	"entity": {
+		"binary_sensor": {
+			"charger_connected": {
+				"name": "Laadkabel"
+			},
+			"charger_locked": {
+				"name": "Laadkabelvergrendeling"
+			},
+			"locked": {
+				"name": "Voertuigvergrendeling"
+			},
+			"doors_locked": {
+				"name": "Deurvergrendeling"
+			},
+			"doors_open": {
+				"name": "Deuren"
+			},
+			"windows_open": {
+				"name": "Ramen"
+			},
+			"trunk_open": {
+				"name": "Kofferbak"
+			},
+			"bonnet_open": {
+				"name": "Motorkap"
+			},
+			"lights_on": {
+				"name": "Lichten"
+			}
+		},
+		"device_tracker": {
+			"device_tracker": {
+				"name": "Positie"
+			}
+		},
+		"climate": {
+			"climate": {
+				"name": "Luchtbehandeling"
+			}
+		},
+		"sensor": {
+			"software_version": {
+				"name": "Software versie"
+			},
+			"battery_percentage": {
+				"name": "Accupercentage"
+			},
+			"charging_power": {
+				"name": "Laadvermogen"
+			},
+			"range": {
+				"name": "Bereik"
+			},
+			"target_battery_percentage": {
+				"name": "Laaddoel in procenten"
+			},
+			"milage": {
+				"name": "Kilometerstand"
+			},
+			"charge_type": {
+				"name": "Laadmethode"
+			},
+			"charging_state": {
+				"name": "Laadstatus"
+			},
+			"remaining_charging_time": {
+				"name": "Laadtijd resterend"
+			},
+			"car_captured": {
+				"name": "Laatst bijgewerkt"
+			}
+		},
+		"number": {
+			"charge_limit": {
+				"name": "Laadlimiet"
+			}
+	}
+}
