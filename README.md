@@ -1,6 +1,6 @@
-# MySkoda Integration for Enyaq
+# MySkoda Integration for Skoda vehicles compatible with MySkoda-App.
 
-MySkoda Enyaq integration using the API that the MySkoda App uses.
+MySkoda integration using the API that the MySkoda App uses.
 
 ## Capabilities
 
@@ -51,4 +51,4 @@ Location of vehicles are exposed as device trackers.
 
 Check out the [awesome work from the team behind pyskodaconnect](https://github.com/skodaconnect/homeassistant-skodaconnect).
 
-Sadly, their integration is currently not working with new cars that can no longer access the old Skoda Essentials App. A rewrite to the new MySkoda API is pending.
+Sadly, the integration is currently not working with new cars that can no longer access the old Skoda Essentials App. This is a rewrite to the new MySkoda API.
