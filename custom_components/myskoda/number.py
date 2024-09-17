@@ -76,6 +76,7 @@ class ChargeLimit(MySkodaNumber):
                 native_min_value=50,
                 native_unit_of_measurement=PERCENTAGE,
                 native_step=10,
+                translation_key="charge_limit"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_charge_limit"

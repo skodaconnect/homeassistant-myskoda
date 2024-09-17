@@ -74,6 +74,7 @@ class SoftwareVersion(MySkodaSensor):
                 key="software_version",
                 name=f"{vehicle.info.specification.title} Software Version",
                 icon="mdi:update",
+                translation_key="software_version"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_software_version"
@@ -102,6 +103,7 @@ class BatteryPercentage(MySkodaSensor):
                 state_class=SensorStateClass.MEASUREMENT,
                 native_unit_of_measurement=PERCENTAGE,
                 device_class=SensorDeviceClass.BATTERY,
+                translation_key="battery_percentage"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_battery_percentage"
@@ -168,6 +170,7 @@ class ChargingPower(MySkodaSensor):
                 state_class=SensorStateClass.MEASUREMENT,
                 native_unit_of_measurement=UnitOfPower.KILO_WATT,
                 device_class=SensorDeviceClass.POWER,
+                translation_key="charging_power"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_charging_power"
@@ -196,6 +199,7 @@ class RemainingDistance(MySkodaSensor):
                 state_class=SensorStateClass.MEASUREMENT,
                 native_unit_of_measurement=UnitOfLength.KILOMETERS,
                 device_class=SensorDeviceClass.DISTANCE,
+                translation_key="range"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_range"
@@ -227,6 +231,7 @@ class TargetBatteryPercentage(MySkodaSensor):
                 native_unit_of_measurement=PERCENTAGE,
                 icon="mdi:percent",
                 device_class=SensorDeviceClass.BATTERY,
+                translation_key="target_battery_percentage"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_target_battery_percentage"
@@ -255,6 +260,7 @@ class Mileage(MySkodaSensor):
                 native_unit_of_measurement=UnitOfLength.KILOMETERS,
                 icon="mdi:counter",
                 device_class=SensorDeviceClass.DISTANCE,
+                translation_key="milage"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_milage"
@@ -279,6 +285,7 @@ class ChargeType(MySkodaSensor):
             SensorEntityDescription(
                 key="charge_type",
                 name=f"{vehicle.info.specification.title} Charge Type",
+                translation_key="charge_type"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_charge_type"
@@ -315,6 +322,7 @@ class ChargingState(MySkodaSensor):
                 key="charging_state",
                 name=f"{vehicle.info.specification.title} Charging State",
                 device_class=SensorDeviceClass.ENUM,
+                translation_key="charging_state"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_charging_state"
@@ -359,6 +367,7 @@ class RemainingChargingTime(MySkodaSensor):
                 device_class=SensorDeviceClass.DURATION,
                 native_unit_of_measurement=UnitOfTime.MINUTES,
                 icon="mdi:timer",
+                translation_key="remaining_charging_time"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_remaining_charging_time"
@@ -385,6 +394,7 @@ class LastUpdated(MySkodaSensor):
                 name=f"{vehicle.info.specification.title} Last Updated",
                 device_class=SensorDeviceClass.TIMESTAMP,
                 icon="mdi:clock",
+                translation_key="car_captured"
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_car_captured"
