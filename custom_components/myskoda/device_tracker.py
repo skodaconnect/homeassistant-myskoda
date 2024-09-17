@@ -42,7 +42,7 @@ class DeviceTracker(MySkodaDataEntity, TrackerEntity):
             EntityDescription(
                 name=vehicle.info.specification.title,
                 key=f"{vehicle.info.vin}_device_tracker",
-                translation_key="device_tracker"
+                translation_key="device_tracker",
             ),
         )
 
