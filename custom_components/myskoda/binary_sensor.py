@@ -71,7 +71,7 @@ class ChargerConnected(MySkodaBinarySensor):
                 key="charger_connected",
                 name=f"{vehicle.info.specification.title} Charger Connected",
                 device_class=BinarySensorDeviceClass.PLUG,
-                translation_key="charger_connected"
+                translation_key="charger_connected",
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_charger_connected"
@@ -111,7 +111,7 @@ class ChargerLocked(MySkodaBinarySensor):
                 key="charger_locked",
                 name=f"{vehicle.info.specification.title} Charger",
                 device_class=BinarySensorDeviceClass.LOCK,
-                translation_key="charger_locked"
+                translation_key="charger_locked",
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_charger_locked"
@@ -154,7 +154,7 @@ class Locked(MySkodaBinarySensor):
                 key="locked",
                 name=f"{vehicle.info.specification.title} Locks",
                 device_class=BinarySensorDeviceClass.LOCK,
-                translation_key="locked"
+                translation_key="locked",
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_locked"
@@ -191,7 +191,7 @@ class DoorsLocked(MySkodaBinarySensor):
                 key="doors_locked",
                 name=f"{vehicle.info.specification.title} Doors Locks",
                 device_class=BinarySensorDeviceClass.LOCK,
-                translation_key="doors_locked"
+                translation_key="doors_locked",
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_doors_locked"
@@ -229,7 +229,7 @@ class DoorsOpen(MySkodaBinarySensor):
                 name=f"{vehicle.info.specification.title} Doors",
                 device_class=BinarySensorDeviceClass.DOOR,
                 icon="mdi:car-door",
-                translation_key="doors_open"
+                translation_key="doors_open",
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_doors_open"
@@ -256,7 +256,7 @@ class WindowsOpen(MySkodaBinarySensor):
                 name=f"{vehicle.info.specification.title} Windows",
                 device_class=BinarySensorDeviceClass.WINDOW,
                 icon="mdi:car-door",
-                translation_key="windows_open"
+                translation_key="windows_open",
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_windows_open"
@@ -283,7 +283,7 @@ class TrunkOpen(MySkodaBinarySensor):
                 name=f"{vehicle.info.specification.title} Trunk",
                 device_class=BinarySensorDeviceClass.OPENING,
                 icon="mdi:car",
-                translation_key="trunk_open"
+                translation_key="trunk_open",
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_trunk_open"
@@ -310,7 +310,7 @@ class BonnetOpen(MySkodaBinarySensor):
                 name=f"{vehicle.info.specification.title} Bonnet",
                 device_class=BinarySensorDeviceClass.OPENING,
                 icon="mdi:car",
-                translation_key="bonnet_open"
+                translation_key="bonnet_open",
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_bonnet_open"
@@ -337,7 +337,7 @@ class LightsOn(MySkodaBinarySensor):
                 name=f"{vehicle.info.specification.title} Lights",
                 device_class=BinarySensorDeviceClass.LIGHT,
                 icon="mdi:car-light-high",
-                translation_key="lights_on"
+                translation_key="lights_on",
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_lights_on"

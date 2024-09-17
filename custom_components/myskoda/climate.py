@@ -51,7 +51,7 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
                 key="climate",
                 name=f"{vehicle.info.specification.title} Air Conditioning",
                 icon="mdi:air-conditioner",
-                translation_key="climate"
+                translation_key="climate",
             ),
         )
         ClimateEntity.__init__(self)
