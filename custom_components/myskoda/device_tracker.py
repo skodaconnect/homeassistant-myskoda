@@ -56,11 +56,17 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
 
     @property
     def latitude(self) -> float | None:  # noqa: D102
-        return self._positions().positions[0].gps_coordinates.latitude
+        if len(self._positions().positions) > 0:
+            return self._positions().positions[0].gps_coordinates.latitude
+        else:
+            return None
 
     @property
     def longitude(self) -> float | None:  # noqa: D102
-        return self._positions().positions[0].gps_coordinates.longitude
+        if len(self._positions().positions) > 0:
+            return self._positions().positions[0].gps_coordinates.longitude
+        else:
+            return None
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.PARKING_POSITION]
