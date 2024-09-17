@@ -1,5 +1,6 @@
 """Binary Sensors for MySkoda."""
 
+from typing import cast
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
@@ -11,7 +12,8 @@ from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from myskoda import Vehicle
+from myskoda import Vehicle, charging, common
+from myskoda.models.common import DoorLockedState, OnOffState, OpenState
 
 from .const import DATA_COODINATOR, DOMAIN
 from .entity import MySkodaDataEntity
@@ -26,13 +28,11 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
 
-    vehicles = coordinator.data.get("vehicles")
+    vehicles = cast(list[Vehicle], coordinator.data.get("vehicles"))
 
     entities = []
 
     for vehicle in vehicles:
-        entities.append(ChargerConnected(coordinator, vehicle))
-        entities.append(ChargerLocked(coordinator, vehicle))
         entities.append(Locked(coordinator, vehicle))
         entities.append(DoorsLocked(coordinator, vehicle))
         entities.append(DoorsOpen(coordinator, vehicle))
@@ -40,6 +40,9 @@ async def async_setup_entry(
         entities.append(TrunkOpen(coordinator, vehicle))
         entities.append(BonnetOpen(coordinator, vehicle))
         entities.append(LightsOn(coordinator, vehicle))
+        if vehicle.charging and vehicle.charging.status:
+            entities.append(ChargerConnected(coordinator, vehicle))
+            entities.append(ChargerLocked(coordinator, vehicle))
 
     async_add_entities(entities, update_before_add=True)
 
@@ -66,7 +69,7 @@ class ChargerConnected(MySkodaBinarySensor):
             vehicle,
             BinarySensorEntityDescription(
                 key="charger_connected",
-                name=f"{vehicle.info.title} Charger Connected",
+                name=f"{vehicle.info.specification.title} Charger Connected",
                 device_class=BinarySensorDeviceClass.PLUG,
             ),
         )
@@ -79,16 +82,19 @@ class ChargerConnected(MySkodaBinarySensor):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.air_conditioning.charger_connected
+        return (
+            self.vehicle.air_conditioning.charger_connection_state
+            == common.ConnectionState.CONNECTED
+        )
 
     @property
     def icon(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return "mdi:power_plug"
 
         self._update_device_from_coordinator()
 
-        if self.vehicle.charging.state == "CONNECT_CABLE":
+        if self.vehicle.charging.status.state == charging.ChargingState.CONNECT_CABLE:
             return "mdi:power-plug-off"
         return "mdi:power-plug"
 
@@ -102,7 +108,7 @@ class ChargerLocked(MySkodaBinarySensor):
             vehicle,
             BinarySensorEntityDescription(
                 key="charger_locked",
-                name=f"{vehicle.info.title} Charger",
+                name=f"{vehicle.info.specification.title} Charger",
                 device_class=BinarySensorDeviceClass.LOCK,
             ),
         )
@@ -115,7 +121,10 @@ class ChargerLocked(MySkodaBinarySensor):
 
         self._update_device_from_coordinator()
 
-        return not self.vehicle.air_conditioning.charger_locked
+        return (
+            self.vehicle.air_conditioning.charger_lock_state
+            != common.ChargerLockedState.LOCKED
+        )
 
     @property
     def icon(self):  # noqa: D102
@@ -124,7 +133,10 @@ class ChargerLocked(MySkodaBinarySensor):
 
         self._update_device_from_coordinator()
 
-        if self.vehicle.air_conditioning.charger_locked:
+        if (
+            self.vehicle.air_conditioning.charger_lock_state
+            == common.ChargerLockedState.LOCKED
+        ):
             return "mdi:lock"
         return "mdi:lock-open"
 
@@ -138,7 +150,7 @@ class Locked(MySkodaBinarySensor):
             vehicle,
             BinarySensorEntityDescription(
                 key="locked",
-                name=f"{vehicle.info.title} Locks",
+                name=f"{vehicle.info.specification.title} Locks",
                 device_class=BinarySensorDeviceClass.LOCK,
             ),
         )
@@ -151,7 +163,7 @@ class Locked(MySkodaBinarySensor):
 
         self._update_device_from_coordinator()
 
-        return not self.vehicle.status.locked
+        return not self.vehicle.status.overall.locked == DoorLockedState.UNLOCKED
 
     @property
     def icon(self):  # noqa: D102
@@ -174,7 +186,7 @@ class DoorsLocked(MySkodaBinarySensor):
             vehicle,
             BinarySensorEntityDescription(
                 key="doors_locked",
-                name=f"{vehicle.info.title} Doors Locks",
+                name=f"{vehicle.info.specification.title} Doors Locks",
                 device_class=BinarySensorDeviceClass.LOCK,
             ),
         )
@@ -187,7 +199,7 @@ class DoorsLocked(MySkodaBinarySensor):
 
         self._update_device_from_coordinator()
 
-        return not self.vehicle.status.doors_locked
+        return not self.vehicle.status.overall.doors_locked == DoorLockedState.UNLOCKED
 
     @property
     def icon(self):  # noqa: D102
@@ -210,7 +222,7 @@ class DoorsOpen(MySkodaBinarySensor):
             vehicle,
             BinarySensorEntityDescription(
                 key="doors_open",
-                name=f"{vehicle.info.title} Doors",
+                name=f"{vehicle.info.specification.title} Doors",
                 device_class=BinarySensorDeviceClass.DOOR,
                 icon="mdi:car-door",
             ),
@@ -224,7 +236,7 @@ class DoorsOpen(MySkodaBinarySensor):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.status.doors_open
+        return self.vehicle.status.overall.doors == OpenState.OPEN
 
 
 class WindowsOpen(MySkodaBinarySensor):
@@ -236,7 +248,7 @@ class WindowsOpen(MySkodaBinarySensor):
             vehicle,
             BinarySensorEntityDescription(
                 key="windows_open",
-                name=f"{vehicle.info.title} Windows",
+                name=f"{vehicle.info.specification.title} Windows",
                 device_class=BinarySensorDeviceClass.WINDOW,
                 icon="mdi:car-door",
             ),
@@ -250,7 +262,7 @@ class WindowsOpen(MySkodaBinarySensor):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.status.windows_open
+        return self.vehicle.status.overall.windows == OpenState.OPEN
 
 
 class TrunkOpen(MySkodaBinarySensor):
@@ -262,7 +274,7 @@ class TrunkOpen(MySkodaBinarySensor):
             vehicle,
             BinarySensorEntityDescription(
                 key="trunk_open",
-                name=f"{vehicle.info.title} Trunk",
+                name=f"{vehicle.info.specification.title} Trunk",
                 device_class=BinarySensorDeviceClass.OPENING,
                 icon="mdi:car",
             ),
@@ -276,7 +288,7 @@ class TrunkOpen(MySkodaBinarySensor):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.status.trunk_open
+        return self.vehicle.status.detail.trunk == OpenState.OPEN
 
 
 class BonnetOpen(MySkodaBinarySensor):
@@ -288,7 +300,7 @@ class BonnetOpen(MySkodaBinarySensor):
             vehicle,
             BinarySensorEntityDescription(
                 key="bonnet_open",
-                name=f"{vehicle.info.title} Bonnet",
+                name=f"{vehicle.info.specification.title} Bonnet",
                 device_class=BinarySensorDeviceClass.OPENING,
                 icon="mdi:car",
             ),
@@ -302,7 +314,7 @@ class BonnetOpen(MySkodaBinarySensor):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.status.bonnet_open
+        return self.vehicle.status.detail.bonnet == OpenState.OPEN
 
 
 class LightsOn(MySkodaBinarySensor):
@@ -314,7 +326,7 @@ class LightsOn(MySkodaBinarySensor):
             vehicle,
             BinarySensorEntityDescription(
                 key="lights_on",
-                name=f"{vehicle.info.title} Lights",
+                name=f"{vehicle.info.specification.title} Lights",
                 device_class=BinarySensorDeviceClass.LIGHT,
                 icon="mdi:car-light-high",
             ),
@@ -328,4 +340,4 @@ class LightsOn(MySkodaBinarySensor):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.status.lights_on
+        return self.vehicle.status.overall.lights == OnOffState.ON

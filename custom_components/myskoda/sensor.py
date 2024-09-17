@@ -1,5 +1,6 @@
 """Sensors for the MySkoda integration."""
 
+from typing import cast
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
@@ -13,7 +14,7 @@ from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from myskoda import Vehicle
+from myskoda import Vehicle, charging
 
 from .const import DATA_COODINATOR, DOMAIN
 from .entity import MySkodaDataEntity
@@ -28,21 +29,23 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
 
-    vehicles = coordinator.data.get("vehicles")
+    vehicles = cast(list[Vehicle], coordinator.data.get("vehicles"))
 
     entities = []
 
     for vehicle in vehicles:
         entities.append(SoftwareVersion(coordinator, vehicle))
-        entities.append(BatteryPercentage(coordinator, vehicle))
-        entities.append(ChargingPower(coordinator, vehicle))
         entities.append(RemainingDistance(coordinator, vehicle))
-        entities.append(TargetBatteryPercentage(coordinator, vehicle))
         entities.append(Mileage(coordinator, vehicle))
-        entities.append(ChargeType(coordinator, vehicle))
-        entities.append(ChargingState(coordinator, vehicle))
-        entities.append(RemainingChargingTime(coordinator, vehicle))
         entities.append(LastUpdated(coordinator, vehicle))
+
+        if vehicle.charging and vehicle.charging.status:
+            entities.append(TargetBatteryPercentage(coordinator, vehicle))
+            entities.append(ChargeType(coordinator, vehicle))
+            entities.append(ChargingState(coordinator, vehicle))
+            entities.append(RemainingChargingTime(coordinator, vehicle))
+            entities.append(BatteryPercentage(coordinator, vehicle))
+            entities.append(ChargingPower(coordinator, vehicle))
 
     async_add_entities(entities, update_before_add=True)
 
@@ -69,7 +72,7 @@ class SoftwareVersion(MySkodaSensor):
             vehicle,
             SensorEntityDescription(
                 key="software_version",
-                name=f"{vehicle.info.title} Software Version",
+                name=f"{vehicle.info.specification.title} Software Version",
                 icon="mdi:update",
             ),
         )
@@ -94,7 +97,7 @@ class BatteryPercentage(MySkodaSensor):
             vehicle,
             SensorEntityDescription(
                 key="battery_percentage",
-                name=f"{vehicle.info.title} Battery Percentage",
+                name=f"{vehicle.info.specification.title} Battery Percentage",
                 icon="mdi:battery",
                 state_class=SensorStateClass.MEASUREMENT,
                 native_unit_of_measurement=PERCENTAGE,
@@ -105,46 +108,46 @@ class BatteryPercentage(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.battery_percent
+        return self.vehicle.charging.status.battery.state_of_charge_in_percent
 
     @property
     def icon(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return "mdi:battery-unknown"
 
         self._update_device_from_coordinator()
 
         suffix = ""
 
-        if self.vehicle.charging.battery_percent >= 95:
+        if self.vehicle.charging.status.battery.state_of_charge_in_percent >= 95:
             suffix = "100"
-        elif self.vehicle.charging.battery_percent >= 85:
+        elif self.vehicle.charging.status.battery.state_of_charge_in_percent >= 85:
             suffix = "90"
-        elif self.vehicle.charging.battery_percent >= 75:
+        elif self.vehicle.charging.status.battery.state_of_charge_in_percent >= 75:
             suffix = "80"
-        elif self.vehicle.charging.battery_percent >= 65:
+        elif self.vehicle.charging.status.battery.state_of_charge_in_percent >= 65:
             suffix = "70"
-        elif self.vehicle.charging.battery_percent >= 55:
+        elif self.vehicle.charging.status.battery.state_of_charge_in_percent >= 55:
             suffix = "60"
-        elif self.vehicle.charging.battery_percent >= 45:
+        elif self.vehicle.charging.status.battery.state_of_charge_in_percent >= 45:
             suffix = "50"
-        elif self.vehicle.charging.battery_percent >= 35:
+        elif self.vehicle.charging.status.battery.state_of_charge_in_percent >= 35:
             suffix = "40"
-        elif self.vehicle.charging.battery_percent >= 25:
+        elif self.vehicle.charging.status.battery.state_of_charge_in_percent >= 25:
             suffix = "30"
-        elif self.vehicle.charging.battery_percent >= 15:
+        elif self.vehicle.charging.status.battery.state_of_charge_in_percent >= 15:
             suffix = "20"
-        elif self.vehicle.charging.battery_percent >= 5:
+        elif self.vehicle.charging.status.battery.state_of_charge_in_percent >= 5:
             suffix = "10"
         else:
             suffix = "outline"
 
-        if self.vehicle.charging.state != "CONNECT_CABLE":
+        if self.vehicle.charging.status.state != charging.ChargingState.CONNECT_CABLE:
             return f"mdi:battery-charging-{suffix}"
         if suffix == "100":
             return "mdi:battery"
@@ -160,7 +163,7 @@ class ChargingPower(MySkodaSensor):
             vehicle,
             SensorEntityDescription(
                 key="charging_power",
-                name=f"{vehicle.info.title} Charging Power",
+                name=f"{vehicle.info.specification.title} Charging Power",
                 icon="mdi:lightning-bolt",
                 state_class=SensorStateClass.MEASUREMENT,
                 native_unit_of_measurement=UnitOfPower.KILO_WATT,
@@ -171,12 +174,12 @@ class ChargingPower(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.charging_power_kw
+        return self.vehicle.charging.status.charge_power_in_kw
 
 
 class RemainingDistance(MySkodaSensor):
@@ -188,7 +191,7 @@ class RemainingDistance(MySkodaSensor):
             vehicle,
             SensorEntityDescription(
                 key="range",
-                name=f"{vehicle.info.title} Range",
+                name=f"{vehicle.info.specification.title} Range",
                 icon="mdi:speedometer",
                 state_class=SensorStateClass.MEASUREMENT,
                 native_unit_of_measurement=UnitOfLength.KILOMETERS,
@@ -199,12 +202,15 @@ class RemainingDistance(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.remaining_distance_m / 1000
+        return (
+            self.vehicle.charging.status.battery.remaining_cruising_range_in_meters
+            / 1000
+        )
 
 
 class TargetBatteryPercentage(MySkodaSensor):
@@ -216,7 +222,7 @@ class TargetBatteryPercentage(MySkodaSensor):
             vehicle,
             SensorEntityDescription(
                 key="target_battery_percentage",
-                name=f"{vehicle.info.title} Target Battery Percentage",
+                name=f"{vehicle.info.specification.title} Target Battery Percentage",
                 state_class=SensorStateClass.MEASUREMENT,
                 native_unit_of_measurement=PERCENTAGE,
                 icon="mdi:percent",
@@ -232,7 +238,7 @@ class TargetBatteryPercentage(MySkodaSensor):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.target_percent
+        return self.vehicle.charging.settings.target_state_of_charge_in_percent
 
 
 class Mileage(MySkodaSensor):
@@ -244,7 +250,7 @@ class Mileage(MySkodaSensor):
             vehicle,
             SensorEntityDescription(
                 key="milage",
-                name=f"{vehicle.info.title} Milage",
+                name=f"{vehicle.info.specification.title} Milage",
                 state_class=SensorStateClass.TOTAL_INCREASING,
                 native_unit_of_measurement=UnitOfLength.KILOMETERS,
                 icon="mdi:counter",
@@ -260,7 +266,7 @@ class Mileage(MySkodaSensor):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.health.mileage_km
+        return self.vehicle.health.mileage_in_km
 
 
 class ChargeType(MySkodaSensor):
@@ -272,28 +278,28 @@ class ChargeType(MySkodaSensor):
             vehicle,
             SensorEntityDescription(
                 key="charge_type",
-                name=f"{vehicle.info.title} Charge Type",
+                name=f"{vehicle.info.specification.title} Charge Type",
             ),
         )
         self._attr_unique_id = f"{vehicle.info.vin}_charge_type"
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.charge_type
+        return self.vehicle.charging.status.charge_type
 
     @property
     def icon(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return "mdi:ev-plug-type2"
 
         self._update_device_from_coordinator()
 
-        if self.vehicle.charging.charge_type == "AC":
+        if self.vehicle.charging.status.charge_type == "AC":
             return "mdi:ev-plug-type2"
         return "mdi:ev-plug-ccs2"
 
@@ -307,7 +313,7 @@ class ChargingState(MySkodaSensor):
             vehicle,
             SensorEntityDescription(
                 key="charging_state",
-                name=f"{vehicle.info.title} Charging State",
+                name=f"{vehicle.info.specification.title} Charging State",
                 device_class=SensorDeviceClass.ENUM,
             ),
         )
@@ -321,21 +327,21 @@ class ChargingState(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.state
+        return self.vehicle.charging.status.state
 
     @property
     def icon(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return "mdi:power_plug"
 
         self._update_device_from_coordinator()
 
-        if self.vehicle.charging.state == "CONNECT_CABLE":
+        if self.vehicle.charging.status.state == charging.ChargingState.CONNECT_CABLE:
             return "mdi:power-plug-off"
         return "mdi:power-plug"
 
@@ -349,7 +355,7 @@ class RemainingChargingTime(MySkodaSensor):
             vehicle,
             SensorEntityDescription(
                 key="remaining_charging_time",
-                name=f"{vehicle.info.title} Remaining Charging Time",
+                name=f"{vehicle.info.specification.title} Remaining Charging Time",
                 device_class=SensorDeviceClass.DURATION,
                 native_unit_of_measurement=UnitOfTime.MINUTES,
                 icon="mdi:timer",
@@ -359,12 +365,12 @@ class RemainingChargingTime(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
-        if not self.coordinator.data:
+        if not self.coordinator.data or not self.vehicle.charging.status:
             return None
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.remaining_time_min
+        return self.vehicle.charging.status.remaining_time_to_fully_charged_in_minutes
 
 
 class LastUpdated(MySkodaSensor):
@@ -376,7 +382,7 @@ class LastUpdated(MySkodaSensor):
             vehicle,
             SensorEntityDescription(
                 key="car_captured",
-                name=f"{vehicle.info.title} Last Updated",
+                name=f"{vehicle.info.specification.title} Last Updated",
                 device_class=SensorDeviceClass.TIMESTAMP,
                 icon="mdi:clock",
             ),
@@ -390,4 +396,4 @@ class LastUpdated(MySkodaSensor):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.status.car_captured
+        return self.vehicle.status.car_captured_timestamp

@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
 import logging
+from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from myskoda import MySkodaHub, Vehicle
+
+from myskoda import RestApi, Vehicle
 
 from .const import DATA_COODINATOR, DOMAIN
 
@@ -65,7 +66,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator):
         super().__init__(
             hass, _LOGGER, name=DOMAIN, update_interval=timedelta(minutes=5)
         )
-        self.hub = MySkodaHub(async_get_clientsession(hass))
+        self.hub = RestApi(async_get_clientsession(hass))
         self.config = config
 
     async def async_login(self) -> bool:

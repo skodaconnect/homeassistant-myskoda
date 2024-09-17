@@ -49,7 +49,7 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
             vehicle,
             ClimateEntityDescription(
                 key="climate",
-                name=f"{vehicle.info.title} Air Conditioning",
+                name=f"{vehicle.info.specification.title} Air Conditioning",
                 icon="mdi:air-conditioner",
             ),
         )
@@ -73,7 +73,7 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
 
         self._update_device_from_coordinator()
 
-        if self.vehicle.air_conditioning.air_conditioning_on:
+        if self.vehicle.air_conditioning.state:
             return HVACMode.AUTO
         return HVACMode.OFF
 
@@ -92,18 +92,24 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
 
     @property
     def target_temperature(self) -> None | float:  # noqa: D102
-        if not self.coordinator.data:
+        if (
+            not self.coordinator.data
+            or not self.vehicle.air_conditioning.target_temperature
+        ):
             return None
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.air_conditioning.target_temperature_celsius
+        return self.vehicle.air_conditioning.target_temperature.temperature_value
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode):  # noqa: D102
+        if not self.vehicle.air_conditioning.target_temperature:
+            return None
+
         if hvac_mode == HVACMode.AUTO:
             await self.coordinator.hub.start_air_conditioning(
                 self.vehicle.info.vin,
-                self.vehicle.air_conditioning.target_temperature_celsius,
+                self.vehicle.air_conditioning.target_temperature.temperature_value,
             )
         else:
             await self.coordinator.hub.stop_air_conditioning(self.vehicle.info.vin)

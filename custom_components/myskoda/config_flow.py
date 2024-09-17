@@ -6,12 +6,13 @@ import logging
 from typing import Any
 
 import voluptuous as vol
-
-from homeassistant.config_entries import ConfigFlow as BaseConfigFlow, ConfigFlowResult
+from homeassistant.config_entries import ConfigFlow as BaseConfigFlow
+from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from myskoda import MySkodaHub
+
+from myskoda import RestApi
 
 from .const import DOMAIN
 
@@ -27,7 +28,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
     """Check that the inputs are valid."""
-    hub = MySkodaHub(async_get_clientsession(hass))
+    hub = RestApi(async_get_clientsession(hass))
 
     if not await hub.authenticate(data["email"], data["password"]):
         raise InvalidAuth

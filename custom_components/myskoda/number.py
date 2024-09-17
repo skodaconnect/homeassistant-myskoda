@@ -70,7 +70,7 @@ class ChargeLimit(MySkodaNumber):
             vehicle,
             NumberEntityDescription(
                 key="charge_limit",
-                name=f"{vehicle.info.title} Charge Limit",
+                name=f"{vehicle.info.specification.title} Charge Limit",
                 icon="mdi:battery-lock",
                 native_max_value=100,
                 native_min_value=50,
@@ -88,7 +88,7 @@ class ChargeLimit(MySkodaNumber):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.target_percent
+        return self.vehicle.charging.settings.target_state_of_charge_in_percent
 
     async def async_set_native_value(self, value: float):  # noqa: D102
         await self.coordinator.hub.set_charge_limit(self.vehicle.info.vin, value)
