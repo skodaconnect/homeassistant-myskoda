@@ -27,6 +27,7 @@ class MySkodaEntity(Entity):
             "identifiers": {(DOMAIN, self.vehicle.info.vin)},
             "name": self.vehicle.info.specification.title,
             "manufacturer": "Škoda",
+            "serial_number": self.vehicle.info.vin,
             "sw_version": self.vehicle.info.software_version,
             "hw_version": f"{self.vehicle.info.specification.system_model_id}-{self.vehicle.info.specification.model_year}",
             "model": self.vehicle.info.specification.model,
