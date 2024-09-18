@@ -16,7 +16,7 @@ from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from myskoda import Vehicle, charging
 from myskoda.models.charging import ChargingState
-from myskoda.models.common import OnOffState
+from myskoda.models.common import ActiveState, OnOffState
 
 from .const import DATA_COODINATOR, DOMAIN
 from .entity import MySkodaDataEntity
@@ -131,7 +131,7 @@ class BatteryCareMode(MySkodaSwitch):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.settings.charging_care_mode == OnOffState.ON
+        return self.vehicle.charging.settings.charging_care_mode == ActiveState.ACTIVATED
 
     async def async_turn_off(self, **kwargs):  # noqa: D102 # noqa: D102
         await self.coordinator.hub.set_battery_care_mode(self.vehicle.info.vin, False)
