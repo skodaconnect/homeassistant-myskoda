@@ -251,6 +251,11 @@ class SunroofOpen(StatusBinarySensor):
 
     @property
     def is_on(self):  # noqa: D102
+        if (
+            self._status().detail.sunroof is None
+            or self._status().detail.sunroof == OpenState.UNSUPPORTED
+        ):
+            return None
         return self._status().detail.sunroof == OpenState.OPEN
 
     def is_supported(self) -> bool:
