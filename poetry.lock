@@ -302,6 +302,20 @@ files = [
 ]
 
 [[package]]
+name = "asyncio-paho"
+version = "0.6.0"
+description = "A Paho MQTT client supporting asyncio loop without additional setup."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "asyncio_paho-0.6.0-py3-none-any.whl", hash = "sha256:7239dc5ec17afef1c1ea162e6c32c477c6cc728ce64740ca433b984bded122e7"},
+    {file = "asyncio_paho-0.6.0.tar.gz", hash = "sha256:19fffd4758bfcf704393acf8b540d06a9def27270b2cf55826f956660a8f1496"},
+]
+
+[package.dependencies]
+paho-mqtt = ">=1.6,<2.0"
+
+[[package]]
 name = "atomicwrites-homeassistant"
 version = "1.4.1"
 description = "Atomic file writes."
@@ -1685,25 +1699,27 @@ files = [
 
 [[package]]
 name = "myskoda"
-version = "0.2.3"
+version = "0.3.0"
 description = "Library for interaction with the MySkoda APIs."
 optional = false
 python-versions = ">=3.12.0"
 files = [
-    {file = "myskoda-0.2.3-py3-none-any.whl", hash = "sha256:fe45b226a7f12db7e6f269cda8518c26bd9de7f39f6799038066eb7fe43b24ad"},
-    {file = "myskoda-0.2.3.tar.gz", hash = "sha256:d5b0e1752b5cdd8e3c8d6df2481e0a221e10f9f00eb6b172d0e6c15902e92e2d"},
+    {file = "myskoda-0.3.0-py3-none-any.whl", hash = "sha256:769d85c76c415312e519979aa371ee4cf315934fca8a2d960790253dcd800394"},
+    {file = "myskoda-0.3.0.tar.gz", hash = "sha256:3bef773aa3e10f50ef6b0e4d8a11c043f484c856c520ad42ce228089da3d8958"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3,<4"
 asyncio = ">=3,<4"
+asyncio-paho = ">=0.6.0,<0.7.0"
 beautifulsoup4 = ">=4,<5"
+paho-mqtt = ">=1,<2"
 pydantic = ">=1,<2"
 pyjwt = ">=2,<3"
 pyyaml = ">=6,<7"
 
 [package.extras]
-cli = ["asyncclick (>=8.1.7.2,<9.0.0.0)", "termcolor (>=2.4.0,<3.0.0)"]
+cli = ["asyncclick (>=8.1.7.2,<9.0.0.0)", "coloredlogs (>=15.0.1,<16.0.0)", "termcolor (>=2.4.0,<3.0.0)"]
 
 [[package]]
 name = "nodeenv"
@@ -1792,6 +1808,19 @@ files = [
     {file = "packaging-24.1-py3-none-any.whl", hash = "sha256:5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124"},
     {file = "packaging-24.1.tar.gz", hash = "sha256:026ed72c8ed3fcce5bf8950572258698927fd1dbda10a5e981cdf0ac37f4f002"},
 ]
+
+[[package]]
+name = "paho-mqtt"
+version = "1.6.1"
+description = "MQTT version 5.0/3.1.1 client class"
+optional = false
+python-versions = "*"
+files = [
+    {file = "paho-mqtt-1.6.1.tar.gz", hash = "sha256:2a8291c81623aec00372b5a85558a372c747cbca8e9934dfe218638b8eefc26f"},
+]
+
+[package.extras]
+proxy = ["PySocks"]
 
 [[package]]
 name = "pillow"
@@ -3075,4 +3104,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.12"
-content-hash = "b9b7e6f950e6417fd412c251cfed918de3052dfe88223eebffc6ff3b876ba148"
+content-hash = "f3263b492af1c44f01daef790d9967c4d0367ac9c4a5c8485fa70565a865834b"
