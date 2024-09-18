@@ -131,7 +131,9 @@ class BatteryCareMode(MySkodaSwitch):
 
         self._update_device_from_coordinator()
 
-        return self.vehicle.charging.settings.charging_care_mode == ActiveState.ACTIVATED
+        return (
+            self.vehicle.charging.settings.charging_care_mode == ActiveState.ACTIVATED
+        )
 
     async def async_turn_off(self, **kwargs):  # noqa: D102 # noqa: D102
         await self.coordinator.hub.set_battery_care_mode(self.vehicle.info.vin, False)
