@@ -7,11 +7,13 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from myskoda import Vehicle
+from myskoda.models.info import CapabilityId
+from myskoda.models.position import Positions
 
-from .const import DATA_COODINATOR, DOMAIN
-from .entity import MySkodaDataEntity
+from .const import COORDINATOR, DOMAIN
+from .coordinator import MySkodaDataUpdateCoordinator
+from .entity import MySkodaEntity
+from .utils import InvalidCapabilityConfigurationError, add_supported_entities
 
 
 async def async_setup_entry(
@@ -21,30 +23,32 @@ async def async_setup_entry(
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Set up the sensor platform."""
-    coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
-
-    vehicles = coordinator.data.get("vehicles")
-
-    entities = [DeviceTracker(coordinator, vehicle) for vehicle in vehicles]
-
-    async_add_entities(entities, update_before_add=True)
+    add_supported_entities(
+        available_entities=[DeviceTracker],
+        coordinator=hass.data[DOMAIN][config.entry_id][COORDINATOR],
+        async_add_entities=async_add_entities,
+    )
 
 
-class DeviceTracker(MySkodaDataEntity, TrackerEntity):
+class DeviceTracker(MySkodaEntity, TrackerEntity):
     """GPS device tracker for MySkoda."""
 
-    vehicle: Vehicle
-
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
-        super().__init__(
-            coordinator,
-            vehicle,
-            EntityDescription(
-                name=vehicle.info.specification.title,
-                key=f"{vehicle.info.vin}_device_tracker",
-                translation_key="device_tracker",
-            ),
+    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:  # noqa: D107
+        title = coordinator.data.vehicles[vin].info.specification.title
+        self.entity_description = EntityDescription(
+            name=title,
+            key=f"{vin}_device_tracker",
+            translation_key="device_tracker",
         )
+        super().__init__(coordinator, vin)
+
+    def _positions(self) -> Positions:
+        positions = self.vehicle.positions
+        if positions is None:
+            raise InvalidCapabilityConfigurationError(
+                self.entity_description.key, self.vehicle
+            )
+        return positions
 
     @property
     def source_type(self) -> SourceType:  # noqa: D102
@@ -52,18 +56,11 @@ class DeviceTracker(MySkodaDataEntity, TrackerEntity):
 
     @property
     def latitude(self) -> float | None:  # noqa: D102
-        if not self.coordinator.data:
-            return None
-
-        self._update_device_from_coordinator()
-
-        return self.vehicle.position.positions[0].gps_coordinates.latitude
+        return self._positions().positions[0].gps_coordinates.latitude
 
     @property
     def longitude(self) -> float | None:  # noqa: D102
-        if not self.coordinator.data:
-            return None
+        return self._positions().positions[0].gps_coordinates.longitude
 
-        self._update_device_from_coordinator()
-
-        return self.vehicle.position.positions[0].gps_coordinates.longitude
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.PARKING_POSITION]

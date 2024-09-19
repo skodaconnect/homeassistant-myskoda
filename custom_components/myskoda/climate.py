@@ -1,6 +1,5 @@
 """Climate entities for MySkoda."""
 
-from asyncio import sleep
 import logging
 
 from homeassistant.components.climate import (
@@ -15,11 +14,13 @@ from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from myskoda import Vehicle
+from myskoda.models.air_conditioning import AirConditioning
+from myskoda.models.info import CapabilityId
 
-from .const import DATA_COODINATOR, DOMAIN
-from .entity import MySkodaDataEntity
+from .const import COORDINATOR, DOMAIN
+from .coordinator import MySkodaDataUpdateCoordinator
+from .entity import MySkodaEntity
+from .utils import InvalidCapabilityConfigurationError, add_supported_entities
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -30,38 +31,43 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    """Set up the sensor platform."""
-    coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
-
-    vehicles = coordinator.data.get("vehicles")
-
-    entities = [MySkodaClimate(coordinator, vehicle) for vehicle in vehicles]
-
-    async_add_entities(entities, update_before_add=True)
+    add_supported_entities(
+        available_entities=[MySkodaClimate],
+        coordinator=hass.data[DOMAIN][config.entry_id][COORDINATOR],
+        async_add_entities=async_add_entities,
+    )
 
 
-class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
+class MySkodaClimate(MySkodaEntity, ClimateEntity):
     """Climate control for MySkoda vehicles."""
 
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
+    entity_description = ClimateEntityDescription(
+        key="climate",
+        name="Air Conditioning",
+        icon="mdi:air-conditioner",
+        translation_key="climate",
+    )
+    _attr_temperature_unit = UnitOfTemperature.CELSIUS
+    _attr_supported_features = (
+        ClimateEntityFeature.TARGET_TEMPERATURE
+        | ClimateEntityFeature.TURN_ON
+        | ClimateEntityFeature.TURN_OFF
+    )
+
+    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:  # noqa: D107
         super().__init__(
             coordinator,
-            vehicle,
-            ClimateEntityDescription(
-                key="climate",
-                name=f"{vehicle.info.specification.title} Air Conditioning",
-                icon="mdi:air-conditioner",
-                translation_key="climate",
-            ),
+            vin,
         )
         ClimateEntity.__init__(self)
-        self._attr_temperature_unit = UnitOfTemperature.CELSIUS
-        self._attr_supported_features = (
-            ClimateEntityFeature.TARGET_TEMPERATURE
-            | ClimateEntityFeature.TURN_ON
-            | ClimateEntityFeature.TURN_OFF
-        )
-        self._attr_unique_id = f"{self.vehicle.info.vin}_climate"
+
+    def _air_conditioning(self) -> AirConditioning:
+        air_conditioning = self.vehicle.air_conditioning
+        if air_conditioning is None:
+            raise InvalidCapabilityConfigurationError(
+                self.entity_description.key, self.vehicle
+            )
+        return air_conditioning
 
     @property
     def hvac_modes(self) -> list[HVACMode]:  # noqa: D102
@@ -69,56 +75,37 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
 
     @property
     def hvac_mode(self) -> HVACMode | None:  # noqa: D102
-        if not self.coordinator.data:
-            return None
-
-        self._update_device_from_coordinator()
-
-        if self.vehicle.air_conditioning.state:
+        if self._air_conditioning().state:
             return HVACMode.AUTO
         return HVACMode.OFF
 
     @property
     def hvac_action(self) -> HVACAction | None:  # noqa: D102
-        if not self.coordinator.data:
-            return None
-
-        self._update_device_from_coordinator()
-
-        if self.vehicle.air_conditioning.state == "HEATING":
+        if self._air_conditioning().state == "HEATING":
             return HVACAction.HEATING
-        if self.vehicle.air_conditioning.state == "COOLING":
+        if self._air_conditioning().state == "COOLING":
             return HVACAction.COOLING
         return HVACAction.OFF
 
     @property
     def target_temperature(self) -> None | float:  # noqa: D102
-        if (
-            not self.coordinator.data
-            or not self.vehicle.air_conditioning.target_temperature
-        ):
+        target_temperature = self._air_conditioning().target_temperature
+        if target_temperature is None:
             return None
-
-        self._update_device_from_coordinator()
-
-        return self.vehicle.air_conditioning.target_temperature.temperature_value
+        return target_temperature.temperature_value
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode):  # noqa: D102
-        if not self.vehicle.air_conditioning.target_temperature:
+        target_temperature = self._air_conditioning().target_temperature
+        if target_temperature is None:
             return None
 
         if hvac_mode == HVACMode.AUTO:
-            await self.coordinator.hub.start_air_conditioning(
+            await self.coordinator.myskoda.start_air_conditioning(
                 self.vehicle.info.vin,
-                self.vehicle.air_conditioning.target_temperature.temperature_value,
+                target_temperature.temperature_value,
             )
         else:
-            await self.coordinator.hub.stop_air_conditioning(self.vehicle.info.vin)
-        for _ in range(10):
-            await sleep(15)
-            if self.hvac_mode == hvac_mode:
-                break
-            await self.coordinator.async_refresh()
+            await self.coordinator.myskoda.stop_air_conditioning(self.vehicle.info.vin)
         _LOGGER.info("HVAC mode set to %s.", hvac_mode)
 
     async def async_turn_on(self):  # noqa: D102
@@ -129,10 +116,13 @@ class MySkodaClimate(MySkodaDataEntity, ClimateEntity):
 
     async def async_set_temperature(self, **kwargs):  # noqa: D102
         temp = kwargs[ATTR_TEMPERATURE]
-        await self.coordinator.hub.set_target_temperature(self.vehicle.info.vin, temp)
-        for _ in range(10):
-            await sleep(15)
-            if self.target_temperature == temp:
-                break
-            await self.coordinator.async_refresh()
+        await self.coordinator.myskoda.set_target_temperature(
+            self.vehicle.info.vin, temp
+        )
         _LOGGER.info("AC disabled.")
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [
+            CapabilityId.AIR_CONDITIONING,
+            CapabilityId.AIR_CONDITIONING_SAVE_AND_ACTIVATE,
+        ]

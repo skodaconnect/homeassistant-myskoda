@@ -1,25 +1,33 @@
 """MySkoda Entity base classes."""
 
-from homeassistant.helpers.entity import DeviceInfo, Entity, EntityDescription
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-)
-
+from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from myskoda import Vehicle
+from myskoda.models.info import CapabilityId
 
 from .const import DOMAIN
+from .coordinator import MySkodaDataUpdateCoordinator
 
 
-class MySkodaEntity(Entity):
+class MySkodaEntity(CoordinatorEntity):
     """Base class for all entities in the MySkoda integration."""
 
-    vehicle: Vehicle
+    vin: str
+    coordinator: MySkodaDataUpdateCoordinator
 
-    def __init__(self, vehicle: Vehicle, entity_description: EntityDescription) -> None:  # noqa: D107
-        super().__init__()
-        self.vehicle = vehicle
-        self.entity_description = entity_description
+    def __init__(
+        self,
+        coordinator: MySkodaDataUpdateCoordinator,
+        vin: str,
+    ) -> None:  # noqa: D107
+        super().__init__(coordinator)
+        self.vin = vin
+        self.coordinator = coordinator
+        self._attr_unique_id = f"{vin}_{self.entity_description.key}"
+
+    @property
+    def vehicle(self) -> Vehicle:
+        return self.coordinator.data.vehicles[self.vin]
 
     @property
     def device_info(self) -> DeviceInfo:  # noqa: D102
@@ -33,21 +41,10 @@ class MySkodaEntity(Entity):
             "model": self.vehicle.info.specification.model,
         }
 
+    def required_capabilities(self) -> list[CapabilityId]:
+        return []
 
-class MySkodaDataEntity(CoordinatorEntity, MySkodaEntity):
-    """Base class for all entities that need to access data from the coordinator."""
-
-    def __init__(  # noqa: D107
-        self,
-        coordinator: DataUpdateCoordinator,
-        vehicle: Vehicle,
-        entity_description: EntityDescription,
-    ) -> None:
-        super().__init__(coordinator)
-        MySkodaEntity.__init__(self, vehicle, entity_description)
-
-    def _update_device_from_coordinator(self) -> None:
-        for vehicle in self.coordinator.data.get("vehicles"):
-            if vehicle.info.vin == self.vehicle.info.vin:
-                self.vehicle = vehicle
-                return
+    def is_supported(self) -> bool:
+        return all(
+            self.vehicle.has_capability(cap) for cap in self.required_capabilities()
+        )
