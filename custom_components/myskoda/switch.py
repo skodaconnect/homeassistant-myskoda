@@ -1,9 +1,7 @@
 """Switches for the MySkoda integration."""
 
-from asyncio import sleep
 import logging
 
-from typing import cast
 from homeassistant.components.switch import (
     SwitchDeviceClass,
     SwitchEntity,
@@ -13,13 +11,20 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from myskoda import Vehicle, charging
-from myskoda.models.charging import ChargingState
+from myskoda.models.air_conditioning import AirConditioning
+from myskoda.models.charging import (
+    Charging,
+    ChargingState,
+    ChargingStatus,
+    MaxChargeCurrent,
+    Settings,
+)
 from myskoda.models.common import OnOffState
+from myskoda.models.info import CapabilityId
 
-from .const import DATA_COODINATOR, DOMAIN
-from .entity import MySkodaDataEntity
+from .const import COORDINATOR, DOMAIN
+from .entity import MySkodaEntity
+from .utils import InvalidCapabilityConfigurationError, add_supported_entities
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -31,217 +36,163 @@ async def async_setup_entry(
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Set up the sensor platform."""
-    coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
-
-    vehicles = cast(list[Vehicle], coordinator.data.get("vehicles"))
-
-    entities = []
-
-    for vehicle in vehicles:
-        entities.append(WindowHeating(coordinator, vehicle))
-
-        if vehicle.charging.status:
-            entities.append(Charging(coordinator, vehicle))
-            entities.append(ReducedCurrent(coordinator, vehicle))
-            entities.append(BatteryCareMode(coordinator, vehicle))
-
-    async_add_entities(entities, update_before_add=True)
+    add_supported_entities(
+        available_entities=[
+            WindowHeating,
+            EnableCharging,
+            ReducedCurrent,
+            BatteryCareMode,
+        ],
+        coordinator=hass.data[DOMAIN][config.entry_id][COORDINATOR],
+        async_add_entities=async_add_entities,
+    )
 
 
-class MySkodaSwitch(MySkodaDataEntity, SwitchEntity):
+class MySkodaSwitch(MySkodaEntity, SwitchEntity):
     """Base class for all switches in the MySkoda integration."""
 
-    def __init__(  # noqa: D107
-        self,
-        coordinator: DataUpdateCoordinator,
-        vehicle: Vehicle,
-        entity_description: SwitchEntityDescription,
-    ) -> None:
-        super().__init__(coordinator, vehicle, entity_description)
-        SwitchEntity.__init__(self)
+    pass
 
 
 class WindowHeating(MySkodaSwitch):
     """Controls window heating."""
 
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
-        super().__init__(
-            coordinator,
-            vehicle,
-            SwitchEntityDescription(
-                key="window_heating",
-                name=f"{vehicle.info.specification.title} Window Heating",
-                icon="mdi:car-defrost-front",
-                device_class=SwitchDeviceClass.SWITCH,
-            ),
-        )
-        self._attr_unique_id = f"{vehicle.info.vin}_window_heating"
+    entity_description = SwitchEntityDescription(
+        key="window_heating",
+        name="Window Heating",
+        icon="mdi:car-defrost-front",
+        device_class=SwitchDeviceClass.SWITCH,
+    )
+
+    def _air_conditioning(self) -> AirConditioning:
+        air_conditioning = self.vehicle.air_conditioning
+        if air_conditioning is None:
+            raise InvalidCapabilityConfigurationError(
+                self.entity_description.key, self.vehicle
+            )
+        return air_conditioning
 
     @property
     def is_on(self) -> bool | None:  # noqa: D102
-        if not self.coordinator.data:
-            return None
-
-        self._update_device_from_coordinator()
-
         return (
-            self.vehicle.air_conditioning.window_heating_state.front == OnOffState.ON
-            or self.vehicle.air_conditioning.window_heating_state.rear == OnOffState.ON
+            self._air_conditioning().window_heating_state.front == OnOffState.ON
+            or self._air_conditioning().window_heating_state.rear == OnOffState.ON
         )
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
-        await self.coordinator.hub.stop_window_heating(self.vehicle.info.vin)
-        for _ in range(10):
-            await sleep(15)
-            if not self.is_on:
-                break
-            await self.coordinator.async_refresh()
+        await self.coordinator.myskoda.stop_window_heating(self.vehicle.info.vin)
         _LOGGER.debug("Window heating disabled.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
-        await self.coordinator.hub.start_window_heating(self.vehicle.info.vin)
-        for _ in range(10):
-            await sleep(15)
-            if self.is_on:
-                break
-            await self.coordinator.async_refresh()
+        await self.coordinator.myskoda.start_window_heating(self.vehicle.info.vin)
         _LOGGER.debug("Window heating enabled.")
 
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.WINDOW_HEATING]
 
-class BatteryCareMode(MySkodaSwitch):
+
+class ChargingSwitch(MySkodaSwitch):
+    def _charging(self) -> Charging:
+        charging = self.vehicle.charging
+        if charging is None:
+            raise InvalidCapabilityConfigurationError(
+                self.entity_description.key, self.vehicle
+            )
+        return charging
+
+    def _settings(self) -> Settings:
+        settings = self._charging().settings
+        if settings is None:
+            raise InvalidCapabilityConfigurationError(
+                self.entity_description.key, self.vehicle
+            )
+
+        return settings
+
+    def _status(self) -> ChargingStatus:
+        status = self._charging().status
+        if status is None:
+            raise InvalidCapabilityConfigurationError(
+                self.entity_description.key, self.vehicle
+            )
+        return status
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING]
+
+
+class BatteryCareMode(ChargingSwitch):
     """Controls battery care mode."""
 
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
-        super().__init__(
-            coordinator,
-            vehicle,
-            SwitchEntityDescription(
-                key="battery_care_mode",
-                name=f"{vehicle.info.specification.title} Battery Care Mode",
-                icon="mdi:battery-heart-variant",
-                device_class=SwitchDeviceClass.SWITCH,
-            ),
-        )
-        self._attr_unique_id = f"{vehicle.info.vin}_battery_care_mode"
+    entity_description = SwitchEntityDescription(
+        key="battery_care_mode",
+        name="Battery Care Mode",
+        icon="mdi:battery-heart-variant",
+        device_class=SwitchDeviceClass.SWITCH,
+    )
 
     @property
     def is_on(self) -> bool | None:  # noqa: D102
-        if not self.coordinator.data:
-            return None
-
-        self._update_device_from_coordinator()
-
-        return self.vehicle.charging.settings.charging_care_mode == OnOffState.ON
+        return self._settings().charging_care_mode == OnOffState.ON
 
     async def async_turn_off(self, **kwargs):  # noqa: D102 # noqa: D102
-        await self.coordinator.hub.set_battery_care_mode(self.vehicle.info.vin, False)
-        for _ in range(10):
-            await sleep(15)
-            if not self.is_on:
-                break
-            await self.coordinator.async_refresh()
+        await self.coordinator.myskoda.set_battery_care_mode(
+            self.vehicle.info.vin, False
+        )
         _LOGGER.info("Battery care mode disabled.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
-        await self.coordinator.hub.set_battery_care_mode(self.vehicle.info.vin, True)
-        for _ in range(10):
-            await sleep(15)
-            if self.is_on:
-                break
-            await self.coordinator.async_refresh()
+        await self.coordinator.myskoda.set_battery_care_mode(
+            self.vehicle.info.vin, True
+        )
         _LOGGER.info("Battery care mode enabled.")
 
 
-class ReducedCurrent(MySkodaSwitch):
+class ReducedCurrent(ChargingSwitch):
     """Control whether to charge with reduced current."""
 
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
-        super().__init__(
-            coordinator,
-            vehicle,
-            SwitchEntityDescription(
-                key="reduced_current",
-                name=f"{vehicle.info.specification.title} Reduced Current",
-                icon="mdi:current-ac",
-                device_class=SwitchDeviceClass.SWITCH,
-            ),
-        )
-        self._attr_unique_id = f"{vehicle.info.vin}_reduced_current"
+    entity_description = SwitchEntityDescription(
+        key="reduced_current",
+        name="Reduced Current",
+        icon="mdi:current-ac",
+        device_class=SwitchDeviceClass.SWITCH,
+    )
 
     @property
     def is_on(self) -> bool | None:  # noqa: D102
-        if not self.coordinator.data:
-            return None
-
-        self._update_device_from_coordinator()
-
-        return (
-            self.vehicle.charging.settings.max_charge_current_ac
-            == charging.MaxChargeCurrent.REDUCED
-        )
+        return self._settings().max_charge_current_ac == MaxChargeCurrent.REDUCED
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
-        await self.coordinator.hub.set_reduced_current_limit(
+        await self.coordinator.myskoda.set_reduced_current_limit(
             self.vehicle.info.vin, False
         )
-        for _ in range(10):
-            await sleep(15)
-            if not self.is_on:
-                break
-            await self.coordinator.async_refresh()
         _LOGGER.info("Reduced current limit disabled.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
-        await self.coordinator.hub.set_reduced_current_limit(
+        await self.coordinator.myskoda.set_reduced_current_limit(
             self.vehicle.info.vin, True
         )
-        for _ in range(10):
-            await sleep(15)
-            if self.is_on:
-                break
-            await self.coordinator.async_refresh()
         _LOGGER.info("Reduced current limit enabled.")
 
 
-class Charging(MySkodaSwitch):
+class EnableCharging(ChargingSwitch):
     """Control whether the vehicle should be charging."""
 
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:  # noqa: D107
-        super().__init__(
-            coordinator,
-            vehicle,
-            SwitchEntityDescription(
-                key="charging",
-                name=f"{vehicle.info.specification.title} Charging",
-                icon="mdi:power-plug-battery",
-                device_class=SwitchDeviceClass.SWITCH,
-            ),
-        )
-        self._attr_unique_id = f"{vehicle.info.vin}_charging"
+    entity_description = SwitchEntityDescription(
+        key="charging",
+        name="Charging",
+        icon="mdi:power-plug-battery",
+        device_class=SwitchDeviceClass.SWITCH,
+    )
 
     @property
     def is_on(self) -> bool | None:  # noqa: D102
-        if not self.coordinator.data or not self.vehicle.charging.status:
-            return None
-
-        self._update_device_from_coordinator()
-
-        return self.vehicle.charging.status.state == ChargingState.CHARGING
+        return self._status().state == ChargingState.CHARGING
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
-        await self.coordinator.hub.stop_charging(self.vehicle.info.vin)
-        for _ in range(10):
-            await sleep(15)
-            if not self.is_on:
-                break
-            await self.coordinator.async_refresh()
+        await self.coordinator.myskoda.stop_charging(self.vehicle.info.vin)
         _LOGGER.info("Charging stopped.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
-        await self.coordinator.hub.start_charging(self.vehicle.info.vin)
-        for _ in range(10):
-            await sleep(15)
-            if self.is_on:
-                break
-            await self.coordinator.async_refresh()
+        await self.coordinator.myskoda.start_charging(self.vehicle.info.vin)
         _LOGGER.info("Charging started.")

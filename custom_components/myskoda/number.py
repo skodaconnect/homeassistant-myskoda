@@ -1,6 +1,5 @@
 """Number entities for MySkoda."""
 
-from asyncio import sleep
 import logging
 
 from homeassistant.components.number import (
@@ -13,11 +12,12 @@ from homeassistant.const import PERCENTAGE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from myskoda import Vehicle
+from myskoda.models.charging import Settings
+from myskoda.models.info import CapabilityId
 
-from .const import DATA_COODINATOR, DOMAIN
-from .entity import MySkodaDataEntity
+from .const import COORDINATOR, DOMAIN
+from .entity import MySkodaEntity
+from .utils import InvalidCapabilityConfigurationError, add_supported_entities
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,31 +29,20 @@ async def async_setup_entry(
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Set up the sensor platform."""
-    coordinator = hass.data[DOMAIN][config.entry_id][DATA_COODINATOR]
-
-    vehicles = coordinator.data.get("vehicles")
-
-    entities = [ChargeLimit(coordinator, vehicle) for vehicle in vehicles]
-
-    async_add_entities(entities, update_before_add=True)
+    add_supported_entities(
+        available_entities=[ChargeLimit],
+        coordinator=hass.data[DOMAIN][config.entry_id][COORDINATOR],
+        async_add_entities=async_add_entities,
+    )
 
 
-class MySkodaNumber(MySkodaDataEntity, NumberEntity):
+class MySkodaNumber(MySkodaEntity, NumberEntity):
     """Number Entity.
 
     Base class for all number entities in the MySkoda integration.
     """
 
-    def __init__(
-        self,
-        coordinator: DataUpdateCoordinator,
-        vehicle: Vehicle,
-        entity_description: NumberEntityDescription,
-    ) -> None:
-        """Create new Number."""
-
-        super().__init__(coordinator, vehicle, entity_description)
-        NumberEntity.__init__(self)
+    pass
 
 
 class ChargeLimit(MySkodaNumber):
@@ -62,40 +51,35 @@ class ChargeLimit(MySkodaNumber):
     Represents the maximum value in percent that the car can be charged to.
     """
 
-    def __init__(self, coordinator: DataUpdateCoordinator, vehicle: Vehicle) -> None:
-        """Create new ChargeLimit."""
+    entity_description = NumberEntityDescription(
+        key="charge_limit",
+        name="Charge Limit",
+        icon="mdi:battery-lock",
+        native_max_value=100,
+        native_min_value=50,
+        native_unit_of_measurement=PERCENTAGE,
+        native_step=10,
+        translation_key="charge_limit",
+    )
 
-        super().__init__(
-            coordinator,
-            vehicle,
-            NumberEntityDescription(
-                key="charge_limit",
-                name=f"{vehicle.info.specification.title} Charge Limit",
-                icon="mdi:battery-lock",
-                native_max_value=100,
-                native_min_value=50,
-                native_unit_of_measurement=PERCENTAGE,
-                native_step=10,
-                translation_key="charge_limit",
-            ),
-        )
-        self._attr_unique_id = f"{vehicle.info.vin}_charge_limit"
-        self._attr_device_class = NumberDeviceClass.BATTERY
+    _attr_device_class = NumberDeviceClass.BATTERY
+
+    def _settings(self) -> Settings:
+        if self.vehicle.charging is None or self.vehicle.charging.settings is None:
+            raise InvalidCapabilityConfigurationError(
+                self.entity_description.key, self.vehicle
+            )
+
+        return self.vehicle.charging.settings
 
     @property
     def native_value(self) -> float | None:  # noqa: D102
-        if not self.coordinator.data:
-            return None
-
-        self._update_device_from_coordinator()
-
-        return self.vehicle.charging.settings.target_state_of_charge_in_percent
+        return self._settings().target_state_of_charge_in_percent
 
     async def async_set_native_value(self, value: float):  # noqa: D102
-        await self.coordinator.hub.set_charge_limit(self.vehicle.info.vin, value)
-        for _ in range(10):
-            await sleep(15)
-            if self.native_value == value:
-                break
-            await self.coordinator.async_refresh()
-        _LOGGER.debug("Changed charge limit to %s.", value)
+        await self.coordinator.myskoda.set_charge_limit(
+            self.vehicle.info.vin, int(value)
+        )
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING]
