@@ -12,7 +12,7 @@ from myskoda.event import Event, EventAccess, EventAirConditioning, ServiceEvent
 from myskoda.models.user import User
 from myskoda.mqtt import EventCharging, EventType
 
-from .const import DOMAIN
+from .const import DOMAIN, FETCH_INTERVAL_IN_MINUTES, API_COOLDOWN_IN_SECONDS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,7 +22,9 @@ class MySkodaDebouncer(Debouncer):
 
     def __init__(self, hass: HomeAssistant) -> None:
         """Initialize debounce."""
-        super.__init__(hass, _LOGGER, cooldown=60.0, immediate=False)
+        super().__init__(
+            hass, _LOGGER, cooldown=API_COOLDOWN_IN_SECONDS, immediate=False
+        )
 
     async def async_call(self) -> None:
         """Call the intended function."""
@@ -63,8 +65,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(minutes=30),
+            update_interval=timedelta(minutes=FETCH_INTERVAL_IN_MINUTES),
             request_refresh_debouncer=MySkodaDebouncer(hass),
+            always_update=False,
         )
         self.myskoda = MySkoda(async_get_clientsession(hass))
         self.config = config
