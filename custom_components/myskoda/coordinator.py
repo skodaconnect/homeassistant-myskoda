@@ -4,6 +4,7 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.util.ssl import get_default_context
 from myskoda import MySkoda, Vehicle
@@ -14,6 +15,24 @@ from myskoda.mqtt import EventCharging, EventType
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
+
+
+class MySkodaDebouncer(Debouncer):
+    """Class to rate limit calls to MySkoda REST APIs."""
+
+    def __init__(self, hass: HomeAssistant) -> None:
+        """Initialize debounce."""
+        super.__init__(hass, _LOGGER, cooldown=60.0, immediate=False)
+
+    async def async_call(self) -> None:
+        """Call the intended function."""
+        # Restart timer when calling
+        self.async_cancel()
+        await super().async_call()
+
+    def has_pending_call(self) -> bool:
+        """Is there a call pending already?"""
+        return self._execute_at_end_of_timer
 
 
 class State:
@@ -41,7 +60,11 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         """Create a new coordinator."""
 
         super().__init__(
-            hass, _LOGGER, name=DOMAIN, update_interval=timedelta(minutes=30)
+            hass,
+            _LOGGER,
+            name=DOMAIN,
+            update_interval=timedelta(minutes=30),
+            request_refresh_debouncer=MySkodaDebouncer(hass),
         )
         self.myskoda = MySkoda(async_get_clientsession(hass))
         self.config = config
