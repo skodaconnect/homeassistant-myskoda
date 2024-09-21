@@ -1,4 +1,5 @@
 from collections.abc import Coroutine
+from dataclasses import dataclass
 from datetime import timedelta
 import logging
 from typing import Callable
@@ -40,13 +41,10 @@ class MySkodaDebouncer(Debouncer):
         )
 
 
+@dataclass
 class State:
     vehicle: Vehicle
     user: User
-
-    def __init__(self, vehicle: Vehicle, user: User) -> None:
-        self.vehicle = vehicle
-        self.user = user
 
 
 class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
@@ -55,15 +53,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     This class manages all data from the MySkoda API.
     """
 
-    myskoda: MySkoda
-    config: ConfigEntry
     data: State
-    update_driving_range: RefreshFunction
-    update_charging: RefreshFunction
-    update_air_conditioning: RefreshFunction
-    update_vehicle: RefreshFunction
-    vin: str
-    hass: HomeAssistant
 
     def __init__(
         self, hass: HomeAssistant, config: ConfigEntry, myskoda: MySkoda, vin: str
