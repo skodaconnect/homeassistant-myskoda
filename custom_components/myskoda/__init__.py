@@ -6,8 +6,11 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.util.ssl import get_default_context
+from myskoda import MySkoda
 
-from .const import COORDINATOR, DOMAIN
+from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
@@ -25,15 +28,25 @@ PLATFORMS: list[Platform] = [
 async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     """Set up MySkoda integration from a config entry."""
 
-    coordinator = MySkodaDataUpdateCoordinator(hass, config)
+    myskoda = MySkoda(async_get_clientsession(hass))
 
-    if not await coordinator.async_login():
+    try:
+        await myskoda.connect(
+            config.data["email"], config.data["password"], get_default_context()
+        )
+    except Exception:
+        _LOGGER.error("Login with MySkoda failed.")
         return False
 
-    await coordinator.async_config_entry_first_refresh()
+    coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
+    vehicles = await myskoda.list_vehicle_vins()
+    for vin in vehicles:
+        coordinator = MySkodaDataUpdateCoordinator(hass, config, myskoda, vin)
+        await coordinator.async_config_entry_first_refresh()
+        coordinators[vin] = coordinator
 
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][config.entry_id] = {COORDINATOR: coordinator}
+    hass.data[DOMAIN][config.entry_id] = {COORDINATORS: coordinators}
 
     await hass.config_entries.async_forward_entry_setups(config, PLATFORMS)
 

@@ -16,7 +16,7 @@ from myskoda.models.charging import Charging, ChargingStatus
 from myskoda.models.info import CapabilityId
 from myskoda.myskoda import Health, Status
 
-from .const import COORDINATOR, DOMAIN
+from .const import COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
 from .utils import InvalidCapabilityConfigurationError, add_supported_entities
 
@@ -41,7 +41,7 @@ async def async_setup_entry(
             BatteryPercentage,
             ChargingPower,
         ],
-        coordinator=hass.data[DOMAIN][config.entry_id][COORDINATOR],
+        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
 
