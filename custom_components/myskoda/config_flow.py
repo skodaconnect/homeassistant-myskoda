@@ -6,11 +6,20 @@ import logging
 from typing import Any
 
 import voluptuous as vol
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlowResult,
+    OptionsFlow,
+    callback,
+)
 from homeassistant.config_entries import ConfigFlow as BaseConfigFlow
-from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.schema_config_entry_flow import (
+    SchemaFlowFormStep,
+    SchemaOptionsFlowHandler,
+)
 
 from myskoda import RestApi
 
@@ -24,6 +33,14 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
         vol.Required("password"): str,
     }
 )
+OPTIONS_SCHEMA = vol.Schema(
+    {
+        vol.Required("tracing", default=False): bool,
+    }
+)
+OPTIONS_FLOW = {
+    "init": SchemaFlowFormStep(OPTIONS_SCHEMA),
+}
 
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
@@ -66,6 +83,14 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
         )
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(
+        config_entry: ConfigEntry,
+    ) -> OptionsFlow:
+        """Create the options flow."""
+        return SchemaOptionsFlowHandler(config_entry, OPTIONS_FLOW)
 
 
 class CannotConnect(HomeAssistantError):
