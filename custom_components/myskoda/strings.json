@@ -16,5 +16,14 @@
     "abort": {
       "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
+        }
+      }
+    }
   }
 }

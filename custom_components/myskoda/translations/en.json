@@ -16,5 +16,14 @@
                 }
             }
         }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
+                }
+            }
+        }
     }
 }

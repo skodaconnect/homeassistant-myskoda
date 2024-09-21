@@ -1,14 +1,15 @@
 """The MySkoda integration."""
 
 from __future__ import annotations
+
 import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.util.ssl import get_default_context
-from myskoda import MySkoda
+from myskoda import TRACE_CONFIG, MySkoda
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
@@ -28,7 +29,11 @@ PLATFORMS: list[Platform] = [
 async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     """Set up MySkoda integration from a config entry."""
 
-    myskoda = MySkoda(async_get_clientsession(hass))
+    trace_configs = []
+    if config.options.get("tracing"):
+        trace_configs.append(TRACE_CONFIG)
+    session = async_create_clientsession(hass, trace_configs=trace_configs)
+    myskoda = MySkoda(session)
 
     try:
         await myskoda.connect(
