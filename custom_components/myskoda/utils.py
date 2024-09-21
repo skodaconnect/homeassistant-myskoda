@@ -11,14 +11,14 @@ def add_supported_entities(
     available_entities: list[
         Callable[[MySkodaDataUpdateCoordinator, str], MySkodaEntity]
     ],
-    coordinator: MySkodaDataUpdateCoordinator,
+    coordinators: dict[str, MySkodaDataUpdateCoordinator],
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     entities = []
 
-    for vin in coordinator.data.vehicles:
+    for vin in coordinators:
         for SensorClass in available_entities:
-            sensor = SensorClass(coordinator, vin)
+            sensor = SensorClass(coordinators[vin], vin)
             if sensor.is_supported():
                 entities.append(sensor)
 

@@ -15,7 +15,7 @@ from homeassistant.helpers.typing import DiscoveryInfoType
 from myskoda.models.charging import Settings
 from myskoda.models.info import CapabilityId
 
-from .const import COORDINATOR, DOMAIN
+from .const import COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
 from .utils import InvalidCapabilityConfigurationError, add_supported_entities
 
@@ -31,7 +31,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     add_supported_entities(
         available_entities=[ChargeLimit],
-        coordinator=hass.data[DOMAIN][config.entry_id][COORDINATOR],
+        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
 

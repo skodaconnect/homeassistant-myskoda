@@ -27,7 +27,7 @@ class MySkodaEntity(CoordinatorEntity):
 
     @property
     def vehicle(self) -> Vehicle:
-        return self.coordinator.data.vehicles[self.vin]
+        return self.coordinator.data.vehicle
 
     @property
     def device_info(self) -> DeviceInfo:  # noqa: D102

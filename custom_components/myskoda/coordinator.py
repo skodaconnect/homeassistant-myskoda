@@ -1,14 +1,12 @@
 from collections.abc import Coroutine
 from datetime import timedelta
 import logging
-from typing import Awaitable, Callable
+from typing import Callable
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from homeassistant.util.ssl import get_default_context
 from myskoda import MySkoda, Vehicle
 from myskoda.event import (
     Event,
@@ -25,67 +23,30 @@ from .const import DOMAIN, FETCH_INTERVAL_IN_MINUTES, API_COOLDOWN_IN_SECONDS
 
 _LOGGER = logging.getLogger(__name__)
 
-type RefreshFunctionVin = Callable[[str], Coroutine[None, None, None]]
 type RefreshFunction = Callable[[], Coroutine[None, None, None]]
 
 
-class MySkodaDebouncer[T](Debouncer):
+class MySkodaDebouncer(Debouncer):
     """Class to rate limit calls to MySkoda REST APIs."""
 
-    def __init__(
-        self, hass: HomeAssistant, vin: str, func: Callable[[str], Awaitable[T]]
-    ) -> None:
+    def __init__(self, hass: HomeAssistant, func: RefreshFunction) -> None:
         """Initialize debounce."""
-
-        async def call_func() -> None:
-            await func(vin)
-
         super().__init__(
             hass,
             _LOGGER,
             cooldown=API_COOLDOWN_IN_SECONDS,
             immediate=False,
-            function=call_func,
+            function=func,
         )
 
 
 class State:
-    vehicles: dict[str, Vehicle]
+    vehicle: Vehicle
     user: User
 
-    def __init__(self, vehicles: list[Vehicle], user: User) -> None:
-        self.vehicles = {}
-        for vehicle in vehicles:
-            self.vehicles[vehicle.info.vin] = vehicle
+    def __init__(self, vehicle: Vehicle, user: User) -> None:
+        self.vehicle = vehicle
         self.user = user
-
-
-class DebouncedRefresh:
-    update_driving_range: RefreshFunction
-    update_charging: RefreshFunction
-    update_air_conditioning: RefreshFunction
-    update_vehicle: RefreshFunction
-
-    def __init__(
-        self,
-        hass: HomeAssistant,
-        vin: str,
-        update_driving_range: RefreshFunctionVin,
-        update_charging: RefreshFunctionVin,
-        update_air_conditioning: RefreshFunctionVin,
-        update_vehicle: RefreshFunctionVin,
-    ) -> None:
-        self.update_driving_range = self._debounce(hass, vin, update_driving_range)
-        self.update_charging = self._debounce(hass, vin, update_charging)
-        self.update_air_conditioning = self._debounce(
-            hass, vin, update_air_conditioning
-        )
-        self.update_vehicle = self._debounce(hass, vin, update_vehicle)
-
-    def _debounce(
-        self, hass: HomeAssistant, vin: str, func: RefreshFunctionVin
-    ) -> RefreshFunction:
-        return MySkodaDebouncer(hass, vin, func).async_call
 
 
 class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
@@ -97,9 +58,16 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     myskoda: MySkoda
     config: ConfigEntry
     data: State
-    refresh: dict[str, DebouncedRefresh]
+    update_driving_range: RefreshFunction
+    update_charging: RefreshFunction
+    update_air_conditioning: RefreshFunction
+    update_vehicle: RefreshFunction
+    vin: str
+    hass: HomeAssistant
 
-    def __init__(self, hass: HomeAssistant, config: ConfigEntry) -> None:
+    def __init__(
+        self, hass: HomeAssistant, config: ConfigEntry, myskoda: MySkoda, vin: str
+    ) -> None:
         """Create a new coordinator."""
 
         super().__init__(
@@ -109,43 +77,26 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             update_interval=timedelta(minutes=FETCH_INTERVAL_IN_MINUTES),
             always_update=False,
         )
-        self.myskoda = MySkoda(async_get_clientsession(hass))
+        self.hass = hass
+        self.vin = vin
+        self.myskoda = myskoda
         self.config = config
-        self.refresh = {}
+        self.update_driving_range = self._debounce(self._update_driving_range)
+        self.update_charging = self._debounce(self._update_charging)
+        self.update_air_conditioning = self._debounce(self._update_air_conditioning)
+        self.update_vehicle = self._debounce(self._update_vehicle)
 
-    async def async_login(self) -> bool:
-        """Login to the MySkoda API. Will return `True` if successful."""
-
-        try:
-            await self.myskoda.connect(
-                self.config.data["email"],
-                self.config.data["password"],
-                get_default_context(),
-            )
-            self.myskoda.subscribe(self._on_mqtt_event)
-            vehicles = await self.myskoda.list_vehicle_vins()
-        except Exception:
-            _LOGGER.error("Login with MySkoda failed.")
-            return False
-
-        for vin in vehicles:
-            self.refresh[vin] = DebouncedRefresh(
-                self.hass,
-                vin,
-                update_air_conditioning=self._update_air_conditioning,
-                update_vehicle=self._update_vehicle,
-                update_charging=self._update_charging,
-                update_driving_range=self._update_driving_range,
-            )
-
-        return True
+        myskoda.subscribe(self._on_mqtt_event)
 
     async def _async_update_data(self) -> State:
-        vehicles = await self.myskoda.get_all_vehicles()
+        vehicle = await self.myskoda.get_vehicle(self.vin)
         user = await self.myskoda.get_user()
-        return State(vehicles, user)
+        return State(vehicle, user)
 
     async def _on_mqtt_event(self, event: Event) -> None:
+        if event.vin != self.vin:
+            return
+
         if event.type == EventType.OPERATION:
             await self._on_operation_event(event)
         if event.type == EventType.SERVICE_EVENT:
@@ -166,7 +117,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.START_WINDOW_HEATING,
             OperationName.STOP_WINDOW_HEATING,
         ]:
-            await self.refresh[event.vin].update_air_conditioning()
+            await self.update_air_conditioning()
         if event.operation.operation in [
             OperationName.UPDATE_CHARGE_LIMIT,
             OperationName.UPDATE_CARE_MODE,
@@ -174,15 +125,15 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.START_CHARGING,
             OperationName.STOP_CHARGING,
         ]:
-            await self.refresh[event.vin].update_charging()
+            await self.update_charging()
 
     async def _on_charging_event(self, event: EventCharging):
-        vehicle = self.data.vehicles[event.vin]
+        vehicle = self.data.vehicle
 
         data = event.event.data
 
         if vehicle.charging is None or vehicle.charging.status is None:
-            await self.refresh[event.vin].update_charging()
+            await self.update_charging()
         else:
             status = vehicle.charging.status
 
@@ -193,7 +144,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.async_set_updated_data
 
         if vehicle.driving_range is None:
-            await self.refresh[event.vin].update_driving_range()
+            await self.update_driving_range()
         else:
             vehicle.driving_range.primary_engine_range.current_so_c_in_percent = (
                 data.soc
@@ -205,40 +156,43 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.set_updated_vehicle(vehicle)
 
     async def _on_access_event(self, event: EventAccess):
-        await self.refresh[event.vin].update_vehicle()
+        await self.update_vehicle()
 
     async def _on_air_conditioning_event(self, event: EventAirConditioning):
-        await self.refresh[event.vin].update_air_conditioning()
+        await self.update_air_conditioning()
 
     def _unsub_refresh(self):
         return
 
     def set_updated_vehicle(self, vehicle: Vehicle) -> None:
-        self.data.vehicles[vehicle.info.vin] = vehicle
+        self.data.vehicle = vehicle
         self.async_set_updated_data(self.data)
 
-    async def _update_driving_range(self, vin: str) -> None:
-        _LOGGER.debug("Updating driving range for %s", vin)
-        driving_range = await self.myskoda.get_driving_range(vin)
-        vehicle = self.data.vehicles[vin]
+    async def _update_driving_range(self) -> None:
+        _LOGGER.debug("Updating driving range for %s", self.vin)
+        driving_range = await self.myskoda.get_driving_range(self.vin)
+        vehicle = self.data.vehicle
         vehicle.driving_range = driving_range
         self.set_updated_vehicle(vehicle)
 
-    async def _update_charging(self, vin: str) -> None:
-        _LOGGER.debug("Updating charging information for %s", vin)
-        charging = await self.myskoda.get_charging(vin)
-        vehicle = self.data.vehicles[vin]
+    async def _update_charging(self) -> None:
+        _LOGGER.debug("Updating charging information for %s", self.vin)
+        charging = await self.myskoda.get_charging(self.vin)
+        vehicle = self.data.vehicle
         vehicle.charging = charging
         self.set_updated_vehicle(vehicle)
 
-    async def _update_air_conditioning(self, vin: str) -> None:
-        _LOGGER.debug("Updating air conditioning for %s", vin)
-        air_conditioning = await self.myskoda.get_air_conditioning(vin)
-        vehicle = self.data.vehicles[vin]
+    async def _update_air_conditioning(self) -> None:
+        _LOGGER.debug("Updating air conditioning for %s", self.vin)
+        air_conditioning = await self.myskoda.get_air_conditioning(self.vin)
+        vehicle = self.data.vehicle
         vehicle.air_conditioning = air_conditioning
         self.set_updated_vehicle(vehicle)
 
-    async def _update_vehicle(self, vin: str) -> None:
-        _LOGGER.debug("Updating full vehicle for %s", vin)
-        vehicle = await self.myskoda.get_vehicle(vin)
+    async def _update_vehicle(self) -> None:
+        _LOGGER.debug("Updating full vehicle for %s", self.vin)
+        vehicle = await self.myskoda.get_vehicle(self.vin)
         self.set_updated_vehicle(vehicle)
+
+    def _debounce(self, func: RefreshFunction) -> RefreshFunction:
+        return MySkodaDebouncer(self.hass, func).async_call

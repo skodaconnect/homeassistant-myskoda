@@ -10,7 +10,7 @@ from homeassistant.helpers.typing import DiscoveryInfoType
 from myskoda.models.info import CapabilityId
 from myskoda.models.position import Position, PositionType, Positions
 
-from .const import COORDINATOR, DOMAIN
+from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import InvalidCapabilityConfigurationError, add_supported_entities
@@ -25,7 +25,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     add_supported_entities(
         available_entities=[DeviceTracker],
-        coordinator=hass.data[DOMAIN][config.entry_id][COORDINATOR],
+        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
 
@@ -34,7 +34,7 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
     """GPS device tracker for MySkoda."""
 
     def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:  # noqa: D107
-        title = coordinator.data.vehicles[vin].info.specification.title
+        title = coordinator.data.vehicle.info.specification.title
         self.entity_description = EntityDescription(
             name=title,
             key=f"{vin}_device_tracker",
