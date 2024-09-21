@@ -8,7 +8,7 @@ from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from myskoda.models.info import CapabilityId
-from myskoda.models.position import Positions
+from myskoda.models.position import Position, PositionType, Positions
 
 from .const import COORDINATOR, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
@@ -50,17 +50,30 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
             )
         return positions
 
+    def _vehicle_position(self) -> Position | None:
+        return next(
+            pos
+            for pos in self._positions().positions
+            if pos.type == PositionType.VEHICLE
+        )
+
     @property
     def source_type(self) -> SourceType:  # noqa: D102
         return SourceType.GPS
 
     @property
     def latitude(self) -> float | None:  # noqa: D102
-        return self._positions().positions[0].gps_coordinates.latitude
+        position = self._vehicle_position()
+        if position is None:
+            return None
+        return position.gps_coordinates.latitude
 
     @property
     def longitude(self) -> float | None:  # noqa: D102
-        return self._positions().positions[0].gps_coordinates.longitude
+        position = self._vehicle_position()
+        if position is None:
+            return None
+        return position.gps_coordinates.longitude
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.PARKING_POSITION]
