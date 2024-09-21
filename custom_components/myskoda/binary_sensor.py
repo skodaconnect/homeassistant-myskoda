@@ -42,6 +42,7 @@ async def async_setup_entry(
             LightsOn,
             ChargerConnected,
             ChargerLocked,
+            SunroofOpen,
         ],
         coordinator=hass.data[DOMAIN][config.entry_id][COORDINATOR],
         async_add_entities=async_add_entities,
@@ -236,6 +237,32 @@ class BonnetOpen(StatusBinarySensor):
     @property
     def is_on(self):  # noqa: D102
         return self._status().detail.bonnet == OpenState.OPEN
+
+
+class SunroofOpen(StatusBinarySensor):
+    """Detects whether the sunroof is open."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="sunroof_open",
+        name="Sunroof",
+        device_class=BinarySensorDeviceClass.OPENING,
+        icon="mdi:car-select",
+    )
+
+    @property
+    def is_on(self):  # noqa: D102
+        if (
+            self._status().detail.sunroof is None
+            or self._status().detail.sunroof == OpenState.UNSUPPORTED
+        ):
+            return None
+        return self._status().detail.sunroof == OpenState.OPEN
+
+    def is_supported(self) -> bool:
+        return (
+            super().is_supported()
+            and self._status().detail.sunroof != OpenState.UNSUPPORTED
+        )
 
 
 class LightsOn(StatusBinarySensor):
