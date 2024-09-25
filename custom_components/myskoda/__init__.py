@@ -9,7 +9,8 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.util.ssl import get_default_context
-from myskoda import TRACE_CONFIG, MySkoda
+from myskoda import MySkoda
+from myskoda.myskoda import TRACE_CONFIG
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
@@ -33,14 +34,14 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     if config.options.get("tracing"):
         trace_configs.append(TRACE_CONFIG)
     session = async_create_clientsession(hass, trace_configs=trace_configs)
-    myskoda = MySkoda(session)
+    myskoda = MySkoda(session, get_default_context())
 
     try:
         await myskoda.connect(
-            config.data["email"], config.data["password"], get_default_context()
+            config.data["email"], config.data["password"]
         )
     except Exception:
-        _LOGGER.error("Login with MySkoda failed.")
+        _LOGGER.exception("Login with MySkoda failed.")
         return False
 
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
