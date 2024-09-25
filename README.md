@@ -2,6 +2,10 @@
 
 MySkoda integration using the API that the MySkoda App uses.
 
+## Status: This project is a new implementation of a relatively new API. Consider this code alpha. 
+
+Contributions are welcomed, both as issues, but more as pull requests :) 
+
 ## Capabilities
 
 ### Sensors 
