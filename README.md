@@ -2,9 +2,11 @@
 
 MySkoda integration using the API that the MySkoda App uses.
 
-## Status: This project is a new implementation of a relatively new API. Consider this code alpha. 
+**Status:** This project is a new implementation of a relatively new API. Consider this code alpha. 
 
 Contributions are welcomed, both as issues, but more as pull requests :) 
+
+Please [join our Discord](https://discord.gg/t7az2hSJXq) and help development by providing feedback and details about the vehicles you are using.
 
 ## Capabilities
 
@@ -50,9 +52,3 @@ Air conditioning is exposed as climate.
 ### Device Tracker
 
 Location of vehicles are exposed as device trackers.
-
-## Further Resources
-
-Check out the [awesome work from the team behind pyskodaconnect](https://github.com/skodaconnect/homeassistant-skodaconnect).
-
-Sadly, the integration is currently not working with new cars that can no longer access the old Skoda Essentials App. This is a rewrite to the new MySkoda API.
