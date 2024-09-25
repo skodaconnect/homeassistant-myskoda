@@ -550,17 +550,17 @@ docs = ["Sphinx (>=5.0,<6.0)", "myst-parser (>=0.18,<1.1)", "sphinx-rtd-theme (>
 
 [[package]]
 name = "boto3"
-version = "1.35.26"
+version = "1.35.27"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.35.26-py3-none-any.whl", hash = "sha256:c31db992655db233d98762612690cfe60723c9e1503b5709aad92c1c564877bb"},
-    {file = "boto3-1.35.26.tar.gz", hash = "sha256:b04087afd3570ba540fd293823c77270ec675672af23da9396bd5988a3f8128b"},
+    {file = "boto3-1.35.27-py3-none-any.whl", hash = "sha256:3da139ca038032e92086e26d23833b557f0c257520162bfd3d6f580bf8032c86"},
+    {file = "boto3-1.35.27.tar.gz", hash = "sha256:10d0fe15670b83a3f26572ab20d9152a064cee4c54b5ea9a1eeb1f0c3b807a7b"},
 ]
 
 [package.dependencies]
-botocore = ">=1.35.26,<1.36.0"
+botocore = ">=1.35.27,<1.36.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -569,13 +569,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.35.26"
+version = "1.35.27"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.35.26-py3-none-any.whl", hash = "sha256:0b9dee5e4a3314e251e103585837506b17fcc7485c3c8adb61a9a913f46da1e7"},
-    {file = "botocore-1.35.26.tar.gz", hash = "sha256:19efc3a22c9df77960712b4e203f912486f8bcd3794bff0fd7b2a0f5f1d5712d"},
+    {file = "botocore-1.35.27-py3-none-any.whl", hash = "sha256:c299c70b5330a8634e032883ce8a72c2c6d9fdbc985d8191199cb86b92e7cbbd"},
+    {file = "botocore-1.35.27.tar.gz", hash = "sha256:f68875c26cd57a9d22c0f7a981ecb1636d7ce4d0e35797e04765b53e7bfed3e7"},
 ]
 
 [package.dependencies]
@@ -1727,13 +1727,13 @@ files = [
 
 [[package]]
 name = "myskoda"
-version = "0.6.0"
+version = "0.6.1"
 description = "Library for interaction with the MySkoda APIs."
 optional = false
 python-versions = ">=3.12.0"
 files = [
-    {file = "myskoda-0.6.0-py3-none-any.whl", hash = "sha256:b2a700e5f4282e880641afbb662aaa816a0292b271482e3fa79a609299a6b536"},
-    {file = "myskoda-0.6.0.tar.gz", hash = "sha256:841e066d8409c39b6cb3c436d60d01fba105bd8c235781f23c43e09413906804"},
+    {file = "myskoda-0.6.1-py3-none-any.whl", hash = "sha256:dcf1e797c4af06b62cafa7924661fa92da78839fcd07b8a10644981f3e61f199"},
+    {file = "myskoda-0.6.1.tar.gz", hash = "sha256:0c6c6b214bdb97fa42120e67421307501bf30e15986f8a018c49860581015312"},
 ]
 
 [package.dependencies]
@@ -2235,13 +2235,13 @@ files = [
 
 [[package]]
 name = "pyright"
-version = "1.1.382"
+version = "1.1.382.post0"
 description = "Command line wrapper for pyright"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pyright-1.1.382-py3-none-any.whl", hash = "sha256:b6658802b2eca1107a6d63b6816903da4c7a53dffebc27cdbc02ebd904b7a18e"},
-    {file = "pyright-1.1.382.tar.gz", hash = "sha256:0c953837aa9f1e1d8d46772ee7ebae845104db657e9216834dbdde567a11f177"},
+    {file = "pyright-1.1.382.post0-py3-none-any.whl", hash = "sha256:a82a20b6a6511d71c6c95de19c0f874f7e50a013f332e3799deaae66a4d237d1"},
+    {file = "pyright-1.1.382.post0.tar.gz", hash = "sha256:4b84dd4439b0cbc662dff6aaf012cc0860f1c788932ac4c2a4b5d6c1280a5e20"},
 ]
 
 [package.dependencies]
@@ -3075,4 +3075,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.12"
-content-hash = "801ae94f9dc7cb41fa75df4cea34ac9aa4bf21a9fc7071a0b9018f8be2e0c34b"
+content-hash = "15946ad83670c7a8d0c6f689b7dddf8153c1f0bd2a099010dbe987a2bcd90b4f"

@@ -6,13 +6,14 @@ import logging
 from typing import Any
 
 import voluptuous as vol
+
 from homeassistant.config_entries import (
     ConfigEntry,
+    ConfigFlow as BaseConfigFlow,
     ConfigFlowResult,
     OptionsFlow,
     callback,
 )
-from homeassistant.config_entries import ConfigFlow as BaseConfigFlow
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -20,8 +21,8 @@ from homeassistant.helpers.schema_config_entry_flow import (
     SchemaFlowFormStep,
     SchemaOptionsFlowHandler,
 )
-
-from myskoda import RestApi
+from homeassistant.util.ssl import get_default_context
+from myskoda import MySkoda
 
 from .const import DOMAIN
 
@@ -45,10 +46,9 @@ OPTIONS_FLOW = {
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
     """Check that the inputs are valid."""
-    hub = RestApi(async_get_clientsession(hass))
+    hub = MySkoda(async_get_clientsession(hass), get_default_context())
 
-    if not await hub.authenticate(data["email"], data["password"]):
-        raise InvalidAuth
+    await hub.connect(data["email"], data["password"])
 
 
 class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
