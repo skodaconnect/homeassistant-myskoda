@@ -1,18 +1,18 @@
 {
     "config": {
         "abort": {
-            "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+            "already_configured": "Device is already configured"
         },
         "error": {
-            "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
-            "invalid_auth": "[%key:common::config_flow::error::cannot_connect%]",
-            "unknown": "[%key:common::config_flow::error::unknown%]"
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles."
         },
         "step": {
             "user": {
                 "data": {
-                    "email": "[%key:common::config_flow::data::username%]",
-                    "password": "[%key:common::config_flow::data::password%]"
+                    "email": "E-mail",
+                    "password": "Password"
                 }
             }
         }
