@@ -37,7 +37,9 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     myskoda = MySkoda(session, get_default_context())
 
     try:
-        await myskoda.connect(config.data["email"], config.data["password"])
+        await myskoda.connect(
+            config.data["email"], config.data["password"]
+        )
     except Exception:
         _LOGGER.exception("Login with MySkoda failed.")
         return False
