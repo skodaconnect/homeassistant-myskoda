@@ -136,6 +136,8 @@ class ChargerLocked(AirConditioningBinarySensor):
 class Locked(StatusBinarySensor):
     """Detects whether the vehicle is fully locked."""
 
+    # Keep in mind, a lock that is open, is "ON" for HomeAssistant
+
     entity_description = BinarySensorEntityDescription(
         key="locked",
         name="Locks",
@@ -145,7 +147,7 @@ class Locked(StatusBinarySensor):
 
     @property
     def is_on(self):  # noqa: D102
-        return not self._status().overall.locked == DoorLockedState.UNLOCKED
+        return not self._status().overall.locked == DoorLockedState.LOCKED
 
     @property
     def icon(self):  # noqa: D102
@@ -159,14 +161,14 @@ class DoorsLocked(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="doors_locked",
-        name="Doors Locks",
+        name="Doors Locked",
         device_class=BinarySensorDeviceClass.LOCK,
         translation_key="doors_locked",
     )
 
     @property
     def is_on(self):  # noqa: D102
-        return not self._status().overall.doors_locked == DoorLockedState.UNLOCKED
+        return not self._status().overall.doors_locked == DoorLockedState.LOCKED
 
     @property
     def icon(self):  # noqa: D102
