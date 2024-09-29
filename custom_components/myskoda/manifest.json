@@ -1,14 +1,23 @@
 {
   "domain": "myskoda",
   "name": "MySkoda",
-  "codeowners": ["@prior99"],
+  "codeowners": [
+    "@prior99",
+    "@WebSpider",
+    "@dvx76"
+  ],
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/skodaconnect/homeassistant-myskoda/blob/main/README.md",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/skodaconnect/homeassistant-myskoda/issues",
-  "loggers": ["custom_components.myskoda", "myskoda"],
-  "requirements": ["myskoda==0.6.1"],
-  "version": "1.4.1"
+  "loggers": [
+    "custom_components.myskoda",
+    "myskoda"
+  ],
+  "requirements": [
+    "myskoda==0.6.2"
+  ],
+  "version": "1.4.2"
 }
