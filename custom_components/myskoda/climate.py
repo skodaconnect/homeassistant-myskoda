@@ -2,6 +2,7 @@
 
 import logging
 
+from datetime import timedelta
 from homeassistant.components.climate import (
     ClimateEntity,
     ClimateEntityDescription,
@@ -14,10 +15,11 @@ from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
+from homeassistant.util import Throttle
 from myskoda.models.air_conditioning import AirConditioning
 from myskoda.models.info import CapabilityId
 
-from .const import COORDINATORS, DOMAIN
+from .const import COORDINATORS, DOMAIN, API_COOLDOWN_IN_SECONDS
 from .coordinator import MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import InvalidCapabilityConfigurationError, add_supported_entities
@@ -94,6 +96,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
             return None
         return target_temperature.temperature_value
 
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_hvac_mode(self, hvac_mode: HVACMode):  # noqa: D102
         target_temperature = self._air_conditioning().target_temperature
         if target_temperature is None:
