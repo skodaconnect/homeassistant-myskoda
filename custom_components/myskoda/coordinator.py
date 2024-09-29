@@ -136,9 +136,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         if vehicle.driving_range is None:
             await self.update_driving_range()
         else:
-            vehicle.driving_range.primary_engine_range.current_so_c_in_percent = (
-                data.soc
-            )
+            vehicle.driving_range.primary_engine_range.current_soc_in_percent = data.soc
             vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
                 data.charged_range
             )
