@@ -17,6 +17,101 @@
             }
         }
     },
+    "entity": {
+        "binary_sensor": {
+	    "charger_connected": {
+	        "name": "Charger Connected"
+	    },
+	    "charger_locked": {
+		"name": "Charge Lock"
+	    },
+	    "locked": {
+		"name": "Vehicle Locked"
+	    },
+	    "doors_locked": {
+		"name": "Doors Locked"
+	    },
+	    "doors_open": {
+		"name": "Doors Open"
+	    },
+	    "windows_open": {
+		"name": "Windows"
+	    },
+	    "trunk_open": {
+		"name": "Trunk"
+	    },
+	    "bonnet_open": {
+		"name": "Bonnet"
+	    },
+	    "sunroof_open": {
+		"name": "Sunroof"
+	    },
+	    "lights_on": {
+		"name": "Lights"
+	    }
+	},
+	"climate": {
+	    "climate": {
+                "name": "Air Conditioning"
+	    }
+	},
+	"device_tracker": {
+	    "device_tracker": {
+                "name": "Positition"
+	    }
+	},
+	"number": {
+	    "charge_limit": {
+                "name": "Charge Limit"
+	    }
+	},
+	"sensor": {
+	    "software_version": {
+                "name": "Software Version"
+	    },
+	    "battery_percentage": {
+		"name": "Battery Percentage"
+	    },
+	    "charging_power": {
+		"name": "Charging Power"
+	    },
+	    "range": {
+		"name": "Range"
+	    },
+	    "target_battery_percentage": {
+		"name": "Target Battery Percentage"
+	    },
+	    "mileage": {
+		"name": "Mileage"
+	    },
+	    "charge_type": {
+		"name": "Charge Type"
+	    },
+	    "remaining_charging_time": {
+		"name": "Remaining Charging Time"
+	    },
+	    "car_captured": {
+		"name": "Last Updated"
+	    }
+	},
+	"switch": {
+            "window_heating": {
+	        "name": "Window Heating"
+	    },
+	    "charging_switch": {
+		"name": "Charging"
+	    },
+	    "battery_care_mode": {
+		"name": "Battery Care"
+	    },
+	    "reduced_current": {
+		"name": "Reduced Current"
+	    },
+	    "charging": {
+		"name": "Charging"
+	    }
+	}
+    },
     "options": {
         "step": {
             "init": {
