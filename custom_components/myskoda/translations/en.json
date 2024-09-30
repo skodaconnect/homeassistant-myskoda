@@ -17,6 +17,19 @@
             }
         }
     },
+    "entity": {
+	    "sensor": {
+                "charging_state": {
+		    "name": "Charging State",
+		    "state": {
+                        "connect_cable": "Cable Disconnected",
+                        "ready_for_charging": "Ready for Charging",
+                        "conserving": "Conserving Charge",
+                        "charging": "Charging"
+		    }
+		}
+	    }
+    },
     "options": {
         "step": {
             "init": {
