@@ -75,6 +75,15 @@
 	    "charging_power": {
 		"name": "Charging Power"
 	    },
+	    "charging_state": {
+                "name": "Charging State",
+                "state": {
+                    "connect_cable": "Cable Disconnected",
+                    "ready_for_charging": "Ready for Charging",
+                    "conserving": "Conserving Charge",
+                    "charging": "Charging"
+                }
+            },
 	    "range": {
 		"name": "Range"
 	    },

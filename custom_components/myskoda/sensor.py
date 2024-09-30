@@ -253,21 +253,25 @@ class ChargingState(ChargingSensor):
         device_class=SensorDeviceClass.ENUM,
         translation_key="charging_state",
     )
+
+    # lower_snake_case for translations
     _attr_options = [
-        "CONNECT_CABLE",
-        "READY_FOR_CHARGING",
-        "CONSERVING",
-        "CHARGING",
+        "connect_cable",
+        "ready_for_charging",
+        "conserving",
+        "charging",
     ]
 
     @property
     def native_value(self):  # noqa: D102
-        return self._status().state
+        return str(self._status().state).lower()
 
     @property
     def icon(self):  # noqa: D102
         if self._status().state == charging.ChargingState.CONNECT_CABLE:
             return "mdi:power-plug-off"
+        if self._status().state == charging.ChargingState.CHARGING:
+            return "mdi:power-plug-battery"
         return "mdi:power-plug"
 
 
