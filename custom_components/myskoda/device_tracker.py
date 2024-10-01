@@ -51,11 +51,14 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         return positions
 
     def _vehicle_position(self) -> Position | None:
-        return next(
-            pos
-            for pos in self._positions().positions
-            if pos.type == PositionType.VEHICLE
-        )
+        if self._positions().positions:
+            return next(
+                pos
+                for pos in self._positions().positions
+                if pos.type == PositionType.VEHICLE
+            )
+        else:
+            return None
 
     @property
     def source_type(self) -> SourceType:  # noqa: D102
