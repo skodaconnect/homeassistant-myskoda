@@ -1,80 +1,133 @@
 {
-	"entity": {
-		"binary_sensor": {
-			"charger_connected": {
-				"name": "Ladekabel"
-			},
-			"charger_locked": {
-				"name": "Ladekabel låst"
-			},
-			"locked": {
-				"name": "Køretøjslåst"
-			},
-			"doors_locked": {
-				"name": "Dørlåst"
-			},
-			"doors_open": {
-				"name": "Døre"
-			},
-			"windows_open": {
-				"name": "Vinduer"
-			},
-			"trunk_open": {
-				"name": "Bagagerum"
-			},
-			"bonnet_open": {
-				"name": "Motorhjelm"
-			},
-			"lights_on": {
-				"name": "Lygter"
-			}
-		},
-		"device_tracker": {
-			"device_tracker": {
-				"name": "Position"
-			}
-		},
-		"climate": {
-			"climate": {
-				"name": "Klimaanlæg"
-			}
-		},
-		"sensor": {
-			"software_version": {
-				"name": "Softwareversion"
-			},
-			"battery_percentage": {
-				"name": "Batteriprocent"
-			},
-			"charging_power": {
-				"name": "Ladeeffekt"
-			},
-			"range": {
-				"name": "Rækkevidde"
-			},
-			"target_battery_percentage": {
-				"name": "Ladegrænse i procent"
-			},
-			"milage": {
-				"name": "Kilometerantal"
-			},
-			"charge_type": {
-				"name": "Lademetode"
-			},
-			"charging_state": {
-				"name": "Ladestatus"
-			},
-			"remaining_charging_time": {
-				"name": "Restopladningstid"
-			},
-			"car_captured": {
-				"name": "Sidst opdateret"
-			}
-		},
-		"number": {
-			"charge_limit": {
-				"name": "Ladegrænse"
-			}
-		}
-	}
+    "config": {
+        "abort": {
+            "already_configured": "Enheden er allerede konfigureret"
+        },
+        "error": {
+            "cannot_connect": "Kunne ikke forbinde",
+            "invalid_auth": "Ugyldig autentificering",
+            "unknown": "Der opstod en uventet fejl. Tjek venligst HomeAssistant logfilerne."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "E-mail",
+                    "password": "Adgangskode"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "charger_connected": {
+                "name": "Ladekabel"
+            },
+            "charger_locked": {
+                "name": "Ladekabel låst"
+            },
+            "locked": {
+                "name": "Køretøjslåst"
+            },
+            "doors_locked": {
+                "name": "Dørlåst"
+            },
+            "doors_open": {
+                "name": "Døre"
+            },
+            "windows_open": {
+                "name": "Vinduer"
+            },
+            "trunk_open": {
+                "name": "Bagagerum"
+            },
+            "bonnet_open": {
+                "name": "Motorhjelm"
+            },
+            "sunroof_open": {
+                "name": "Sunroof"
+            },
+            "lights_on": {
+                "name": "Lygter"
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Klimaanlæg"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Position"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Ladegrænse"
+            }
+        },
+        "sensor": {
+            "software_version": {
+                "name": "Softwareversion"
+            },
+            "battery_percentage": {
+                "name": "Batteriprocent"
+            },
+            "charging_power": {
+                "name": "Ladeeffekt"
+            },
+            "charging_state": {
+                "name": "Ladestatus",
+                "state": {
+                    "connect_cable": "Cable Disconnected",
+                    "ready_for_charging": "Ready for Charging",
+                    "conserving": "Conserving Charge",
+                    "charging": "Charging"
+                }
+            },
+            "range": {
+                "name": "Rækkevidde"
+            },
+            "target_battery_percentage": {
+                "name": "Ladegrænse i procent"
+            },
+            "mileage": {
+                "name": "Mileage"
+            },
+            "charge_type": {
+                "name": "Lademetode"
+            },
+            "remaining_charging_time": {
+                "name": "Restopladningstid"
+            },
+            "car_captured": {
+                "name": "Sidst opdateret"
+            }
+        },
+        "switch": {
+            "window_heating": {
+                "name": "Window Heating"
+            },
+            "charging_switch": {
+                "name": "Charging"
+            },
+            "battery_care_mode": {
+                "name": "Battery Care"
+            },
+            "reduced_current": {
+                "name": "Reduced Current"
+            },
+            "charging": {
+                "name": "Charging"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "API-svarsporing. Kræver fejlsøgningslogning aktiveret i configuration.yaml."
+                }
+            }
+        }
+    }
 }
