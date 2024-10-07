@@ -1,18 +1,18 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Apparaat is al geconfigureerd"
+            "already_configured": "Device is already configured"
         },
         "error": {
-            "cannot_connect": "Kan geen verbinding maken",
-            "invalid_auth": "Ongeldige authenticatie",
-            "unknown": "Er is een onverwachte fout opgetreden. Controleer de HomeAssistant logbestanden."
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles."
         },
         "step": {
             "user": {
                 "data": {
                     "email": "E-mail",
-                    "password": "Wachtwoord"
+                    "password": "Password"
                 }
             }
         }
@@ -20,104 +20,104 @@
     "entity": {
         "binary_sensor": {
             "charger_connected": {
-                "name": "Laadkabel"
+                "name": "Charger Connected"
             },
             "charger_locked": {
-                "name": "Laadkabelvergrendeling"
+                "name": "Charge Lock"
             },
             "locked": {
-                "name": "Voertuigvergrendeling"
+                "name": "Vehicle Locked"
             },
             "doors_locked": {
-                "name": "Deurvergrendeling"
+                "name": "Doors Locked"
             },
             "doors_open": {
-                "name": "Deuren"
+                "name": "Doors Open"
             },
             "windows_open": {
-                "name": "Ramen"
+                "name": "Windows"
             },
             "trunk_open": {
-                "name": "Kofferbak"
+                "name": "Trunk"
             },
             "bonnet_open": {
-                "name": "Motorkap"
+                "name": "Bonnet"
             },
             "sunroof_open": {
-                "name": "Zonnedak Open"
+                "name": "Sunroof"
             },
             "lights_on": {
-                "name": "Lichten"
+                "name": "Lights"
             }
         },
         "climate": {
             "climate": {
-                "name": "Luchtbehandeling"
+                "name": "Air Conditioning"
             }
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Positie"
+                "name": "Positition"
             }
         },
         "number": {
             "charge_limit": {
-                "name": "Laadlimiet"
+                "name": "Charge Limit"
             }
         },
         "sensor": {
             "software_version": {
-                "name": "Software versie"
+                "name": "Software Version"
             },
             "battery_percentage": {
-                "name": "Accupercentage"
+                "name": "Battery Percentage"
             },
             "charging_power": {
-                "name": "Laadvermogen"
+                "name": "Charging Power"
             },
             "charging_state": {
-                "name": "Laadstatus",
+                "name": "Charging State",
                 "state": {
-                    "connect_cable": "Kabel verbinding verbroken",
-                    "ready_for_charging": "Klaar om op te laden",
-                    "conserving": "Lading bewaren",
-                    "charging": "Opladen"
+                    "connect_cable": "Cable Disconnected",
+                    "ready_for_charging": "Ready for Charging",
+                    "conserving": "Conserving Charge",
+                    "charging": "Charging"
                 }
             },
             "range": {
-                "name": "Bereik"
+                "name": "Range"
             },
             "target_battery_percentage": {
-                "name": "Laaddoel in procenten"
+                "name": "Target Battery Percentage"
             },
             "mileage": {
-                "name": "Kilometerstand"
+                "name": "Mileage"
             },
             "charge_type": {
-                "name": "Laadmethode"
+                "name": "Charge Type"
             },
             "remaining_charging_time": {
-                "name": "Laadtijd resterend"
+                "name": "Remaining Charging Time"
             },
             "car_captured": {
-                "name": "Laatst bijgewerkt"
+                "name": "Last Updated"
             }
         },
         "switch": {
             "window_heating": {
-                "name": "Verwarming raam"
+                "name": "Window Heating"
             },
             "charging_switch": {
-                "name": "Opladen"
+                "name": "Charging"
             },
             "battery_care_mode": {
-                "name": "Batterij verzorging"
+                "name": "Battery Care"
             },
             "reduced_current": {
-                "name": "Verminderde stroom"
+                "name": "Reduced Current"
             },
             "charging": {
-                "name": "Opladen"
+                "name": "Charging"
             }
         }
     },
@@ -125,7 +125,7 @@
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API respons traceren. Debug logging ingeschakeld in configuration.yaml."
+                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
                 }
             }
         }
