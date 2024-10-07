@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "homeassistant-myskoda"
-version = "1.4.3"
+version = "1.4.5"
 description = "Homeassistant integration for myskoda."
 authors = ["Frederick Gnodtke <frederick@gnodtke.net>"]
 readme = "README.md"
