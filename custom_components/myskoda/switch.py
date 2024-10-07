@@ -62,6 +62,7 @@ class WindowHeating(MySkodaSwitch):
         name="Window Heating",
         icon="mdi:car-defrost-front",
         device_class=SwitchDeviceClass.SWITCH,
+        translation_key="window_heating",
     )
 
     def _air_conditioning(self) -> AirConditioning:
@@ -92,6 +93,16 @@ class WindowHeating(MySkodaSwitch):
 
 
 class ChargingSwitch(MySkodaSwitch):
+    """Shows charging."""
+
+    entity_description = SwitchEntityDescription(
+        key="charging_switch",
+        name="Charging",
+        icon="mdi:car-electric",
+        device_class=SwitchDeviceClass.SWITCH,
+        translation_key="charging_switch",
+    )
+
     def _charging(self) -> Charging:
         charging = self.vehicle.charging
         if charging is None:
@@ -129,6 +140,7 @@ class BatteryCareMode(ChargingSwitch):
         name="Battery Care Mode",
         icon="mdi:battery-heart-variant",
         device_class=SwitchDeviceClass.SWITCH,
+        translation_key="battery_care_mode",
     )
 
     @property
@@ -156,6 +168,7 @@ class ReducedCurrent(ChargingSwitch):
         name="Reduced Current",
         icon="mdi:current-ac",
         device_class=SwitchDeviceClass.SWITCH,
+        translation_key="reduced_current",
     )
 
     @property
@@ -183,6 +196,7 @@ class EnableCharging(ChargingSwitch):
         name="Charging",
         icon="mdi:power-plug-battery",
         device_class=SwitchDeviceClass.SWITCH,
+        translation_key="charging",
     )
 
     @property
