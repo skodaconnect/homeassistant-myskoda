@@ -21,6 +21,7 @@ jobs:
         with:
           upload_sources: true
           upload_translations: true
+          auto_approve_imported: true
           download_translations: false
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
