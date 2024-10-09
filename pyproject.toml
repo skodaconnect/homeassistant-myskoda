@@ -18,8 +18,8 @@ myskoda = "^0.7.2"
 
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.6.4"
-homeassistant-stubs = "^2024.9.1"
+ruff = "^0.6.7"
+homeassistant-stubs = "^2024.10.0"
 pyright = "^1.1.379"
 
 [build-system]
