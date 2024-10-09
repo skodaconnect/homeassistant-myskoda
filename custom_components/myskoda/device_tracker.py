@@ -53,7 +53,7 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         return positions
 
     def _vehicle_position(self) -> Position | None:
-        if self._positions().positions:
+        if self._positions is not None and self._positions().positions:
             return next(
                 pos
                 for pos in self._positions().positions
