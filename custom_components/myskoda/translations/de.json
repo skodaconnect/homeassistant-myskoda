@@ -1,18 +1,18 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Device is already configured"
+            "already_configured": "Das Gerät ist bereits konfiguriert"
         },
         "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles."
+            "cannot_connect": "Fehler beim Verbinden",
+            "invalid_auth": "Ungültige Anmeldung",
+            "unknown": "Ein unerwarteter Fehler ist aufgetreten. Bitte überprüfe die Logdateien von HomeAssistant."
         },
         "step": {
             "user": {
                 "data": {
-                    "email": "E-mail",
-                    "password": "Password"
+                    "email": "E-Mail",
+                    "password": "Passwort"
                 }
             }
         }
@@ -20,104 +20,104 @@
     "entity": {
         "binary_sensor": {
             "charger_connected": {
-                "name": "Charger Connected"
+                "name": "Ladekabel"
             },
             "charger_locked": {
-                "name": "Charge Lock"
+                "name": "Ladekabelverriegelung"
             },
             "locked": {
-                "name": "Vehicle Locked"
+                "name": "Fahrzeug verriegelt"
             },
             "doors_locked": {
-                "name": "Doors Locked"
+                "name": "Türen geschlossen"
             },
             "doors_open": {
-                "name": "Doors Open"
+                "name": "Türen offen"
             },
             "windows_open": {
-                "name": "Windows"
+                "name": "Fenster"
             },
             "trunk_open": {
-                "name": "Trunk"
+                "name": "Kofferraum"
             },
             "bonnet_open": {
-                "name": "Bonnet"
+                "name": "Motorhaube"
             },
             "sunroof_open": {
-                "name": "Sunroof"
+                "name": "Schiebedach"
             },
             "lights_on": {
-                "name": "Lights"
+                "name": "Licht"
             }
         },
         "climate": {
             "climate": {
-                "name": "Air Conditioning"
+                "name": "Klimaanlage"
             }
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Positition"
+                "name": "Position"
             }
         },
         "number": {
             "charge_limit": {
-                "name": "Charge Limit"
+                "name": "Ladelimit"
             }
         },
         "sensor": {
             "software_version": {
-                "name": "Software Version"
+                "name": "Software-Version"
             },
             "battery_percentage": {
-                "name": "Battery Percentage"
+                "name": "Batteriestand"
             },
             "charging_power": {
-                "name": "Charging Power"
+                "name": "Ladeleistung"
             },
             "charging_state": {
-                "name": "Charging State",
+                "name": "Ladestatus",
                 "state": {
-                    "connect_cable": "Cable Disconnected",
-                    "ready_for_charging": "Ready for Charging",
-                    "conserving": "Conserving Charge",
-                    "charging": "Charging"
+                    "connect_cable": "Ladekabel getrennt",
+                    "ready_for_charging": "Bereit zum Laden",
+                    "conserving": "Ladestand halten",
+                    "charging": "Laden"
                 }
             },
             "range": {
-                "name": "Range"
+                "name": "Reichweite"
             },
             "target_battery_percentage": {
-                "name": "Target Battery Percentage"
+                "name": "Ladegrenze in Prozent"
             },
             "mileage": {
-                "name": "Mileage"
+                "name": "Kilometerstand"
             },
             "charge_type": {
-                "name": "Charge Type"
+                "name": "Ladeverfahren"
             },
             "remaining_charging_time": {
-                "name": "Remaining Charging Time"
+                "name": "Verbleibende Ladezeit"
             },
             "car_captured": {
-                "name": "Last Updated"
+                "name": "Letzte Aktualisierung"
             }
         },
         "switch": {
             "window_heating": {
-                "name": "Window Heating"
+                "name": "Scheiben beheizen"
             },
             "charging_switch": {
-                "name": "Charging"
+                "name": "Laden"
             },
             "battery_care_mode": {
                 "name": "Battery Care"
             },
             "reduced_current": {
-                "name": "Reduced Current"
+                "name": "Ladestrombegrenzung"
             },
             "charging": {
-                "name": "Charging"
+                "name": "Laden"
             }
         }
     },
@@ -125,7 +125,7 @@
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
+                    "tracing": "API response tracing. Erfordert die Aktivierung der Debug-Protokollierung in der configuration.yaml."
                 }
             }
         }
