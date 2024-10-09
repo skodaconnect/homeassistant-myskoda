@@ -44,7 +44,7 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         )
         super().__init__(coordinator, vin)
 
-    def _positions(self) -> Positions:
+    def _positions(self) -> Positions | None:
         positions = self.vehicle.positions
         if positions is None:
             raise InvalidCapabilityConfigurationError(
@@ -68,17 +68,21 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
 
     @property
     def latitude(self) -> float | None:  # noqa: D102
-        position = self._vehicle_position()
-        if position is None:
-            return None
-        return position.gps_coordinates.latitude
+        if self.vehicle.is_capability_available(CapabilityId.PARKING_POSITION):
+            position = self._vehicle_position()
+            if position is None:
+                return None
+            return position.gps_coordinates.latitude
+        return None
 
     @property
     def longitude(self) -> float | None:  # noqa: D102
-        position = self._vehicle_position()
-        if position is None:
-            return None
-        return position.gps_coordinates.longitude
+        if self.vehicle.is_capability_available(CapabilityId.PARKING_POSITION):
+            position = self._vehicle_position()
+            if position is None:
+                return None
+            return position.gps_coordinates.longitude
+        return None
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.PARKING_POSITION]
