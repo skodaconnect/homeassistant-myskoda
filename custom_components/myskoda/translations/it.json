@@ -1,12 +1,12 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Device is already configured"
+            "already_configured": "Il dispositivo è già configurato"
         },
         "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles."
+            "cannot_connect": "Connessione non riuscita",
+            "invalid_auth": "Autenticazione non valida",
+            "unknown": "Si è verificato un errore imprevisto. Si prega di controllare i file di registro HomeAssistant."
         },
         "step": {
             "user": {
@@ -20,104 +20,104 @@
     "entity": {
         "binary_sensor": {
             "charger_connected": {
-                "name": "Charger Connected"
+                "name": "Caricabatterie collegato"
             },
             "charger_locked": {
-                "name": "Charge Lock"
+                "name": "Blocco ricarica"
             },
             "locked": {
-                "name": "Vehicle Locked"
+                "name": "Veicolo bloccato"
             },
             "doors_locked": {
-                "name": "Doors Locked"
+                "name": "Porte chiuse"
             },
             "doors_open": {
-                "name": "Doors Open"
+                "name": "Porte aperte"
             },
             "windows_open": {
-                "name": "Windows"
+                "name": "Finestrini"
             },
             "trunk_open": {
-                "name": "Trunk"
+                "name": "Bagagliaio"
             },
             "bonnet_open": {
-                "name": "Bonnet"
+                "name": "Cofano"
             },
             "sunroof_open": {
-                "name": "Sunroof"
+                "name": "Tettuccio"
             },
             "lights_on": {
-                "name": "Lights"
+                "name": "Luci"
             }
         },
         "climate": {
             "climate": {
-                "name": "Air Conditioning"
+                "name": "Aria condizionata"
             }
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Positition"
+                "name": "Posizione"
             }
         },
         "number": {
             "charge_limit": {
-                "name": "Charge Limit"
+                "name": "Limite di carica"
             }
         },
         "sensor": {
             "software_version": {
-                "name": "Software Version"
+                "name": "Versione software"
             },
             "battery_percentage": {
-                "name": "Battery Percentage"
+                "name": "Percentuale batteria"
             },
             "charging_power": {
-                "name": "Charging Power"
+                "name": "Potenza di carica"
             },
             "charging_state": {
-                "name": "Charging State",
+                "name": "Stato di carica",
                 "state": {
-                    "connect_cable": "Cable Disconnected",
-                    "ready_for_charging": "Ready for Charging",
-                    "conserving": "Conserving Charge",
-                    "charging": "Charging"
+                    "connect_cable": "Cavo disconnesso",
+                    "ready_for_charging": "Pronto per la ricarica",
+                    "conserving": "Conservazione della carica",
+                    "charging": "Ricarica"
                 }
             },
             "range": {
-                "name": "Range"
+                "name": "Gamma"
             },
             "target_battery_percentage": {
-                "name": "Target Battery Percentage"
+                "name": "Percentuale limite di carica"
             },
             "mileage": {
-                "name": "Mileage"
+                "name": "Chilometraggio"
             },
             "charge_type": {
-                "name": "Charge Type"
+                "name": "Tipo di carica"
             },
             "remaining_charging_time": {
-                "name": "Remaining Charging Time"
+                "name": "Tempo di ricarica rimanente"
             },
             "car_captured": {
-                "name": "Last Updated"
+                "name": "Ultimo aggiornamento"
             }
         },
         "switch": {
             "window_heating": {
-                "name": "Window Heating"
+                "name": "Riscaldamento finestrini"
             },
             "charging_switch": {
-                "name": "Charging"
+                "name": "Ricarica"
             },
             "battery_care_mode": {
-                "name": "Battery Care"
+                "name": "Cura della batteria"
             },
             "reduced_current": {
-                "name": "Reduced Current"
+                "name": "Limitatore di corrente"
             },
             "charging": {
-                "name": "Charging"
+                "name": "Ricarica"
             }
         }
     },
@@ -125,7 +125,7 @@
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
+                    "tracing": "Rilevamento risposta API. Richiede la registrazione del debug abilitata nel file di configurazione configuration.yaml."
                 }
             }
         }
