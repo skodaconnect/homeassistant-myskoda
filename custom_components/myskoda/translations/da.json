@@ -44,7 +44,7 @@
                 "name": "Motorhjelm"
             },
             "sunroof_open": {
-                "name": "Sunroof"
+                "name": "Soltag"
             },
             "lights_on": {
                 "name": "Lygter"
@@ -78,10 +78,10 @@
             "charging_state": {
                 "name": "Ladestatus",
                 "state": {
-                    "connect_cable": "Cable Disconnected",
-                    "ready_for_charging": "Ready for Charging",
-                    "conserving": "Conserving Charge",
-                    "charging": "Charging"
+                    "connect_cable": "Kabel Frakoblet",
+                    "ready_for_charging": "Klar til opladning",
+                    "conserving": "",
+                    "charging": "Oplader"
                 }
             },
             "range": {
@@ -91,7 +91,7 @@
                 "name": "Ladegrænse i procent"
             },
             "mileage": {
-                "name": "Mileage"
+                "name": "Kilometerstand"
             },
             "charge_type": {
                 "name": "Lademetode"
@@ -105,19 +105,19 @@
         },
         "switch": {
             "window_heating": {
-                "name": "Window Heating"
+                "name": "Opvarming af ruder"
             },
             "charging_switch": {
-                "name": "Charging"
+                "name": "Oplader"
             },
             "battery_care_mode": {
-                "name": "Battery Care"
+                "name": "Batteribeskyttelse"
             },
             "reduced_current": {
-                "name": "Reduced Current"
+                "name": "Reduceret strømstyrke"
             },
             "charging": {
-                "name": "Charging"
+                "name": "Oplader"
             }
         }
     },
