@@ -44,7 +44,7 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         )
         super().__init__(coordinator, vin)
 
-    def _positions(self) -> Positions:
+    def _positions(self) -> Positions | None:
         positions = self.vehicle.positions
         if positions is None:
             raise InvalidCapabilityConfigurationError(
@@ -53,10 +53,10 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         return positions
 
     def _vehicle_position(self) -> Position | None:
-        if self._positions().positions:
+        if self._positions is not None and self._positions().positions:  # pyright: ignore reportOptionalMemberAccess
             return next(
                 pos
-                for pos in self._positions().positions
+                for pos in self._positions().positions  # pyright: ignore reportOptionalMemberAccess
                 if pos.type == PositionType.VEHICLE
             )
         else:
@@ -68,17 +68,21 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
 
     @property
     def latitude(self) -> float | None:  # noqa: D102
-        position = self._vehicle_position()
-        if position is None:
-            return None
-        return position.gps_coordinates.latitude
+        if self.vehicle.is_capability_available(CapabilityId.PARKING_POSITION):
+            position = self._vehicle_position()
+            if position is None:
+                return None
+            return position.gps_coordinates.latitude
+        return None
 
     @property
     def longitude(self) -> float | None:  # noqa: D102
-        position = self._vehicle_position()
-        if position is None:
-            return None
-        return position.gps_coordinates.longitude
+        if self.vehicle.is_capability_available(CapabilityId.PARKING_POSITION):
+            position = self._vehicle_position()
+            if position is None:
+                return None
+            return position.gps_coordinates.longitude
+        return None
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.PARKING_POSITION]
