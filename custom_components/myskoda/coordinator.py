@@ -20,7 +20,7 @@ from myskoda.models.operation_request import OperationName, OperationStatus
 from myskoda.models.user import User
 from myskoda.mqtt import EventCharging, EventType
 
-from .const import DOMAIN, FETCH_INTERVAL_IN_MINUTES, API_COOLDOWN_IN_SECONDS
+from .const import API_COOLDOWN_IN_SECONDS, DOMAIN, FETCH_INTERVAL_IN_MINUTES
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -127,11 +127,11 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         else:
             status = vehicle.charging.status
 
-            status.battery.remaining_cruising_range_in_meters = data.charged_range
+            status.battery.remaining_cruising_range_in_meters = (
+                data.charged_range * 1000
+            )
             status.battery.state_of_charge_in_percent = data.soc
             status.state = data.state
-            status.state = data.state
-        self.async_set_updated_data
 
         if vehicle.driving_range is None:
             await self.update_driving_range()
