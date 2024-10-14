@@ -1,5 +1,7 @@
 """Sensors for the MySkoda integration."""
 
+from datetime import datetime
+
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
@@ -15,11 +17,10 @@ from homeassistant.helpers.typing import DiscoveryInfoType
 from myskoda.models import charging
 from myskoda.models.charging import Charging, ChargingStatus
 from myskoda.models.info import CapabilityId
-from myskoda.myskoda import Health, Status
 
 from .const import COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
-from .utils import InvalidCapabilityConfigurationError, add_supported_entities
+from .utils import add_supported_entities
 
 
 async def async_setup_entry(
@@ -68,21 +69,14 @@ class SoftwareVersion(MySkodaSensor):
 
 
 class ChargingSensor(MySkodaSensor):
-    def _charging(self) -> Charging:
-        charging = self.vehicle.charging
-        if charging is None:
-            raise InvalidCapabilityConfigurationError(
-                self.entity_description.key, self.vehicle
-            )
-        return charging
+    def _charging(self) -> Charging | None:
+        if charging := self.vehicle.charging:
+            return charging
 
-    def _status(self) -> ChargingStatus:
-        status = self._charging().status
-        if status is None:
-            raise InvalidCapabilityConfigurationError(
-                self.entity_description.key, self.vehicle
-            )
-        return status
+    def _status(self) -> ChargingStatus | None:
+        if charging := self._charging():
+            if status := charging.status:
+                return status
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING]
@@ -106,37 +100,39 @@ class BatteryPercentage(ChargingSensor):
         return True
 
     @property
-    def native_value(self):  # noqa: D102
-        return self._status().battery.state_of_charge_in_percent
+    def native_value(self) -> int | None:  # noqa: D102
+        if status := self._status():
+            return status.battery.state_of_charge_in_percent
 
     @property
-    def icon(self):  # noqa: D102
-        suffix = ""
+    def icon(self) -> str:  # noqa: D102
+        if not (status := self._status()):
+            return "mdi:battery-outline"
 
-        if self._status().battery.state_of_charge_in_percent >= 95:
+        if status.battery.state_of_charge_in_percent >= 95:
             suffix = "100"
-        elif self._status().battery.state_of_charge_in_percent >= 85:
+        elif status.battery.state_of_charge_in_percent >= 85:
             suffix = "90"
-        elif self._status().battery.state_of_charge_in_percent >= 75:
+        elif status.battery.state_of_charge_in_percent >= 75:
             suffix = "80"
-        elif self._status().battery.state_of_charge_in_percent >= 65:
+        elif status.battery.state_of_charge_in_percent >= 65:
             suffix = "70"
-        elif self._status().battery.state_of_charge_in_percent >= 55:
+        elif status.battery.state_of_charge_in_percent >= 55:
             suffix = "60"
-        elif self._status().battery.state_of_charge_in_percent >= 45:
+        elif status.battery.state_of_charge_in_percent >= 45:
             suffix = "50"
-        elif self._status().battery.state_of_charge_in_percent >= 35:
+        elif status.battery.state_of_charge_in_percent >= 35:
             suffix = "40"
-        elif self._status().battery.state_of_charge_in_percent >= 25:
+        elif status.battery.state_of_charge_in_percent >= 25:
             suffix = "30"
-        elif self._status().battery.state_of_charge_in_percent >= 15:
+        elif status.battery.state_of_charge_in_percent >= 15:
             suffix = "20"
-        elif self._status().battery.state_of_charge_in_percent >= 5:
+        elif status.battery.state_of_charge_in_percent >= 5:
             suffix = "10"
         else:
             suffix = "outline"
 
-        if self._status().state != charging.ChargingState.CONNECT_CABLE:
+        if status.state != charging.ChargingState.CONNECT_CABLE:
             return f"mdi:battery-charging-{suffix}"
         if suffix == "100":
             return "mdi:battery"
@@ -157,8 +153,9 @@ class ChargingPower(ChargingSensor):
     )
 
     @property
-    def native_value(self):  # noqa: D102
-        return self._status().charge_power_in_kw
+    def native_value(self) -> float | None:  # noqa: D102
+        if status := self._status():
+            return status.charge_power_in_kw
 
 
 class RemainingDistance(ChargingSensor):
@@ -175,8 +172,9 @@ class RemainingDistance(ChargingSensor):
     )
 
     @property
-    def native_value(self):  # noqa: D102
-        return self._status().battery.remaining_cruising_range_in_meters / 1000
+    def native_value(self) -> int | float | None:  # noqa: D102
+        if status := self._status():
+            return status.battery.remaining_cruising_range_in_meters / 1000
 
 
 class TargetBatteryPercentage(ChargingSensor):
@@ -193,8 +191,9 @@ class TargetBatteryPercentage(ChargingSensor):
     )
 
     @property
-    def native_value(self):  # noqa: D102
-        return self._charging().settings.target_state_of_charge_in_percent
+    def native_value(self) -> int | None:  # noqa: D102
+        if charging := self._charging():
+            return charging.settings.target_state_of_charge_in_percent
 
 
 class Mileage(MySkodaSensor):
@@ -210,17 +209,10 @@ class Mileage(MySkodaSensor):
         translation_key="milage",
     )
 
-    def _health(self) -> Health:
-        health = self.vehicle.health
-        if health is None:
-            raise InvalidCapabilityConfigurationError(
-                self.entity_description.key, self.vehicle
-            )
-        return health
-
     @property
-    def native_value(self):  # noqa: D102
-        return self._health().mileage_in_km
+    def native_value(self) -> int | None:  # noqa: D102
+        if health := self.vehicle.health:
+            return health.mileage_in_km
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.VEHICLE_HEALTH_INSPECTION]
@@ -258,14 +250,17 @@ class ChargeType(ChargingSensor):
     )
 
     @property
-    def native_value(self):  # noqa: D102
-        return self._status().charge_type
+    def native_value(self) -> str | None:  # noqa: D102
+        if status := self._status():
+            return str(status.charge_type).lower()
 
     @property
-    def icon(self):  # noqa: D102
-        if self._status().charge_type == "AC":
-            return "mdi:ev-plug-type2"
-        return "mdi:ev-plug-ccs2"
+    def icon(self) -> str:  # noqa: D102
+        if status := self._status():
+            if status.charge_type == "DC":
+                return "mdi:ev-plug-ccs2"
+
+        return "mdi:ev-plug-type2"
 
 
 class ChargingState(ChargingSensor):
@@ -287,15 +282,17 @@ class ChargingState(ChargingSensor):
     ]
 
     @property
-    def native_value(self):  # noqa: D102
-        return str(self._status().state).lower()
+    def native_value(self) -> str | None:  # noqa: D102
+        if status := self._status():
+            return str(status.state).lower()
 
     @property
-    def icon(self):  # noqa: D102
-        if self._status().state == charging.ChargingState.CONNECT_CABLE:
-            return "mdi:power-plug-off"
-        if self._status().state == charging.ChargingState.CHARGING:
-            return "mdi:power-plug-battery"
+    def icon(self) -> str:  # noqa: D102
+        if status := self._status():
+            if status.state == charging.ChargingState.CONNECT_CABLE:
+                return "mdi:power-plug-off"
+            if status.state == charging.ChargingState.CHARGING:
+                return "mdi:power-plug-battery"
         return "mdi:power-plug"
 
 
@@ -312,8 +309,9 @@ class RemainingChargingTime(ChargingSensor):
     )
 
     @property
-    def native_value(self):  # noqa: D102
-        return self._status().remaining_time_to_fully_charged_in_minutes
+    def native_value(self) -> int | None:  # noqa: D102
+        if status := self._status():
+            return status.remaining_time_to_fully_charged_in_minutes
 
 
 class LastUpdated(MySkodaSensor):
@@ -327,17 +325,10 @@ class LastUpdated(MySkodaSensor):
         translation_key="car_captured",
     )
 
-    def _status(self) -> Status:
-        status = self.vehicle.status
-        if status is None:
-            raise InvalidCapabilityConfigurationError(
-                self.entity_description.key, self.vehicle
-            )
-        return status
-
     @property
-    def native_value(self):  # noqa: D102
-        return self._status().car_captured_timestamp
+    def native_value(self) -> datetime | None:  # noqa: D102
+        if status := self.vehicle.status:
+            return status.car_captured_timestamp
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE]

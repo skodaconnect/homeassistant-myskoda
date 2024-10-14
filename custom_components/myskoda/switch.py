@@ -1,6 +1,7 @@
 """Switches for the MySkoda integration."""
 
 import logging
+from datetime import timedelta
 
 from homeassistant.components.switch import (
     SwitchDeviceClass,
@@ -12,7 +13,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from homeassistant.util import Throttle
-from myskoda.models.air_conditioning import AirConditioning
+
 from myskoda.models.charging import (
     Charging,
     ChargingState,
@@ -22,11 +23,10 @@ from myskoda.models.charging import (
 )
 from myskoda.models.common import ActiveState, OnOffState
 from myskoda.models.info import CapabilityId
-from datetime import timedelta
 
-from .const import COORDINATORS, DOMAIN, API_COOLDOWN_IN_SECONDS
+from .const import API_COOLDOWN_IN_SECONDS, COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
-from .utils import InvalidCapabilityConfigurationError, add_supported_entities
+from .utils import add_supported_entities
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -67,20 +67,13 @@ class WindowHeating(MySkodaSwitch):
         translation_key="window_heating",
     )
 
-    def _air_conditioning(self) -> AirConditioning:
-        air_conditioning = self.vehicle.air_conditioning
-        if air_conditioning is None:
-            raise InvalidCapabilityConfigurationError(
-                self.entity_description.key, self.vehicle
-            )
-        return air_conditioning
-
     @property
     def is_on(self) -> bool | None:  # noqa: D102
-        return (
-            self._air_conditioning().window_heating_state.front == OnOffState.ON
-            or self._air_conditioning().window_heating_state.rear == OnOffState.ON
-        )
+        if ac := self.vehicle.air_conditioning:
+            return (
+                ac.window_heating_state.front == OnOffState.ON
+                or ac.window_heating_state.rear == OnOffState.ON
+            )
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
@@ -113,30 +106,18 @@ class ChargingSwitch(MySkodaSwitch):
         translation_key="charging_switch",
     )
 
-    def _charging(self) -> Charging:
-        charging = self.vehicle.charging
-        if charging is None:
-            raise InvalidCapabilityConfigurationError(
-                self.entity_description.key, self.vehicle
-            )
-        return charging
+    def _charging(self) -> Charging | None:
+        if charging := self.vehicle.charging:
+            return charging
 
-    def _settings(self) -> Settings:
-        settings = self._charging().settings
-        if settings is None:
-            raise InvalidCapabilityConfigurationError(
-                self.entity_description.key, self.vehicle
-            )
+    def _settings(self) -> Settings | None:
+        if charging := self._charging():
+            if settings := charging.settings:
+                return settings
 
-        return settings
-
-    def _status(self) -> ChargingStatus:
-        status = self._charging().status
-        if status is None:
-            raise InvalidCapabilityConfigurationError(
-                self.entity_description.key, self.vehicle
-            )
-        return status
+    def _status(self) -> ChargingStatus | None:
+        if charging := self._charging():
+            return charging.status
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING]
@@ -155,7 +136,8 @@ class BatteryCareMode(ChargingSwitch):
 
     @property
     def is_on(self) -> bool | None:  # noqa: D102
-        return self._settings().charging_care_mode == ActiveState.ACTIVATED
+        if settings := self._settings():
+            return settings.charging_care_mode == ActiveState.ACTIVATED
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
@@ -191,7 +173,8 @@ class ReducedCurrent(ChargingSwitch):
 
     @property
     def is_on(self) -> bool | None:  # noqa: D102
-        return self._settings().max_charge_current_ac == MaxChargeCurrent.REDUCED
+        if settings := self._settings():
+            return settings.max_charge_current_ac == MaxChargeCurrent.REDUCED
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
@@ -227,7 +210,8 @@ class EnableCharging(ChargingSwitch):
 
     @property
     def is_on(self) -> bool | None:  # noqa: D102
-        return self._status().state == ChargingState.CHARGING
+        if status := self._status():
+            return status.state == ChargingState.CHARGING
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102

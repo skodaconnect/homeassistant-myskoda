@@ -16,7 +16,7 @@ from myskoda.models.position import Position, Positions, PositionType
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
-from .utils import InvalidCapabilityConfigurationError, add_supported_entities
+from .utils import add_supported_entities
 
 
 async def async_setup_entry(
@@ -45,23 +45,15 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         )
         super().__init__(coordinator, vin)
 
-    def _positions(self) -> Positions:
-        positions = self.vehicle.positions
-        if positions is None:
-            raise InvalidCapabilityConfigurationError(
-                self.entity_description.key, self.vehicle
-            )
-        return positions
+    def _positions(self) -> Positions | None:
+        return self.vehicle.positions
 
     def _vehicle_position(self) -> Position | None:
-        if self._positions().positions:
-            return next(
-                pos
-                for pos in self._positions().positions
-                if pos.type == PositionType.VEHICLE
-            )
-        else:
-            return None
+        if pos := self._positions():
+            if pos.positions:
+                return next(
+                    pos for pos in pos.positions if pos.type == PositionType.VEHICLE
+                )
 
     @property
     def source_type(self) -> SourceType:  # noqa: D102
