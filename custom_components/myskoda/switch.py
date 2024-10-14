@@ -11,6 +11,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
+from homeassistant.util import Throttle
 from myskoda.models.air_conditioning import AirConditioning
 from myskoda.models.charging import (
     Charging,
@@ -21,8 +22,9 @@ from myskoda.models.charging import (
 )
 from myskoda.models.common import ActiveState, OnOffState
 from myskoda.models.info import CapabilityId
+from datetime import timedelta
 
-from .const import COORDINATORS, DOMAIN
+from .const import COORDINATORS, DOMAIN, API_COOLDOWN_IN_SECONDS
 from .entity import MySkodaEntity
 from .utils import InvalidCapabilityConfigurationError, add_supported_entities
 
@@ -79,12 +81,20 @@ class WindowHeating(MySkodaSwitch):
             or self._air_conditioning().window_heating_state.rear == OnOffState.ON
         )
 
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
+    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+        """Internal method to have a central location for the Throttle."""
+        if turn_on:
+            await self.coordinator.myskoda.start_window_heating(self.vehicle.info.vin)
+        else:
+            await self.coordinator.myskoda.stop_window_heating(self.vehicle.info.vin)
+
     async def async_turn_off(self, **kwargs):  # noqa: D102
-        await self.coordinator.myskoda.stop_window_heating(self.vehicle.info.vin)
+        await self._async_turn_on_off(turn_on=False)
         _LOGGER.debug("Window heating disabled.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
-        await self.coordinator.myskoda.start_window_heating(self.vehicle.info.vin)
+        await self._async_turn_on_off(turn_on=True)
         _LOGGER.debug("Window heating enabled.")
 
     def required_capabilities(self) -> list[CapabilityId]:
@@ -135,16 +145,24 @@ class BatteryCareMode(ChargingSwitch):
     def is_on(self) -> bool | None:  # noqa: D102
         return self._settings().charging_care_mode == ActiveState.ACTIVATED
 
-    async def async_turn_off(self, **kwargs):  # noqa: D102 # noqa: D102
-        await self.coordinator.myskoda.set_battery_care_mode(
-            self.vehicle.info.vin, False
-        )
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
+    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+        """Internal method to have a central location for the Throttle."""
+        if turn_on:
+            await self.coordinator.myskoda.set_battery_care_mode(
+                self.vehicle.info.vin, True
+            )
+        else:
+            await self.coordinator.myskoda.set_reduced_current_limit(
+                self.vehicle.info.vin, False
+            )
+
+    async def async_turn_off(self, **kwargs):  # noqa: D102
+        await self._async_turn_on_off(turn_on=False)
         _LOGGER.info("Battery care mode disabled.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
-        await self.coordinator.myskoda.set_battery_care_mode(
-            self.vehicle.info.vin, True
-        )
+        await self._async_turn_on_off(turn_on=True)
         _LOGGER.info("Battery care mode enabled.")
 
 
@@ -162,16 +180,24 @@ class ReducedCurrent(ChargingSwitch):
     def is_on(self) -> bool | None:  # noqa: D102
         return self._settings().max_charge_current_ac == MaxChargeCurrent.REDUCED
 
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
+    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+        """Internal method to have a central location for the Throttle."""
+        if turn_on:
+            await self.coordinator.myskoda.set_reduced_current_limit(
+                self.vehicle.info.vin, True
+            )
+        else:
+            await self.coordinator.myskoda.set_reduced_current_limit(
+                self.vehicle.info.vin, False
+            )
+
     async def async_turn_off(self, **kwargs):  # noqa: D102
-        await self.coordinator.myskoda.set_reduced_current_limit(
-            self.vehicle.info.vin, False
-        )
+        await self._async_turn_on_off(turn_on=False)
         _LOGGER.info("Reduced current limit disabled.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
-        await self.coordinator.myskoda.set_reduced_current_limit(
-            self.vehicle.info.vin, True
-        )
+        await self._async_turn_on_off(turn_on=True)
         _LOGGER.info("Reduced current limit enabled.")
 
 
@@ -189,10 +215,18 @@ class EnableCharging(ChargingSwitch):
     def is_on(self) -> bool | None:  # noqa: D102
         return self._status().state == ChargingState.CHARGING
 
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
+    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+        """Internal method to have a central location for the Throttle."""
+        if turn_on:
+            await self.coordinator.myskoda.start_charging(self.vehicle.info.vin)
+        else:
+            await self.coordinator.myskoda.stop_charging(self.vehicle.info.vin)
+
     async def async_turn_off(self, **kwargs):  # noqa: D102
-        await self.coordinator.myskoda.stop_charging(self.vehicle.info.vin)
+        await self._async_turn_on_off(turn_on=False)
         _LOGGER.info("Charging stopped.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
-        await self.coordinator.myskoda.start_charging(self.vehicle.info.vin)
+        await self._async_turn_on_off(turn_on=True)
         _LOGGER.info("Charging started.")

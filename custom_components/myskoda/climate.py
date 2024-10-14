@@ -117,6 +117,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
     async def async_turn_off(self):  # noqa: D102
         await self.async_set_hvac_mode(HVACMode.OFF)
 
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_temperature(self, **kwargs):  # noqa: D102
         temp = kwargs[ATTR_TEMPERATURE]
         await self.coordinator.myskoda.set_target_temperature(

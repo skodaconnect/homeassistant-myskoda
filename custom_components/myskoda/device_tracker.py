@@ -1,10 +1,12 @@
 """Device Tracker entities for MySkoda."""
 
-from homeassistant.components.device_tracker.config_entry import TrackerEntity
+from homeassistant.components.device_tracker.config_entry import (
+    TrackerEntity,
+    TrackerEntityDescription,
+)
 from homeassistant.components.device_tracker.const import SourceType
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
 from myskoda.models.info import CapabilityId
@@ -35,7 +37,7 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
 
     def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:  # noqa: D107
         title = coordinator.data.vehicle.info.specification.title
-        self.entity_description = EntityDescription(
+        self.entity_description = TrackerEntityDescription(
             name=title,
             key=f"{vin}_device_tracker",
             translation_key="device_tracker",
