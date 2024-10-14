@@ -1,4 +1,18 @@
+# artifacts
 __pycache__
+.pytest*
+*.egg-info
+*/build/*
+*/dist/*
+
+# misc
+.coverage
+.vscode
+coverage.xml
+.ruff_cache
 *.code-workspace
 venv
-.vscode/PythonImportHelper-v2-Completion.json
+
+# Home Assistant configuration
+config/*
+!config/configuration.yaml

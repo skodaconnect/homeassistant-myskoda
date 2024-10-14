@@ -1,18 +1,18 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Apparaat is al geconfigureerd"
+            "already_configured": "Il dispositivo è già configurato"
         },
         "error": {
-            "cannot_connect": "Kan geen verbinding maken",
-            "invalid_auth": "Ongeldige authenticatie",
-            "unknown": "Er is een onverwachte fout opgetreden. Controleer de HomeAssistant logbestanden."
+            "cannot_connect": "Connessione non riuscita",
+            "invalid_auth": "Autenticazione non valida",
+            "unknown": "Si è verificato un errore imprevisto. Si prega di controllare i file di registro HomeAssistant."
         },
         "step": {
             "user": {
                 "data": {
                     "email": "E-mail",
-                    "password": "Wachtwoord"
+                    "password": "Password"
                 }
             }
         }
@@ -20,104 +20,104 @@
     "entity": {
         "binary_sensor": {
             "charger_connected": {
-                "name": "Laadkabel"
+                "name": "Caricabatterie collegato"
             },
             "charger_locked": {
-                "name": "Laadkabelvergrendeling"
+                "name": "Blocco ricarica"
             },
             "locked": {
-                "name": "Voertuigvergrendeling"
+                "name": "Veicolo bloccato"
             },
             "doors_locked": {
-                "name": "Deurvergrendeling"
+                "name": "Porte chiuse"
             },
             "doors_open": {
-                "name": "Deuren"
+                "name": "Porte aperte"
             },
             "windows_open": {
-                "name": "Ramen"
+                "name": "Finestrini"
             },
             "trunk_open": {
-                "name": "Kofferbak"
+                "name": "Bagagliaio"
             },
             "bonnet_open": {
-                "name": "Motorkap"
+                "name": "Cofano"
             },
             "sunroof_open": {
-                "name": "Zonnedak Open"
+                "name": "Tettuccio"
             },
             "lights_on": {
-                "name": "Lichten"
+                "name": "Luci"
             }
         },
         "climate": {
             "climate": {
-                "name": "Luchtbehandeling"
+                "name": "Aria condizionata"
             }
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Positie"
+                "name": "Posizione"
             }
         },
         "number": {
             "charge_limit": {
-                "name": "Laadlimiet"
+                "name": "Limite di carica"
             }
         },
         "sensor": {
             "software_version": {
-                "name": "Software versie"
+                "name": "Versione software"
             },
             "battery_percentage": {
-                "name": "Accupercentage"
+                "name": "Percentuale batteria"
             },
             "charging_power": {
-                "name": "Laadvermogen"
+                "name": "Potenza di carica"
             },
             "charging_state": {
-                "name": "Laadstatus",
+                "name": "Stato di carica",
                 "state": {
-                    "connect_cable": "Kabel verbinding verbroken",
-                    "ready_for_charging": "Klaar om op te laden",
-                    "conserving": "Lading bewaren",
-                    "charging": "Opladen"
+                    "connect_cable": "Cavo disconnesso",
+                    "ready_for_charging": "Pronto per la ricarica",
+                    "conserving": "Conservazione della carica",
+                    "charging": "Ricarica"
                 }
             },
             "range": {
-                "name": "Bereik"
+                "name": "Gamma"
             },
             "target_battery_percentage": {
-                "name": "Laaddoel in procenten"
+                "name": "Percentuale limite di carica"
             },
             "mileage": {
-                "name": "Kilometerstand"
+                "name": "Chilometraggio"
             },
             "charge_type": {
-                "name": "Laadmethode"
+                "name": "Tipo di carica"
             },
             "remaining_charging_time": {
-                "name": "Laadtijd resterend"
+                "name": "Tempo di ricarica rimanente"
             },
             "car_captured": {
-                "name": "Laatst bijgewerkt"
+                "name": "Ultimo aggiornamento"
             }
         },
         "switch": {
             "window_heating": {
-                "name": "Verwarming raam"
+                "name": "Riscaldamento finestrini"
             },
             "charging_switch": {
-                "name": "Opladen"
+                "name": "Ricarica"
             },
             "battery_care_mode": {
-                "name": "Batterij verzorging"
+                "name": "Cura della batteria"
             },
             "reduced_current": {
-                "name": "Verminderde stroom"
+                "name": "Limitatore di corrente"
             },
             "charging": {
-                "name": "Opladen"
+                "name": "Ricarica"
             }
         }
     },
@@ -125,7 +125,7 @@
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API respons traceren. Debug logging ingeschakeld in configuration.yaml."
+                    "tracing": "Rilevamento risposta API. Richiede la registrazione del debug abilitata nel file di configurazione configuration.yaml."
                 }
             }
         }

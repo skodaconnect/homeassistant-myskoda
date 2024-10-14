@@ -2,7 +2,11 @@ name: Validate
 
 on:
   push: 
+    branches:
+      - "main"
   pull_request:
+    branches:
+      - "main"
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
@@ -11,7 +15,7 @@ jobs:
   validate-hacs:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@v4"
       - name: HACS validation
         uses: "hacs/action@main"
         with:
