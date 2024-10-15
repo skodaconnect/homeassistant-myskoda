@@ -11,6 +11,7 @@ from homeassistant.const import PERCENTAGE, UnitOfLength, UnitOfPower, UnitOfTim
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
+
 from myskoda.models import charging
 from myskoda.models.charging import Charging, ChargingStatus
 from myskoda.models.info import CapabilityId
@@ -30,16 +31,17 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     add_supported_entities(
         available_entities=[
-            SoftwareVersion,
-            RemainingDistance,
-            Mileage,
-            LastUpdated,
-            TargetBatteryPercentage,
-            ChargeType,
-            ChargingState,
-            RemainingChargingTime,
             BatteryPercentage,
+            ChargeType,
             ChargingPower,
+            ChargingState,
+            LastUpdated,
+            MainRender,
+            Mileage,
+            RemainingChargingTime,
+            RemainingDistance,
+            SoftwareVersion,
+            TargetBatteryPercentage,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -317,3 +319,18 @@ class LastUpdated(MySkodaSensor):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE]
+
+
+class MainRender(MySkodaSensor):
+    """URL of the main image render of the vehicle."""
+
+    entity_description = SensorEntityDescription(
+        key="render_url_main",
+        name="Main Render URL",
+        icon="mdi:file-image",
+        translation_key="render_url_main",
+    )
+
+    @property
+    def native_value(self):  # noqa: D102
+        return self.get_renders().get("main")

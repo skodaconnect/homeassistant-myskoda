@@ -9,8 +9,9 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
+
 from myskoda.models.info import CapabilityId
-from myskoda.models.position import Position, PositionType, Positions
+from myskoda.models.position import Position, Positions, PositionType
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
@@ -79,6 +80,15 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         if position is None:
             return None
         return position.gps_coordinates.longitude
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Return extra state attributes."""
+        attributes = {}
+        if render := self.get_renders().get("main"):
+            attributes["entity_picture"] = render
+
+        return attributes
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.PARKING_POSITION]

@@ -2,6 +2,7 @@
 
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+
 from myskoda import Vehicle
 from myskoda.models.info import CapabilityId
 
@@ -48,3 +49,11 @@ class MySkodaEntity(CoordinatorEntity):
         return all(
             self.vehicle.has_capability(cap) for cap in self.required_capabilities()
         )
+
+    def get_renders(self) -> dict[str, str]:
+        """Return a dict of all vehicle image render URLs, keyed by view_point.
+
+        E.g.
+        {"main": "https://ip-modcwp.azureedge.net/path/render.png"}
+        """
+        return {render.view_point: render.url for render in self.vehicle.info.renders}
