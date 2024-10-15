@@ -9,6 +9,7 @@ permissions: {}
 
 jobs:
   release:
+    if: github.repository_owner == 'skodaconnect'
     name: "Release"
     runs-on: "ubuntu-latest"
     permissions:
