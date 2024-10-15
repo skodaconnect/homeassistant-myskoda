@@ -80,7 +80,7 @@
                 "state": {
                     "connect_cable": "Kabel Frakoblet",
                     "ready_for_charging": "Klar til opladning",
-                    "conserving": "",
+                    "conserving": "Conserving Charge",
                     "charging": "Oplader"
                 }
             },
