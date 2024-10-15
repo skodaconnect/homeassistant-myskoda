@@ -12,10 +12,12 @@ from homeassistant.const import PERCENTAGE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType
+from homeassistant.util import Throttle
 from myskoda.models.charging import Settings
 from myskoda.models.info import CapabilityId
+from datetime import timedelta
 
-from .const import COORDINATORS, DOMAIN
+from .const import COORDINATORS, DOMAIN, API_COOLDOWN_IN_SECONDS
 from .entity import MySkodaEntity
 from .utils import InvalidCapabilityConfigurationError, add_supported_entities
 
@@ -76,6 +78,7 @@ class ChargeLimit(MySkodaNumber):
     def native_value(self) -> float | None:  # noqa: D102
         return self._settings().target_state_of_charge_in_percent
 
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_native_value(self, value: float):  # noqa: D102
         await self.coordinator.myskoda.set_charge_limit(
             self.vehicle.info.vin, int(value)

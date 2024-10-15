@@ -63,3 +63,14 @@ Air conditioning is exposed as climate.
 ### Device Tracker
 
 Location of vehicles are exposed as device trackers.
+
+## Sending updates
+
+To make sure updates end up in the car the way intended by the you, we throttle all equal changes to the car for 30s.
+Simply put: You can change a setting in the car once every 30s, but you can change multiple settings in sequence.
+
+So:
+- If you change the seat-heating to on, you can immediately change the window-heating to on as well.
+- If you change the seat-heating to on, you cannot turn it back off again for 30s
+
+The requests will silently be ignored by HomeAssistant, so make sure you wait at least 30s before sending another request
