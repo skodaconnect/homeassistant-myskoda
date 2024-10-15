@@ -118,10 +118,14 @@ class ChargerLocked(AirConditioningBinarySensor):
 
     @property
     def is_on(self):  # noqa: D102
-        return (
+        if (
             self._air_conditioning().charger_lock_state
-            != common.ChargerLockedState.LOCKED
-        )
+            != common.ChargerLockedState.INVALID
+        ):
+            return (
+                self._air_conditioning().charger_lock_state
+                != common.ChargerLockedState.LOCKED
+            )
 
     @property
     def icon(self):  # noqa: D102
