@@ -226,6 +226,28 @@ class Mileage(MySkodaSensor):
         return [CapabilityId.VEHICLE_HEALTH_INSPECTION]
 
 
+class InspectionInterval(MySkodaSensor):
+    """The number of days before next inspection."""
+
+    entity_description = SensorEntityDescription(
+        key="inspection",
+        name="Inspection",
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTime.DAYS,
+        icon="mdi:car-wrench",
+        translation_key="inspection",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: D102
+        if maintenance_report := self.vehicle.maintenance.maintenance_report:
+            return maintenance_report.inspection_due_in_days
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.VEHICLE_HEALTH_INSPECTION]
+
+
 class ChargeType(ChargingSensor):
     """How the vehicle is being charged (AC/DC)."""
 

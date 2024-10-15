@@ -32,6 +32,7 @@ Just [join our Crowdin project](https://crowdin.com/project/homeassistant-myskod
 - Charging State
 - Remaining Charging Time
 - Last Updated
+- Maintenance Interval
 
 ### Binary Sensors
 
