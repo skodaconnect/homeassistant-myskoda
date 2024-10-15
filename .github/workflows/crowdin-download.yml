@@ -9,6 +9,7 @@ permissions: write-all
 
 jobs:
   synchronize-with-crowdin:
+    if: github.repository_owner == 'skodaconnect'
     runs-on: ubuntu-latest
 
     steps:
