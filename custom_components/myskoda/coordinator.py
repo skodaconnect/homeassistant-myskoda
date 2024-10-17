@@ -100,6 +100,14 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     async def _on_operation_event(self, event: EventOperation) -> None:
         if event.operation.status == OperationStatus.IN_PROGRESS:
             return
+        if event.operation.status == OperationStatus.ERROR:
+            _LOGGER.error(
+                "Error received from car in operation %s, reason: %s. Requesting MySkoda full update",
+                event.operation.status,
+                event.operation.error_code,
+            )
+            await self.update_vehicle()
+            return
         if event.operation.operation in [
             OperationName.STOP_AIR_CONDITIONING,
             OperationName.START_AIR_CONDITIONING,
