@@ -284,7 +284,8 @@ class ChargingState(ChargingSensor):
     @property
     def native_value(self) -> str | None:  # noqa: D102
         if status := self._status():
-            return str(status.state).lower()
+            if status.state:
+                return str(status.state).lower()
 
     @property
     def icon(self) -> str:  # noqa: D102
