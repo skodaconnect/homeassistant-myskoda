@@ -12,7 +12,12 @@ from homeassistant.helpers.typing import DiscoveryInfoType
 
 from myskoda import common
 from myskoda.models.air_conditioning import AirConditioning
-from myskoda.models.common import DoorLockedState, OnOffState, OpenState
+from myskoda.models.common import (
+    DoorLockedState,
+    OnOffState,
+    OpenState,
+    ChargerLockedState,
+)
 from myskoda.models.info import CapabilityId
 from myskoda.models.status import Status
 
@@ -101,7 +106,8 @@ class ChargerLocked(AirConditioningBinarySensor):
     @property
     def is_on(self) -> bool | None:  # noqa: D102
         if ac := self._air_conditioning():
-            return ac.charger_lock_state != common.ChargerLockedState.LOCKED
+            if ac.charger_lock_state != ChargerLockedState.INVALID:
+                return ac.charger_lock_state != common.ChargerLockedState.LOCKED
 
     @property
     def icon(self) -> str:  # noqa: D102
