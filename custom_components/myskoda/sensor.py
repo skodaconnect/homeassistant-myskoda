@@ -295,6 +295,11 @@ class ChargingState(ChargingSensor):
                 return "mdi:power-plug-battery"
         return "mdi:power-plug"
 
+    @property
+    def available(self):  # noqa: D102
+        if status := self._status():
+            return status.state is not None
+
 
 class RemainingChargingTime(ChargingSensor):
     """Estimation on when the vehicle will be fully charged."""
