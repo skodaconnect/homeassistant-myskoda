@@ -1,18 +1,18 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Device is already configured"
+            "already_configured": "O aparelho já está configurado"
         },
         "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles."
+            "cannot_connect": "Falha ao conectar",
+            "invalid_auth": "Autenticação inválida",
+            "unknown": "Um erro inesperado ocorreu. Verifica os ficheiros de log do HomeAssistant."
         },
         "step": {
             "user": {
                 "data": {
                     "email": "E-mail",
-                    "password": "Password"
+                    "password": "Palavra passe"
                 }
             }
         }
@@ -20,104 +20,104 @@
     "entity": {
         "binary_sensor": {
             "charger_connected": {
-                "name": "Charger Connected"
+                "name": "Carregador conectado"
             },
             "charger_locked": {
-                "name": "Charge Lock"
+                "name": "Bloqueio de carga"
             },
             "locked": {
-                "name": "Vehicle Locked"
+                "name": "Veículo trancado"
             },
             "doors_locked": {
-                "name": "Doors Locked"
+                "name": "Portas trancadas"
             },
             "doors_open": {
-                "name": "Doors Open"
+                "name": "Portas abertas"
             },
             "windows_open": {
-                "name": "Windows"
+                "name": "Janelas"
             },
             "trunk_open": {
-                "name": "Trunk"
+                "name": "Porta-malas"
             },
             "bonnet_open": {
-                "name": "Bonnet"
+                "name": "Capota"
             },
             "sunroof_open": {
-                "name": "Sunroof"
+                "name": "Teto solar"
             },
             "lights_on": {
-                "name": "Lights"
+                "name": "Luzes"
             }
         },
         "climate": {
             "climate": {
-                "name": "Air Conditioning"
+                "name": "Ar condicionado"
             }
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Positition"
+                "name": "Posição"
             }
         },
         "number": {
             "charge_limit": {
-                "name": "Charge Limit"
+                "name": "Limite de carga"
             }
         },
         "sensor": {
             "software_version": {
-                "name": "Software Version"
+                "name": "Versão do software"
             },
             "battery_percentage": {
-                "name": "Battery Percentage"
+                "name": "Percentagem da bateria"
             },
             "charging_power": {
-                "name": "Charging Power"
+                "name": "A carregar energia"
             },
             "charging_state": {
-                "name": "Charging State",
+                "name": "A carregar estado",
                 "state": {
-                    "connect_cable": "Cable Disconnected",
-                    "ready_for_charging": "Ready for Charging",
-                    "conserving": "Conserving Charge",
-                    "charging": "Charging"
+                    "connect_cable": "Cabo desconectado",
+                    "ready_for_charging": "Preparado para carregar",
+                    "conserving": "Conservando carga",
+                    "charging": "A carregar"
                 }
             },
             "range": {
-                "name": "Range"
+                "name": "Alcance"
             },
             "target_battery_percentage": {
-                "name": "Target Battery Percentage"
+                "name": "Percentagem limite da bateria"
             },
             "mileage": {
-                "name": "Mileage"
+                "name": "Quilometragem"
             },
             "charge_type": {
-                "name": "Charge Type"
+                "name": "Tipo de carga"
             },
             "remaining_charging_time": {
-                "name": "Remaining Charging Time"
+                "name": "Tempo de carga restante"
             },
             "car_captured": {
-                "name": "Last Updated"
+                "name": "Última atualização"
             }
         },
         "switch": {
             "window_heating": {
-                "name": "Window Heating"
+                "name": "Aquecimento da janela"
             },
             "charging_switch": {
-                "name": "Charging"
+                "name": "A carregar"
             },
             "battery_care_mode": {
-                "name": "Battery Care"
+                "name": "Cuidado da bateria"
             },
             "reduced_current": {
-                "name": "Reduced Current"
+                "name": "Corrente reduzida"
             },
             "charging": {
-                "name": "Charging"
+                "name": "A carregar"
             }
         }
     },
@@ -125,7 +125,7 @@
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
+                    "tracing": "Rastreamento de resposta da API. Requer registo de depuração habilitada em configuration.yaml."
                 }
             }
         }
