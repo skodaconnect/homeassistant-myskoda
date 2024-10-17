@@ -284,7 +284,8 @@ class ChargingState(ChargingSensor):
     @property
     def native_value(self) -> str | None:  # noqa: D102
         if status := self._status():
-            return str(status.state).lower()
+            if status.state:
+                return str(status.state).lower()
 
     @property
     def icon(self) -> str:  # noqa: D102
@@ -294,11 +295,6 @@ class ChargingState(ChargingSensor):
             if status.state == charging.ChargingState.CHARGING:
                 return "mdi:power-plug-battery"
         return "mdi:power-plug"
-
-    @property
-    def available(self):  # noqa: D102
-        if status := self._status():
-            return status.state is not None
 
 
 class RemainingChargingTime(ChargingSensor):
