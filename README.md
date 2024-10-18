@@ -17,6 +17,7 @@ Please [join our Discord](https://discord.gg/t7az2hSJXq) and help development by
 
 You can help us translate your MySkoda integration into your language!
 Just [join our Crowdin project](https://crowdin.com/project/homeassistant-myskoda/invite?h=1c4f8152c707b666f570b9cb68678ece2227331)
+If your desired language is not available, please [open an issue](https://github.com/skodaconnect/homeassistant-myskoda/issues/new/choose) and let us know about it!
 
 ## Capabilities
 
