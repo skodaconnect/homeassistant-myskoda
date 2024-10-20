@@ -15,6 +15,7 @@ class MySkodaEntity(CoordinatorEntity):
 
     vin: str
     coordinator: MySkodaDataUpdateCoordinator
+    _attr_has_entity_name = True
 
     def __init__(
         self,
