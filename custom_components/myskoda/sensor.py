@@ -254,14 +254,6 @@ class ChargeType(ChargingSensor):
         if status := self._status():
             return str(status.charge_type).lower()
 
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if status := self._status():
-            if status.charge_type == "DC":
-                return "mdi:ev-plug-ccs2"
-
-        return "mdi:ev-plug-type2"
-
 
 class ChargingState(ChargingSensor):
     """Current state of charging (ready, charging, conserving, ...)."""
@@ -286,15 +278,6 @@ class ChargingState(ChargingSensor):
         if status := self._status():
             if status.state:
                 return str(status.state).lower()
-
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if status := self._status():
-            if status.state == charging.ChargingState.CONNECT_CABLE:
-                return "mdi:power-plug-off"
-            if status.state == charging.ChargingState.CHARGING:
-                return "mdi:power-plug-battery"
-        return "mdi:power-plug"
 
 
 class RemainingChargingTime(ChargingSensor):
