@@ -11,6 +11,7 @@
 				"charging": "mdi:power-plug-battery",
 				"conserving": "mdi:battery-sync",
 				"ready_for_charging": "mdi:battery-check"
+			}
 		}
 	}
 }
