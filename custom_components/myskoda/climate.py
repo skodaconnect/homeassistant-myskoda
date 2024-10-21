@@ -47,7 +47,6 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
     entity_description = ClimateEntityDescription(
         key="climate",
         name="Air Conditioning",
-        icon="mdi:air-conditioner",
         translation_key="climate",
     )
     _attr_temperature_unit = UnitOfTemperature.CELSIUS

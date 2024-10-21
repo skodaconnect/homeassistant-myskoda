@@ -56,7 +56,6 @@ class ChargeLimit(MySkodaNumber):
     entity_description = NumberEntityDescription(
         key="charge_limit",
         name="Charge Limit",
-        icon="mdi:battery-lock",
         native_max_value=100,
         native_min_value=50,
         native_unit_of_measurement=PERCENTAGE,
