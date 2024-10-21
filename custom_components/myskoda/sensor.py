@@ -206,7 +206,7 @@ class Mileage(MySkodaSensor):
         native_unit_of_measurement=UnitOfLength.KILOMETERS,
         icon="mdi:counter",
         device_class=SensorDeviceClass.DISTANCE,
-        translation_key="milage",
+        translation_key="mileage",
     )
 
     @property
