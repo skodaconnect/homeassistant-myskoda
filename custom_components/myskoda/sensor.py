@@ -9,7 +9,13 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, UnitOfLength, UnitOfPower, UnitOfTime
+from homeassistant.const import (
+    PERCENTAGE,
+    UnitOfLength,
+    UnitOfPower,
+    UnitOfTime,
+    EntityCategory,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
@@ -59,7 +65,6 @@ class SoftwareVersion(MySkodaSensor):
     entity_description = SensorEntityDescription(
         key="software_version",
         name="Software Version",
-        icon="mdi:update",
         translation_key="software_version",
     )
 
@@ -145,7 +150,6 @@ class ChargingPower(ChargingSensor):
     entity_description = SensorEntityDescription(
         key="charging_power",
         name="Charging Power",
-        icon="mdi:lightning-bolt",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfPower.KILO_WATT,
         device_class=SensorDeviceClass.POWER,
@@ -164,7 +168,6 @@ class RemainingDistance(ChargingSensor):
     entity_description = SensorEntityDescription(
         key="range",
         name="Range",
-        icon="mdi:speedometer",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfLength.KILOMETERS,
         device_class=SensorDeviceClass.DISTANCE,
@@ -185,7 +188,6 @@ class TargetBatteryPercentage(ChargingSensor):
         name="Target Battery Percentage",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=PERCENTAGE,
-        icon="mdi:percent",
         device_class=SensorDeviceClass.BATTERY,
         translation_key="target_battery_percentage",
     )
@@ -204,7 +206,6 @@ class Mileage(MySkodaSensor):
         name="Milage",
         state_class=SensorStateClass.TOTAL_INCREASING,
         native_unit_of_measurement=UnitOfLength.KILOMETERS,
-        icon="mdi:counter",
         device_class=SensorDeviceClass.DISTANCE,
         translation_key="milage",
     )
@@ -227,7 +228,6 @@ class InspectionInterval(MySkodaSensor):
         device_class=SensorDeviceClass.DURATION,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTime.DAYS,
-        icon="mdi:car-wrench",
         translation_key="inspection",
     )
 
@@ -288,7 +288,6 @@ class RemainingChargingTime(ChargingSensor):
         name="Remaining Charging Time",
         device_class=SensorDeviceClass.DURATION,
         native_unit_of_measurement=UnitOfTime.MINUTES,
-        icon="mdi:timer",
         translation_key="remaining_charging_time",
     )
 
@@ -305,7 +304,6 @@ class LastUpdated(MySkodaSensor):
         key="car_captured",
         name="Last Updated",
         device_class=SensorDeviceClass.TIMESTAMP,
-        icon="mdi:clock",
         translation_key="car_captured",
     )
 
@@ -324,8 +322,8 @@ class MainRender(MySkodaSensor):
     entity_description = SensorEntityDescription(
         key="render_url_main",
         name="Main Render URL",
-        icon="mdi:file-image",
         translation_key="render_url_main",
+        entity_category=EntityCategory.DIAGNOSTIC,
     )
 
     @property
