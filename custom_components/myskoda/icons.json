@@ -3,14 +3,18 @@
 		"sensor": {
 			"charge_type": {
 				"default": "mdi:ev-plug-type2",
-				"dc": "mdi:ev-plug-ccs2"
+				"state": {
+				    "dc": "mdi:ev-plug-ccs2"
+				}
 			},
 			"charging_state": {
 				"default": "mdi:power-plug",
-				"connect_cable": "mdi:power-plug-off",
-				"charging": "mdi:power-plug-battery",
-				"conserving": "mdi:battery-sync",
-				"ready_for_charging": "mdi:battery-check"
+				"state": {
+				    "connect_cable": "mdi:power-plug-off",
+				    "charging": "mdi:power-plug-battery",
+				    "conserving": "mdi:battery-sync",
+				    "ready_for_charging": "mdi:battery-check"
+				}
 			}
 		}
 	}
