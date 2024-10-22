@@ -86,12 +86,6 @@ class ChargerConnected(AirConditioningBinarySensor):
         if ac := self._air_conditioning():
             return ac.charger_connection_state == common.ConnectionState.CONNECTED
 
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if self.is_on:
-            return "mdi:power-plug"
-        return "mdi:power-plug-off"
-
 
 class ChargerLocked(AirConditioningBinarySensor):
     """Detect if the charger is locked on the car, or whether it can be unplugged."""
@@ -108,12 +102,6 @@ class ChargerLocked(AirConditioningBinarySensor):
         if ac := self._air_conditioning():
             if ac.charger_lock_state != ChargerLockedState.INVALID:
                 return ac.charger_lock_state != common.ChargerLockedState.LOCKED
-
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if self.is_on:
-            return "mdi:lock-open"
-        return "mdi:lock"
 
 
 class Locked(StatusBinarySensor):
@@ -133,12 +121,6 @@ class Locked(StatusBinarySensor):
         if status := self._status():
             return not status.overall.locked == DoorLockedState.LOCKED
 
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if self.is_on:
-            return "mdi:lock-open"
-        return "mdi:lock"
-
 
 class DoorsLocked(StatusBinarySensor):
     """Detect whether the doors are locked."""
@@ -155,12 +137,6 @@ class DoorsLocked(StatusBinarySensor):
         if status := self._status():
             return not status.overall.doors_locked == DoorLockedState.LOCKED
 
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if self.is_on:
-            return "mdi:car-door-lock-open"
-        return "mdi:car-door-lock"
-
 
 class DoorsOpen(StatusBinarySensor):
     """Detects whether at least one door is open."""
@@ -169,7 +145,6 @@ class DoorsOpen(StatusBinarySensor):
         key="doors_open",
         name="Doors",
         device_class=BinarySensorDeviceClass.DOOR,
-        icon="mdi:car-door",
         translation_key="doors_open",
     )
 
@@ -186,7 +161,6 @@ class WindowsOpen(StatusBinarySensor):
         key="windows_open",
         name="Windows",
         device_class=BinarySensorDeviceClass.WINDOW,
-        icon="mdi:car-door",
         translation_key="windows_open",
     )
 
@@ -203,7 +177,6 @@ class TrunkOpen(StatusBinarySensor):
         key="trunk_open",
         name="Trunk",
         device_class=BinarySensorDeviceClass.OPENING,
-        icon="mdi:car",
         translation_key="trunk_open",
     )
 
@@ -220,7 +193,6 @@ class BonnetOpen(StatusBinarySensor):
         key="bonnet_open",
         name="Bonnet",
         device_class=BinarySensorDeviceClass.OPENING,
-        icon="mdi:car",
         translation_key="bonnet_open",
     )
 
@@ -237,7 +209,6 @@ class SunroofOpen(StatusBinarySensor):
         key="sunroof_open",
         name="Sunroof",
         device_class=BinarySensorDeviceClass.OPENING,
-        icon="mdi:car-select",
     )
 
     @property
@@ -266,7 +237,6 @@ class LightsOn(StatusBinarySensor):
         key="lights_on",
         name="Lights",
         device_class=BinarySensorDeviceClass.LIGHT,
-        icon="mdi:car-light-high",
         translation_key="lights_on",
     )
 
