@@ -1,5 +1,48 @@
 {
 	"entity": {
+		"binary_sensor": {
+			"bonnet_open": {
+				"default": "mdi:car"
+			},
+			"charger_connected": {
+				"default": "mdi:power-plug-off",
+				"state": {
+					"on": "mdi:power-plug"
+				}
+			},
+			"charger_locked": {
+				"default": "mdi:lock",
+				"state": {
+					"on": "mdi:lock-open"
+				}
+			},
+			"doors_locked": {
+				"default": "mdi:car-door-lock",
+				"state": {
+					"on": "mdi:car-door-lock-open"
+				}
+			},
+			"doors_open": {
+				"default": "mdi:car-door"
+			},
+			"lights_on": {
+				"default": "mdi:car-light-high"
+			},
+			"locked": {
+				"default": "mdi:lock",
+				"state": {
+					"on": "mdi:lock-open"
+				}
+			},
+			"sunroof_open": {
+				"default": "mdi:car-select"
+			},
+			"trunk_open": {
+				"default": "mdi:car"
+			},
+			"windows_open": {
+				"default": "mdi:car-door"
+			},
 		"climate": {
 			"climate": {
 				"default": "mdi:air-conditioner"
