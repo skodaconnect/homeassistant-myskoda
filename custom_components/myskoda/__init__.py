@@ -7,10 +7,12 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.util.ssl import get_default_context
 from myskoda import MySkoda
 from myskoda.myskoda import TRACE_CONFIG
+from myskoda.auth.authorization import AuthorizationFailedError
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
@@ -38,6 +40,8 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
 
     try:
         await myskoda.connect(config.data["email"], config.data["password"])
+    except AuthorizationFailedError:
+        raise ConfigEntryAuthFailed("Log in failed for MySkoda")
     except Exception:
         _LOGGER.exception("Login with MySkoda failed.")
         return False
