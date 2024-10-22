@@ -8,10 +8,6 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "~3.12,<3.13"
 homeassistant = "^2024.10.0"
-aiohttp = "^3.10.5"
-pyjwt = "^2.9.0"
-pyyaml = "^6.0.2"
-asyncio = "^3.4.3"
 voluptuous = "^0.15.2"
 myskoda = "^0.8.4"
 
