@@ -80,7 +80,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         myskoda.subscribe(self._on_mqtt_event)
 
     async def _async_update_data(self) -> State:
-        _LOGGER.debug("Perfoming scheduled update of all data for vin %s", self.vin)
+        _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
         try:
             vehicle = await self.myskoda.get_vehicle(self.vin)
             user = await self.myskoda.get_user()
