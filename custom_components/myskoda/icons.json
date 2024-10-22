@@ -42,7 +42,8 @@
 			},
 			"windows_open": {
 				"default": "mdi:car-door"
-			},
+			}
+		},
 		"climate": {
 			"climate": {
 				"default": "mdi:air-conditioner"
