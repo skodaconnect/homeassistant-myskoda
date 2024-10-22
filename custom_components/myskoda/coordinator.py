@@ -174,9 +174,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             driving_range = await self.myskoda.get_driving_range(self.vin)
         except ClientError as err:
-            _LOGGER.error("Error getting drive range from MySkoda API: %s", err)
-            self.last_exception = err
-            self.last_update_success = False
+            self.async_set_update_error(err)
             return
 
         vehicle = self.data.vehicle
@@ -188,11 +186,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             charging = await self.myskoda.get_charging(self.vin)
         except ClientError as err:
-            _LOGGER.error(
-                "Error getting charging information from MySkoda API: %s", err
-            )
-            self.last_exception = err
-            self.last_update_success = False
+            self.async_set_update_error(err)
             return
 
         vehicle = self.data.vehicle
@@ -204,9 +198,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             air_conditioning = await self.myskoda.get_air_conditioning(self.vin)
         except ClientError as err:
-            _LOGGER.error("Error getting AC information from MySkoda API: %s", err)
-            self.last_exception = err
-            self.last_update_success = False
+            self.async_set_update_error(err)
             return
 
         vehicle = self.data.vehicle
@@ -218,9 +210,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             vehicle = await self.myskoda.get_vehicle(self.vin)
         except ClientError as err:
-            _LOGGER.error("Error getting vehicle update from MySkoda API: %s", err)
-            self.last_exception = err
-            self.last_update_success = False
+            self.async_set_update_error(err)
             return
 
         self.set_updated_vehicle(vehicle)
