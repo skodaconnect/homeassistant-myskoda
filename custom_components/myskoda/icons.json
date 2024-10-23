@@ -59,6 +59,11 @@
 				"default": "mdi:battery-lock"
 			}
 		},
+		"image": {
+			"render_url_main": {
+				"default": "mdi:file-image"
+			}
+		},
 		"sensor": {
 			"car_captured": {
 				"default": "mdi:clock"
@@ -92,9 +97,6 @@
 			},
 			"remaining_charging_time": {
 				"default": "mdi:timer"
-			},
-			"render_url_main": {
-				"default": "mdi:file-image"
 			},
 			"software_version": {
 				"default": "mdi:update"
