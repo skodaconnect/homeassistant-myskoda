@@ -17,7 +17,6 @@ from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [r
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
-from .utils import add_supported_entities
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,22 +28,35 @@ async def async_setup_entry(
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Set up the image platform."""
-    add_supported_entities(
-        available_entities=[MainRenderImage],
-        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
-        async_add_entities=async_add_entities,
-    )
+
+    entities = []
+    for vin in hass.data[DOMAIN][config.entry_id][COORDINATORS]:
+        for SensorClass in [MainRenderImage]:
+            entities.append(
+                SensorClass(
+                    hass.data[DOMAIN][config.entry_id][COORDINATORS][vin], vin, hass
+                )
+            )
+
+    async_add_entities(entities)
 
 
 class MySkodaImage(MySkodaEntity, ImageEntity):
     """Representation of an Image for MySkoda."""
 
+    vin: str
+    coordinator: MySkodaDataUpdateCoordinator
+    hass: HomeAssistant
+
     def __init__(
-        self, hass: HomeAssistant, coordinator: MySkodaDataUpdateCoordinator, vin: str
+        self,
+        coordinator: MySkodaDataUpdateCoordinator,
+        vin: str,
+        hass: HomeAssistant,
     ) -> None:
         """Initialize the Image for MySkoda."""
-        ImageEntity.__init__(hass)
-        super().__init__(self.coordinator, self.vin)
+        ImageEntity.__init__(self, hass)
+        super().__init__(coordinator, vin)
 
 
 class MainRenderImage(MySkodaImage):
