@@ -17,7 +17,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
 
-from myskoda.models.air_conditioning import AirConditioning
+from myskoda.models.air_conditioning import AirConditioning, AirConditioningState
 from myskoda.models.info import CapabilityId
 
 from .const import API_COOLDOWN_IN_SECONDS, COORDINATORS, DOMAIN
@@ -74,7 +74,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
     @property
     def hvac_mode(self) -> HVACMode | None:  # noqa: D102
         if ac := self._air_conditioning():
-            if ac.state:
+            if ac.state != AirConditioningState.OFF:
                 return HVACMode.HEAT_COOL
             return HVACMode.OFF
 
