@@ -1,5 +1,7 @@
 """Images for the MySkoda integration."""
 
+import logging
+
 from homeassistant.components.image import (
     ImageEntity,
     ImageEntityDescription,
@@ -12,30 +14,37 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 
-
 from .const import COORDINATORS, DOMAIN
+from .coordinator import MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
+
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
     config: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
-    _discovery_info: DiscoveryInfoType | None = None,
+    discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    """Set up the sensor platform."""
+    """Set up the image platform."""
     add_supported_entities(
-        available_entities=[
-            MainRenderImage,
-        ],
+        available_entities=[MainRenderImage],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
 
 
 class MySkodaImage(MySkodaEntity, ImageEntity):
-    pass
+    """Representation of an Image for MySkoda."""
+
+    def __init__(
+        self, hass: HomeAssistant, coordinator: MySkodaDataUpdateCoordinator, vin: str
+    ) -> None:
+        """Initialize the Image for MySkoda."""
+        ImageEntity.__init__(hass)
+        super().__init__(self.coordinator, self.vin)
 
 
 class MainRenderImage(MySkodaImage):
@@ -49,5 +58,5 @@ class MainRenderImage(MySkodaImage):
     )
 
     @property
-    def image_url(self):  # noqa: D102
+    def image_url(self) -> str | None:
         return self.get_renders().get("main")
