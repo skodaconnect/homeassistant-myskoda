@@ -125,7 +125,7 @@
 			"reduced_current": {
 				"default": "mdi:current-ac",
 				"state": {
-					"on": "mdi:turle"
+					"on": "mdi:turtle"
 				}
 			},
 			"window_heating": {
