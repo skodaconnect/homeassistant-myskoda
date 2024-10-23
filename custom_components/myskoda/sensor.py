@@ -14,7 +14,6 @@ from homeassistant.const import (
     UnitOfLength,
     UnitOfPower,
     UnitOfTime,
-    EntityCategory,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -43,7 +42,6 @@ async def async_setup_entry(
             ChargingPower,
             ChargingState,
             LastUpdated,
-            MainRender,
             Mileage,
             RemainingChargingTime,
             RemainingDistance,
@@ -314,18 +312,3 @@ class LastUpdated(MySkodaSensor):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE]
-
-
-class MainRender(MySkodaSensor):
-    """URL of the main image render of the vehicle."""
-
-    entity_description = SensorEntityDescription(
-        key="render_url_main",
-        name="Main Render URL",
-        translation_key="render_url_main",
-        entity_category=EntityCategory.DIAGNOSTIC,
-    )
-
-    @property
-    def native_value(self):  # noqa: D102
-        return self.get_renders().get("main")
