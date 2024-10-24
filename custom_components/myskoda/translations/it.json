@@ -65,6 +65,11 @@
                 "name": "Limite di carica"
             }
         },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Main Render of Vehicle"
+            }
+        },
         "sensor": {
             "software_version": {
                 "name": "Versione software"

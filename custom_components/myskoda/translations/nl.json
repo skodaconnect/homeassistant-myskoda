@@ -65,6 +65,11 @@
                 "name": "Laadlimiet"
             }
         },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Hoofdafbeelding"
+            }
+        },
         "sensor": {
             "software_version": {
                 "name": "Software versie"
@@ -111,10 +116,10 @@
                 "name": "Opladen"
             },
             "battery_care_mode": {
-                "name": "Batterij verzorging"
+                "name": "Accu onderhoudsmodus"
             },
             "reduced_current": {
-                "name": "Verminderde stroom"
+                "name": "Stroombegrenzing"
             },
             "charging": {
                 "name": "Opladen"
