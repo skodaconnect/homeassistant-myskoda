@@ -65,6 +65,11 @@
                 "name": "Ladelimit"
             }
         },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Main Render of Vehicle"
+            }
+        },
         "sensor": {
             "software_version": {
                 "name": "Software-Version"
