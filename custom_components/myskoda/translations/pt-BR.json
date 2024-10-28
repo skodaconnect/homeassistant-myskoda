@@ -1,18 +1,18 @@
 {
     "config": {
         "abort": {
-            "already_configured": "O aparelho já está configurado"
+            "already_configured": "O dispositivo já está ajustado"
         },
         "error": {
-            "cannot_connect": "Falha ao conectar",
+            "cannot_connect": "Falhou ao conectar",
             "invalid_auth": "Autenticação inválida",
-            "unknown": "Um erro inesperado ocorreu. Verifica os ficheiros de log do HomeAssistant."
+            "unknown": "Ocorreu um erro inesperado. Verifique os arquivos de registro do HomeAssistant."
         },
         "step": {
             "user": {
                 "data": {
                     "email": "E-mail",
-                    "password": "Palavra passe"
+                    "password": "Senha"
                 }
             }
         }
@@ -72,10 +72,10 @@
         },
         "sensor": {
             "software_version": {
-                "name": "Versão do software"
+                "name": "Versão"
             },
             "battery_percentage": {
-                "name": "Percentagem da bateria"
+                "name": "Porcentagem da bateria"
             },
             "charging_power": {
                 "name": "Potência de carga"
@@ -84,16 +84,16 @@
                 "name": "Estado de carga",
                 "state": {
                     "connect_cable": "Cabo desconectado",
-                    "ready_for_charging": "Preparado para carregar",
+                    "ready_for_charging": "Pronto para carregar",
                     "conserving": "Conservando carga",
-                    "charging": "A carregar"
+                    "charging": "Carregando"
                 }
             },
             "range": {
                 "name": "Alcance"
             },
             "target_battery_percentage": {
-                "name": "Percentagem limite da bateria"
+                "name": "Porcentagem limite da bateria"
             },
             "mileage": {
                 "name": "Quilometragem"
@@ -113,7 +113,7 @@
                 "name": "Aquecimento da janela"
             },
             "charging_switch": {
-                "name": "A carregar"
+                "name": "Carregando"
             },
             "battery_care_mode": {
                 "name": "Cuidado da bateria"
@@ -122,7 +122,7 @@
                 "name": "Corrente reduzida"
             },
             "charging": {
-                "name": "A carregar"
+                "name": "Carregando"
             }
         }
     },
@@ -130,7 +130,7 @@
         "step": {
             "init": {
                 "data": {
-                    "tracing": "Rastreamento de resposta da API. Requer registo de depuração habilitada em configuration.yaml."
+                    "tracing": "Rastreamento de resposta da API. Requer registro de depuração ativo em configuration.yaml."
                 }
             }
         }
