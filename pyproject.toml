@@ -9,7 +9,7 @@ readme = "README.md"
 python = "~3.12,<3.13"
 homeassistant = "^2024.10.0"
 voluptuous = "^0.15.2"
-myskoda = "^0.8.4"
+myskoda = "^0.8.5"
 
 
 [tool.poetry.group.dev.dependencies]
