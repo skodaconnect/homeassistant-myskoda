@@ -309,6 +309,33 @@ files = [
 ]
 
 [[package]]
+name = "asyncio"
+version = "3.4.3"
+description = "reference implementation of PEP 3156"
+optional = false
+python-versions = "*"
+files = [
+    {file = "asyncio-3.4.3-cp33-none-win32.whl", hash = "sha256:b62c9157d36187eca799c378e572c969f0da87cd5fc42ca372d92cdb06e7e1de"},
+    {file = "asyncio-3.4.3-cp33-none-win_amd64.whl", hash = "sha256:c46a87b48213d7464f22d9a497b9eef8c1928b68320a2fa94240f969f6fec08c"},
+    {file = "asyncio-3.4.3-py3-none-any.whl", hash = "sha256:c4d18b22701821de07bd6aea8b53d21449ec0ec5680645e5317062ea21817d2d"},
+    {file = "asyncio-3.4.3.tar.gz", hash = "sha256:83360ff8bc97980e4ff25c964c7bd3923d333d177aa4f7fb736b019f26c7cb41"},
+]
+
+[[package]]
+name = "asyncio-paho"
+version = "0.6.0"
+description = "A Paho MQTT client supporting asyncio loop without additional setup."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "asyncio_paho-0.6.0-py3-none-any.whl", hash = "sha256:7239dc5ec17afef1c1ea162e6c32c477c6cc728ce64740ca433b984bded122e7"},
+    {file = "asyncio_paho-0.6.0.tar.gz", hash = "sha256:19fffd4758bfcf704393acf8b540d06a9def27270b2cf55826f956660a8f1496"},
+]
+
+[package.dependencies]
+paho-mqtt = ">=1.6,<2.0"
+
+[[package]]
 name = "atomicwrites-homeassistant"
 version = "1.4.1"
 description = "Atomic file writes."
@@ -1620,6 +1647,7 @@ files = [
 ]
 
 [package.dependencies]
+orjson = {version = "*", optional = true, markers = "extra == \"orjson\""}
 typing-extensions = ">=4.1.0"
 
 [package.extras]
@@ -1734,13 +1762,24 @@ name = "myskoda"
 version = "0.8.5"
 description = "Library for interaction with the MySkoda APIs."
 optional = false
-python-versions = "*"
-files = []
-develop = true
+python-versions = "<4.0,>=3.12.0"
+files = [
+    {file = "myskoda-0.8.5-py3-none-any.whl", hash = "sha256:02e537f88d55de873fc91eb19803bd4f0a202d33cf00200f89bc39bb37208007"},
+    {file = "myskoda-0.8.5.tar.gz", hash = "sha256:84e3a1bd388799ba0b23d45c2873ac273a95604b981c41a999a31dcefc5b52e8"},
+]
 
-[package.source]
-type = "directory"
-url = "../myskoda"
+[package.dependencies]
+aiohttp = ">=3,<4"
+asyncio = ">=3,<4"
+asyncio-paho = ">=0.6.0,<0.7.0"
+mashumaro = {version = ">=3.13.1,<4.0.0", extras = ["orjson"]}
+paho-mqtt = ">=1,<2"
+pyjwt = ">=2,<3"
+pyyaml = ">=6,<7"
+
+[package.extras]
+cli = ["asyncclick (>=8.1.7.2,<9.0.0.0)", "coloredlogs (>=15.0.1,<16.0.0)", "pygments (>=2.18.0,<3.0.0)", "termcolor (>=2.4.0,<3.0.0)"]
+docs = ["mkdocs-gen-files (>=0.5.0,<0.6.0)", "mkdocs-literate-nav (>=0.6.1,<0.7.0)", "mkdocs[gen-files] (>=1.6.1,<2.0.0)", "mkdocstrings[python] (>=0.26.1,<0.27.0)"]
 
 [[package]]
 name = "nodeenv"
@@ -1829,6 +1868,19 @@ files = [
     {file = "packaging-24.1-py3-none-any.whl", hash = "sha256:5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124"},
     {file = "packaging-24.1.tar.gz", hash = "sha256:026ed72c8ed3fcce5bf8950572258698927fd1dbda10a5e981cdf0ac37f4f002"},
 ]
+
+[[package]]
+name = "paho-mqtt"
+version = "1.6.1"
+description = "MQTT version 5.0/3.1.1 client class"
+optional = false
+python-versions = "*"
+files = [
+    {file = "paho-mqtt-1.6.1.tar.gz", hash = "sha256:2a8291c81623aec00372b5a85558a372c747cbca8e9934dfe218638b8eefc26f"},
+]
+
+[package.extras]
+proxy = ["PySocks"]
 
 [[package]]
 name = "pillow"
