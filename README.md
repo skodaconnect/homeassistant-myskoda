@@ -75,3 +75,37 @@ So:
 - If you change the seat-heating to on, you cannot turn it back off again for 30s
 
 The requests will silently be ignored by HomeAssistant, so make sure you wait at least 30s before sending another request
+
+## Enable debug logging
+
+For comprehensive debug logging you can add this to your `<config dir>/configuration.yaml`:
+
+```yaml
+logger:
+  default: info
+  logs:
+    myskoda: debug
+    myskoda.mqtt: debug
+    myskoda.rest_api: debug
+    custom_components.myskoda: debug
+    custom_components.myskoda.climate: debug
+    custom_components.myskoda.lock: debug
+    custom_components.myskoda.device_tracker: debug
+    custom_components.myskoda.switch: debug
+    custom_components.myskoda.binary_sensor: debug
+    custom_components.myskoda.sensor: debug
+    custom_components.myskoda.number: debug
+    custom_components.myskoda.image: debug
+ ```
+
+Pick any of the subjects from the example. If you want to enable full debugging, you only need **myskoda** and **custom_components.myskoda**.
+
+- **myskoda:** Set the debug level for the MySkoda library. This handles all the communication with MySkoda.
+
+- **myskoda.mqtt:** Set the debug level for the MQTT class of the MySkoda library. This handles the push-messages sent from MySkoda to the integration, notifying of changes to/in the car.
+
+- **myskoda.rest_api:** Set the debug level for the REST API of the MySkoda library. This handles all the pull-messages the integration fetches from MySkoda.
+
+- **custom_components.myskoda:** Set debug level for the custom component. The communication between hass and library.
+
+- **custom_components.myskoda.XYZ** Sets debug level for individual entity types in the custom component.
