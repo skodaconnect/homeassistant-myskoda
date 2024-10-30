@@ -213,6 +213,20 @@ isal = ["isal (>=1.6.1)"]
 zlib-ng = ["zlib_ng (>=0.4.3)"]
 
 [[package]]
+name = "aiomqtt"
+version = "2.0.1"
+description = "The idiomatic asyncio MQTT client, wrapped around paho-mqtt"
+optional = false
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "aiomqtt-2.0.1-py3-none-any.whl", hash = "sha256:7c26a867212366ae0841571e6c2d06cebc00c2de029475b920c2cd7396aeacea"},
+    {file = "aiomqtt-2.0.1.tar.gz", hash = "sha256:60f6451c8ab7235cfb392b1b0cab398e9bc6040f4b140628c0615371abcde15f"},
+]
+
+[package.dependencies]
+paho-mqtt = ">=1.6.0,<2.0.0"
+
+[[package]]
 name = "aiooui"
 version = "0.1.7"
 description = "Async OUI lookups"
@@ -320,20 +334,6 @@ files = [
     {file = "asyncio-3.4.3-py3-none-any.whl", hash = "sha256:c4d18b22701821de07bd6aea8b53d21449ec0ec5680645e5317062ea21817d2d"},
     {file = "asyncio-3.4.3.tar.gz", hash = "sha256:83360ff8bc97980e4ff25c964c7bd3923d333d177aa4f7fb736b019f26c7cb41"},
 ]
-
-[[package]]
-name = "asyncio-paho"
-version = "0.6.0"
-description = "A Paho MQTT client supporting asyncio loop without additional setup."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "asyncio_paho-0.6.0-py3-none-any.whl", hash = "sha256:7239dc5ec17afef1c1ea162e6c32c477c6cc728ce64740ca433b984bded122e7"},
-    {file = "asyncio_paho-0.6.0.tar.gz", hash = "sha256:19fffd4758bfcf704393acf8b540d06a9def27270b2cf55826f956660a8f1496"},
-]
-
-[package.dependencies]
-paho-mqtt = ">=1.6,<2.0"
 
 [[package]]
 name = "atomicwrites-homeassistant"
@@ -1759,19 +1759,19 @@ files = [
 
 [[package]]
 name = "myskoda"
-version = "0.8.5"
+version = "0.8.6"
 description = "Library for interaction with the MySkoda APIs."
 optional = false
 python-versions = "<4.0,>=3.12.0"
 files = [
-    {file = "myskoda-0.8.5-py3-none-any.whl", hash = "sha256:02e537f88d55de873fc91eb19803bd4f0a202d33cf00200f89bc39bb37208007"},
-    {file = "myskoda-0.8.5.tar.gz", hash = "sha256:84e3a1bd388799ba0b23d45c2873ac273a95604b981c41a999a31dcefc5b52e8"},
+    {file = "myskoda-0.8.6-py3-none-any.whl", hash = "sha256:d3d02bf2b34068094d116193fd240e4d08d653a5cc1dd774552c72b533f4d5d5"},
+    {file = "myskoda-0.8.6.tar.gz", hash = "sha256:c30e722bd16b4a57afc2643eccdcd4986946f0c763c270e715b13b9806f4729b"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3,<4"
+aiomqtt = ">=2.0,<3.0"
 asyncio = ">=3,<4"
-asyncio-paho = ">=0.6.0,<0.7.0"
 mashumaro = {version = ">=3.13.1,<4.0.0", extras = ["orjson"]}
 paho-mqtt = ">=1,<2"
 pyjwt = ">=2,<3"
@@ -3113,4 +3113,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.12,<3.13"
-content-hash = "2055f0905c39a72a475ea3d2bdc537b7362911b663f0d9ee5150451786a77726"
+content-hash = "04118c30744fb6f29c93975eec5fbd8f9929b20d139a39a4a66a1038146e7d5a"

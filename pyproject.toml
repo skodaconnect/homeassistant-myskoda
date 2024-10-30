@@ -1,15 +1,19 @@
 [tool.poetry]
 name = "homeassistant-myskoda"
-version = "1.6.2"
+version = "1.6.4"
 description = "HomeAssistant integration for MySkoda."
-authors = ["Frederick Gnodtke <frederick@gnodtke.net>"]
+authors = [
+    "Frederick Gnodtke <frederick@gnodtke.net>",
+    "WebSpider <bacardicoke@gmail.com>",
+    "Fabrice Devaux <fabrice.devaux@gmail.com>",
+]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.12,<3.13"
 homeassistant = "^2024.10.0"
 voluptuous = "^0.15.2"
-myskoda = "^0.8.5"
+myskoda = "^0.8.6"
 
 
 [tool.poetry.group.dev.dependencies]
