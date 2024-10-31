@@ -99,7 +99,12 @@
 		"name": "Mileage"
 	    },
 	    "charge_type": {
-		"name": "Charge Type"
+		"name": "Charge Type",
+		"state": {
+			"ac": "AC",
+			"dc": "DC",
+			"off": "OFF"
+		}
 	    },
 	    "remaining_charging_time": {
 		"name": "Remaining Charging Time"
