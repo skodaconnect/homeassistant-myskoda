@@ -14,6 +14,7 @@ from homeassistant.const import (
     UnitOfLength,
     UnitOfPower,
     UnitOfTime,
+    UnitOfEnergy,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -47,6 +48,7 @@ async def async_setup_entry(
             RemainingDistance,
             SoftwareVersion,
             TargetBatteryPercentage,
+            BatteryCapacity,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -312,3 +314,23 @@ class LastUpdated(MySkodaSensor):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE]
+
+
+class BatteryCapacity(MySkodaSensor):
+    """Current capacity of the battery."""
+
+    entity_description = SensorEntityDescription(
+        key="battery_capacity",
+        device_class=SensorDeviceClass.ENERGY_STORAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        translation_key="battery_capacity",
+    )
+
+    @property
+    def native_value(self) -> int | None:
+        if battery := self.vehicle.info.specification.battery:
+            return battery.capacity
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.BATTERY_SUPPORT]
