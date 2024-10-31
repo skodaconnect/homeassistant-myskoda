@@ -20,34 +20,74 @@
     "entity": {
         "binary_sensor": {
 	    "charger_connected": {
-	        "name": "Charger Connected"
+	        "name": "Charger Connected",
+		"state": {
+		    "on": "Plugged in",
+		    "off": "Unplugged"
+		}
 	    },
 	    "charger_locked": {
-		"name": "Charge Lock"
+		"name": "Charge Lock",
+		"state": {
+		    "on": "Unlocked",
+		    "off": "Locked"
+		}
 	    },
 	    "locked": {
-		"name": "Vehicle Locked"
+		"name": "Vehicle Locked",
+		"state": {
+		    "on": "Unlocked",
+		    "off": "Locked"
+		}
 	    },
 	    "doors_locked": {
-		"name": "Doors Locked"
+		"name": "Doors Locked",
+		"state": {
+		    "on": "Unlocked",
+		    "off": "Locked"
+		}
 	    },
 	    "doors_open": {
-		"name": "Doors Open"
+		"name": "Doors Open",
+		"state": {
+		    "on": "Open",
+		    "off": "Closed"
+		}
 	    },
 	    "windows_open": {
-		"name": "Windows"
+		"name": "Windows",
+		"state": {
+		    "on": "Open",
+		    "off": "Closed"
+		}
 	    },
 	    "trunk_open": {
-		"name": "Trunk"
+		"name": "Trunk",
+		"state": {
+		    "on": "Open",
+		    "off": "Closed"
+		}
 	    },
 	    "bonnet_open": {
-		"name": "Bonnet"
+		"name": "Bonnet",
+		"state": {
+		    "on": "Open",
+		    "off": "Closed"
+		}
 	    },
 	    "sunroof_open": {
-		"name": "Sunroof"
+		"name": "Sunroof",
+		"state": {
+		    "on": "Open",
+		    "off": "Closed"
+		}
 	    },
 	    "lights_on": {
-		"name": "Lights"
+		"name": "Lights",
+		"state": {
+		    "on": "On",
+		    "off": "Off"
+		}
 	    }
 	},
 	"climate": {

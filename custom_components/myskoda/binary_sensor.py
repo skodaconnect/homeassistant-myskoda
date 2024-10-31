@@ -76,7 +76,6 @@ class ChargerConnected(AirConditioningBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="charger_connected",
-        name="Charger Connected",
         device_class=BinarySensorDeviceClass.PLUG,
         translation_key="charger_connected",
     )
@@ -92,7 +91,6 @@ class ChargerLocked(AirConditioningBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="charger_locked",
-        name="Charger",
         device_class=BinarySensorDeviceClass.LOCK,
         translation_key="charger_locked",
     )
@@ -111,7 +109,6 @@ class Locked(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="locked",
-        name="Locks",
         device_class=BinarySensorDeviceClass.LOCK,
         translation_key="locked",
     )
@@ -127,7 +124,6 @@ class DoorsLocked(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="doors_locked",
-        name="Doors Locked",
         device_class=BinarySensorDeviceClass.LOCK,
         translation_key="doors_locked",
     )
@@ -143,7 +139,6 @@ class DoorsOpen(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="doors_open",
-        name="Doors",
         device_class=BinarySensorDeviceClass.DOOR,
         translation_key="doors_open",
     )
@@ -159,7 +154,6 @@ class WindowsOpen(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="windows_open",
-        name="Windows",
         device_class=BinarySensorDeviceClass.WINDOW,
         translation_key="windows_open",
     )
@@ -175,7 +169,6 @@ class TrunkOpen(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="trunk_open",
-        name="Trunk",
         device_class=BinarySensorDeviceClass.OPENING,
         translation_key="trunk_open",
     )
@@ -191,7 +184,6 @@ class BonnetOpen(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="bonnet_open",
-        name="Bonnet",
         device_class=BinarySensorDeviceClass.OPENING,
         translation_key="bonnet_open",
     )
@@ -207,7 +199,6 @@ class SunroofOpen(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="sunroof_open",
-        name="Sunroof",
         device_class=BinarySensorDeviceClass.OPENING,
     )
 
@@ -235,7 +226,6 @@ class LightsOn(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="lights_on",
-        name="Lights",
         device_class=BinarySensorDeviceClass.LIGHT,
         translation_key="lights_on",
     )
