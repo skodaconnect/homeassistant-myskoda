@@ -64,7 +64,6 @@ class MainRenderImage(MySkodaImage):
 
     entity_description = ImageEntityDescription(
         key="render_vehicle_main",
-        name="Main Vehicle Render",
         translation_key="render_vehicle_main",
         entity_category=EntityCategory.DIAGNOSTIC,
     )

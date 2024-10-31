@@ -62,7 +62,6 @@ class SoftwareVersion(MySkodaSensor):
 
     entity_description = SensorEntityDescription(
         key="software_version",
-        name="Software Version",
         translation_key="software_version",
     )
 
@@ -90,7 +89,6 @@ class BatteryPercentage(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="battery_percentage",
-        name="Battery Percentage",
         icon="mdi:battery",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=PERCENTAGE,
@@ -147,7 +145,6 @@ class ChargingPower(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="charging_power",
-        name="Charging Power",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfPower.KILO_WATT,
         device_class=SensorDeviceClass.POWER,
@@ -165,7 +162,6 @@ class RemainingDistance(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="range",
-        name="Range",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfLength.KILOMETERS,
         device_class=SensorDeviceClass.DISTANCE,
@@ -183,7 +179,6 @@ class TargetBatteryPercentage(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="target_battery_percentage",
-        name="Target Battery Percentage",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=PERCENTAGE,
         device_class=SensorDeviceClass.BATTERY,
@@ -201,7 +196,6 @@ class Mileage(MySkodaSensor):
 
     entity_description = SensorEntityDescription(
         key="milage",
-        name="Milage",
         state_class=SensorStateClass.TOTAL_INCREASING,
         native_unit_of_measurement=UnitOfLength.KILOMETERS,
         device_class=SensorDeviceClass.DISTANCE,
@@ -222,7 +216,6 @@ class InspectionInterval(MySkodaSensor):
 
     entity_description = SensorEntityDescription(
         key="inspection",
-        name="Inspection",
         device_class=SensorDeviceClass.DURATION,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTime.DAYS,
@@ -243,7 +236,6 @@ class ChargeType(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="charge_type",
-        name="Charge Type",
         translation_key="charge_type",
     )
 
@@ -258,7 +250,6 @@ class ChargingState(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="charging_state",
-        name="Charging State",
         device_class=SensorDeviceClass.ENUM,
         translation_key="charging_state",
     )
@@ -283,7 +274,6 @@ class RemainingChargingTime(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="remaining_charging_time",
-        name="Remaining Charging Time",
         device_class=SensorDeviceClass.DURATION,
         native_unit_of_measurement=UnitOfTime.MINUTES,
         translation_key="remaining_charging_time",
@@ -300,7 +290,6 @@ class LastUpdated(MySkodaSensor):
 
     entity_description = SensorEntityDescription(
         key="car_captured",
-        name="Last Updated",
         device_class=SensorDeviceClass.TIMESTAMP,
         translation_key="car_captured",
     )
