@@ -97,7 +97,10 @@
 	},
 	"device_tracker": {
 	    "device_tracker": {
-                "name": "Positition"
+                "name": "Position",
+                "state": {
+		    "vehicle_in_motion": "Motion detected"
+		}
 	    }
 	},
 	"number": {

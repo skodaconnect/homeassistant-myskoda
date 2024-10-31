@@ -11,7 +11,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 
 from myskoda.models.info import CapabilityId
-from myskoda.models.position import Position, Positions, PositionType
+from myskoda.models.position import Error, ErrorType, Position, Positions, PositionType
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
@@ -55,6 +55,13 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
                     pos for pos in pos.positions if pos.type == PositionType.VEHICLE
                 )
 
+    def _pos_error(self) -> Error | None:
+        if pos := self._positions():
+            if pos.errors:
+                return next(
+                    err for err in pos.errors if err.type == ErrorType.VEHICLE_IN_MOTION
+                )
+
     @property
     def source_type(self) -> SourceType:  # noqa: D102
         return SourceType.GPS
@@ -81,6 +88,12 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
             attributes["entity_picture"] = render
 
         return attributes
+
+    @property
+    def location_name(self) -> str | None:
+        if err := self._pos_error():
+            if err.type == ErrorType.VEHICLE_IN_MOTION:
+                return "vehicle_in_motion"
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.PARKING_POSITION]
