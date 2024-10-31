@@ -20,34 +20,74 @@
     "entity": {
         "binary_sensor": {
             "charger_connected": {
-                "name": "Laadkabel"
+                "name": "Laadkabel",
+                "state": {
+                    "on": "Aangesloten",
+                    "off": "Losgekoppeld"
+                }
             },
             "charger_locked": {
-                "name": "Laadkabelvergrendeling"
+                "name": "Laadkabelvergrendeling",
+                "state": {
+                    "on": "Ontgrendeld",
+                    "off": "Vergrendeld"
+                }
             },
             "locked": {
-                "name": "Voertuigvergrendeling"
+                "name": "Voertuigvergrendeling",
+                "state": {
+                    "on": "Ontgrendeld",
+                    "off": "Vergrendeld"
+                }
             },
             "doors_locked": {
-                "name": "Deurvergrendeling"
+                "name": "Deurvergrendeling",
+                "state": {
+                    "on": "Ontgrendeld",
+                    "off": "Vergrendeld"
+                }
             },
             "doors_open": {
-                "name": "Deuren"
+                "name": "Deuren",
+                "state": {
+                    "on": "Open",
+                    "off": "Gesloten"
+                }
             },
             "windows_open": {
-                "name": "Ramen"
+                "name": "Ramen",
+                "state": {
+                    "on": "Open",
+                    "off": "Gesloten"
+                }
             },
             "trunk_open": {
-                "name": "Kofferbak"
+                "name": "Kofferbak",
+                "state": {
+                    "on": "Open",
+                    "off": "Gesloten"
+                }
             },
             "bonnet_open": {
-                "name": "Motorkap"
+                "name": "Motorkap",
+                "state": {
+                    "on": "Open",
+                    "off": "Gesloten"
+                }
             },
             "sunroof_open": {
-                "name": "Zonnedak Open"
+                "name": "Zonnedak Open",
+                "state": {
+                    "on": "Open",
+                    "off": "Gesloten"
+                }
             },
             "lights_on": {
-                "name": "Lichten"
+                "name": "Lichten",
+                "state": {
+                    "on": "Aan",
+                    "off": "Uit"
+                }
             }
         },
         "climate": {
@@ -99,7 +139,12 @@
                 "name": "Kilometerstand"
             },
             "charge_type": {
-                "name": "Laadmethode"
+                "name": "Laadmethode",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "Uit"
+                }
             },
             "remaining_charging_time": {
                 "name": "Laadtijd resterend"

@@ -20,34 +20,74 @@
     "entity": {
         "binary_sensor": {
             "charger_connected": {
-                "name": "Carregador conectado"
+                "name": "Carregador conectado",
+                "state": {
+                    "on": "Conectado",
+                    "off": "Desconectado"
+                }
             },
             "charger_locked": {
-                "name": "Bloqueio de carga"
+                "name": "Bloqueio de carga",
+                "state": {
+                    "on": "Desbloqueado",
+                    "off": "Bloqueado"
+                }
             },
             "locked": {
-                "name": "Veículo trancado"
+                "name": "Veículo trancado",
+                "state": {
+                    "on": "Desbloqueado",
+                    "off": "Bloqueado"
+                }
             },
             "doors_locked": {
-                "name": "Portas trancadas"
+                "name": "Portas trancadas",
+                "state": {
+                    "on": "Desbloqueado",
+                    "off": "Bloqueado"
+                }
             },
             "doors_open": {
-                "name": "Portas abertas"
+                "name": "Portas abertas",
+                "state": {
+                    "on": "Aberto",
+                    "off": "Fechado"
+                }
             },
             "windows_open": {
-                "name": "Janelas"
+                "name": "Janelas",
+                "state": {
+                    "on": "Aberto",
+                    "off": "Fechado"
+                }
             },
             "trunk_open": {
-                "name": "Porta-malas"
+                "name": "Porta-malas",
+                "state": {
+                    "on": "Aberto",
+                    "off": "Fechado"
+                }
             },
             "bonnet_open": {
-                "name": "Capota"
+                "name": "Capota",
+                "state": {
+                    "on": "Aberto",
+                    "off": "Fechado"
+                }
             },
             "sunroof_open": {
-                "name": "Teto solar"
+                "name": "Teto solar",
+                "state": {
+                    "on": "Aberto",
+                    "off": "Fechado"
+                }
             },
             "lights_on": {
-                "name": "Luzes"
+                "name": "Luzes",
+                "state": {
+                    "on": "Ativadas",
+                    "off": "Desativadas"
+                }
             }
         },
         "climate": {
@@ -99,7 +139,12 @@
                 "name": "Quilometragem"
             },
             "charge_type": {
-                "name": "Tipo de carga"
+                "name": "Tipo de carga",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "DESLIGADO"
+                }
             },
             "remaining_charging_time": {
                 "name": "Tempo de carga restante"
