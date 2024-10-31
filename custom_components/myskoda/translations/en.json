@@ -38,18 +38,21 @@
 		"state": {
 		    "on": "Unlocked",
 		    "off": "Locked"
+		}
 	    },
 	    "doors_locked": {
 		"name": "Doors Locked",
 		"state": {
 		    "on": "Unlocked",
 		    "off": "Locked"
+		}
 	    },
 	    "doors_open": {
 		"name": "Doors Open",
 		"state": {
 		    "on": "Open",
 		    "off": "Closed"
+		}
 	    },
 	    "windows_open": {
 		"name": "Windows",
