@@ -97,7 +97,12 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Positie"
+                "name": "Positie",
+                "state": {
+                    "vehicle_in_motion": "In beweging",
+                    "not_home": "Afwezig",
+                    "home": "Thuis"
+                }
             }
         },
         "number": {
