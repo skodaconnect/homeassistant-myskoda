@@ -99,7 +99,9 @@
 	    "device_tracker": {
                 "name": "Position",
                 "state": {
-		    "vehicle_in_motion": "Motion detected"
+		    "vehicle_in_motion": "Motion detected",
+		    "not_home": "Away",
+		    "home": "Home"
 		}
 	    }
 	},
