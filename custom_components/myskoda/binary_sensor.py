@@ -200,6 +200,7 @@ class SunroofOpen(StatusBinarySensor):
     entity_description = BinarySensorEntityDescription(
         key="sunroof_open",
         device_class=BinarySensorDeviceClass.OPENING,
+        translation_key="sunroof_open",
     )
 
     @property
