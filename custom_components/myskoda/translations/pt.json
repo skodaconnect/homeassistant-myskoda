@@ -97,7 +97,12 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Posição"
+                "name": "Posição",
+                "state": {
+                    "vehicle_in_motion": "Moção detetada",
+                    "not_home": "Fora",
+                    "home": "Em casa"
+                }
             }
         },
         "number": {
