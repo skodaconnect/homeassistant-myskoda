@@ -46,9 +46,17 @@ class MySkodaEntity(CoordinatorEntity):
     def required_capabilities(self) -> list[CapabilityId]:
         return []
 
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return []
+
     def is_supported(self) -> bool:
         return all(
             self.vehicle.has_capability(cap) for cap in self.required_capabilities()
+        )
+
+    def is_forbidden(self) -> bool:
+        return all(
+            self.vehicle.has_capability(cap) for cap in self.forbidden_capabilities()
         )
 
     def get_renders(self) -> dict[str, str]:
