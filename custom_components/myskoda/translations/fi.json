@@ -1,0 +1,188 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Laite on jo määritetty"
+        },
+        "error": {
+            "cannot_connect": "Yhteyden muodostaminen epäonnistui",
+            "invalid_auth": "Virheellinen todennus",
+            "unknown": "Tapahtui odottamaton virhe. Tarkista Home Assistantin lokit."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Sähköposti",
+                    "password": "Salasana"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "charger_connected": {
+                "name": "Latauskaapeli",
+                "state": {
+                    "on": "Kytketty",
+                    "off": "Irti"
+                }
+            },
+            "charger_locked": {
+                "name": "Kaapelin lukitus",
+                "state": {
+                    "on": "Lukittu",
+                    "off": "Auki"
+                }
+            },
+            "locked": {
+                "name": "Ajoneuvon lukitus",
+                "state": {
+                    "on": "Lukitsematta",
+                    "off": "Lukossa"
+                }
+            },
+            "doors_locked": {
+                "name": "Ovien lukitus",
+                "state": {
+                    "on": "Lukitsematta",
+                    "off": "Lukossa"
+                }
+            },
+            "doors_open": {
+                "name": "Ovet",
+                "state": {
+                    "on": "Auki",
+                    "off": "Kiinni"
+                }
+            },
+            "windows_open": {
+                "name": "Ikkunat",
+                "state": {
+                    "on": "Auki",
+                    "off": "Kiinni"
+                }
+            },
+            "trunk_open": {
+                "name": "Tavaratila",
+                "state": {
+                    "on": "Auki",
+                    "off": "Kiinni"
+                }
+            },
+            "bonnet_open": {
+                "name": "Konepelti",
+                "state": {
+                    "on": "Auki",
+                    "off": "Kiinni"
+                }
+            },
+            "sunroof_open": {
+                "name": "Kattoikkuna",
+                "state": {
+                    "on": "Auki",
+                    "off": "Kiinni"
+                }
+            },
+            "lights_on": {
+                "name": "Valot",
+                "state": {
+                    "on": "Päällä",
+                    "off": "Pois"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Ilmastointi"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Sijainti",
+                "state": {
+                    "vehicle_in_motion": "Liikkeellä",
+                    "not_home": "Poissa kotoa",
+                    "home": "Kotona"
+                }
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Latausraja"
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Pääkuva"
+            }
+        },
+        "sensor": {
+            "software_version": {
+                "name": "Ohjelmistoversio"
+            },
+            "battery_percentage": {
+                "name": "Varaustaso"
+            },
+            "charging_power": {
+                "name": "Latausteho"
+            },
+            "charging_state": {
+                "name": "Latauksen tila",
+                "state": {
+                    "connect_cable": "Kaapeli irti",
+                    "ready_for_charging": "Valmis lataamaan",
+                    "conserving": "Rajoitettu lataus",
+                    "charging": "Ladataan"
+                }
+            },
+            "range": {
+                "name": "Toimintamatka"
+            },
+            "target_battery_percentage": {
+                "name": "Latausraja"
+            },
+            "mileage": {
+                "name": "Kilometrilukema"
+            },
+            "charge_type": {
+                "name": "Latauksen tyyppi",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "Pois"
+                }
+            },
+            "remaining_charging_time": {
+                "name": "Jäljellä oleva latausaika"
+            },
+            "car_captured": {
+                "name": "Tiedot päivitetty"
+            }
+        },
+        "switch": {
+            "window_heating": {
+                "name": "Ikkunoiden lämmitys"
+            },
+            "charging_switch": {
+                "name": "Lataus"
+            },
+            "battery_care_mode": {
+                "name": "Battery Care"
+            },
+            "reduced_current": {
+                "name": "Virran rajoitus"
+            },
+            "charging": {
+                "name": "Lataus"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "API-vastauksen jäljitys. Vaatii debug-lokituksen aktivoimisen configuration.yaml-asetustiedostossa."
+                }
+            }
+        }
+    }
+}
