@@ -47,6 +47,7 @@ async def async_setup_entry(
             RemainingDistance,
             SoftwareVersion,
             TargetBatteryPercentage,
+            InspectionInterval,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
