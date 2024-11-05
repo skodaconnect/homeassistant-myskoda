@@ -78,3 +78,6 @@ class ChargeLimit(MySkodaNumber):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING]
+
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_MQB]
