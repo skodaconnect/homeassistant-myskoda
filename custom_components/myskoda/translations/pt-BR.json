@@ -19,74 +19,74 @@
     },
     "entity": {
         "binary_sensor": {
+            "bonnet_open": {
+                "name": "Capota",
+                "state": {
+                    "off": "Fechado",
+                    "on": "Aberto"
+                }
+            },
             "charger_connected": {
                 "name": "Carregador conectado",
                 "state": {
-                    "on": "Conectado",
-                    "off": "Desconectado"
+                    "off": "Desconectado",
+                    "on": "Conectado"
                 }
             },
             "charger_locked": {
                 "name": "Bloqueio de carga",
                 "state": {
-                    "on": "Desbloqueado",
-                    "off": "Bloqueado"
-                }
-            },
-            "locked": {
-                "name": "Veículo trancado",
-                "state": {
-                    "on": "Desbloqueado",
-                    "off": "Bloqueado"
+                    "off": "Bloqueado",
+                    "on": "Desbloqueado"
                 }
             },
             "doors_locked": {
                 "name": "Portas trancadas",
                 "state": {
-                    "on": "Desbloqueado",
-                    "off": "Bloqueado"
+                    "off": "Bloqueado",
+                    "on": "Desbloqueado"
                 }
             },
             "doors_open": {
                 "name": "Portas abertas",
                 "state": {
-                    "on": "Aberto",
-                    "off": "Fechado"
-                }
-            },
-            "windows_open": {
-                "name": "Janelas",
-                "state": {
-                    "on": "Aberto",
-                    "off": "Fechado"
-                }
-            },
-            "trunk_open": {
-                "name": "Porta-malas",
-                "state": {
-                    "on": "Aberto",
-                    "off": "Fechado"
-                }
-            },
-            "bonnet_open": {
-                "name": "Capota",
-                "state": {
-                    "on": "Aberto",
-                    "off": "Fechado"
-                }
-            },
-            "sunroof_open": {
-                "name": "Teto solar",
-                "state": {
-                    "on": "Aberto",
-                    "off": "Fechado"
+                    "off": "Fechado",
+                    "on": "Aberto"
                 }
             },
             "lights_on": {
                 "name": "Luzes",
                 "state": {
-                    "on": "Ativadas",
-                    "off": "Desativadas"
+                    "off": "Desativadas",
+                    "on": "Ativadas"
+                }
+            },
+            "locked": {
+                "name": "Veículo trancado",
+                "state": {
+                    "off": "Bloqueado",
+                    "on": "Desbloqueado"
+                }
+            },
+            "sunroof_open": {
+                "name": "Teto solar",
+                "state": {
+                    "off": "Fechado",
+                    "on": "Aberto"
+                }
+            },
+            "trunk_open": {
+                "name": "Porta-malas",
+                "state": {
+                    "off": "Fechado",
+                    "on": "Aberto"
+                }
+            },
+            "windows_open": {
+                "name": "Janelas",
+                "state": {
+                    "off": "Fechado",
+                    "on": "Aberto"
                 }
             }
         },
@@ -99,15 +99,10 @@
             "device_tracker": {
                 "name": "Posição",
                 "state": {
-                    "vehicle_in_motion": "Moção detectada",
+                    "home": "Em casa",
                     "not_home": "Ausente",
-                    "home": "Em casa"
+                    "vehicle_in_motion": "Moção detectada"
                 }
-            }
-        },
-        "number": {
-            "charge_limit": {
-                "name": "Limite de carga"
             }
         },
         "image": {
@@ -115,33 +110,17 @@
                 "name": "Renderização principal do veículo"
             }
         },
+        "number": {
+            "charge_limit": {
+                "name": "Limite de carga"
+            }
+        },
         "sensor": {
-            "software_version": {
-                "name": "Versão"
-            },
             "battery_percentage": {
                 "name": "Porcentagem da bateria"
             },
-            "charging_power": {
-                "name": "Potência de carga"
-            },
-            "charging_state": {
-                "name": "Estado de carga",
-                "state": {
-                    "connect_cable": "Cabo desconectado",
-                    "ready_for_charging": "Pronto para carregar",
-                    "conserving": "Conservando carga",
-                    "charging": "Carregando"
-                }
-            },
-            "range": {
-                "name": "Alcance"
-            },
-            "target_battery_percentage": {
-                "name": "Porcentagem limite da bateria"
-            },
-            "mileage": {
-                "name": "Quilometragem"
+            "car_captured": {
+                "name": "Última atualização"
             },
             "charge_type": {
                 "name": "Tipo de carga",
@@ -151,28 +130,52 @@
                     "off": "DESLIGADO"
                 }
             },
+            "charging_power": {
+                "name": "Potência de carga"
+            },
+            "charging_state": {
+                "name": "Estado de carga",
+                "state": {
+                    "charging": "Carregando",
+                    "connect_cable": "Cabo desconectado",
+                    "conserving": "Conservando carga",
+                    "ready_for_charging": "Pronto para carregar"
+                }
+            },
+            "inspection": {
+                "name": "Próxima inspeção"
+            },
+            "mileage": {
+                "name": "Quilometragem"
+            },
+            "range": {
+                "name": "Alcance"
+            },
             "remaining_charging_time": {
                 "name": "Tempo de carga restante"
             },
-            "car_captured": {
-                "name": "Última atualização"
+            "software_version": {
+                "name": "Versão"
+            },
+            "target_battery_percentage": {
+                "name": "Porcentagem limite da bateria"
             }
         },
         "switch": {
-            "window_heating": {
-                "name": "Aquecimento da janela"
+            "battery_care_mode": {
+                "name": "Cuidado da bateria"
+            },
+            "charging": {
+                "name": "Carregando"
             },
             "charging_switch": {
                 "name": "Carregando"
             },
-            "battery_care_mode": {
-                "name": "Cuidado da bateria"
-            },
             "reduced_current": {
                 "name": "Corrente reduzida"
             },
-            "charging": {
-                "name": "Carregando"
+            "window_heating": {
+                "name": "Aquecimento da janela"
             }
         }
     },
