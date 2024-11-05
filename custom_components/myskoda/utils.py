@@ -18,7 +18,8 @@ def add_supported_entities(
     for vin in coordinators:
         for SensorClass in available_entities:
             sensor = SensorClass(coordinators[vin], vin)
-            if sensor.is_supported():
-                entities.append(sensor)
+            if not sensor.is_forbidden():
+                if sensor.is_supported():
+                    entities.append(sensor)
 
     async_add_entities(entities, update_before_add=True)
