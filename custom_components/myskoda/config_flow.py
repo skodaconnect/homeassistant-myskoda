@@ -36,10 +36,11 @@ async def validate_options_input(
 ) -> dict[str, Any]:
     """Validate options are valid."""
 
-    if user_input.get("polling_interval_in_minutes"):
-        polling_interval = user_input.get("polling_interval_in_minutes")
-        if 1 < polling_interval < 1440:
-            raise SchemaFlowError("invalid_polling_interval")
+    if "poll_interval_in_minutes" in user_input:
+        polling_interval = int(user_input.get("poll_interval_in_minutes"))
+        if 1 <= polling_interval <= 1440:
+            return user_input
+        raise SchemaFlowError("invalid_polling_interval")
 
     return user_input
 
