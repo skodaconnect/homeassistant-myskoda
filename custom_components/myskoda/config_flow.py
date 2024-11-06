@@ -38,7 +38,7 @@ async def validate_options_input(
 
     if user_input.get("polling_interval_in_minutes"):
         polling_interval = user_input.get("polling_interval_in_minutes")
-        if 24 * 60 < polling_interval < 1:
+        if 1 < polling_interval < 1440:
             raise SchemaFlowError("invalid_polling_interval")
 
     return user_input
