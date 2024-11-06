@@ -29,25 +29,6 @@ from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-STEP_USER_DATA_SCHEMA = vol.Schema(
-    {
-        vol.Required("email"): str,
-        vol.Required("password"): str,
-    }
-)
-OPTIONS_SCHEMA = vol.Schema(
-    {
-        vol.Required("tracing", default=False): bool,
-        vol.Optional("poll_interval_in_seconds"): int,
-    }
-)
-OPTIONS_FLOW = {
-    "init": SchemaFlowFormStep(
-        OPTIONS_SCHEMA,
-        validate_user_input=validate_options_input,  # pyright: ignore[reportUndefinedVariable] # noqa: F821
-    )
-}
-
 
 async def validate_options_input(
     handler: SchemaCommonFlowHandler, user_input: dict[str, Any]
@@ -63,6 +44,26 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
     hub = MySkoda(async_get_clientsession(hass), get_default_context())
 
     await hub.connect(data["email"], data["password"])
+
+
+STEP_USER_DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required("email"): str,
+        vol.Required("password"): str,
+    }
+)
+OPTIONS_SCHEMA = vol.Schema(
+    {
+        vol.Required("tracing", default=False): bool,
+        vol.Optional("poll_interval_in_seconds"): int,
+    }
+)
+OPTIONS_FLOW = {
+    "init": SchemaFlowFormStep(
+        OPTIONS_SCHEMA,
+        validate_user_input=validate_options_input,
+    )
+}
 
 
 class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
