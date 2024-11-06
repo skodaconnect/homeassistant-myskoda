@@ -55,7 +55,7 @@ class MySkodaEntity(CoordinatorEntity):
         )
 
     def is_forbidden(self) -> bool:
-        return all(
+        return any(
             self.vehicle.has_capability(cap) for cap in self.forbidden_capabilities()
         )
 
