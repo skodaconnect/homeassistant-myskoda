@@ -183,7 +183,8 @@
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
+                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml.",
+		    "poll_interval_in_seconds": "Polling interval in seconds. Minimal 60s to protect your account from being locked out"
                 }
             }
         }

@@ -18,6 +18,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.schema_config_entry_flow import (
+    SchemaCommonFlowHandler,
     SchemaFlowFormStep,
     SchemaOptionsFlowHandler,
 )
@@ -37,11 +38,24 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 OPTIONS_SCHEMA = vol.Schema(
     {
         vol.Required("tracing", default=False): bool,
+        vol.Optional("poll_interval_in_seconds"): int,
     }
 )
 OPTIONS_FLOW = {
-    "init": SchemaFlowFormStep(OPTIONS_SCHEMA),
+    "init": SchemaFlowFormStep(
+        OPTIONS_SCHEMA,
+        validate_user_input=validate_options_input,  # pyright: ignore[reportUndefinedVariable] # noqa: F821
+    )
 }
+
+
+async def validate_options_input(
+    handler: SchemaCommonFlowHandler, user_input: dict[str, Any]
+) -> dict[str, Any]:
+    """Validate options are valid."""
+    print(f"Validating that {user_input} is valid input")
+
+    return user_input
 
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:

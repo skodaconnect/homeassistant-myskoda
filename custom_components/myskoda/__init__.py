@@ -34,6 +34,7 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     trace_configs = []
     if config.options.get("tracing"):
         trace_configs.append(TRACE_CONFIG)
+
     session = async_create_clientsession(hass, trace_configs=trace_configs)
     myskoda = MySkoda(session, get_default_context())
 
