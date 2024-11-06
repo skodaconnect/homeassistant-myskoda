@@ -26,7 +26,12 @@ from homeassistant.helpers.schema_config_entry_flow import (
 from homeassistant.util.ssl import get_default_context
 from myskoda import MySkoda
 
-from .const import DOMAIN
+from .const import (
+    DOMAIN,
+    CONF_POLL_INTERVAL,
+    CONF_POLL_INTERVAL_MIN,
+    CONF_POLL_INTERVAL_MAX,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -36,9 +41,9 @@ async def validate_options_input(
 ) -> dict[str, Any]:
     """Validate options are valid."""
 
-    if "poll_interval_in_minutes" in user_input:
-        polling_interval = int(user_input.get("poll_interval_in_minutes"))
-        if 1 <= polling_interval <= 1440:
+    if CONF_POLL_INTERVAL in user_input:
+        polling_interval: int = user_input[CONF_POLL_INTERVAL]
+        if CONF_POLL_INTERVAL_MIN <= polling_interval <= CONF_POLL_INTERVAL_MAX:
             return user_input
         raise SchemaFlowError("invalid_polling_interval")
 
@@ -61,7 +66,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 OPTIONS_SCHEMA = vol.Schema(
     {
         vol.Required("tracing", default=False): bool,
-        vol.Optional("poll_interval_in_minutes"): int,
+        vol.Optional(CONF_POLL_INTERVAL): int,
     }
 )
 OPTIONS_FLOW = {
