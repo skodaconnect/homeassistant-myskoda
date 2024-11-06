@@ -156,8 +156,8 @@ class BatteryCareMode(ChargingSwitch):
         await self._async_turn_on_off(turn_on=True)
         _LOGGER.info("Battery care mode enabled.")
 
-    def forbidden_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.CHARGING_MQB]
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.BATTERY_CHARGING_CARE]
 
 
 class ReducedCurrent(ChargingSwitch):
