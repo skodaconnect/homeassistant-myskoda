@@ -19,74 +19,74 @@
     },
     "entity": {
         "binary_sensor": {
+            "bonnet_open": {
+                "name": "Konepelti",
+                "state": {
+                    "off": "Kiinni",
+                    "on": "Auki"
+                }
+            },
             "charger_connected": {
                 "name": "Latauskaapeli",
                 "state": {
-                    "on": "Kytketty",
-                    "off": "Irti"
+                    "off": "Irti",
+                    "on": "Kytketty"
                 }
             },
             "charger_locked": {
                 "name": "Kaapelin lukitus",
                 "state": {
-                    "on": "Lukittu",
-                    "off": "Auki"
-                }
-            },
-            "locked": {
-                "name": "Ajoneuvon lukitus",
-                "state": {
-                    "on": "Lukitsematta",
-                    "off": "Lukossa"
+                    "off": "Auki",
+                    "on": "Lukittu"
                 }
             },
             "doors_locked": {
                 "name": "Ovien lukitus",
                 "state": {
-                    "on": "Lukitsematta",
-                    "off": "Lukossa"
+                    "off": "Lukossa",
+                    "on": "Lukitsematta"
                 }
             },
             "doors_open": {
                 "name": "Ovet",
                 "state": {
-                    "on": "Auki",
-                    "off": "Kiinni"
-                }
-            },
-            "windows_open": {
-                "name": "Ikkunat",
-                "state": {
-                    "on": "Auki",
-                    "off": "Kiinni"
-                }
-            },
-            "trunk_open": {
-                "name": "Tavaratila",
-                "state": {
-                    "on": "Auki",
-                    "off": "Kiinni"
-                }
-            },
-            "bonnet_open": {
-                "name": "Konepelti",
-                "state": {
-                    "on": "Auki",
-                    "off": "Kiinni"
-                }
-            },
-            "sunroof_open": {
-                "name": "Kattoikkuna",
-                "state": {
-                    "on": "Auki",
-                    "off": "Kiinni"
+                    "off": "Kiinni",
+                    "on": "Auki"
                 }
             },
             "lights_on": {
                 "name": "Valot",
                 "state": {
-                    "on": "Päällä",
-                    "off": "Pois"
+                    "off": "Pois",
+                    "on": "Päällä"
+                }
+            },
+            "locked": {
+                "name": "Ajoneuvon lukitus",
+                "state": {
+                    "off": "Lukossa",
+                    "on": "Lukitsematta"
+                }
+            },
+            "sunroof_open": {
+                "name": "Kattoikkuna",
+                "state": {
+                    "off": "Kiinni",
+                    "on": "Auki"
+                }
+            },
+            "trunk_open": {
+                "name": "Tavaratila",
+                "state": {
+                    "off": "Kiinni",
+                    "on": "Auki"
+                }
+            },
+            "windows_open": {
+                "name": "Ikkunat",
+                "state": {
+                    "off": "Kiinni",
+                    "on": "Auki"
                 }
             }
         },
@@ -99,15 +99,10 @@
             "device_tracker": {
                 "name": "Sijainti",
                 "state": {
-                    "vehicle_in_motion": "Liikkeellä",
+                    "home": "Kotona",
                     "not_home": "Poissa kotoa",
-                    "home": "Kotona"
+                    "vehicle_in_motion": "Liikkeellä"
                 }
-            }
-        },
-        "number": {
-            "charge_limit": {
-                "name": "Latausraja"
             }
         },
         "image": {
@@ -115,33 +110,17 @@
                 "name": "Pääkuva"
             }
         },
+        "number": {
+            "charge_limit": {
+                "name": "Latausraja"
+            }
+        },
         "sensor": {
-            "software_version": {
-                "name": "Ohjelmistoversio"
-            },
             "battery_percentage": {
                 "name": "Varaustaso"
             },
-            "charging_power": {
-                "name": "Latausteho"
-            },
-            "charging_state": {
-                "name": "Latauksen tila",
-                "state": {
-                    "connect_cable": "Kaapeli irti",
-                    "ready_for_charging": "Valmis lataamaan",
-                    "conserving": "Rajoitettu lataus",
-                    "charging": "Ladataan"
-                }
-            },
-            "range": {
-                "name": "Toimintamatka"
-            },
-            "target_battery_percentage": {
-                "name": "Latausraja"
-            },
-            "mileage": {
-                "name": "Kilometrilukema"
+            "car_captured": {
+                "name": "Tiedot päivitetty"
             },
             "charge_type": {
                 "name": "Latauksen tyyppi",
@@ -151,28 +130,52 @@
                     "off": "Pois"
                 }
             },
+            "charging_power": {
+                "name": "Latausteho"
+            },
+            "charging_state": {
+                "name": "Latauksen tila",
+                "state": {
+                    "charging": "Ladataan",
+                    "connect_cable": "Kaapeli irti",
+                    "conserving": "Rajoitettu lataus",
+                    "ready_for_charging": "Valmis lataamaan"
+                }
+            },
+            "inspection": {
+                "name": "Huoltotarkistus"
+            },
+            "mileage": {
+                "name": "Kilometrilukema"
+            },
+            "range": {
+                "name": "Toimintamatka"
+            },
             "remaining_charging_time": {
                 "name": "Jäljellä oleva latausaika"
             },
-            "car_captured": {
-                "name": "Tiedot päivitetty"
+            "software_version": {
+                "name": "Ohjelmistoversio"
+            },
+            "target_battery_percentage": {
+                "name": "Latausraja"
             }
         },
         "switch": {
-            "window_heating": {
-                "name": "Ikkunoiden lämmitys"
+            "battery_care_mode": {
+                "name": "Battery Care"
+            },
+            "charging": {
+                "name": "Lataus"
             },
             "charging_switch": {
                 "name": "Lataus"
             },
-            "battery_care_mode": {
-                "name": "Battery Care"
-            },
             "reduced_current": {
                 "name": "Virran rajoitus"
             },
-            "charging": {
-                "name": "Lataus"
+            "window_heating": {
+                "name": "Ikkunoiden lämmitys"
             }
         }
     },

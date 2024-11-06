@@ -1,0 +1,191 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Enheten er allerede konfigurert"
+        },
+        "error": {
+            "cannot_connect": "Klarte ikke å koble til",
+            "invalid_auth": "Ugyldig autentisering",
+            "unknown": "En uventet feil oppstod. Vennligst sjekk HomeAssistant loggfiler."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "E-post",
+                    "password": "Passord"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "bonnet_open": {
+                "name": "Panser",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpent"
+                }
+            },
+            "charger_connected": {
+                "name": "Lader tilkoblet",
+                "state": {
+                    "off": "Frakoblet",
+                    "on": "Tilkoblet"
+                }
+            },
+            "charger_locked": {
+                "name": "Lader Lås",
+                "state": {
+                    "off": "Låst",
+                    "on": "Ulåst"
+                }
+            },
+            "doors_locked": {
+                "name": "Dører låst",
+                "state": {
+                    "off": "Låst",
+                    "on": "Ulåst"
+                }
+            },
+            "doors_open": {
+                "name": "Dører åpne",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpne"
+                }
+            },
+            "lights_on": {
+                "name": "Lys",
+                "state": {
+                    "off": "Av",
+                    "on": "På"
+                }
+            },
+            "locked": {
+                "name": "Bil låst",
+                "state": {
+                    "off": "Låst",
+                    "on": "Ulåst"
+                }
+            },
+            "sunroof_open": {
+                "name": "Soltak",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpent"
+                }
+            },
+            "trunk_open": {
+                "name": "Bagasjerom",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpent"
+                }
+            },
+            "windows_open": {
+                "name": "Vinduer",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpne"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Air Condition"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Posisjon",
+                "state": {
+                    "home": "Hjemme",
+                    "not_home": "Borte",
+                    "vehicle_in_motion": "Bevegelse oppdaget"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Hovedvisning av kjøretøyet"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Ladegrense"
+            }
+        },
+        "sensor": {
+            "battery_percentage": {
+                "name": "Batteriprosent"
+            },
+            "car_captured": {
+                "name": "Sist Oppdatert"
+            },
+            "charge_type": {
+                "name": "Ladetype",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "AV"
+                }
+            },
+            "charging_power": {
+                "name": "Ladeeffekt"
+            },
+            "charging_state": {
+                "name": "Ladestatus",
+                "state": {
+                    "charging": "Lader",
+                    "connect_cable": "Kabel frakoblet",
+                    "conserving": "Konserverer lading",
+                    "ready_for_charging": "Klar for lading"
+                }
+            },
+            "inspection": {
+                "name": "Neste inspeksjon"
+            },
+            "mileage": {
+                "name": "Kilometerstand"
+            },
+            "range": {
+                "name": "Rekkevidde"
+            },
+            "remaining_charging_time": {
+                "name": "Gjenstående ladetid"
+            },
+            "software_version": {
+                "name": "Programvareversjon"
+            },
+            "target_battery_percentage": {
+                "name": "Ønsket batteriprosent"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "name": "Batteripleie"
+            },
+            "charging": {
+                "name": "Lader"
+            },
+            "charging_switch": {
+                "name": "Lader"
+            },
+            "reduced_current": {
+                "name": "Redusert effekt"
+            },
+            "window_heating": {
+                "name": "Vindusvarme"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "Sporing av API-respons. Krever at feilsøkingslogging er aktivert i configuration.yaml."
+                }
+            }
+        }
+    }
+}

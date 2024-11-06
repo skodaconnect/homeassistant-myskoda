@@ -19,74 +19,74 @@
     },
     "entity": {
         "binary_sensor": {
+            "bonnet_open": {
+                "name": "Motorkap",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
             "charger_connected": {
                 "name": "Laadkabel",
                 "state": {
-                    "on": "Aangesloten",
-                    "off": "Losgekoppeld"
+                    "off": "Losgekoppeld",
+                    "on": "Aangesloten"
                 }
             },
             "charger_locked": {
                 "name": "Laadkabelvergrendeling",
                 "state": {
-                    "on": "Ontgrendeld",
-                    "off": "Vergrendeld"
-                }
-            },
-            "locked": {
-                "name": "Voertuigvergrendeling",
-                "state": {
-                    "on": "Ontgrendeld",
-                    "off": "Vergrendeld"
+                    "off": "Vergrendeld",
+                    "on": "Ontgrendeld"
                 }
             },
             "doors_locked": {
                 "name": "Deurvergrendeling",
                 "state": {
-                    "on": "Ontgrendeld",
-                    "off": "Vergrendeld"
+                    "off": "Vergrendeld",
+                    "on": "Ontgrendeld"
                 }
             },
             "doors_open": {
                 "name": "Deuren",
                 "state": {
-                    "on": "Open",
-                    "off": "Gesloten"
+                    "off": "Gesloten",
+                    "on": "Open"
                 }
             },
-            "windows_open": {
-                "name": "Ramen",
+            "lights_on": {
+                "name": "Verlichting",
                 "state": {
-                    "on": "Open",
-                    "off": "Gesloten"
+                    "off": "Uit",
+                    "on": "Aan"
                 }
             },
-            "trunk_open": {
-                "name": "Kofferbak",
+            "locked": {
+                "name": "Voertuigvergrendeling",
                 "state": {
-                    "on": "Open",
-                    "off": "Gesloten"
-                }
-            },
-            "bonnet_open": {
-                "name": "Motorkap",
-                "state": {
-                    "on": "Open",
-                    "off": "Gesloten"
+                    "off": "Vergrendeld",
+                    "on": "Ontgrendeld"
                 }
             },
             "sunroof_open": {
                 "name": "Zonnedak Open",
                 "state": {
-                    "on": "Open",
-                    "off": "Gesloten"
+                    "off": "Gesloten",
+                    "on": "Open"
                 }
             },
-            "lights_on": {
-                "name": "Lichten",
+            "trunk_open": {
+                "name": "Kofferbak",
                 "state": {
-                    "on": "Aan",
-                    "off": "Uit"
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
+            "windows_open": {
+                "name": "Ramen",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
                 }
             }
         },
@@ -99,15 +99,10 @@
             "device_tracker": {
                 "name": "Positie",
                 "state": {
-                    "vehicle_in_motion": "In beweging",
+                    "home": "Thuis",
                     "not_home": "Afwezig",
-                    "home": "Thuis"
+                    "vehicle_in_motion": "In beweging"
                 }
-            }
-        },
-        "number": {
-            "charge_limit": {
-                "name": "Laadlimiet"
             }
         },
         "image": {
@@ -115,33 +110,17 @@
                 "name": "Hoofdafbeelding"
             }
         },
+        "number": {
+            "charge_limit": {
+                "name": "Laadlimiet"
+            }
+        },
         "sensor": {
-            "software_version": {
-                "name": "Software versie"
-            },
             "battery_percentage": {
                 "name": "Accupercentage"
             },
-            "charging_power": {
-                "name": "Laadvermogen"
-            },
-            "charging_state": {
-                "name": "Laadstatus",
-                "state": {
-                    "connect_cable": "Kabel verbinding verbroken",
-                    "ready_for_charging": "Klaar om op te laden",
-                    "conserving": "Lading bewaren",
-                    "charging": "Opladen"
-                }
-            },
-            "range": {
-                "name": "Bereik"
-            },
-            "target_battery_percentage": {
-                "name": "Laaddoel in procenten"
-            },
-            "mileage": {
-                "name": "Kilometerstand"
+            "car_captured": {
+                "name": "Laatst bijgewerkt"
             },
             "charge_type": {
                 "name": "Laadmethode",
@@ -151,28 +130,52 @@
                     "off": "Uit"
                 }
             },
+            "charging_power": {
+                "name": "Laadvermogen"
+            },
+            "charging_state": {
+                "name": "Laadstatus",
+                "state": {
+                    "charging": "Opladen",
+                    "connect_cable": "Kabel verbinding verbroken",
+                    "conserving": "Lading bewaren",
+                    "ready_for_charging": "Klaar om op te laden"
+                }
+            },
+            "inspection": {
+                "name": "Volgend onderhoud"
+            },
+            "mileage": {
+                "name": "Kilometerstand"
+            },
+            "range": {
+                "name": "Actieradius"
+            },
             "remaining_charging_time": {
                 "name": "Laadtijd resterend"
             },
-            "car_captured": {
-                "name": "Laatst bijgewerkt"
+            "software_version": {
+                "name": "Software versie"
+            },
+            "target_battery_percentage": {
+                "name": "Laadlimiet in procenten"
             }
         },
         "switch": {
-            "window_heating": {
-                "name": "Verwarming raam"
+            "battery_care_mode": {
+                "name": "Accu onderhoudsmodus"
+            },
+            "charging": {
+                "name": "Opladen"
             },
             "charging_switch": {
                 "name": "Opladen"
             },
-            "battery_care_mode": {
-                "name": "Accu onderhoudsmodus"
-            },
             "reduced_current": {
                 "name": "Stroombegrenzing"
             },
-            "charging": {
-                "name": "Opladen"
+            "window_heating": {
+                "name": "Verwarming raam"
             }
         }
     },
