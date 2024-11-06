@@ -55,6 +55,7 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     hass.data[DOMAIN][config.entry_id] = {COORDINATORS: coordinators}
 
     await hass.config_entries.async_forward_entry_setups(config, PLATFORMS)
+    config.async_on_unload(config.add_update_listener(_async_update_listener))
 
     return True
 
@@ -66,3 +67,9 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
+
+
+async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry):
+    """Handle options update."""
+    # Do a lazy reload of integration when configuration changed
+    await hass.config_entries.async_reload(entry.entry_id)
