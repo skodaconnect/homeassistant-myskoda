@@ -67,7 +67,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             name=DOMAIN,
             update_interval=timedelta(
                 seconds=config.options.get(
-                    "poll_interval_in_seconds", DEFAULT_FETCH_INTERVAL_IN_MINUTES * 60
+                    "poll_interval_in_minutes", DEFAULT_FETCH_INTERVAL_IN_MINUTES
                 )
             ),
             always_update=False,

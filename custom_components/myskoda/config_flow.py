@@ -19,6 +19,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.schema_config_entry_flow import (
     SchemaCommonFlowHandler,
+    SchemaFlowError,
     SchemaFlowFormStep,
     SchemaOptionsFlowHandler,
 )
@@ -34,7 +35,11 @@ async def validate_options_input(
     handler: SchemaCommonFlowHandler, user_input: dict[str, Any]
 ) -> dict[str, Any]:
     """Validate options are valid."""
-    print(f"Validating that {user_input} is valid input")
+
+    if user_input.get("polling_interval_in_minutes"):
+        polling_interval = user_input.get("polling_interval_in_minutes")
+        if 24 * 60 < polling_interval < 1:
+            raise SchemaFlowError("invalid_polling_interval")
 
     return user_input
 
@@ -55,7 +60,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 OPTIONS_SCHEMA = vol.Schema(
     {
         vol.Required("tracing", default=False): bool,
-        vol.Optional("poll_interval_in_seconds"): int,
+        vol.Optional("poll_interval_in_minutes"): int,
     }
 )
 OPTIONS_FLOW = {
