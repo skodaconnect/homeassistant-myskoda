@@ -1,18 +1,18 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Device is already configured"
+            "already_configured": "Устройство уже настроено"
         },
         "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles."
+            "cannot_connect": "Не удалось подключиться",
+            "invalid_auth": "Неверная аутентификация",
+            "unknown": "Произошла непредвиденная ошибка. Пожалуйста, проверьте журналы HomeAssistant."
         },
         "step": {
             "user": {
                 "data": {
-                    "email": "E-mail",
-                    "password": "Password"
+                    "email": "Электронная почта",
+                    "password": "Пароль"
                 }
             }
         }
@@ -20,162 +20,162 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Bonnet",
+                "name": "Капот",
                 "state": {
-                    "off": "Closed",
-                    "on": "Open"
+                    "off": "Закрыт",
+                    "on": "Открыт"
                 }
             },
             "charger_connected": {
-                "name": "Charger Connected",
+                "name": "Зарядное устройство подключено",
                 "state": {
-                    "off": "Unplugged",
-                    "on": "Plugged in"
+                    "off": "Отключено",
+                    "on": "Подключено"
                 }
             },
             "charger_locked": {
-                "name": "Charge Lock",
+                "name": "Блокировка зарядки",
                 "state": {
-                    "off": "Locked",
-                    "on": "Unlocked"
+                    "off": "Заблокировано",
+                    "on": "Разблокировано"
                 }
             },
             "doors_locked": {
-                "name": "Doors Locked",
+                "name": "Двери заблокированы",
                 "state": {
-                    "off": "Locked",
-                    "on": "Unlocked"
+                    "off": "Заблокированы",
+                    "on": "Разблокированы"
                 }
             },
             "doors_open": {
-                "name": "Doors Open",
+                "name": "Двери",
                 "state": {
-                    "off": "Closed",
-                    "on": "Open"
+                    "off": "Закрыты",
+                    "on": "Открыты"
                 }
             },
             "lights_on": {
-                "name": "Lights",
+                "name": "Фары",
                 "state": {
-                    "off": "Off",
-                    "on": "On"
+                    "off": "Выключены",
+                    "on": "Включены"
                 }
             },
             "locked": {
-                "name": "Vehicle Locked",
+                "name": "Автомобиль заблокирован",
                 "state": {
-                    "off": "Locked",
-                    "on": "Unlocked"
+                    "off": "Заблокирован",
+                    "on": "Разблокирован"
                 }
             },
             "sunroof_open": {
-                "name": "Sunroof",
+                "name": "Люк в крыше",
                 "state": {
-                    "off": "Closed",
-                    "on": "Open"
+                    "off": "Закрыт",
+                    "on": "Открыт"
                 }
             },
             "trunk_open": {
-                "name": "Trunk",
+                "name": "Багажник",
                 "state": {
-                    "off": "Closed",
-                    "on": "Open"
+                    "off": "Закрыт",
+                    "on": "Открыт"
                 }
             },
             "windows_open": {
-                "name": "Windows",
+                "name": "Окна",
                 "state": {
-                    "off": "Closed",
-                    "on": "Open"
+                    "off": "Закрыты",
+                    "on": "Открыты"
                 }
             }
         },
         "climate": {
             "climate": {
-                "name": "Air Conditioning"
+                "name": "Кондиционер"
             }
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Position",
+                "name": "Местоположение",
                 "state": {
-                    "home": "Home",
-                    "not_home": "Away",
-                    "vehicle_in_motion": "Motion detected"
+                    "home": "Дома",
+                    "not_home": "Не дома",
+                    "vehicle_in_motion": "Обнаружено движение"
                 }
             }
         },
         "image": {
             "render_vehicle_main": {
-                "name": "Main Render of Vehicle"
+                "name": "Основное изображение автомобиля"
             }
         },
         "number": {
             "charge_limit": {
-                "name": "Charge Limit"
+                "name": "Лимит заряда"
             }
         },
         "sensor": {
             "battery_percentage": {
-                "name": "Battery Percentage"
+                "name": "Процент заряда батареи"
             },
             "car_captured": {
-                "name": "Last Updated"
+                "name": "Последнее обновление"
             },
             "charge_type": {
-                "name": "Charge Type",
+                "name": "Тип зарядки",
                 "state": {
                     "ac": "AC",
                     "dc": "DC",
-                    "off": "OFF"
+                    "off": "Выключено"
                 }
             },
             "charging_power": {
-                "name": "Charging Power"
+                "name": "Мощность зарядки"
             },
             "charging_state": {
-                "name": "Charging State",
+                "name": "Состояние зарядки",
                 "state": {
-                    "charging": "Charging",
-                    "connect_cable": "Cable Disconnected",
-                    "conserving": "Conserving Charge",
-                    "ready_for_charging": "Ready for Charging"
+                    "charging": "Заряжается",
+                    "connect_cable": "Кабель отсоединен",
+                    "conserving": "Сохранение заряда",
+                    "ready_for_charging": "Готово к зарядке"
                 }
             },
-	    "inspection": {
-		"name": "Next Inspection"
-	    },
+            "inspection": {
+                "name": "Следующая проверка"
+            },
             "mileage": {
-                "name": "Mileage"
+                "name": "Пробег"
             },
             "range": {
-                "name": "Range"
+                "name": "Запас хода"
             },
             "remaining_charging_time": {
-                "name": "Remaining Charging Time"
+                "name": "Оставшееся время зарядки"
             },
             "software_version": {
-                "name": "Software Version"
+                "name": "Версия ПО"
             },
             "target_battery_percentage": {
-                "name": "Target Battery Percentage"
+                "name": "Цель заряда батареи"
             }
         },
         "switch": {
             "battery_care_mode": {
-                "name": "Battery Care"
+                "name": "Режим заботы о батарее"
             },
             "charging": {
-                "name": "Charging"
+                "name": "Зарядка"
             },
             "charging_switch": {
-                "name": "Charging"
+                "name": "Зарядка"
             },
             "reduced_current": {
-                "name": "Reduced Current"
+                "name": "Сниженный ток"
             },
             "window_heating": {
-                "name": "Window Heating"
+                "name": "Обогрев окон"
             }
         }
     },
@@ -183,7 +183,7 @@
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
+                    "tracing": "Отслеживание ответа API. Требуется включить журнал отладки в configuration.yaml."
                 }
             }
         }
