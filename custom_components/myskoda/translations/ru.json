@@ -1,0 +1,191 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "E-mail",
+                    "password": "Password"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "bonnet_open": {
+                "name": "Bonnet",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "charger_connected": {
+                "name": "Charger Connected",
+                "state": {
+                    "off": "Unplugged",
+                    "on": "Plugged in"
+                }
+            },
+            "charger_locked": {
+                "name": "Charge Lock",
+                "state": {
+                    "off": "Locked",
+                    "on": "Unlocked"
+                }
+            },
+            "doors_locked": {
+                "name": "Doors Locked",
+                "state": {
+                    "off": "Locked",
+                    "on": "Unlocked"
+                }
+            },
+            "doors_open": {
+                "name": "Doors Open",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "lights_on": {
+                "name": "Lights",
+                "state": {
+                    "off": "Off",
+                    "on": "On"
+                }
+            },
+            "locked": {
+                "name": "Vehicle Locked",
+                "state": {
+                    "off": "Locked",
+                    "on": "Unlocked"
+                }
+            },
+            "sunroof_open": {
+                "name": "Sunroof",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "trunk_open": {
+                "name": "Trunk",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "windows_open": {
+                "name": "Windows",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Air Conditioning"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Position",
+                "state": {
+                    "home": "Home",
+                    "not_home": "Away",
+                    "vehicle_in_motion": "Motion detected"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Main Render of Vehicle"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Charge Limit"
+            }
+        },
+        "sensor": {
+            "battery_percentage": {
+                "name": "Battery Percentage"
+            },
+            "car_captured": {
+                "name": "Last Updated"
+            },
+            "charge_type": {
+                "name": "Charge Type",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "OFF"
+                }
+            },
+            "charging_power": {
+                "name": "Charging Power"
+            },
+            "charging_state": {
+                "name": "Charging State",
+                "state": {
+                    "charging": "Charging",
+                    "connect_cable": "Cable Disconnected",
+                    "conserving": "Conserving Charge",
+                    "ready_for_charging": "Ready for Charging"
+                }
+            },
+	    "inspection": {
+		"name": "Next Inspection"
+	    },
+            "mileage": {
+                "name": "Mileage"
+            },
+            "range": {
+                "name": "Range"
+            },
+            "remaining_charging_time": {
+                "name": "Remaining Charging Time"
+            },
+            "software_version": {
+                "name": "Software Version"
+            },
+            "target_battery_percentage": {
+                "name": "Target Battery Percentage"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "name": "Battery Care"
+            },
+            "charging": {
+                "name": "Charging"
+            },
+            "charging_switch": {
+                "name": "Charging"
+            },
+            "reduced_current": {
+                "name": "Reduced Current"
+            },
+            "window_heating": {
+                "name": "Window Heating"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
+                }
+            }
+        }
+    }
+}
