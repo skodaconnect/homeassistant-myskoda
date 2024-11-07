@@ -7,9 +7,9 @@
 
 MySkoda integration using the API that the MySkoda App uses.
 
-**Status:** This project is a new implementation of a relatively new API. Consider this code alpha. 
+**Status:** This project is a new implementation of a relatively new API. Consider this code alpha.
 
-Contributions are welcomed, both as issues, but more as pull requests :) 
+Contributions are welcomed, both as issues, but more as pull requests :)
 
 Please [join our Discord](https://discord.gg/t7az2hSJXq) and help development by providing feedback and details about the vehicles you are using.
 
@@ -21,7 +21,7 @@ If your desired language is not available, please [open an issue](https://github
 
 ## Capabilities
 
-### Sensors 
+### Sensors
 
 - Software Version
 - Battery Percentage
@@ -75,6 +75,32 @@ So:
 - If you change the seat-heating to on, you cannot turn it back off again for 30s
 
 The requests will silently be ignored by HomeAssistant, so make sure you wait at least 30s before sending another request
+
+## Installation
+You can manually install this integration as an custom_component under Home Assistant or install it using HACS (Home Assistant Community Store).
+
+### Manual installation
+1. **Download** the `myskoda` repository or folder.
+2. **Copy** the `custom_components/myskoda` folder from the downloaded files.
+3. **Paste** the `myskoda` folder into your Home Assistant's custom components directory:
+   - Path: `<home_assistant_folder>/custom_components/myskoda`
+4. **Restart** Home Assistant to load the new integration.
+
+### HACS installation
+The `myskoda` repository is also compatible with HACS (Home Assistant Community Store), making installation and updates easier.
+
+1. **Install HACS** (if not already installed):
+   - Follow instructions here: [HACS Installation Guide](https://hacs.xyz/docs/installation/manual)
+2. **Add `myskoda` Repository** to HACS:
+   - In Home Assistant, go to **HACS** > **Settings** tab.
+   - Select **Custom Repositories** and add the repository URL `https://github.com/skodaconnect/homeassistant-myskoda`.
+3. **Install `myskoda`** from HACS:
+   - After adding the repository, find and install `myskoda` under the HACS integrations.
+4. **Restart** Home Assistant.
+
+Following these steps should successfully install the `myskoda` integration for use with your Home Assistant setup.
+
+For more guidance on HACS, you can refer to the [HACS Getting Started Guide](https://hacs.xyz/docs/basic/getting_started).
 
 ## Enable debug logging
 
