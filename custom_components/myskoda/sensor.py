@@ -13,6 +13,7 @@ from homeassistant.const import (
     PERCENTAGE,
     UnitOfLength,
     UnitOfPower,
+    UnitOfSpeed,
     UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
@@ -40,6 +41,7 @@ async def async_setup_entry(
             BatteryPercentage,
             ChargeType,
             ChargingPower,
+            ChargingRate,
             ChargingState,
             LastUpdated,
             Mileage,
@@ -285,6 +287,22 @@ class RemainingChargingTime(ChargingSensor):
     def native_value(self) -> int | None:  # noqa: D102
         if status := self._status():
             return status.remaining_time_to_fully_charged_in_minutes
+
+
+class ChargingRate(ChargingSensor):
+    """Estimation on how many kmh are being charged."""
+
+    entity_description = SensorEntityDescription(
+        key="charging_rate",
+        device_class=SensorDeviceClass.SPEED,
+        native_unit_of_measurement=UnitOfSpeed.KILOMETERS_PER_HOUR,
+        translation_key="charging_rate",
+    )
+
+    @property
+    def native_value(self) -> float | None:
+        if status := self._status():
+            return status.charging_rate_in_kilometers_per_hour
 
 
 class LastUpdated(MySkodaSensor):

@@ -133,6 +133,9 @@
             "charging_power": {
                 "name": "Charging Power"
             },
+	    "charging_rate": {
+		"name": "Charging Rate"
+	    },
             "charging_state": {
                 "name": "Charging State",
                 "state": {
