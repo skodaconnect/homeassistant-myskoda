@@ -201,7 +201,7 @@
                 },
 		"data_description": {
 		    "poll_interval_in_minutes": "Specify a polling interval between 1 and 1440 minutes. (default 30)",
-		    "s-pin": "Specify the Security PIN. WARNING: This enabled remote lock/unlock"
+		    "s-pin": "Specify the Security PIN. WARNING: This enables remote lock/unlock"
 		}
             }
         }
