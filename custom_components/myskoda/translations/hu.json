@@ -1,0 +1,201 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Az eszköz már konfigurálva van"
+        },
+        "error": {
+            "cannot_connect": "Nem sikerült csatlakozni",
+            "invalid_auth": "Érvénytelen hitelesítés",
+            "unknown": "Váratlan hiba történt. Ellenőrizze a HomeAssistant log fájlokat."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email",
+                    "password": "Jelszó"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "bonnet_open": {
+                "name": "Motorháztető",
+                "state": {
+                    "off": "Zárva",
+                    "on": "Nyitva"
+                }
+            },
+            "charger_connected": {
+                "name": "Töltő csatlakoztatva",
+                "state": {
+                    "off": "Kihúzva",
+                    "on": "Bedugva"
+                }
+            },
+            "charger_locked": {
+                "name": "Töltő reteszelve",
+                "state": {
+                    "off": "Zárolva",
+                    "on": "Feloldva"
+                }
+            },
+            "doors_locked": {
+                "name": "Ajtók zárva",
+                "state": {
+                    "off": "Zárva",
+                    "on": "Feloldva"
+                }
+            },
+            "doors_open": {
+                "name": "Ajtók nyitva",
+                "state": {
+                    "off": "Zárva",
+                    "on": "Nyitva"
+                }
+            },
+            "lights_on": {
+                "name": "Lámpák",
+                "state": {
+                    "off": "Kikapcsolva",
+                    "on": "Bekapcsolva"
+                }
+            },
+            "locked": {
+                "name": "Jármű zárva",
+                "state": {
+                    "off": "Zárva",
+                    "on": "Feloldva"
+                }
+            },
+            "sunroof_open": {
+                "name": "Napfénytető",
+                "state": {
+                    "off": "Zárva",
+                    "on": "Nyitva"
+                }
+            },
+            "trunk_open": {
+                "name": "Csomagtartó",
+                "state": {
+                    "off": "Zárva",
+                    "on": "Nyitva"
+                }
+            },
+            "windows_open": {
+                "name": "Ablakok",
+                "state": {
+                    "off": "Zárva",
+                    "on": "Nyitva"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Légkondicionálás"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Pozíció",
+                "state": {
+                    "home": "Otthon",
+                    "not_home": "Távol",
+                    "vehicle_in_motion": "Mozgás érzékelve"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "A jármű elsődleges megjelenítése"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Töltési limit"
+            }
+        },
+        "sensor": {
+            "battery_percentage": {
+                "name": "Akkumulátor százalék"
+            },
+            "car_captured": {
+                "name": "Legutóbb frissítve"
+            },
+            "charge_type": {
+                "name": "Töltő típusa",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "KI"
+                }
+            },
+            "charging_power": {
+                "name": "Töltési teljesítmény"
+            },
+            "charging_rate": {
+                "name": "Töltési sebesség"
+            },
+            "charging_state": {
+                "name": "Töltés állapota",
+                "state": {
+                    "charging": "Töltődik",
+                    "connect_cable": "Töltőkábel lecsatlakoztatva",
+                    "conserving": "Szintentartó töltés",
+                    "ready_for_charging": "Kész a töltésre"
+                }
+            },
+            "inspection": {
+                "name": "Következő inspekció"
+            },
+            "mileage": {
+                "name": "Futásteljesítmény"
+            },
+            "range": {
+                "name": "Hatótáv"
+            },
+            "remaining_charging_time": {
+                "name": "Hátralévő töltési idő"
+            },
+            "software_version": {
+                "name": "Szoftververzió"
+            },
+            "target_battery_percentage": {
+                "name": "Cél akku százalék"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "name": "Akkumulátor kímélő"
+            },
+            "charging": {
+                "name": "Töltés"
+            },
+            "charging_switch": {
+                "name": "Töltés"
+            },
+            "reduced_current": {
+                "name": "Csökkentett áramerősség"
+            },
+            "window_heating": {
+                "name": "Szélvédő fűtés"
+            }
+        }
+    },
+    "options": {
+        "error": {
+            "invalid_polling_interval": "Érvénytelen frissítési időköz lett megadva. Válasszon 1 és 1440 perc között!"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "API válasz nyomon követése. Engedélyezett hibakeresési naplózást igényel a configuration.yaml fájlban.",
+                    "poll_interval_in_minutes": "Frissítési időköz (perc) a jármű nyugalmi helyzetében."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Adjon meg frissítési időközt 1 és 1440 perc között. (alapértelmezett 30 perc)"
+                }
+            }
+        }
+    }
+}
