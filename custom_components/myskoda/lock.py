@@ -53,7 +53,7 @@ class DoorLock(MySkodaLock):
     )
 
     @property
-    def available(self):
+    def available(self) -> bool:
         if not self.coordinator.config.options.get(CONF_SPIN):
             return False
 
