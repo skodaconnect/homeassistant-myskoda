@@ -1,0 +1,201 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Zařízení je již nakonfigurováno"
+        },
+        "error": {
+            "cannot_connect": "Připojení se nezdařilo",
+            "invalid_auth": "Neplatné ověření",
+            "unknown": "Došlo k neočekávané chybě. Zkontrolujte logy aplikace HomeAssistant."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "E-mail",
+                    "password": "Heslo"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "bonnet_open": {
+                "name": "Kapota",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "charger_connected": {
+                "name": "Nabíječka připojena",
+                "state": {
+                    "off": "Odpojeno",
+                    "on": "Připojeno"
+                }
+            },
+            "charger_locked": {
+                "name": "Zámek nabíjení",
+                "state": {
+                    "off": "Uzamčeno",
+                    "on": "Odemčeno"
+                }
+            },
+            "doors_locked": {
+                "name": "Dveře uzamčené",
+                "state": {
+                    "off": "Uzamčeno",
+                    "on": "Odemčeno"
+                }
+            },
+            "doors_open": {
+                "name": "Dveře otevřené",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "lights_on": {
+                "name": "Světla",
+                "state": {
+                    "off": "Vypnuto",
+                    "on": "Zapnuto"
+                }
+            },
+            "locked": {
+                "name": "Vozidlo uzamčeno",
+                "state": {
+                    "off": "Uzamčeno",
+                    "on": "Odemčeno"
+                }
+            },
+            "sunroof_open": {
+                "name": "Střecha",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "trunk_open": {
+                "name": "Kufr",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "windows_open": {
+                "name": "Okna",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Klimatizace"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Poloha",
+                "state": {
+                    "home": "Doma",
+                    "not_home": "Pryč",
+                    "vehicle_in_motion": "Zjištěn pohyb"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Hlavní vykreslení vozidla"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Limit nabíjení"
+            }
+        },
+        "sensor": {
+            "battery_percentage": {
+                "name": "Stav baterie v %"
+            },
+            "car_captured": {
+                "name": "Naposledy aktualizováno"
+            },
+            "charge_type": {
+                "name": "Typ nabíjení",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "Vypnuto"
+                }
+            },
+            "charging_power": {
+                "name": "Nabíjecí výkon"
+            },
+            "charging_rate": {
+                "name": "Rychlost nabíjení"
+            },
+            "charging_state": {
+                "name": "Stav nabíjení",
+                "state": {
+                    "charging": "Nabíjení",
+                    "connect_cable": "Kabel odpojen",
+                    "conserving": "Uchovávání nabití",
+                    "ready_for_charging": "Připraveno k nabíjení"
+                }
+            },
+            "inspection": {
+                "name": "Další prohlídka"
+            },
+            "mileage": {
+                "name": "Najeto"
+            },
+            "range": {
+                "name": "Dojezd"
+            },
+            "remaining_charging_time": {
+                "name": "Zbývající čas nabíjení"
+            },
+            "software_version": {
+                "name": "Verze softwaru"
+            },
+            "target_battery_percentage": {
+                "name": "Cílové nabití baterie"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "name": "Péče o baterii"
+            },
+            "charging": {
+                "name": "Nabíjení"
+            },
+            "charging_switch": {
+                "name": "Nabíjení"
+            },
+            "reduced_current": {
+                "name": "Snížený proud"
+            },
+            "window_heating": {
+                "name": "Vytápění okna"
+            }
+        }
+    },
+    "options": {
+        "error": {
+            "invalid_polling_interval": "Zadán neplatný interval dotazování. Zvolte prosím hodnotu 1 až 1440 minut"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "Zjišťování odezvy API. Vyžaduje povolený debug logging v konfiguraci configuration.yaml.",
+                    "poll_interval_in_minutes": "Interval dotazování v minutách při nečinnosti vozidla."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Zadejte interval dotazování mezi 1 a 1440 minutami. (výchozí 30)"
+                }
+            }
+        }
+    }
+}

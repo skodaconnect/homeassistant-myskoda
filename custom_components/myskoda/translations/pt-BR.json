@@ -125,13 +125,16 @@
             "charge_type": {
                 "name": "Tipo de carga",
                 "state": {
-                    "ac": "AC",
-                    "dc": "DC",
+                    "ac": "Corrente alternada",
+                    "dc": "Corrente contínua",
                     "off": "DESLIGADO"
                 }
             },
             "charging_power": {
                 "name": "Potência de carga"
+            },
+            "charging_rate": {
+                "name": "Taxa de carga"
             },
             "charging_state": {
                 "name": "Estado de carga",
@@ -180,10 +183,17 @@
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Intervalo inserido inválido. Escolha entre 1 a 1440 minutos"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "Rastreamento de resposta da API. Requer registro de depuração ativo em configuration.yaml."
+                    "tracing": "Rastreamento de resposta da API. Requer registro de depuração ativo em configuration.yaml.",
+                    "poll_interval_in_minutes": "Intervalos em minuto quando o carro está ausente."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Especifique os minutos do intervalo entre 1 a 1440 minutos. (padrão 30)"
                 }
             }
         }

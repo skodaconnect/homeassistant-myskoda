@@ -133,6 +133,9 @@
             "charging_power": {
                 "name": "Laadvermogen"
             },
+            "charging_rate": {
+                "name": "Laadsnelheid"
+            },
             "charging_state": {
                 "name": "Laadstatus",
                 "state": {
@@ -180,10 +183,17 @@
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Ongeldige waarde opgegeven. Kies tussen 1 en 1440 minuten"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API respons traceren. Debug logging ingeschakeld in configuration.yaml."
+                    "tracing": "API respons traceren. Debug logging ingeschakeld in configuration.yaml.",
+                    "poll_interval_in_minutes": "Verversinterval in minuten wanneer de auto inactief is."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Geef een waarde tussen 1 en 1440 minuten. (standaard 30)"
                 }
             }
         }
