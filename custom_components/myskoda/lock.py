@@ -13,6 +13,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
 
+from myskoda.models.common import DoorLockedState
 from myskoda.models.info import CapabilityId
 
 from .const import API_COOLDOWN_IN_SECONDS, COORDINATORS, CONF_SPIN, DOMAIN
@@ -58,6 +59,11 @@ class DoorLock(MySkodaLock):
             return False
         return True
 
+    @property
+    def is_locked(self) -> bool | None:
+        if status := self.vehicle.status:
+            return status.overall.doors_locked == DoorLockedState.LOCKED
+
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def _async_lock_unlock(self, lock: bool, spin: str, **kwargs):  # noqa: D102
         """Internal method to have a central location for the Throttle."""
@@ -72,6 +78,7 @@ class DoorLock(MySkodaLock):
                 lock=True, spin=self.coordinator.config.options.get(CONF_SPIN)
             )
             _LOGGER.info("Sent command to lock the vehicle.")
+            await self.coordinator.update_status()
         else:
             _LOGGER.error("Cannot lock car: No S-PIN set.")
 
@@ -81,6 +88,7 @@ class DoorLock(MySkodaLock):
                 lock=False, spin=self.coordinator.config.options.get(CONF_SPIN)
             )
             _LOGGER.info("Sent command to unlock the vehicle.")
+            await self.coordinator.update_status()
         else:
             _LOGGER.error("Cannot unlock car: No S-PIN set.")
 

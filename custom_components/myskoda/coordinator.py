@@ -85,6 +85,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
         self.update_vehicle = self._debounce(self._update_vehicle)
+        self.update_status = self._debounce(self._update_status)
 
         myskoda.subscribe(self._on_mqtt_event)
 
@@ -212,6 +213,18 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         vehicle = self.data.vehicle
         vehicle.air_conditioning = air_conditioning
+        self.set_updated_vehicle(vehicle)
+
+    async def _update_status(self) -> None:
+        _LOGGER.debug("Updating vehicle status for %s", self.vin)
+        try:
+            status = await self.myskoda.get_status(self.vin)
+        except ClientError as err:
+            self.async_set_update_error(err)
+            return
+
+        vehicle = self.data.vehicle
+        vehicle.status = status
         self.set_updated_vehicle(vehicle)
 
     async def _update_vehicle(self) -> None:
