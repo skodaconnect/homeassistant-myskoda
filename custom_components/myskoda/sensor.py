@@ -72,6 +72,9 @@ class SoftwareVersion(MySkodaSensor):
     def native_value(self):  # noqa: D102
         return self.vehicle.info.software_version
 
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_MEB]
+
 
 class ChargingSensor(MySkodaSensor):
     def _charging(self) -> Charging | None:
