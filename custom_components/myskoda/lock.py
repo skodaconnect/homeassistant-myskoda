@@ -56,6 +56,7 @@ class DoorLock(MySkodaLock):
     def available(self) -> bool:
         if not self.coordinator.config.options.get(CONF_SPIN):
             return False
+        return True
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def _async_lock_unlock(self, lock: bool, spin: str, **kwargs):  # noqa: D102
