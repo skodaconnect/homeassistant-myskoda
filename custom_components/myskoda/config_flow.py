@@ -43,11 +43,10 @@ async def validate_options_input(
 
     if CONF_POLL_INTERVAL in user_input:
         polling_interval: int = user_input[CONF_POLL_INTERVAL]
-        if CONF_POLL_INTERVAL_MIN <= polling_interval <= CONF_POLL_INTERVAL_MAX:
-            return user_input
-        raise SchemaFlowError("invalid_polling_interval")
-
+        if not CONF_POLL_INTERVAL_MIN <= polling_interval <= CONF_POLL_INTERVAL_MAX:
+            raise SchemaFlowError("invalid_polling_interval")
     return user_input
+    if CONF_POLL_INTERVAL in user_input:
 
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
@@ -66,8 +65,10 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 OPTIONS_SCHEMA = vol.Schema(
     {
         vol.Required("tracing", default=False): bool,
+        vol.Optional(CONF_POLL_INTERVAL, default=DEFAULT_FETCH_INTERVAL_IN_MINUTES): vol.All(
+            vol.Coerce(int), vol.Range(min=CONF_POLL_INTERVAL_MIN, max=CONF_POLL_INTERVAL_MAX)
+        ),
         vol.Optional(CONF_POLL_INTERVAL): int,
-    }
 )
 OPTIONS_FLOW = {
     "init": SchemaFlowFormStep(

@@ -70,10 +70,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(
                 seconds=config.options.get(
                     CONF_POLL_INTERVAL, DEFAULT_FETCH_INTERVAL_IN_MINUTES
-                )
+                ) * 60  # Convert minutes to seconds
+            update_interval=timedelta(
             ),
             always_update=False,
         )
