@@ -135,3 +135,23 @@ Pick any of the subjects from the example. If you want to enable full debugging,
 - **custom_components.myskoda:** Set debug level for the custom component. The communication between hass and library.
 
 - **custom_components.myskoda.XYZ** Sets debug level for individual entity types in the custom component.
+
+## Customize polling interval
+
+This integration does not poll at a set interval, instead when the last update has been a while, we request new information from MySkoda.
+The reason for this is that cars emit a lot of events when they are operating, and we use these events to partially update the car information.
+
+When the car is quiet for a period we call the **POLLING INTERVAL**, we will request a full update of the car.
+
+By default, this POLLING INTERVAL is set to 30 minutes. You can tune this to anything between 1 and 1440 minutes (1 day) by filling in the desired value in
+Integrations > MySkoda > Hubs > Select your account > Configure
+
+## Disabling polling
+
+You can disable polling completely and use automations to update the data from MySkoda. In order to do this, disable polling in the integration, and call the following action:
+
+```yaml
+action: homeassistant.update_entity
+target:
+  entity_id: device_tracker.skoda_4ever
+```

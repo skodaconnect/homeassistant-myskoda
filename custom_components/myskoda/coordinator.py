@@ -21,7 +21,12 @@ from myskoda.models.operation_request import OperationName, OperationStatus
 from myskoda.models.user import User
 from myskoda.mqtt import EventCharging, EventType
 
-from .const import API_COOLDOWN_IN_SECONDS, DOMAIN, FETCH_INTERVAL_IN_MINUTES
+from .const import (
+    API_COOLDOWN_IN_SECONDS,
+    CONF_POLL_INTERVAL,
+    DOMAIN,
+    DEFAULT_FETCH_INTERVAL_IN_MINUTES,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -65,7 +70,11 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(minutes=FETCH_INTERVAL_IN_MINUTES),
+            update_interval=timedelta(
+                seconds=config.options.get(
+                    CONF_POLL_INTERVAL, DEFAULT_FETCH_INTERVAL_IN_MINUTES
+                )
+            ),
             always_update=False,
         )
         self.hass = hass
