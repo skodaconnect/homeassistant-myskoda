@@ -189,7 +189,8 @@
     },
     "options": {
 	"error": {
-	    "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes"
+	    "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes",
+	    "invalid_spin_format": "Invalid format for S-PIN"
 	},
         "step": {
             "init": {
