@@ -19,35 +19,75 @@
     },
     "entity": {
         "binary_sensor": {
+            "bonnet_open": {
+                "name": "Motorhjelm",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åben"
+                }
+            },
             "charger_connected": {
-                "name": "Ladekabel"
+                "name": "Ladekabel",
+                "state": {
+                    "off": "Ikke tilsluttet",
+                    "on": "Tilsluttet"
+                }
             },
             "charger_locked": {
-                "name": "Ladekabel låst"
-            },
-            "locked": {
-                "name": "Køretøjslåst"
+                "name": "Ladekabel låst",
+                "state": {
+                    "off": "Låst",
+                    "on": "Låst op"
+                }
             },
             "doors_locked": {
-                "name": "Dørlåst"
+                "name": "Dørlåst",
+                "state": {
+                    "off": "Låst",
+                    "on": "Låst op"
+                }
             },
             "doors_open": {
-                "name": "Døre"
-            },
-            "windows_open": {
-                "name": "Vinduer"
-            },
-            "trunk_open": {
-                "name": "Bagagerum"
-            },
-            "bonnet_open": {
-                "name": "Motorhjelm"
-            },
-            "sunroof_open": {
-                "name": "Soltag"
+                "name": "Døre",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åbne"
+                }
             },
             "lights_on": {
-                "name": "Lygter"
+                "name": "Lygter",
+                "state": {
+                    "off": "Slukkede",
+                    "on": "Tændte"
+                }
+            },
+            "locked": {
+                "name": "Køretøjslåst",
+                "state": {
+                    "off": "Låst",
+                    "on": "Låst op"
+                }
+            },
+            "sunroof_open": {
+                "name": "Soltag",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åbent"
+                }
+            },
+            "trunk_open": {
+                "name": "Bagagerum",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åben"
+                }
+            },
+            "windows_open": {
+                "name": "Vinduer",
+                "state": {
+                    "off": "Lukkede",
+                    "on": "Åbne"
+                }
             }
         },
         "climate": {
@@ -57,7 +97,17 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Position"
+                "name": "Position",
+                "state": {
+                    "home": "Hjemme",
+                    "not_home": "Ikke hjemme",
+                    "vehicle_in_motion": "Bevægelse registreret"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Repræsentation af køretøjet"
             }
         },
         "number": {
@@ -66,66 +116,84 @@
             }
         },
         "sensor": {
-            "software_version": {
-                "name": "Softwareversion"
-            },
             "battery_percentage": {
                 "name": "Batteriprocent"
             },
+            "car_captured": {
+                "name": "Sidst opdateret"
+            },
+            "charge_type": {
+                "name": "Lademetode",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "Slukket"
+                }
+            },
             "charging_power": {
+                "name": "Ladeeffekt"
+            },
+            "charging_rate": {
                 "name": "Ladeeffekt"
             },
             "charging_state": {
                 "name": "Ladestatus",
                 "state": {
+                    "charging": "Oplader",
                     "connect_cable": "Kabel Frakoblet",
-                    "ready_for_charging": "Klar til opladning",
-                    "conserving": "Conserving Charge",
-                    "charging": "Oplader"
+                    "conserving": "Holder opladning",
+                    "ready_for_charging": "Klar til opladning"
                 }
             },
-            "range": {
-                "name": "Rækkevidde"
-            },
-            "target_battery_percentage": {
-                "name": "Ladegrænse i procent"
+            "inspection": {
+                "name": "Næste eftersyn"
             },
             "mileage": {
                 "name": "Kilometerstand"
             },
-            "charge_type": {
-                "name": "Lademetode"
+            "range": {
+                "name": "Rækkevidde"
             },
             "remaining_charging_time": {
                 "name": "Restopladningstid"
             },
-            "car_captured": {
-                "name": "Sidst opdateret"
+            "software_version": {
+                "name": "Softwareversion"
+            },
+            "target_battery_percentage": {
+                "name": "Ladegrænse i procent"
             }
         },
         "switch": {
-            "window_heating": {
-                "name": "Opvarming af ruder"
+            "battery_care_mode": {
+                "name": "Batteribeskyttelse"
+            },
+            "charging": {
+                "name": "Oplader"
             },
             "charging_switch": {
                 "name": "Oplader"
             },
-            "battery_care_mode": {
-                "name": "Batteribeskyttelse"
-            },
             "reduced_current": {
                 "name": "Reduceret strømstyrke"
             },
-            "charging": {
-                "name": "Oplader"
+            "window_heating": {
+                "name": "Opvarming af ruder"
             }
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Ugyldigt forespørgselsinterval angivet. Vælg mellem 1 og 1440 minutter"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API-svarsporing. Kræver fejlsøgningslogning aktiveret i configuration.yaml."
+                    "tracing": "API-svarsporing. Kræver fejlsøgningslogning aktiveret i configuration.yaml.",
+                    "poll_interval_in_minutes": "Forespørgselsinterval i minutter, når bilen er inaktiv."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Angiv et forespørgselsinterval mellem 1 og 1440 minutter. (standard 30)"
                 }
             }
         }
