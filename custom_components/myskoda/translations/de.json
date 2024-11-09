@@ -55,7 +55,7 @@
                 }
             },
             "lights_on": {
-                "name": "Licht",
+                "name": "Parklicht",
                 "state": {
                     "off": "Aus",
                     "on": "An"
@@ -132,6 +132,9 @@
             },
             "charging_power": {
                 "name": "Ladeleistung"
+            },
+            "charging_rate": {
+                "name": "Laderate"
             },
             "charging_state": {
                 "name": "Ladestatus",
