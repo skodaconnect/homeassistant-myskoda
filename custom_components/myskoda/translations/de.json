@@ -140,7 +140,7 @@
                 "name": "Ladestatus",
                 "state": {
                     "charging": "Laden",
-                    "connect_cable": "Ladekabel getrennt",
+                    "connect_cable": "Kein Strom",
                     "conserving": "Ladestand halten",
                     "ready_for_charging": "Bereit zum Laden"
                 }

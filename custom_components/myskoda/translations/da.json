@@ -140,7 +140,7 @@
                 "name": "Ladestatus",
                 "state": {
                     "charging": "Oplader",
-                    "connect_cable": "Kabel Frakoblet",
+                    "connect_cable": "Ingen strøm",
                     "conserving": "Holder opladning",
                     "ready_for_charging": "Klar til opladning"
                 }

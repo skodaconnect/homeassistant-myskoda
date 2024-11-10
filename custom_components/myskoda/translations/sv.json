@@ -140,7 +140,7 @@
                 "name": "Laddningstillstånd",
                 "state": {
                     "charging": "Laddar",
-                    "connect_cable": "Kabel frånkopplad",
+                    "connect_cable": "Ingen kraft",
                     "conserving": "Bevara laddning",
                     "ready_for_charging": "Redo för laddning"
                 }

@@ -133,21 +133,21 @@
             "charging_power": {
                 "name": "Charging Power"
             },
-	    "charging_rate": {
-		"name": "Charging Rate"
-	    },
+            "charging_rate": {
+                "name": "Charging Rate"
+            },
             "charging_state": {
                 "name": "Charging State",
                 "state": {
                     "charging": "Charging",
-                    "connect_cable": "Cable Disconnected",
+                    "connect_cable": "No Power",
                     "conserving": "Conserving Charge",
                     "ready_for_charging": "Ready for Charging"
                 }
             },
-	    "inspection": {
-		"name": "Next Inspection"
-	    },
+            "inspection": {
+                "name": "Next Inspection"
+            },
             "mileage": {
                 "name": "Mileage"
             },
@@ -183,18 +183,18 @@
         }
     },
     "options": {
-	"error": {
-	    "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes"
-	},
+        "error": {
+            "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes"
+        },
         "step": {
             "init": {
                 "data": {
                     "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml.",
-		    "poll_interval_in_minutes": "Polling interval in minutes when car is idle."
+                    "poll_interval_in_minutes": "Polling interval in minutes when car is idle."
                 },
-		"data_description": {
-		    "poll_interval_in_minutes": "Specify a polling interval between 1 and 1440 minutes. (default 30)"
-		}
+                "data_description": {
+                    "poll_interval_in_minutes": "Specify a polling interval between 1 and 1440 minutes. (default 30)"
+                }
             }
         }
     }

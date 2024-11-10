@@ -140,7 +140,7 @@
                 "name": "Stav nabíjení",
                 "state": {
                     "charging": "Nabíjení",
-                    "connect_cable": "Kabel odpojen",
+                    "connect_cable": "Žádná síla",
                     "conserving": "Uchovávání nabití",
                     "ready_for_charging": "Připraveno k nabíjení"
                 }

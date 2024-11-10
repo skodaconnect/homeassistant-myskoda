@@ -140,7 +140,7 @@
                 "name": "Estado de carga",
                 "state": {
                     "charging": "Carregando",
-                    "connect_cable": "Cabo desconectado",
+                    "connect_cable": "Sem energia",
                     "conserving": "Conservando carga",
                     "ready_for_charging": "Pronto para carregar"
                 }

@@ -137,7 +137,7 @@
                 "name": "Ladestatus",
                 "state": {
                     "charging": "Lader",
-                    "connect_cable": "Kabel frakoblet",
+                    "connect_cable": "Ingen strøm",
                     "conserving": "Konserverer lading",
                     "ready_for_charging": "Klar for lading"
                 }
