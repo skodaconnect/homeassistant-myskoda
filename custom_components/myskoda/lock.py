@@ -78,7 +78,7 @@ class DoorLock(MySkodaLock):
                 lock=True, spin=self.coordinator.config.options.get(CONF_SPIN)
             )
             _LOGGER.info("Sent command to lock the vehicle.")
-            await self.coordinator.update_status()
+            self.coordinator.update_status
         else:
             _LOGGER.error("Cannot lock car: No S-PIN set.")
 
@@ -88,7 +88,7 @@ class DoorLock(MySkodaLock):
                 lock=False, spin=self.coordinator.config.options.get(CONF_SPIN)
             )
             _LOGGER.info("Sent command to unlock the vehicle.")
-            await self.coordinator.update_status()
+            self.coordinator.update_status
         else:
             _LOGGER.error("Cannot unlock car: No S-PIN set.")
 
