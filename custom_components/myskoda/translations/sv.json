@@ -133,6 +133,9 @@
             "charging_power": {
                 "name": "Laddningseffekt"
             },
+            "charging_rate": {
+                "name": "Laddningshastighet"
+            },
             "charging_state": {
                 "name": "Laddningstillstånd",
                 "state": {
@@ -180,10 +183,17 @@
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Ogiltigt intervall för polling. Vänligen välj mellan 1 och 1440 minuter"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "Spårning av API-svar. Kräver att felsökningsloggning är aktiverad i configuration.yaml."
+                    "tracing": "Spårning av API-svar. Kräver att felsökningsloggning är aktiverad i configuration.yaml.",
+                    "poll_interval_in_minutes": "Pollning intervall i minuter när bilen är inaktiv."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Ange pollinering intervall mellan 1 och 1440 minuter. (standard 30)"
                 }
             }
         }
