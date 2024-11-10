@@ -137,7 +137,7 @@
                 "name": "Stato di carica",
                 "state": {
                     "charging": "Ricarica",
-                    "connect_cable": "Cavo disconnesso",
+                    "connect_cable": "Nessun potere",
                     "conserving": "Conservazione della carica",
                     "ready_for_charging": "Pronto per la ricarica"
                 }

@@ -137,7 +137,7 @@
                 "name": "Состояние зарядки",
                 "state": {
                     "charging": "Заряжается",
-                    "connect_cable": "Кабель отсоединен",
+                    "connect_cable": "Нет питания",
                     "conserving": "Сохранение заряда",
                     "ready_for_charging": "Готово к зарядке"
                 }

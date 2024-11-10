@@ -140,7 +140,7 @@
                 "name": "Töltés állapota",
                 "state": {
                     "charging": "Töltődik",
-                    "connect_cable": "Töltőkábel lecsatlakoztatva",
+                    "connect_cable": "Nincs erő",
                     "conserving": "Szintentartó töltés",
                     "ready_for_charging": "Kész a töltésre"
                 }

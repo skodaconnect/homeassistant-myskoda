@@ -137,7 +137,7 @@
                 "name": "Latauksen tila",
                 "state": {
                     "charging": "Ladataan",
-                    "connect_cable": "Kaapeli irti",
+                    "connect_cable": "Ei virtaa",
                     "conserving": "Rajoitettu lataus",
                     "ready_for_charging": "Valmis lataamaan"
                 }

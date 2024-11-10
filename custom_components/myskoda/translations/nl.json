@@ -140,7 +140,7 @@
                 "name": "Laadstatus",
                 "state": {
                     "charging": "Opladen",
-                    "connect_cable": "Kabel verbinding verbroken",
+                    "connect_cable": "Geen stroom",
                     "conserving": "Lading bewaren",
                     "ready_for_charging": "Klaar om op te laden"
                 }
