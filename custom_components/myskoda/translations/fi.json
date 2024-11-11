@@ -133,6 +133,9 @@
             "charging_power": {
                 "name": "Latausteho"
             },
+            "charging_rate": {
+                "name": "Latausnopeus"
+            },
             "charging_state": {
                 "name": "Latauksen tila",
                 "state": {
@@ -180,10 +183,17 @@
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Virheellinen päivitysväli. Arvon tulee olla välillä 1-1440 minuuttia."
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API-vastauksen jäljitys. Vaatii debug-lokituksen aktivoimisen configuration.yaml-asetustiedostossa."
+                    "tracing": "API-vastauksen jäljitys. Vaatii debug-lokituksen aktivoimisen configuration.yaml-asetustiedostossa.",
+                    "poll_interval_in_minutes": "Päivitysväli minuuteissa, kun auto ei ole aktiivinen."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Määritä päivitysväli minuuteissa välillä 1-1440. (vakioarvo 30)"
                 }
             }
         }
