@@ -139,6 +139,11 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.STOP_CHARGING,
         ]:
             await self.update_charging()
+        if event.operation.operation in [
+            OperationName.LOCK,
+            OperationName.UNLOCK,
+        ]:
+            await self.update_status()
 
     async def _on_charging_event(self, event: EventCharging):
         vehicle = self.data.vehicle
