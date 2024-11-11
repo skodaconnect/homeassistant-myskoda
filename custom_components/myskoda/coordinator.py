@@ -155,16 +155,22 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         else:
             status = vehicle.charging.status
 
-            status.battery.remaining_cruising_range_in_meters = (
-                data.charged_range * 1000
-            )
-            status.battery.state_of_charge_in_percent = data.soc
-            status.state = data.state
+            if data.charged_range is not None:
+                status.battery.remaining_cruising_range_in_meters = (
+                    data.charged_range * 1000
+                )
+            if data.soc is not None:
+                status.battery.state_of_charge_in_percent = data.soc
+            if data.state is not None:
+                status.state = data.state
 
         if vehicle.driving_range is None:
             await self.update_driving_range()
         else:
-            vehicle.driving_range.primary_engine_range.current_soc_in_percent = data.soc
+            if data.soc is not None:
+                vehicle.driving_range.primary_engine_range.current_soc_in_percent = (
+                    data.soc
+                )
             vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
                 data.charged_range
             )
