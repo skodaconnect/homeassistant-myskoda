@@ -1,0 +1,201 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "L'appareil est déjà configuré"
+        },
+        "error": {
+            "cannot_connect": "Échec de la connexion",
+            "invalid_auth": "Authentification incorrecte",
+            "unknown": "Une erreur inattendue s'est produite. Veuillez vérifier les journaux HomeAssistant."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Courriel",
+                    "password": "Mot de passe"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "bonnet_open": {
+                "name": "Trappe",
+                "state": {
+                    "off": "Fermée",
+                    "on": "Ouverte"
+                }
+            },
+            "charger_connected": {
+                "name": "Chargeur connecté",
+                "state": {
+                    "off": "Débranché",
+                    "on": "Branché"
+                }
+            },
+            "charger_locked": {
+                "name": "Verrou de charge",
+                "state": {
+                    "off": "Verrouillé",
+                    "on": "Déverrouillé"
+                }
+            },
+            "doors_locked": {
+                "name": "Portes verrouillées",
+                "state": {
+                    "off": "Verrouillé",
+                    "on": "Déverrouillé"
+                }
+            },
+            "doors_open": {
+                "name": "Portes Ouvertes",
+                "state": {
+                    "off": "Portes Fermées",
+                    "on": "Ouverte"
+                }
+            },
+            "lights_on": {
+                "name": "Feux",
+                "state": {
+                    "off": "Éteint",
+                    "on": "Allumées"
+                }
+            },
+            "locked": {
+                "name": "Véhicule verrouillé",
+                "state": {
+                    "off": "Verrouillé",
+                    "on": "Déverrouillé"
+                }
+            },
+            "sunroof_open": {
+                "name": "Toit vitré",
+                "state": {
+                    "off": "Fermé",
+                    "on": "Ouvert"
+                }
+            },
+            "trunk_open": {
+                "name": "Coffre",
+                "state": {
+                    "off": "Fermé",
+                    "on": "Ouvert"
+                }
+            },
+            "windows_open": {
+                "name": "Fenêtres",
+                "state": {
+                    "off": "Fermées",
+                    "on": "Ouvertes"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Air conditionné"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Position",
+                "state": {
+                    "home": "Maison",
+                    "not_home": "Absent",
+                    "vehicle_in_motion": "Mouvement détecté"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Illustration du véhicule"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Limite de charge"
+            }
+        },
+        "sensor": {
+            "battery_percentage": {
+                "name": "Pourcentage de la batterie"
+            },
+            "car_captured": {
+                "name": "Dernière mise à jour"
+            },
+            "charge_type": {
+                "name": "Type de charge",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "Désactivé"
+                }
+            },
+            "charging_power": {
+                "name": "Puissance de recharge"
+            },
+            "charging_rate": {
+                "name": "Taux de charge"
+            },
+            "charging_state": {
+                "name": "Etat de la charge",
+                "state": {
+                    "charging": "En charge",
+                    "connect_cable": "Aucune charge",
+                    "conserving": "Conservation de la charge",
+                    "ready_for_charging": "Prêt pour la charge"
+                }
+            },
+            "inspection": {
+                "name": "Prochaine révision"
+            },
+            "mileage": {
+                "name": "Kilométrage"
+            },
+            "range": {
+                "name": "Autonomie"
+            },
+            "remaining_charging_time": {
+                "name": "Temps de recharge restant"
+            },
+            "software_version": {
+                "name": "Version du logiciel"
+            },
+            "target_battery_percentage": {
+                "name": "Pourcentage de batterie cible"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "name": "Entretien de la batterie"
+            },
+            "charging": {
+                "name": "Recharger"
+            },
+            "charging_switch": {
+                "name": "En charge"
+            },
+            "reduced_current": {
+                "name": "Limiter le courant de charge"
+            },
+            "window_heating": {
+                "name": "Chauffage des fenêtres"
+            }
+        }
+    },
+    "options": {
+        "error": {
+            "invalid_polling_interval": "Intervalle de requêtes non valide. Veuillez choisir entre 1 et 1440 minutes"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "Suivi des réponses de l'API. Nécessite d'activer le mode débogage dans configuration.yaml.",
+                    "poll_interval_in_minutes": "Intervalle de requêtes, en minutes, lorsque la voiture est inactive."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Spécifiez un intervalle de requêtes entre 1 et 1440 minutes. (par défaut 30)"
+                }
+            }
+        }
+    }
+}
