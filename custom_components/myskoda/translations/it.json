@@ -133,11 +133,14 @@
             "charging_power": {
                 "name": "Potenza di carica"
             },
+            "charging_rate": {
+                "name": "Velocità di Ricarica"
+            },
             "charging_state": {
                 "name": "Stato di carica",
                 "state": {
                     "charging": "Ricarica",
-                    "connect_cable": "Cavo disconnesso",
+                    "connect_cable": "Nessun potere",
                     "conserving": "Conservazione della carica",
                     "ready_for_charging": "Pronto per la ricarica"
                 }
@@ -180,10 +183,17 @@
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Intervallo di aggiornamento specificato non valido. Si prega di scegliere tra 1 e 1440 minuti"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "Rilevamento risposta API. Richiede la registrazione del debug abilitata nel file di configurazione configuration.yaml."
+                    "tracing": "Rilevamento risposta API. Richiede la registrazione del debug abilitata nel file di configurazione configuration.yaml.",
+                    "poll_interval_in_minutes": "Intervallo di aggiornamento in minuti quando l'auto è inattiva."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Specificare un intervallo di aggiornamento tra 1 e 1440 minuti (predefinito 30)"
                 }
             }
         }

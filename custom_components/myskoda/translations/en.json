@@ -138,21 +138,21 @@
             "charging_power": {
                 "name": "Charging Power"
             },
-	    "charging_rate": {
-		"name": "Charging Rate"
-	    },
+            "charging_rate": {
+                "name": "Charging Rate"
+            },
             "charging_state": {
                 "name": "Charging State",
                 "state": {
                     "charging": "Charging",
-                    "connect_cable": "Cable Disconnected",
+                    "connect_cable": "No Power",
                     "conserving": "Conserving Charge",
                     "ready_for_charging": "Ready for Charging"
                 }
             },
-	    "inspection": {
-		"name": "Next Inspection"
-	    },
+            "inspection": {
+                "name": "Next Inspection"
+            },
             "mileage": {
                 "name": "Mileage"
             },
