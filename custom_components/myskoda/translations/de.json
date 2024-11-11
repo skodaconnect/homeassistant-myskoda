@@ -183,10 +183,17 @@
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Ungültiges Abfrageintervall angegeben. Bitte wählen Sie zwischen 1 und 1440 Minuten"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API response tracing. Erfordert die Aktivierung der Debug-Protokollierung in der configuration.yaml."
+                    "tracing": "API response tracing. Erfordert die Aktivierung der Debug-Protokollierung in der configuration.yaml.",
+                    "poll_interval_in_minutes": "Abfrageintervall in Minuten, wenn das Auto untätig ist."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Geben Sie ein Abfrageintervall zwischen 1 und 1440 Minuten an. (Standardwert 30)"
                 }
             }
         }
