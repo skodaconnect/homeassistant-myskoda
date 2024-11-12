@@ -4,6 +4,7 @@ from datetime import timedelta
 import logging
 from typing import Callable
 from aiohttp import ClientError
+from aiohttp.client_exceptions import ClientResponseError
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -93,7 +94,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             vehicle = await self.myskoda.get_vehicle(self.vin)
             user = await self.myskoda.get_user()
-        except ClientError as err:
+        except (ClientError, ClientResponseError) as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
         return State(vehicle, user)
 
@@ -188,9 +189,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         _LOGGER.debug("Updating driving range for %s", self.vin)
         try:
             driving_range = await self.myskoda.get_driving_range(self.vin)
-        except ClientError as err:
-            self.async_set_update_error(err)
-            return
+        except (ClientError, ClientResponseError) as err:
+            raise UpdateFailed("Error getting driving range from MySkoda API: %s", err)
 
         vehicle = self.data.vehicle
         vehicle.driving_range = driving_range
@@ -200,9 +200,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         _LOGGER.debug("Updating charging information for %s", self.vin)
         try:
             charging = await self.myskoda.get_charging(self.vin)
-        except ClientError as err:
-            self.async_set_update_error(err)
-            return
+        except (ClientError, ClientResponseError) as err:
+            raise UpdateFailed("Error getting charging info from MySkoda API: %s", err)
 
         vehicle = self.data.vehicle
         vehicle.charging = charging
@@ -212,9 +211,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         _LOGGER.debug("Updating air conditioning for %s", self.vin)
         try:
             air_conditioning = await self.myskoda.get_air_conditioning(self.vin)
-        except ClientError as err:
-            self.async_set_update_error(err)
-            return
+        except (ClientError, ClientResponseError) as err:
+            raise UpdateFailed("Error getting AC update from MySkoda API: %s", err)
 
         vehicle = self.data.vehicle
         vehicle.air_conditioning = air_conditioning
@@ -224,9 +222,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         _LOGGER.debug("Updating full vehicle for %s", self.vin)
         try:
             vehicle = await self.myskoda.get_vehicle(self.vin)
-        except ClientError as err:
-            self.async_set_update_error(err)
-            return
+        except (ClientError, ClientResponseError) as err:
+            raise UpdateFailed(
+                "Error getting complete update from MySkoda API: %s", err
+            )
 
         self.set_updated_vehicle(vehicle)
 
