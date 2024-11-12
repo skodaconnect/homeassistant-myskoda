@@ -176,9 +176,11 @@ class RemainingDistance(ChargingSensor):
 
     @property
     def native_value(self) -> int | float | None:  # noqa: D102
-        if status := self._status():
-            if status.battery.remaining_cruising_range_in_meters is not None:
-                return status.battery.remaining_cruising_range_in_meters / 1000
+        if range := self.vehicle.driving_range:
+            return range.total_range_in_km
+            
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.STATE]
 
 
 class TargetBatteryPercentage(ChargingSensor):
