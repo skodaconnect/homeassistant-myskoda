@@ -25,14 +25,14 @@
 			"doors_open": {
 				"default": "mdi:car-door"
 			},
-			"lights_on": {
-				"default": "mdi:car-light-high"
-			},
 			"locked": {
 				"default": "mdi:lock",
 				"state": {
 					"on": "mdi:lock-open"
 				}
+			},
+			"parkinglights_on": {
+				"default": "mdi:car-parking-lights"
 			},
 			"sunroof_open": {
 				"default": "mdi:car-select"
