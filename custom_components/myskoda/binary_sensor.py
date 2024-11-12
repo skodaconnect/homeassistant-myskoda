@@ -226,7 +226,7 @@ class ParkingLightsOn(StatusBinarySensor):
     """Detects whether the parking-lights are on."""
 
     entity_description = BinarySensorEntityDescription(
-        key="parkinglights_on",
+        key="lights_on",
         device_class=BinarySensorDeviceClass.LIGHT,
         translation_key="parkinglights_on",
     )
