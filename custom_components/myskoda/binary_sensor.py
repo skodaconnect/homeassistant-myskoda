@@ -76,7 +76,6 @@ class ChargerConnected(AirConditioningBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="charger_connected",
-        name="Charger Connected",
         device_class=BinarySensorDeviceClass.PLUG,
         translation_key="charger_connected",
     )
@@ -86,19 +85,12 @@ class ChargerConnected(AirConditioningBinarySensor):
         if ac := self._air_conditioning():
             return ac.charger_connection_state == common.ConnectionState.CONNECTED
 
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if self.is_on:
-            return "mdi:power-plug"
-        return "mdi:power-plug-off"
-
 
 class ChargerLocked(AirConditioningBinarySensor):
     """Detect if the charger is locked on the car, or whether it can be unplugged."""
 
     entity_description = BinarySensorEntityDescription(
         key="charger_locked",
-        name="Charger",
         device_class=BinarySensorDeviceClass.LOCK,
         translation_key="charger_locked",
     )
@@ -109,12 +101,6 @@ class ChargerLocked(AirConditioningBinarySensor):
             if ac.charger_lock_state != ChargerLockedState.INVALID:
                 return ac.charger_lock_state != common.ChargerLockedState.LOCKED
 
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if self.is_on:
-            return "mdi:lock-open"
-        return "mdi:lock"
-
 
 class Locked(StatusBinarySensor):
     """Detects whether the vehicle is fully locked."""
@@ -123,7 +109,6 @@ class Locked(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="locked",
-        name="Locks",
         device_class=BinarySensorDeviceClass.LOCK,
         translation_key="locked",
     )
@@ -133,19 +118,12 @@ class Locked(StatusBinarySensor):
         if status := self._status():
             return not status.overall.locked == DoorLockedState.LOCKED
 
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if self.is_on:
-            return "mdi:lock-open"
-        return "mdi:lock"
-
 
 class DoorsLocked(StatusBinarySensor):
     """Detect whether the doors are locked."""
 
     entity_description = BinarySensorEntityDescription(
         key="doors_locked",
-        name="Doors Locked",
         device_class=BinarySensorDeviceClass.LOCK,
         translation_key="doors_locked",
     )
@@ -155,21 +133,13 @@ class DoorsLocked(StatusBinarySensor):
         if status := self._status():
             return not status.overall.doors_locked == DoorLockedState.LOCKED
 
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if self.is_on:
-            return "mdi:car-door-lock-open"
-        return "mdi:car-door-lock"
-
 
 class DoorsOpen(StatusBinarySensor):
     """Detects whether at least one door is open."""
 
     entity_description = BinarySensorEntityDescription(
         key="doors_open",
-        name="Doors",
         device_class=BinarySensorDeviceClass.DOOR,
-        icon="mdi:car-door",
         translation_key="doors_open",
     )
 
@@ -184,9 +154,7 @@ class WindowsOpen(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="windows_open",
-        name="Windows",
         device_class=BinarySensorDeviceClass.WINDOW,
-        icon="mdi:car-door",
         translation_key="windows_open",
     )
 
@@ -201,9 +169,7 @@ class TrunkOpen(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="trunk_open",
-        name="Trunk",
         device_class=BinarySensorDeviceClass.OPENING,
-        icon="mdi:car",
         translation_key="trunk_open",
     )
 
@@ -218,9 +184,7 @@ class BonnetOpen(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="bonnet_open",
-        name="Bonnet",
         device_class=BinarySensorDeviceClass.OPENING,
-        icon="mdi:car",
         translation_key="bonnet_open",
     )
 
@@ -235,9 +199,8 @@ class SunroofOpen(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="sunroof_open",
-        name="Sunroof",
         device_class=BinarySensorDeviceClass.OPENING,
-        icon="mdi:car-select",
+        translation_key="sunroof_open",
     )
 
     @property
@@ -264,9 +227,7 @@ class LightsOn(StatusBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="lights_on",
-        name="Lights",
         device_class=BinarySensorDeviceClass.LIGHT,
-        icon="mdi:car-light-high",
         translation_key="lights_on",
     )
 

@@ -62,7 +62,6 @@ class WindowHeating(MySkodaSwitch):
     entity_description = SwitchEntityDescription(
         key="window_heating",
         name="Window Heating",
-        icon="mdi:car-defrost-front",
         device_class=SwitchDeviceClass.SWITCH,
         translation_key="window_heating",
     )
@@ -101,7 +100,6 @@ class ChargingSwitch(MySkodaSwitch):
     entity_description = SwitchEntityDescription(
         key="charging_switch",
         name="Charging",
-        icon="mdi:car-electric",
         device_class=SwitchDeviceClass.SWITCH,
         translation_key="charging_switch",
     )
@@ -129,7 +127,6 @@ class BatteryCareMode(ChargingSwitch):
     entity_description = SwitchEntityDescription(
         key="battery_care_mode",
         name="Battery Care Mode",
-        icon="mdi:battery-heart-variant",
         device_class=SwitchDeviceClass.SWITCH,
         translation_key="battery_care_mode",
     )
@@ -159,6 +156,9 @@ class BatteryCareMode(ChargingSwitch):
         await self._async_turn_on_off(turn_on=True)
         _LOGGER.info("Battery care mode enabled.")
 
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.BATTERY_CHARGING_CARE]
+
 
 class ReducedCurrent(ChargingSwitch):
     """Control whether to charge with reduced current."""
@@ -166,7 +166,6 @@ class ReducedCurrent(ChargingSwitch):
     entity_description = SwitchEntityDescription(
         key="reduced_current",
         name="Reduced Current",
-        icon="mdi:current-ac",
         device_class=SwitchDeviceClass.SWITCH,
         translation_key="reduced_current",
     )
@@ -203,7 +202,6 @@ class EnableCharging(ChargingSwitch):
     entity_description = SwitchEntityDescription(
         key="charging",
         name="Charging",
-        icon="mdi:power-plug-battery",
         device_class=SwitchDeviceClass.SWITCH,
         translation_key="charging",
     )

@@ -9,7 +9,13 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, UnitOfLength, UnitOfPower, UnitOfTime
+from homeassistant.const import (
+    PERCENTAGE,
+    UnitOfLength,
+    UnitOfPower,
+    UnitOfSpeed,
+    UnitOfTime,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
@@ -35,14 +41,15 @@ async def async_setup_entry(
             BatteryPercentage,
             ChargeType,
             ChargingPower,
+            ChargingRate,
             ChargingState,
             LastUpdated,
-            MainRender,
             Mileage,
             RemainingChargingTime,
             RemainingDistance,
             SoftwareVersion,
             TargetBatteryPercentage,
+            InspectionInterval,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -58,14 +65,15 @@ class SoftwareVersion(MySkodaSensor):
 
     entity_description = SensorEntityDescription(
         key="software_version",
-        name="Software Version",
-        icon="mdi:update",
         translation_key="software_version",
     )
 
     @property
     def native_value(self):  # noqa: D102
         return self.vehicle.info.software_version
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_MEB]
 
 
 class ChargingSensor(MySkodaSensor):
@@ -87,7 +95,6 @@ class BatteryPercentage(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="battery_percentage",
-        name="Battery Percentage",
         icon="mdi:battery",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=PERCENTAGE,
@@ -144,8 +151,6 @@ class ChargingPower(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="charging_power",
-        name="Charging Power",
-        icon="mdi:lightning-bolt",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfPower.KILO_WATT,
         device_class=SensorDeviceClass.POWER,
@@ -163,8 +168,6 @@ class RemainingDistance(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="range",
-        name="Range",
-        icon="mdi:speedometer",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfLength.KILOMETERS,
         device_class=SensorDeviceClass.DISTANCE,
@@ -174,7 +177,8 @@ class RemainingDistance(ChargingSensor):
     @property
     def native_value(self) -> int | float | None:  # noqa: D102
         if status := self._status():
-            return status.battery.remaining_cruising_range_in_meters / 1000
+            if status.battery.remaining_cruising_range_in_meters is not None:
+                return status.battery.remaining_cruising_range_in_meters / 1000
 
 
 class TargetBatteryPercentage(ChargingSensor):
@@ -182,10 +186,8 @@ class TargetBatteryPercentage(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="target_battery_percentage",
-        name="Target Battery Percentage",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=PERCENTAGE,
-        icon="mdi:percent",
         device_class=SensorDeviceClass.BATTERY,
         translation_key="target_battery_percentage",
     )
@@ -201,10 +203,8 @@ class Mileage(MySkodaSensor):
 
     entity_description = SensorEntityDescription(
         key="milage",
-        name="Milage",
         state_class=SensorStateClass.TOTAL_INCREASING,
         native_unit_of_measurement=UnitOfLength.KILOMETERS,
-        icon="mdi:counter",
         device_class=SensorDeviceClass.DISTANCE,
         translation_key="mileage",
     )
@@ -223,11 +223,9 @@ class InspectionInterval(MySkodaSensor):
 
     entity_description = SensorEntityDescription(
         key="inspection",
-        name="Inspection",
         device_class=SensorDeviceClass.DURATION,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTime.DAYS,
-        icon="mdi:car-wrench",
         translation_key="inspection",
     )
 
@@ -245,22 +243,14 @@ class ChargeType(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="charge_type",
-        name="Charge Type",
         translation_key="charge_type",
     )
 
     @property
     def native_value(self) -> str | None:  # noqa: D102
         if status := self._status():
-            return str(status.charge_type).lower()
-
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if status := self._status():
-            if status.charge_type == "DC":
-                return "mdi:ev-plug-ccs2"
-
-        return "mdi:ev-plug-type2"
+            if status.charge_type:
+                return str(status.charge_type).lower()
 
 
 class ChargingState(ChargingSensor):
@@ -268,7 +258,6 @@ class ChargingState(ChargingSensor):
 
     entity_description = SensorEntityDescription(
         key="charging_state",
-        name="Charging State",
         device_class=SensorDeviceClass.ENUM,
         translation_key="charging_state",
     )
@@ -287,25 +276,14 @@ class ChargingState(ChargingSensor):
             if status.state:
                 return str(status.state).lower()
 
-    @property
-    def icon(self) -> str:  # noqa: D102
-        if status := self._status():
-            if status.state == charging.ChargingState.CONNECT_CABLE:
-                return "mdi:power-plug-off"
-            if status.state == charging.ChargingState.CHARGING:
-                return "mdi:power-plug-battery"
-        return "mdi:power-plug"
-
 
 class RemainingChargingTime(ChargingSensor):
     """Estimation on when the vehicle will be fully charged."""
 
     entity_description = SensorEntityDescription(
         key="remaining_charging_time",
-        name="Remaining Charging Time",
         device_class=SensorDeviceClass.DURATION,
         native_unit_of_measurement=UnitOfTime.MINUTES,
-        icon="mdi:timer",
         translation_key="remaining_charging_time",
     )
 
@@ -315,14 +293,28 @@ class RemainingChargingTime(ChargingSensor):
             return status.remaining_time_to_fully_charged_in_minutes
 
 
+class ChargingRate(ChargingSensor):
+    """Estimation on how many kmh are being charged."""
+
+    entity_description = SensorEntityDescription(
+        key="charging_rate",
+        device_class=SensorDeviceClass.SPEED,
+        native_unit_of_measurement=UnitOfSpeed.KILOMETERS_PER_HOUR,
+        translation_key="charging_rate",
+    )
+
+    @property
+    def native_value(self) -> float | None:
+        if status := self._status():
+            return status.charging_rate_in_kilometers_per_hour
+
+
 class LastUpdated(MySkodaSensor):
     """Timestamp of when the car has sent the last update to the MySkoda server."""
 
     entity_description = SensorEntityDescription(
         key="car_captured",
-        name="Last Updated",
         device_class=SensorDeviceClass.TIMESTAMP,
-        icon="mdi:clock",
         translation_key="car_captured",
     )
 
@@ -333,18 +325,3 @@ class LastUpdated(MySkodaSensor):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE]
-
-
-class MainRender(MySkodaSensor):
-    """URL of the main image render of the vehicle."""
-
-    entity_description = SensorEntityDescription(
-        key="render_url_main",
-        name="Main Render URL",
-        icon="mdi:file-image",
-        translation_key="render_url_main",
-    )
-
-    @property
-    def native_value(self):  # noqa: D102
-        return self.get_renders().get("main")

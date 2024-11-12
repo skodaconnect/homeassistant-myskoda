@@ -1,131 +1,199 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Device is already configured"
+            "already_configured": "Enheten är redan konfigurerad"
         },
         "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles."
+            "cannot_connect": "Misslyckades att ansluta",
+            "invalid_auth": "Ogiltig autentisering",
+            "unknown": "Ett oväntat fel inträffade. Kontrollera loggfilerna för HomeAssistant."
         },
         "step": {
             "user": {
                 "data": {
-                    "email": "E-mail",
-                    "password": "Password"
+                    "email": "E-post",
+                    "password": "Lösenord"
                 }
             }
         }
     },
     "entity": {
         "binary_sensor": {
+            "bonnet_open": {
+                "name": "Motorhuv",
+                "state": {
+                    "off": "Stängd",
+                    "on": "Öppen"
+                }
+            },
             "charger_connected": {
-                "name": "Charger Connected"
+                "name": "Laddare ansluten",
+                "state": {
+                    "off": "Ej ansluten",
+                    "on": "Inkopplad"
+                }
             },
             "charger_locked": {
-                "name": "Charge Lock"
-            },
-            "locked": {
-                "name": "Vehicle Locked"
+                "name": "Laddningslås",
+                "state": {
+                    "off": "Låst",
+                    "on": "Olåst"
+                }
             },
             "doors_locked": {
-                "name": "Doors Locked"
+                "name": "Dörrarna låsta",
+                "state": {
+                    "off": "Låsta",
+                    "on": "Olåsta"
+                }
             },
             "doors_open": {
-                "name": "Doors Open"
-            },
-            "windows_open": {
-                "name": "Windows"
-            },
-            "trunk_open": {
-                "name": "Trunk"
-            },
-            "bonnet_open": {
-                "name": "Bonnet"
-            },
-            "sunroof_open": {
-                "name": "Sunroof"
+                "name": "Dörrarna öppna",
+                "state": {
+                    "off": "Stängda",
+                    "on": "Öppna"
+                }
             },
             "lights_on": {
-                "name": "Lights"
+                "name": "Ljus",
+                "state": {
+                    "off": "Av",
+                    "on": "På"
+                }
+            },
+            "locked": {
+                "name": "Fordonet låst",
+                "state": {
+                    "off": "Låst",
+                    "on": "Olåst"
+                }
+            },
+            "sunroof_open": {
+                "name": "Soltak",
+                "state": {
+                    "off": "Stängt",
+                    "on": "Öppet"
+                }
+            },
+            "trunk_open": {
+                "name": "Bagageutrymme",
+                "state": {
+                    "off": "Stängt",
+                    "on": "Öppen"
+                }
+            },
+            "windows_open": {
+                "name": "Fönster",
+                "state": {
+                    "off": "Stängda",
+                    "on": "Öppna"
+                }
             }
         },
         "climate": {
             "climate": {
-                "name": "Air Conditioning"
+                "name": "Luftkonditionering"
             }
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Positition"
+                "name": "Position",
+                "state": {
+                    "home": "Hemma",
+                    "not_home": "Borta",
+                    "vehicle_in_motion": "Rörelse upptäckt"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Huvudrendering av fordon"
             }
         },
         "number": {
             "charge_limit": {
-                "name": "Charge Limit"
+                "name": "Laddningsgräns"
             }
         },
         "sensor": {
-            "software_version": {
-                "name": "Software Version"
-            },
             "battery_percentage": {
-                "name": "Battery Percentage"
-            },
-            "charging_power": {
-                "name": "Charging Power"
-            },
-            "charging_state": {
-                "name": "Charging State",
-                "state": {
-                    "connect_cable": "Cable Disconnected",
-                    "ready_for_charging": "Ready for Charging",
-                    "conserving": "Conserving Charge",
-                    "charging": "Charging"
-                }
-            },
-            "range": {
-                "name": "Range"
-            },
-            "target_battery_percentage": {
-                "name": "Target Battery Percentage"
-            },
-            "mileage": {
-                "name": "Mileage"
-            },
-            "charge_type": {
-                "name": "Charge Type"
-            },
-            "remaining_charging_time": {
-                "name": "Remaining Charging Time"
+                "name": "Batteriprocent"
             },
             "car_captured": {
-                "name": "Last Updated"
+                "name": "Senast uppdaterad"
+            },
+            "charge_type": {
+                "name": "Laddningstyp",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "Från"
+                }
+            },
+            "charging_power": {
+                "name": "Laddningseffekt"
+            },
+            "charging_rate": {
+                "name": "Laddningshastighet"
+            },
+            "charging_state": {
+                "name": "Laddningstillstånd",
+                "state": {
+                    "charging": "Laddar",
+                    "connect_cable": "Ingen kraft",
+                    "conserving": "Bevara laddning",
+                    "ready_for_charging": "Redo för laddning"
+                }
+            },
+            "inspection": {
+                "name": "Nästa inspektion"
+            },
+            "mileage": {
+                "name": "Mätarställning"
+            },
+            "range": {
+                "name": "Räckvidd"
+            },
+            "remaining_charging_time": {
+                "name": "Återstående laddningstid"
+            },
+            "software_version": {
+                "name": "Programvaruversion"
+            },
+            "target_battery_percentage": {
+                "name": "Mål batteriprocent"
             }
         },
         "switch": {
-            "window_heating": {
-                "name": "Window Heating"
-            },
-            "charging_switch": {
-                "name": "Charging"
-            },
             "battery_care_mode": {
-                "name": "Battery Care"
-            },
-            "reduced_current": {
-                "name": "Reduced Current"
+                "name": "Batterivård"
             },
             "charging": {
-                "name": "Charging"
+                "name": "Laddning"
+            },
+            "charging_switch": {
+                "name": "Laddar"
+            },
+            "reduced_current": {
+                "name": "Reducerad ström"
+            },
+            "window_heating": {
+                "name": "Fönstervärme"
             }
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Ogiltigt intervall för polling. Vänligen välj mellan 1 och 1440 minuter"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
+                    "tracing": "Spårning av API-svar. Kräver att felsökningsloggning är aktiverad i configuration.yaml.",
+                    "poll_interval_in_minutes": "Pollning intervall i minuter när bilen är inaktiv."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Ange pollinering intervall mellan 1 och 1440 minuter. (standard 30)"
                 }
             }
         }

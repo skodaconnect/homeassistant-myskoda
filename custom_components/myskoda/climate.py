@@ -17,7 +17,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
 
-from myskoda.models.air_conditioning import AirConditioning
+from myskoda.models.air_conditioning import AirConditioning, AirConditioningState
 from myskoda.models.info import CapabilityId
 
 from .const import API_COOLDOWN_IN_SECONDS, COORDINATORS, DOMAIN
@@ -46,8 +46,6 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
 
     entity_description = ClimateEntityDescription(
         key="climate",
-        name="Air Conditioning",
-        icon="mdi:air-conditioner",
         translation_key="climate",
     )
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
@@ -69,13 +67,13 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
 
     @property
     def hvac_modes(self) -> list[HVACMode]:  # noqa: D102
-        return [HVACMode.AUTO, HVACMode.OFF]
+        return [HVACMode.HEAT_COOL, HVACMode.OFF]
 
     @property
     def hvac_mode(self) -> HVACMode | None:  # noqa: D102
         if ac := self._air_conditioning():
-            if ac.state:
-                return HVACMode.AUTO
+            if ac.state != AirConditioningState.OFF:
+                return HVACMode.HEAT_COOL
             return HVACMode.OFF
 
     @property
@@ -102,7 +100,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
             if target_temperature is None:
                 return
 
-            if hvac_mode == HVACMode.AUTO:
+            if hvac_mode == HVACMode.HEAT_COOL:
                 await self.coordinator.myskoda.start_air_conditioning(
                     self.vehicle.info.vin,
                     target_temperature.temperature_value,
@@ -114,7 +112,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
             _LOGGER.info("HVAC mode set to %s.", hvac_mode)
 
     async def async_turn_on(self):  # noqa: D102
-        await self.async_set_hvac_mode(HVACMode.AUTO)
+        await self.async_set_hvac_mode(HVACMode.HEAT_COOL)
 
     async def async_turn_off(self):  # noqa: D102
         await self.async_set_hvac_mode(HVACMode.OFF)

@@ -1,0 +1,198 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Устройство уже настроено"
+        },
+        "error": {
+            "cannot_connect": "Не удалось подключиться",
+            "invalid_auth": "Неверная аутентификация",
+            "unknown": "Произошла непредвиденная ошибка. Пожалуйста, проверьте журналы HomeAssistant."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Электронная почта",
+                    "password": "Пароль"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "bonnet_open": {
+                "name": "Капот",
+                "state": {
+                    "off": "Закрыт",
+                    "on": "Открыт"
+                }
+            },
+            "charger_connected": {
+                "name": "Зарядное устройство подключено",
+                "state": {
+                    "off": "Отключено",
+                    "on": "Подключено"
+                }
+            },
+            "charger_locked": {
+                "name": "Блокировка зарядки",
+                "state": {
+                    "off": "Заблокировано",
+                    "on": "Разблокировано"
+                }
+            },
+            "doors_locked": {
+                "name": "Двери заблокированы",
+                "state": {
+                    "off": "Заблокированы",
+                    "on": "Разблокированы"
+                }
+            },
+            "doors_open": {
+                "name": "Двери",
+                "state": {
+                    "off": "Закрыты",
+                    "on": "Открыты"
+                }
+            },
+            "lights_on": {
+                "name": "Фары",
+                "state": {
+                    "off": "Выключены",
+                    "on": "Включены"
+                }
+            },
+            "locked": {
+                "name": "Автомобиль заблокирован",
+                "state": {
+                    "off": "Заблокирован",
+                    "on": "Разблокирован"
+                }
+            },
+            "sunroof_open": {
+                "name": "Люк в крыше",
+                "state": {
+                    "off": "Закрыт",
+                    "on": "Открыт"
+                }
+            },
+            "trunk_open": {
+                "name": "Багажник",
+                "state": {
+                    "off": "Закрыт",
+                    "on": "Открыт"
+                }
+            },
+            "windows_open": {
+                "name": "Окна",
+                "state": {
+                    "off": "Закрыты",
+                    "on": "Открыты"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Кондиционер"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Местоположение",
+                "state": {
+                    "home": "Дома",
+                    "not_home": "Не дома",
+                    "vehicle_in_motion": "Обнаружено движение"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Основное изображение автомобиля"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Лимит заряда"
+            }
+        },
+        "sensor": {
+            "battery_percentage": {
+                "name": "Процент заряда батареи"
+            },
+            "car_captured": {
+                "name": "Последнее обновление"
+            },
+            "charge_type": {
+                "name": "Тип зарядки",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "Выключено"
+                }
+            },
+            "charging_power": {
+                "name": "Мощность зарядки"
+            },
+            "charging_state": {
+                "name": "Состояние зарядки",
+                "state": {
+                    "charging": "Заряжается",
+                    "connect_cable": "Нет питания",
+                    "conserving": "Сохранение заряда",
+                    "ready_for_charging": "Готово к зарядке"
+                }
+            },
+            "inspection": {
+                "name": "Следующая проверка"
+            },
+            "mileage": {
+                "name": "Пробег"
+            },
+            "range": {
+                "name": "Запас хода"
+            },
+            "remaining_charging_time": {
+                "name": "Оставшееся время зарядки"
+            },
+            "software_version": {
+                "name": "Версия ПО"
+            },
+            "target_battery_percentage": {
+                "name": "Цель заряда батареи"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "name": "Режим заботы о батарее"
+            },
+            "charging": {
+                "name": "Зарядка"
+            },
+            "charging_switch": {
+                "name": "Зарядка"
+            },
+            "reduced_current": {
+                "name": "Сниженный ток"
+            },
+            "window_heating": {
+                "name": "Обогрев окон"
+            }
+        }
+    },
+    "options": {
+        "error": {
+            "invalid_polling_interval": "Указан недопустимый интервал опроса. Выберите значение от 1 до 1440 минут"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "Отслеживание ответа API. Требуется включить журнал отладки в configuration.yaml.",
+                    "poll_interval_in_minutes": "Интервал опроса в минутах, когда автомобиль находится в режиме ожидания."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Укажите интервал опроса от 1 до 1440 минут (по умолчанию 30)"
+                }
+            }
+        }
+    }
+}

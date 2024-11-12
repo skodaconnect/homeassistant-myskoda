@@ -19,15 +19,44 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.schema_config_entry_flow import (
+    SchemaCommonFlowHandler,
+    SchemaFlowError,
     SchemaFlowFormStep,
     SchemaOptionsFlowHandler,
 )
 from homeassistant.util.ssl import get_default_context
 from myskoda import MySkoda
 
-from .const import DOMAIN
+from .const import (
+    DOMAIN,
+    CONF_POLL_INTERVAL,
+    CONF_POLL_INTERVAL_MIN,
+    CONF_POLL_INTERVAL_MAX,
+)
 
 _LOGGER = logging.getLogger(__name__)
+
+
+async def validate_options_input(
+    handler: SchemaCommonFlowHandler, user_input: dict[str, Any]
+) -> dict[str, Any]:
+    """Validate options are valid."""
+
+    if CONF_POLL_INTERVAL in user_input:
+        polling_interval: int = user_input[CONF_POLL_INTERVAL]
+        if CONF_POLL_INTERVAL_MIN <= polling_interval <= CONF_POLL_INTERVAL_MAX:
+            return user_input
+        raise SchemaFlowError("invalid_polling_interval")
+
+    return user_input
+
+
+async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
+    """Check that the inputs are valid."""
+    hub = MySkoda(async_get_clientsession(hass), get_default_context())
+
+    await hub.connect(data["email"], data["password"])
+
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
@@ -38,18 +67,15 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 OPTIONS_SCHEMA = vol.Schema(
     {
         vol.Required("tracing", default=False): bool,
+        vol.Optional(CONF_POLL_INTERVAL): int,
     }
 )
 OPTIONS_FLOW = {
-    "init": SchemaFlowFormStep(OPTIONS_SCHEMA),
+    "init": SchemaFlowFormStep(
+        OPTIONS_SCHEMA,
+        validate_user_input=validate_options_input,
+    )
 }
-
-
-async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
-    """Check that the inputs are valid."""
-    hub = MySkoda(async_get_clientsession(hass), get_default_context())
-
-    await hub.connect(data["email"], data["password"])
 
 
 class ConfigFlow(BaseConfigFlow, domain=DOMAIN):

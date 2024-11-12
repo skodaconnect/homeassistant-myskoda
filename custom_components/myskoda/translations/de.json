@@ -19,35 +19,75 @@
     },
     "entity": {
         "binary_sensor": {
+            "bonnet_open": {
+                "name": "Motorhaube",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            },
             "charger_connected": {
-                "name": "Ladekabel"
+                "name": "Ladekabel",
+                "state": {
+                    "off": "Ausgesteckt",
+                    "on": "Eingesteckt"
+                }
             },
             "charger_locked": {
-                "name": "Ladekabelverriegelung"
-            },
-            "locked": {
-                "name": "Fahrzeug verriegelt"
+                "name": "Ladekabelverriegelung",
+                "state": {
+                    "off": "Verriegelt",
+                    "on": "Entriegelt"
+                }
             },
             "doors_locked": {
-                "name": "Türen geschlossen"
+                "name": "Türen geschlossen",
+                "state": {
+                    "off": "Verriegelt",
+                    "on": "Entriegelt"
+                }
             },
             "doors_open": {
-                "name": "Türen offen"
-            },
-            "windows_open": {
-                "name": "Fenster"
-            },
-            "trunk_open": {
-                "name": "Kofferraum"
-            },
-            "bonnet_open": {
-                "name": "Motorhaube"
-            },
-            "sunroof_open": {
-                "name": "Schiebedach"
+                "name": "Türen offen",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
             },
             "lights_on": {
-                "name": "Licht"
+                "name": "Parklicht",
+                "state": {
+                    "off": "Aus",
+                    "on": "An"
+                }
+            },
+            "locked": {
+                "name": "Fahrzeug verriegelt",
+                "state": {
+                    "off": "Verriegelt",
+                    "on": "Entriegelt"
+                }
+            },
+            "sunroof_open": {
+                "name": "Schiebedach",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            },
+            "trunk_open": {
+                "name": "Kofferraum",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            },
+            "windows_open": {
+                "name": "Fenster",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
             }
         },
         "climate": {
@@ -57,7 +97,17 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Position"
+                "name": "Standort",
+                "state": {
+                    "home": "Anwesend",
+                    "not_home": "Abwesend",
+                    "vehicle_in_motion": "Bewegung erkannt"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Hauptansicht des Fahrzeugs"
             }
         },
         "number": {
@@ -66,66 +116,84 @@
             }
         },
         "sensor": {
-            "software_version": {
-                "name": "Software-Version"
-            },
             "battery_percentage": {
                 "name": "Batteriestand"
+            },
+            "car_captured": {
+                "name": "Letzte Aktualisierung"
+            },
+            "charge_type": {
+                "name": "Ladeverfahren",
+                "state": {
+                    "ac": "Wechselstrom",
+                    "dc": "Gleichstrom",
+                    "off": "Aus"
+                }
             },
             "charging_power": {
                 "name": "Ladeleistung"
             },
+            "charging_rate": {
+                "name": "Laderate"
+            },
             "charging_state": {
                 "name": "Ladestatus",
                 "state": {
-                    "connect_cable": "Ladekabel getrennt",
-                    "ready_for_charging": "Bereit zum Laden",
+                    "charging": "Laden",
+                    "connect_cable": "Kein Strom",
                     "conserving": "Ladestand halten",
-                    "charging": "Laden"
+                    "ready_for_charging": "Bereit zum Laden"
                 }
             },
-            "range": {
-                "name": "Reichweite"
-            },
-            "target_battery_percentage": {
-                "name": "Ladegrenze in Prozent"
+            "inspection": {
+                "name": "Nächste Inspektion"
             },
             "mileage": {
                 "name": "Kilometerstand"
             },
-            "charge_type": {
-                "name": "Ladeverfahren"
+            "range": {
+                "name": "Reichweite"
             },
             "remaining_charging_time": {
                 "name": "Verbleibende Ladezeit"
             },
-            "car_captured": {
-                "name": "Letzte Aktualisierung"
+            "software_version": {
+                "name": "Software-Version"
+            },
+            "target_battery_percentage": {
+                "name": "Ladegrenze in Prozent"
             }
         },
         "switch": {
-            "window_heating": {
-                "name": "Scheiben beheizen"
+            "battery_care_mode": {
+                "name": "Battery Care-Modus"
+            },
+            "charging": {
+                "name": "Laden"
             },
             "charging_switch": {
                 "name": "Laden"
             },
-            "battery_care_mode": {
-                "name": "Battery Care-Modus"
-            },
             "reduced_current": {
                 "name": "Ladestrombegrenzung"
             },
-            "charging": {
-                "name": "Laden"
+            "window_heating": {
+                "name": "Scheiben beheizen"
             }
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Ungültiges Abfrageintervall angegeben. Bitte wählen Sie zwischen 1 und 1440 Minuten"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API response tracing. Erfordert die Aktivierung der Debug-Protokollierung in der configuration.yaml."
+                    "tracing": "API response tracing. Erfordert die Aktivierung der Debug-Protokollierung in der configuration.yaml.",
+                    "poll_interval_in_minutes": "Abfrageintervall in Minuten, wenn das Auto untätig ist."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Geben Sie ein Abfrageintervall zwischen 1 und 1440 Minuten an. (Standardwert 30)"
                 }
             }
         }

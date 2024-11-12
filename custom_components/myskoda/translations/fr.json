@@ -1,131 +1,199 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Device is already configured"
+            "already_configured": "L'appareil est déjà configuré"
         },
         "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles."
+            "cannot_connect": "Échec de la connexion",
+            "invalid_auth": "Authentification incorrecte",
+            "unknown": "Une erreur inattendue s'est produite. Veuillez vérifier les journaux HomeAssistant."
         },
         "step": {
             "user": {
                 "data": {
-                    "email": "E-mail",
-                    "password": "Password"
+                    "email": "Courriel",
+                    "password": "Mot de passe"
                 }
             }
         }
     },
     "entity": {
         "binary_sensor": {
+            "bonnet_open": {
+                "name": "Trappe",
+                "state": {
+                    "off": "Fermée",
+                    "on": "Ouverte"
+                }
+            },
             "charger_connected": {
-                "name": "Charger Connected"
+                "name": "Chargeur connecté",
+                "state": {
+                    "off": "Débranché",
+                    "on": "Branché"
+                }
             },
             "charger_locked": {
-                "name": "Charge Lock"
-            },
-            "locked": {
-                "name": "Vehicle Locked"
+                "name": "Verrou de charge",
+                "state": {
+                    "off": "Verrouillé",
+                    "on": "Déverrouillé"
+                }
             },
             "doors_locked": {
-                "name": "Doors Locked"
+                "name": "Portes verrouillées",
+                "state": {
+                    "off": "Verrouillé",
+                    "on": "Déverrouillé"
+                }
             },
             "doors_open": {
-                "name": "Doors Open"
-            },
-            "windows_open": {
-                "name": "Windows"
-            },
-            "trunk_open": {
-                "name": "Trunk"
-            },
-            "bonnet_open": {
-                "name": "Bonnet"
-            },
-            "sunroof_open": {
-                "name": "Sunroof"
+                "name": "Portes Ouvertes",
+                "state": {
+                    "off": "Portes Fermées",
+                    "on": "Ouverte"
+                }
             },
             "lights_on": {
-                "name": "Lights"
+                "name": "Feux",
+                "state": {
+                    "off": "Éteint",
+                    "on": "Allumées"
+                }
+            },
+            "locked": {
+                "name": "Véhicule verrouillé",
+                "state": {
+                    "off": "Verrouillé",
+                    "on": "Déverrouillé"
+                }
+            },
+            "sunroof_open": {
+                "name": "Toit vitré",
+                "state": {
+                    "off": "Fermé",
+                    "on": "Ouvert"
+                }
+            },
+            "trunk_open": {
+                "name": "Coffre",
+                "state": {
+                    "off": "Fermé",
+                    "on": "Ouvert"
+                }
+            },
+            "windows_open": {
+                "name": "Fenêtres",
+                "state": {
+                    "off": "Fermées",
+                    "on": "Ouvertes"
+                }
             }
         },
         "climate": {
             "climate": {
-                "name": "Air Conditioning"
+                "name": "Air conditionné"
             }
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Positition"
+                "name": "Position",
+                "state": {
+                    "home": "Maison",
+                    "not_home": "Absent",
+                    "vehicle_in_motion": "Mouvement détecté"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Illustration du véhicule"
             }
         },
         "number": {
             "charge_limit": {
-                "name": "Charge Limit"
+                "name": "Limite de charge"
             }
         },
         "sensor": {
-            "software_version": {
-                "name": "Software Version"
-            },
             "battery_percentage": {
-                "name": "Battery Percentage"
-            },
-            "charging_power": {
-                "name": "Charging Power"
-            },
-            "charging_state": {
-                "name": "Charging State",
-                "state": {
-                    "connect_cable": "Cable Disconnected",
-                    "ready_for_charging": "Ready for Charging",
-                    "conserving": "Conserving Charge",
-                    "charging": "Charging"
-                }
-            },
-            "range": {
-                "name": "Range"
-            },
-            "target_battery_percentage": {
-                "name": "Target Battery Percentage"
-            },
-            "mileage": {
-                "name": "Mileage"
-            },
-            "charge_type": {
-                "name": "Charge Type"
-            },
-            "remaining_charging_time": {
-                "name": "Remaining Charging Time"
+                "name": "Pourcentage de la batterie"
             },
             "car_captured": {
-                "name": "Last Updated"
+                "name": "Dernière mise à jour"
+            },
+            "charge_type": {
+                "name": "Type de charge",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "Désactivé"
+                }
+            },
+            "charging_power": {
+                "name": "Puissance de recharge"
+            },
+            "charging_rate": {
+                "name": "Taux de charge"
+            },
+            "charging_state": {
+                "name": "Etat de la charge",
+                "state": {
+                    "charging": "En charge",
+                    "connect_cable": "Aucune charge",
+                    "conserving": "Conservation de la charge",
+                    "ready_for_charging": "Prêt pour la charge"
+                }
+            },
+            "inspection": {
+                "name": "Prochaine révision"
+            },
+            "mileage": {
+                "name": "Kilométrage"
+            },
+            "range": {
+                "name": "Autonomie"
+            },
+            "remaining_charging_time": {
+                "name": "Temps de recharge restant"
+            },
+            "software_version": {
+                "name": "Version du logiciel"
+            },
+            "target_battery_percentage": {
+                "name": "Pourcentage de batterie cible"
             }
         },
         "switch": {
-            "window_heating": {
-                "name": "Window Heating"
-            },
-            "charging_switch": {
-                "name": "Charging"
-            },
             "battery_care_mode": {
-                "name": "Battery Care"
-            },
-            "reduced_current": {
-                "name": "Reduced Current"
+                "name": "Entretien de la batterie"
             },
             "charging": {
-                "name": "Charging"
+                "name": "Recharger"
+            },
+            "charging_switch": {
+                "name": "En charge"
+            },
+            "reduced_current": {
+                "name": "Limiter le courant de charge"
+            },
+            "window_heating": {
+                "name": "Chauffage des fenêtres"
             }
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Intervalle de requêtes non valide. Veuillez choisir entre 1 et 1440 minutes"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml."
+                    "tracing": "Suivi des réponses de l'API. Nécessite d'activer le mode débogage dans configuration.yaml.",
+                    "poll_interval_in_minutes": "Intervalle de requêtes, en minutes, lorsque la voiture est inactive."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Spécifiez un intervalle de requêtes entre 1 et 1440 minutes. (par défaut 30)"
                 }
             }
         }

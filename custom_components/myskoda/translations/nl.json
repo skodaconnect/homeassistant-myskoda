@@ -19,35 +19,75 @@
     },
     "entity": {
         "binary_sensor": {
+            "bonnet_open": {
+                "name": "Motorkap",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
             "charger_connected": {
-                "name": "Laadkabel"
+                "name": "Laadkabel",
+                "state": {
+                    "off": "Losgekoppeld",
+                    "on": "Aangesloten"
+                }
             },
             "charger_locked": {
-                "name": "Laadkabelvergrendeling"
-            },
-            "locked": {
-                "name": "Voertuigvergrendeling"
+                "name": "Laadkabelvergrendeling",
+                "state": {
+                    "off": "Vergrendeld",
+                    "on": "Ontgrendeld"
+                }
             },
             "doors_locked": {
-                "name": "Deurvergrendeling"
+                "name": "Deurvergrendeling",
+                "state": {
+                    "off": "Vergrendeld",
+                    "on": "Ontgrendeld"
+                }
             },
             "doors_open": {
-                "name": "Deuren"
-            },
-            "windows_open": {
-                "name": "Ramen"
-            },
-            "trunk_open": {
-                "name": "Kofferbak"
-            },
-            "bonnet_open": {
-                "name": "Motorkap"
-            },
-            "sunroof_open": {
-                "name": "Zonnedak Open"
+                "name": "Deuren",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
             },
             "lights_on": {
-                "name": "Lichten"
+                "name": "Verlichting",
+                "state": {
+                    "off": "Uit",
+                    "on": "Aan"
+                }
+            },
+            "locked": {
+                "name": "Voertuigvergrendeling",
+                "state": {
+                    "off": "Vergrendeld",
+                    "on": "Ontgrendeld"
+                }
+            },
+            "sunroof_open": {
+                "name": "Zonnedak Open",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
+            "trunk_open": {
+                "name": "Kofferbak",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
+            "windows_open": {
+                "name": "Ramen",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
             }
         },
         "climate": {
@@ -57,7 +97,17 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Positie"
+                "name": "Positie",
+                "state": {
+                    "home": "Thuis",
+                    "not_home": "Afwezig",
+                    "vehicle_in_motion": "In beweging"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Hoofdafbeelding"
             }
         },
         "number": {
@@ -66,66 +116,84 @@
             }
         },
         "sensor": {
-            "software_version": {
-                "name": "Software versie"
-            },
             "battery_percentage": {
                 "name": "Accupercentage"
+            },
+            "car_captured": {
+                "name": "Laatst bijgewerkt"
+            },
+            "charge_type": {
+                "name": "Laadmethode",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "Uit"
+                }
             },
             "charging_power": {
                 "name": "Laadvermogen"
             },
+            "charging_rate": {
+                "name": "Laadsnelheid"
+            },
             "charging_state": {
                 "name": "Laadstatus",
                 "state": {
-                    "connect_cable": "Kabel verbinding verbroken",
-                    "ready_for_charging": "Klaar om op te laden",
+                    "charging": "Opladen",
+                    "connect_cable": "Geen stroom",
                     "conserving": "Lading bewaren",
-                    "charging": "Opladen"
+                    "ready_for_charging": "Klaar om op te laden"
                 }
             },
-            "range": {
-                "name": "Bereik"
-            },
-            "target_battery_percentage": {
-                "name": "Laaddoel in procenten"
+            "inspection": {
+                "name": "Volgend onderhoud"
             },
             "mileage": {
                 "name": "Kilometerstand"
             },
-            "charge_type": {
-                "name": "Laadmethode"
+            "range": {
+                "name": "Actieradius"
             },
             "remaining_charging_time": {
                 "name": "Laadtijd resterend"
             },
-            "car_captured": {
-                "name": "Laatst bijgewerkt"
+            "software_version": {
+                "name": "Software versie"
+            },
+            "target_battery_percentage": {
+                "name": "Laadlimiet in procenten"
             }
         },
         "switch": {
-            "window_heating": {
-                "name": "Verwarming raam"
+            "battery_care_mode": {
+                "name": "Accu onderhoudsmodus"
+            },
+            "charging": {
+                "name": "Opladen"
             },
             "charging_switch": {
                 "name": "Opladen"
             },
-            "battery_care_mode": {
-                "name": "Batterij verzorging"
-            },
             "reduced_current": {
-                "name": "Verminderde stroom"
+                "name": "Stroombegrenzing"
             },
-            "charging": {
-                "name": "Opladen"
+            "window_heating": {
+                "name": "Verwarming raam"
             }
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Ongeldige waarde opgegeven. Kies tussen 1 en 1440 minuten"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API respons traceren. Debug logging ingeschakeld in configuration.yaml."
+                    "tracing": "API respons traceren. Debug logging ingeschakeld in configuration.yaml.",
+                    "poll_interval_in_minutes": "Verversinterval in minuten wanneer de auto inactief is."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Geef een waarde tussen 1 en 1440 minuten. (standaard 30)"
                 }
             }
         }

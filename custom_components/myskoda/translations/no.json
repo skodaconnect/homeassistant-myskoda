@@ -1,18 +1,18 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Enheden er allerede konfigureret"
+            "already_configured": "Enheten er allerede konfigurert"
         },
         "error": {
-            "cannot_connect": "Kunne ikke forbinde",
-            "invalid_auth": "Ugyldig autentificering",
-            "unknown": "Der opstod en uventet fejl. Tjek venligst HomeAssistant logfilerne."
+            "cannot_connect": "Klarte ikke å koble til",
+            "invalid_auth": "Ugyldig autentisering",
+            "unknown": "En uventet feil oppstod. Vennligst sjekk HomeAssistant loggfiler."
         },
         "step": {
             "user": {
                 "data": {
-                    "email": "E-mail",
-                    "password": "Adgangskode"
+                    "email": "E-post",
+                    "password": "Passord"
                 }
             }
         }
@@ -20,180 +20,170 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Motorhjelm",
+                "name": "Panser",
                 "state": {
                     "off": "Lukket",
-                    "on": "Åben"
+                    "on": "Åpent"
                 }
             },
             "charger_connected": {
-                "name": "Ladekabel",
+                "name": "Lader tilkoblet",
                 "state": {
-                    "off": "Ikke tilsluttet",
-                    "on": "Tilsluttet"
+                    "off": "Frakoblet",
+                    "on": "Tilkoblet"
                 }
             },
             "charger_locked": {
-                "name": "Ladekabel låst",
+                "name": "Lader Lås",
                 "state": {
                     "off": "Låst",
-                    "on": "Låst op"
+                    "on": "Ulåst"
                 }
             },
             "doors_locked": {
-                "name": "Dørlåst",
+                "name": "Dører låst",
                 "state": {
                     "off": "Låst",
-                    "on": "Låst op"
+                    "on": "Ulåst"
                 }
             },
             "doors_open": {
-                "name": "Døre",
+                "name": "Dører åpne",
                 "state": {
                     "off": "Lukket",
-                    "on": "Åbne"
+                    "on": "Åpne"
                 }
             },
             "lights_on": {
-                "name": "Lygter",
+                "name": "Lys",
                 "state": {
-                    "off": "Slukkede",
-                    "on": "Tændte"
+                    "off": "Av",
+                    "on": "På"
                 }
             },
             "locked": {
-                "name": "Køretøjslåst",
+                "name": "Bil låst",
                 "state": {
                     "off": "Låst",
-                    "on": "Låst op"
+                    "on": "Ulåst"
                 }
             },
             "sunroof_open": {
-                "name": "Soltag",
+                "name": "Soltak",
                 "state": {
                     "off": "Lukket",
-                    "on": "Åbent"
+                    "on": "Åpent"
                 }
             },
             "trunk_open": {
-                "name": "Bagagerum",
+                "name": "Bagasjerom",
                 "state": {
                     "off": "Lukket",
-                    "on": "Åben"
+                    "on": "Åpent"
                 }
             },
             "windows_open": {
                 "name": "Vinduer",
                 "state": {
-                    "off": "Lukkede",
-                    "on": "Åbne"
+                    "off": "Lukket",
+                    "on": "Åpne"
                 }
             }
         },
         "climate": {
             "climate": {
-                "name": "Klimaanlæg"
+                "name": "Air Condition"
             }
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Position",
+                "name": "Posisjon",
                 "state": {
                     "home": "Hjemme",
-                    "not_home": "Ikke hjemme",
-                    "vehicle_in_motion": "Bevægelse registreret"
+                    "not_home": "Borte",
+                    "vehicle_in_motion": "Bevegelse oppdaget"
                 }
             }
         },
         "image": {
             "render_vehicle_main": {
-                "name": "Repræsentation af køretøjet"
+                "name": "Hovedvisning av kjøretøyet"
             }
         },
         "number": {
             "charge_limit": {
-                "name": "Ladegrænse"
+                "name": "Ladegrense"
             }
         },
         "sensor": {
             "battery_percentage": {
-                "name": "Batteriprocent"
+                "name": "Batteriprosent"
             },
             "car_captured": {
-                "name": "Sidst opdateret"
+                "name": "Sist Oppdatert"
             },
             "charge_type": {
-                "name": "Lademetode",
+                "name": "Ladetype",
                 "state": {
                     "ac": "AC",
                     "dc": "DC",
-                    "off": "Slukket"
+                    "off": "AV"
                 }
             },
             "charging_power": {
                 "name": "Ladeeffekt"
             },
-            "charging_rate": {
-                "name": "Ladeeffekt"
-            },
             "charging_state": {
                 "name": "Ladestatus",
                 "state": {
-                    "charging": "Oplader",
+                    "charging": "Lader",
                     "connect_cable": "Ingen strøm",
-                    "conserving": "Holder opladning",
-                    "ready_for_charging": "Klar til opladning"
+                    "conserving": "Konserverer lading",
+                    "ready_for_charging": "Klar for lading"
                 }
             },
             "inspection": {
-                "name": "Næste eftersyn"
+                "name": "Neste inspeksjon"
             },
             "mileage": {
                 "name": "Kilometerstand"
             },
             "range": {
-                "name": "Rækkevidde"
+                "name": "Rekkevidde"
             },
             "remaining_charging_time": {
-                "name": "Restopladningstid"
+                "name": "Gjenstående ladetid"
             },
             "software_version": {
-                "name": "Softwareversion"
+                "name": "Programvareversjon"
             },
             "target_battery_percentage": {
-                "name": "Ladegrænse i procent"
+                "name": "Ønsket batteriprosent"
             }
         },
         "switch": {
             "battery_care_mode": {
-                "name": "Batteribeskyttelse"
+                "name": "Batteripleie"
             },
             "charging": {
-                "name": "Oplader"
+                "name": "Lader"
             },
             "charging_switch": {
-                "name": "Oplader"
+                "name": "Lader"
             },
             "reduced_current": {
-                "name": "Reduceret strømstyrke"
+                "name": "Redusert effekt"
             },
             "window_heating": {
-                "name": "Opvarming af ruder"
+                "name": "Vindusvarme"
             }
         }
     },
     "options": {
-        "error": {
-            "invalid_polling_interval": "Ugyldigt forespørgselsinterval angivet. Vælg mellem 1 og 1440 minutter"
-        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "API-svarsporing. Kræver fejlsøgningslogning aktiveret i configuration.yaml.",
-                    "poll_interval_in_minutes": "Forespørgselsinterval i minutter, når bilen er inaktiv."
-                },
-                "data_description": {
-                    "poll_interval_in_minutes": "Angiv et forespørgselsinterval mellem 1 og 1440 minutter. (standard 30)"
+                    "tracing": "Sporing av API-respons. Krever at feilsøkingslogging er aktivert i configuration.yaml."
                 }
             }
         }

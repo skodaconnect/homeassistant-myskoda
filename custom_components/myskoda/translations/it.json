@@ -19,35 +19,75 @@
     },
     "entity": {
         "binary_sensor": {
+            "bonnet_open": {
+                "name": "Cofano",
+                "state": {
+                    "off": "Chiuso",
+                    "on": "Aperto"
+                }
+            },
             "charger_connected": {
-                "name": "Caricabatterie collegato"
+                "name": "Caricabatterie collegato",
+                "state": {
+                    "off": "Scollegato",
+                    "on": "Collegato"
+                }
             },
             "charger_locked": {
-                "name": "Blocco ricarica"
-            },
-            "locked": {
-                "name": "Veicolo bloccato"
+                "name": "Blocco ricarica",
+                "state": {
+                    "off": "Bloccato",
+                    "on": "Sbloccato"
+                }
             },
             "doors_locked": {
-                "name": "Porte chiuse"
+                "name": "Porte chiuse",
+                "state": {
+                    "off": "Bloccato",
+                    "on": "Sbloccato"
+                }
             },
             "doors_open": {
-                "name": "Porte aperte"
-            },
-            "windows_open": {
-                "name": "Finestrini"
-            },
-            "trunk_open": {
-                "name": "Bagagliaio"
-            },
-            "bonnet_open": {
-                "name": "Cofano"
-            },
-            "sunroof_open": {
-                "name": "Tettuccio"
+                "name": "Porte aperte",
+                "state": {
+                    "off": "Chiuso",
+                    "on": "Aperto"
+                }
             },
             "lights_on": {
-                "name": "Luci"
+                "name": "Luci",
+                "state": {
+                    "off": "Non attivo",
+                    "on": "Attivo"
+                }
+            },
+            "locked": {
+                "name": "Veicolo bloccato",
+                "state": {
+                    "off": "Bloccato",
+                    "on": "Sbloccato"
+                }
+            },
+            "sunroof_open": {
+                "name": "Tettuccio",
+                "state": {
+                    "off": "Chiuso",
+                    "on": "Aperto"
+                }
+            },
+            "trunk_open": {
+                "name": "Bagagliaio",
+                "state": {
+                    "off": "Chiuso",
+                    "on": "Aperto"
+                }
+            },
+            "windows_open": {
+                "name": "Finestrini",
+                "state": {
+                    "off": "Chiuso",
+                    "on": "Aperto"
+                }
             }
         },
         "climate": {
@@ -57,7 +97,17 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Posizione"
+                "name": "Posizione",
+                "state": {
+                    "home": "Casa",
+                    "not_home": "Assente",
+                    "vehicle_in_motion": "Movimento rilevato"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Immagine del veicolo"
             }
         },
         "number": {
@@ -66,66 +116,84 @@
             }
         },
         "sensor": {
-            "software_version": {
-                "name": "Versione software"
-            },
             "battery_percentage": {
                 "name": "Percentuale batteria"
+            },
+            "car_captured": {
+                "name": "Ultimo aggiornamento"
+            },
+            "charge_type": {
+                "name": "Tipo di carica",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "SPENTO"
+                }
             },
             "charging_power": {
                 "name": "Potenza di carica"
             },
+            "charging_rate": {
+                "name": "Velocità di Ricarica"
+            },
             "charging_state": {
                 "name": "Stato di carica",
                 "state": {
-                    "connect_cable": "Cavo disconnesso",
-                    "ready_for_charging": "Pronto per la ricarica",
+                    "charging": "Ricarica",
+                    "connect_cable": "Nessun potere",
                     "conserving": "Conservazione della carica",
-                    "charging": "Ricarica"
+                    "ready_for_charging": "Pronto per la ricarica"
                 }
             },
-            "range": {
-                "name": "Gamma"
-            },
-            "target_battery_percentage": {
-                "name": "Percentuale limite di carica"
+            "inspection": {
+                "name": "Prossima Ispezione"
             },
             "mileage": {
                 "name": "Chilometraggio"
             },
-            "charge_type": {
-                "name": "Tipo di carica"
+            "range": {
+                "name": "Gamma"
             },
             "remaining_charging_time": {
                 "name": "Tempo di ricarica rimanente"
             },
-            "car_captured": {
-                "name": "Ultimo aggiornamento"
+            "software_version": {
+                "name": "Versione software"
+            },
+            "target_battery_percentage": {
+                "name": "Percentuale limite di carica"
             }
         },
         "switch": {
-            "window_heating": {
-                "name": "Riscaldamento finestrini"
+            "battery_care_mode": {
+                "name": "Cura della batteria"
+            },
+            "charging": {
+                "name": "Ricarica"
             },
             "charging_switch": {
                 "name": "Ricarica"
             },
-            "battery_care_mode": {
-                "name": "Cura della batteria"
-            },
             "reduced_current": {
                 "name": "Limitatore di corrente"
             },
-            "charging": {
-                "name": "Ricarica"
+            "window_heating": {
+                "name": "Riscaldamento finestrini"
             }
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Intervallo di aggiornamento specificato non valido. Si prega di scegliere tra 1 e 1440 minuti"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "Rilevamento risposta API. Richiede la registrazione del debug abilitata nel file di configurazione configuration.yaml."
+                    "tracing": "Rilevamento risposta API. Richiede la registrazione del debug abilitata nel file di configurazione configuration.yaml.",
+                    "poll_interval_in_minutes": "Intervallo di aggiornamento in minuti quando l'auto è inattiva."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Specificare un intervallo di aggiornamento tra 1 e 1440 minuti (predefinito 30)"
                 }
             }
         }

@@ -1,18 +1,18 @@
 {
     "config": {
         "abort": {
-            "already_configured": "O aparelho já está configurado"
+            "already_configured": "O dispositivo já está ajustado"
         },
         "error": {
-            "cannot_connect": "Falha ao conectar",
+            "cannot_connect": "Falhou ao conectar",
             "invalid_auth": "Autenticação inválida",
-            "unknown": "Um erro inesperado ocorreu. Verifica os ficheiros de log do HomeAssistant."
+            "unknown": "Ocorreu um erro inesperado. Verifique os arquivos de registro do HomeAssistant."
         },
         "step": {
             "user": {
                 "data": {
                     "email": "E-mail",
-                    "password": "Palavra passe"
+                    "password": "Senha"
                 }
             }
         }
@@ -100,8 +100,8 @@
                 "name": "Posição",
                 "state": {
                     "home": "Em casa",
-                    "not_home": "Fora",
-                    "vehicle_in_motion": "Moção detetada"
+                    "not_home": "Ausente",
+                    "vehicle_in_motion": "Moção detectada"
                 }
             }
         },
@@ -117,7 +117,7 @@
         },
         "sensor": {
             "battery_percentage": {
-                "name": "Percentagem da bateria"
+                "name": "Porcentagem da bateria"
             },
             "car_captured": {
                 "name": "Última atualização"
@@ -134,15 +134,15 @@
                 "name": "Potência de carga"
             },
             "charging_rate": {
-                "name": "Taxa de carregamento"
+                "name": "Taxa de carga"
             },
             "charging_state": {
                 "name": "Estado de carga",
                 "state": {
-                    "charging": "A carregar",
+                    "charging": "Carregando",
                     "connect_cable": "Sem energia",
                     "conserving": "Conservando carga",
-                    "ready_for_charging": "Preparado para carregar"
+                    "ready_for_charging": "Pronto para carregar"
                 }
             },
             "inspection": {
@@ -158,10 +158,10 @@
                 "name": "Tempo de carga restante"
             },
             "software_version": {
-                "name": "Versão do software"
+                "name": "Versão"
             },
             "target_battery_percentage": {
-                "name": "Percentagem limite da bateria"
+                "name": "Porcentagem limite da bateria"
             }
         },
         "switch": {
@@ -169,10 +169,10 @@
                 "name": "Cuidado da bateria"
             },
             "charging": {
-                "name": "A carregar"
+                "name": "Carregando"
             },
             "charging_switch": {
-                "name": "A carregar"
+                "name": "Carregando"
             },
             "reduced_current": {
                 "name": "Corrente reduzida"
@@ -184,16 +184,16 @@
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Intervalo de consulta específica inválida. Escolha entre 1 a 1440 minutos"
+            "invalid_polling_interval": "Intervalo inserido inválido. Escolha entre 1 a 1440 minutos"
         },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "Rastreamento de resposta da API. Requer registo de depuração habilitada em configuration.yaml.",
-                    "poll_interval_in_minutes": "Intervalo de consulta quando o carro está ocioso."
+                    "tracing": "Rastreamento de resposta da API. Requer registro de depuração ativo em configuration.yaml.",
+                    "poll_interval_in_minutes": "Intervalos em minuto quando o carro está ausente."
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Especifique um intervalo de consulta entre 1 e 1440 minutos (padrão 30)"
+                    "poll_interval_in_minutes": "Especifique os minutos do intervalo entre 1 a 1440 minutos. (padrão 30)"
                 }
             }
         }
