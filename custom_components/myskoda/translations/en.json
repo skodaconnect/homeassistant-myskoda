@@ -180,6 +180,14 @@
             "window_heating": {
                 "name": "Window Heating"
             }
+        },
+        "button": {
+            "honk": {
+                "name": "Honk"
+            },
+            "flash": {
+                "name": "Flash"
+            }
         }
     },
     "options": {

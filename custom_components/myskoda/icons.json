@@ -136,6 +136,14 @@
 					"on": "mdi:heat-wave"
 				}
 			}
-		}
+		},
+        	"button": {
+            		"honk": {
+                		"default": "mdi:bugle"
+            		},
+            		"flash": {
+                		"default": "mdi:car-parking-lights"
+            		}
+        	}
 	}
 }
