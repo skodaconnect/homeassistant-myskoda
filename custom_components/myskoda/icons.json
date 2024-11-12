@@ -89,8 +89,17 @@
 			"inspection": {
 				"default": "mdi:car-wrench"
 			},
+			"inspection_in_km": {
+				"default": "mdi:car-wrench"
+			},
 			"mileage": {
 				"default": "mdi:counter"
+			},
+			"oil_service_in_days": {
+				"default": "mdi:oil"
+			},
+			"oil_service_in_km": {
+				"default": "mdi:oil"
 			},
 			"range": {
 				"default": "mdi:speedometer"

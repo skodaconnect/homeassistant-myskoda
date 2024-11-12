@@ -148,9 +148,18 @@
             "inspection": {
                 "name": "Next Inspection"
             },
+	    "inspection_in_km": {
+		"name": "Next Inspection in KM"
+	    },
             "mileage": {
                 "name": "Mileage"
             },
+	    "oil_service_in_days": {
+		"name": "Oil Service"
+	    },
+	    "oil_service_in_km": {
+		"name": "Oil Service in KM"
+	    },
             "range": {
                 "name": "Range"
             },
