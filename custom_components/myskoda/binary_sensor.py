@@ -41,7 +41,7 @@ async def async_setup_entry(
             WindowsOpen,
             TrunkOpen,
             BonnetOpen,
-            LightsOn,
+            ParkingLightsOn,
             ChargerConnected,
             ChargerLocked,
             SunroofOpen,
@@ -222,13 +222,13 @@ class SunroofOpen(StatusBinarySensor):
         return False
 
 
-class LightsOn(StatusBinarySensor):
-    """Detects whether the lights are on."""
+class ParkingLightsOn(StatusBinarySensor):
+    """Detects whether the parking-lights are on."""
 
     entity_description = BinarySensorEntityDescription(
-        key="lights_on",
+        key="parkinglights_on",
         device_class=BinarySensorDeviceClass.LIGHT,
-        translation_key="lights_on",
+        translation_key="parkinglights_on",
     )
 
     @property
