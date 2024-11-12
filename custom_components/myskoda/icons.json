@@ -95,6 +95,15 @@
 			"range": {
 				"default": "mdi:speedometer"
 			},
+            "combustion_range": {
+                "default": "mdi:car"
+            },
+            "electric_range": {
+                "default": "mdi:car-electric"
+            },
+            "fuel_level": {
+                "default": "mdi:fuel"
+            },
 			"remaining_charging_time": {
 				"default": "mdi:timer"
 			},

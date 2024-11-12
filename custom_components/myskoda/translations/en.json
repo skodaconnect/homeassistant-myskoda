@@ -162,6 +162,15 @@
             },
             "target_battery_percentage": {
                 "name": "Target Battery Percentage"
+            },
+            "fuel_level": {
+                "name": "Fuel Level"
+            },
+            "combustion_range": {
+                "name": "Combustion Range"
+            },
+            "electric_range": {
+                "name": "Electric Range"
             }
         },
         "switch": {
