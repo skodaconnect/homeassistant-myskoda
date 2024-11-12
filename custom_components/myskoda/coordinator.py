@@ -36,13 +36,18 @@ type RefreshFunction = Callable[[], Coroutine[None, None, None]]
 class MySkodaDebouncer(Debouncer):
     """Class to rate limit calls to MySkoda REST APIs."""
 
-    def __init__(self, hass: HomeAssistant, func: RefreshFunction) -> None:
+    def __init__(
+        self, hass: HomeAssistant, func: RefreshFunction, immediate: bool
+    ) -> None:
         """Initialize debounce."""
+
+        self.immediate = immediate
+
         super().__init__(
             hass,
             _LOGGER,
             cooldown=API_COOLDOWN_IN_SECONDS,
-            immediate=False,
+            immediate=immediate,
             function=func,
         )
 
@@ -85,7 +90,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
         self.update_vehicle = self._debounce(self._update_vehicle)
-        self.update_status = self._debounce(self._update_status)
 
         myskoda.subscribe(self._on_mqtt_event)
 
@@ -143,7 +147,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.LOCK,
             OperationName.UNLOCK,
         ]:
-            await self.update_status()
+            await self.update_status(immediate=True)
 
     async def _on_charging_event(self, event: EventCharging):
         vehicle = self.data.vehicle
@@ -248,5 +252,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         self.set_updated_vehicle(vehicle)
 
-    def _debounce(self, func: RefreshFunction) -> RefreshFunction:
-        return MySkodaDebouncer(self.hass, func).async_call
+    def _debounce(
+        self, func: RefreshFunction, immediate: bool = False
+    ) -> RefreshFunction:
+        return MySkodaDebouncer(self.hass, func, immediate).async_call
+
+    async def update_status(self, immediate: bool = False) -> RefreshFunction:
+        return self._debounce(self._update_status, immediate)
