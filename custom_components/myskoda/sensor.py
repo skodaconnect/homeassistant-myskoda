@@ -50,12 +50,12 @@ async def async_setup_entry(
             SoftwareVersion,
             TargetBatteryPercentage,
             InspectionInterval,
-            InspectionIntervalKM,
-            OilServiceIntervalDays,
-            OilServiceIntervalKM,
             ElectricRange,
             CombustionRange,
             FuelLevel,
+            InspectionIntervalKM,
+            OilServiceIntervalDays,
+            OilServiceIntervalKM,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -301,6 +301,66 @@ class InspectionInterval(MySkodaSensor):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.VEHICLE_HEALTH_INSPECTION]
+
+
+class InspectionIntervalKM(MySkodaSensor):
+    """The number of kilometers before inspection is due."""
+
+    entity_description = SensorEntityDescription(
+        key="inspection_in_km",
+        device_class=SensorDeviceClass.DISTANCE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
+        translation_key="inspection_in_km",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: S102
+        if maintenance_report := self.vehicle.maintenance.maintenance_report:
+            return maintenance_report.inspection_due_in_km
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.VEHICLE_HEALTH_INSPECTION, CapabilityId.FUEL_STATUS]
+
+
+class OilServiceIntervalDays(MySkodaSensor):
+    """The number of days before oil service is due."""
+
+    entity_description = SensorEntityDescription(
+        key="oil_service_in_days",
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTime.DAYS,
+        translation_key="oil_service_in_days",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: S102
+        if maintenance_report := self.vehicle.maintenance.maintenance_report:
+            return maintenance_report.oil_service_due_in_days
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.VEHICLE_HEALTH_INSPECTION, CapabilityId.FUEL_STATUS]
+
+
+class OilServiceIntervalKM(MySkodaSensor):
+    """The number of kilometers before oil service is due."""
+
+    entity_description = SensorEntityDescription(
+        key="oil_service_in_km",
+        device_class=SensorDeviceClass.DISTANCE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
+        translation_key="oil_service_in_km",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: S102
+        if maintenance_report := self.vehicle.maintenance.maintenance_report:
+            return maintenance_report.oil_service_due_in_km
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.VEHICLE_HEALTH_INSPECTION, CapabilityId.FUEL_STATUS]
 
 
 class ChargeType(ChargingSensor):
