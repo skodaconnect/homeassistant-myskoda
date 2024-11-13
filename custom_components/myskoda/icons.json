@@ -96,10 +96,10 @@
 				"default": "mdi:speedometer"
 			},
             "combustion_range": {
-                "default": "mdi:car"
+                "default": "mdi:gas-station"
             },
             "electric_range": {
-                "default": "mdi:car-electric"
+                "default": "mdi:ev-station"
             },
             "fuel_level": {
                 "default": "mdi:fuel"

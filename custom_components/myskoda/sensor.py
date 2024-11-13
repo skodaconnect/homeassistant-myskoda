@@ -164,7 +164,8 @@ class ChargingPower(ChargingSensor):
     def native_value(self) -> float | None:  # noqa: D102
         if status := self._status():
             return status.charge_power_in_kw
-            
+
+
 class CombustionRange(MySkodaSensor):
     """The vehicle's combustion range - only for hybrid vehicles."""
 
@@ -183,6 +184,7 @@ class CombustionRange(MySkodaSensor):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE, CapabilityId.FUEL_STATUS, CapabilityId.CHARGING_MQB]
+
 
 class ElectricRange(MySkodaSensor):
     """The vehicle's electric range - only for hybrid vehicles."""
