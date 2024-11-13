@@ -54,18 +54,18 @@
                     "on": "Otevřeno"
                 }
             },
-            "lights_on": {
-                "name": "Světla",
-                "state": {
-                    "off": "Vypnuto",
-                    "on": "Zapnuto"
-                }
-            },
             "locked": {
                 "name": "Vozidlo uzamčeno",
                 "state": {
                     "off": "Uzamčeno",
                     "on": "Odemčeno"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Parkovací světla",
+                "state": {
+                    "off": "Vyp.",
+                    "on": "Zap."
                 }
             },
             "sunroof_open": {
@@ -148,8 +148,17 @@
             "inspection": {
                 "name": "Další prohlídka"
             },
+            "inspection_in_km": {
+                "name": "Další prohlídka v KM"
+            },
             "mileage": {
                 "name": "Najeto"
+            },
+            "oil_service_in_days": {
+                "name": "Výměna oleje"
+            },
+            "oil_service_in_km": {
+                "name": "Výměna oleje v KM"
             },
             "range": {
                 "name": "Dojezd"
