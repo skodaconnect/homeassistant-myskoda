@@ -23,6 +23,7 @@ from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [r
 from myskoda.models import charging
 from myskoda.models.charging import Charging, ChargingStatus
 from myskoda.models.info import CapabilityId
+from myskoda.models.driving_range import EngineType
 
 from .const import COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
@@ -46,7 +47,7 @@ async def async_setup_entry(
             LastUpdated,
             Mileage,
             RemainingChargingTime,
-            RemainingDistance,
+            Range,
             SoftwareVersion,
             TargetBatteryPercentage,
             InspectionInterval,
@@ -163,8 +164,8 @@ class ChargingPower(ChargingSensor):
             return status.charge_power_in_kw
 
 
-class RemainingDistance(ChargingSensor):
-    """Estimated range of an electric vehicle in km."""
+class Range(MySkodaSensor):
+    """Estimated range of vehicle in km."""
 
     entity_description = SensorEntityDescription(
         key="range",
@@ -173,6 +174,13 @@ class RemainingDistance(ChargingSensor):
         device_class=SensorDeviceClass.DISTANCE,
         translation_key="range",
     )
+
+    @property
+    def icon(self) -> str:  # noqa: D102
+        if self.vehicle.driving_range.car_type == EngineType.ELECTRIC:
+            return "mdi:ev-station"
+        else:
+            return "mdi:gas-station"
 
     @property
     def native_value(self) -> int | float | None:  # noqa: D102
