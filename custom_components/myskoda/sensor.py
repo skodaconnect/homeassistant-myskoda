@@ -51,6 +51,9 @@ async def async_setup_entry(
             SoftwareVersion,
             TargetBatteryPercentage,
             InspectionInterval,
+            ElectricRange,
+            CombustionRange,
+            FuelLevel,
             InspectionIntervalKM,
             OilServiceIntervalDays,
             OilServiceIntervalKM,
@@ -165,6 +168,67 @@ class ChargingPower(ChargingSensor):
     def native_value(self) -> float | None:  # noqa: D102
         if status := self._status():
             return status.charge_power_in_kw
+
+
+class CombustionRange(MySkodaSensor):
+    """The vehicle's combustion range - only for hybrid vehicles."""
+
+    entity_description = SensorEntityDescription(
+        key="combustion_range",
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
+        device_class=SensorDeviceClass.DISTANCE,
+        translation_key="combustion_range",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: D102
+        if range := self.vehicle.driving_range:
+            if range.primary_engine_range is not None:
+                return range.primary_engine_range.remaining_range_in_km
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.STATE, CapabilityId.FUEL_STATUS, CapabilityId.CHARGING_MQB]
+
+
+class ElectricRange(MySkodaSensor):
+    """The vehicle's electric range - only for hybrid vehicles."""
+
+    entity_description = SensorEntityDescription(
+        key="electric_range",
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
+        device_class=SensorDeviceClass.DISTANCE,
+        translation_key="electric_range",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: D102
+        if range := self.vehicle.driving_range:
+            if range.secondary_engine_range is not None:
+                return range.secondary_engine_range.remaining_range_in_km
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.STATE, CapabilityId.FUEL_STATUS, CapabilityId.CHARGING_MQB]
+
+
+class FuelLevel(MySkodaSensor):
+    """The vehicle's combustion engine fuel level - only for non electric vehicles."""
+
+    entity_description = SensorEntityDescription(
+        key="fuel_level",
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=PERCENTAGE,
+        translation_key="fuel_level",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: D102
+        if range := self.vehicle.driving_range:
+            return range.primary_engine_range.current_fuel_level_in_percent
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.STATE, CapabilityId.FUEL_STATUS]
 
 
 class Range(MySkodaSensor):

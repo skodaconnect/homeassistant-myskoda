@@ -101,6 +101,15 @@
 			"oil_service_in_km": {
 				"default": "mdi:oil"
 			},
+            "combustion_range": {
+                "default": "mdi:gas-station"
+            },
+            "electric_range": {
+                "default": "mdi:ev-station"
+            },
+            "fuel_level": {
+                "default": "mdi:fuel"
+            },
 			"remaining_charging_time": {
 				"default": "mdi:timer"
 			},
