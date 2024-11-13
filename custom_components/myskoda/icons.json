@@ -101,9 +101,6 @@
 			"oil_service_in_km": {
 				"default": "mdi:oil"
 			},
-			"range": {
-				"default": "mdi:speedometer"
-			},
             "combustion_range": {
                 "default": "mdi:gas-station"
             },
