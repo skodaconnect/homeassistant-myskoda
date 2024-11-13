@@ -180,10 +180,13 @@ class Range(MySkodaSensor):
 
     @property
     def icon(self) -> str:  # noqa: D102
-        if self.vehicle.driving_range.car_type == EngineType.ELECTRIC:
-            return "mdi:ev-station"
-        else:
+        if vehicle.vehicle.driving_range is None or vehicle.vehicle.driving_range.car_type is None:
             return "mdi:gas-station"
+        else:
+            if self.vehicle.driving_range.car_type == EngineType.ELECTRIC:
+                return "mdi:ev-station"
+            else:
+                return "mdi:gas-station"
 
     @property
     def native_value(self) -> int | float | None:  # noqa: D102
