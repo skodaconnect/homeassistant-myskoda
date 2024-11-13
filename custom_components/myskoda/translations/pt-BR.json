@@ -171,6 +171,15 @@
             },
             "target_battery_percentage": {
                 "name": "Porcentagem limite da bateria"
+            },
+            "fuel_level": {
+                "name": "Nível de combustível"
+            },
+            "combustion_range": {
+                "name": "Alcance de combustão"
+            },
+            "electric_range": {
+                "name": "Alcance elétrico"
             }
         },
         "switch": {
