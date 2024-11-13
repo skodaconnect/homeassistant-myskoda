@@ -141,6 +141,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             await self.update_charging()
 
     async def _on_charging_event(self, event: EventCharging):
+        # TODO @webspider: Refactor with proper classes
         vehicle = self.data.vehicle
 
         data = event.event.data
@@ -156,6 +157,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 )
             if data.soc is not None:
                 status.battery.state_of_charge_in_percent = data.soc
+            if data.time_to_finish is not None:
+                status.remaining_time_to_fully_charged_in_minutes = data.time_to_finish
             if data.state is not None:
                 status.state = data.state
 
