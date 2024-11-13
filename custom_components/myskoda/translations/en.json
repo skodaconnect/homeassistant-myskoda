@@ -54,18 +54,18 @@
                     "on": "Open"
                 }
             },
-            "lights_on": {
-                "name": "Lights",
-                "state": {
-                    "off": "Off",
-                    "on": "On"
-                }
-            },
             "locked": {
                 "name": "Vehicle Locked",
                 "state": {
                     "off": "Locked",
                     "on": "Unlocked"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Parking Lights",
+                "state": {
+                    "off": "Off",
+                    "on": "On"
                 }
             },
             "sunroof_open": {
@@ -148,9 +148,18 @@
             "inspection": {
                 "name": "Next Inspection"
             },
+	    "inspection_in_km": {
+		"name": "Next Inspection in KM"
+	    },
             "mileage": {
                 "name": "Mileage"
             },
+	    "oil_service_in_days": {
+		"name": "Oil Service"
+	    },
+	    "oil_service_in_km": {
+		"name": "Oil Service in KM"
+	    },
             "range": {
                 "name": "Range"
             },
