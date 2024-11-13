@@ -189,7 +189,7 @@ class Range(MySkodaSensor):
     def native_value(self) -> int | float | None:  # noqa: D102
         if range := self.vehicle.driving_range:
             return range.total_range_in_km
-            
+
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE]
 
