@@ -54,18 +54,18 @@
                     "on": "Åpne"
                 }
             },
-            "lights_on": {
-                "name": "Lys",
-                "state": {
-                    "off": "Av",
-                    "on": "På"
-                }
-            },
             "locked": {
                 "name": "Bil låst",
                 "state": {
                     "off": "Låst",
                     "on": "Ulåst"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Parkeringslys",
+                "state": {
+                    "off": "Av",
+                    "on": "På"
                 }
             },
             "sunroof_open": {
@@ -133,6 +133,9 @@
             "charging_power": {
                 "name": "Ladeeffekt"
             },
+            "charging_rate": {
+                "name": "Ladehastighet"
+            },
             "charging_state": {
                 "name": "Ladestatus",
                 "state": {
@@ -145,8 +148,17 @@
             "inspection": {
                 "name": "Neste inspeksjon"
             },
+            "inspection_in_km": {
+                "name": "Neste inspeksjon i km"
+            },
             "mileage": {
                 "name": "Kilometerstand"
+            },
+            "oil_service_in_days": {
+                "name": "Oljeservice"
+            },
+            "oil_service_in_km": {
+                "name": "Neste oljeservice i km"
             },
             "range": {
                 "name": "Rekkevidde"
@@ -180,10 +192,17 @@
         }
     },
     "options": {
+        "error": {
+            "invalid_polling_interval": "Ugyldig polling-intervall angitt. Vennligst velg et intervall mellom 1 og 1440 minutter"
+        },
         "step": {
             "init": {
                 "data": {
-                    "tracing": "Sporing av API-respons. Krever at feilsøkingslogging er aktivert i configuration.yaml."
+                    "tracing": "Sporing av API-respons. Krever at feilsøkingslogging er aktivert i configuration.yaml.",
+                    "poll_interval_in_minutes": "Polling-intervall i minutter når bilen er inaktiv."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Angi et polling-intervall mellom 1 og 1440 minutter. (standard er 30)"
                 }
             }
         }

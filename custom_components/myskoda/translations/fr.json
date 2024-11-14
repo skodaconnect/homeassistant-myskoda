@@ -54,18 +54,18 @@
                     "on": "Ouverte"
                 }
             },
-            "lights_on": {
-                "name": "Feux",
-                "state": {
-                    "off": "Éteint",
-                    "on": "Allumées"
-                }
-            },
             "locked": {
                 "name": "Véhicule verrouillé",
                 "state": {
                     "off": "Verrouillé",
                     "on": "Déverrouillé"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Feux de stationnement",
+                "state": {
+                    "off": "Éteintes",
+                    "on": "Allumées"
                 }
             },
             "sunroof_open": {
@@ -148,8 +148,17 @@
             "inspection": {
                 "name": "Prochaine révision"
             },
+            "inspection_in_km": {
+                "name": "Prochaine révision en Km"
+            },
             "mileage": {
                 "name": "Kilométrage"
+            },
+            "oil_service_in_days": {
+                "name": "Vidange"
+            },
+            "oil_service_in_km": {
+                "name": "Prochaine vidange en Km"
             },
             "range": {
                 "name": "Autonomie"

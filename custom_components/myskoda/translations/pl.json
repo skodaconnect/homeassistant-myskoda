@@ -1,0 +1,201 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Urządzenie jest już skonfigurowane"
+        },
+        "error": {
+            "cannot_connect": "Nie udało się połączyć",
+            "invalid_auth": "Nieprawidłowe uwierzytelnienie",
+            "unknown": "Wystąpił nieoczekiwany błąd. Sprawdź logi systemowe HomeAssistant."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "E-mail",
+                    "password": "Hasło"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "bonnet_open": {
+                "name": "Maska",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            },
+            "charger_connected": {
+                "name": "Ładowarka podłączona",
+                "state": {
+                    "off": "Niepodłączony",
+                    "on": "Podłączony"
+                }
+            },
+            "charger_locked": {
+                "name": "Blokada kabla ładującego",
+                "state": {
+                    "off": "Zablokowany",
+                    "on": "Odblokowany"
+                }
+            },
+            "doors_locked": {
+                "name": "Drzwi zablokowane",
+                "state": {
+                    "off": "Zablokowane",
+                    "on": "Odblokowane"
+                }
+            },
+            "doors_open": {
+                "name": "Drzwi otwarte",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            },
+            "lights_on": {
+                "name": "Światła",
+                "state": {
+                    "off": "Wyłączone",
+                    "on": "Włączone"
+                }
+            },
+            "locked": {
+                "name": "Pojazd zablokowany",
+                "state": {
+                    "off": "Zablokowany",
+                    "on": "Odblokowany"
+                }
+            },
+            "sunroof_open": {
+                "name": "Okno dachowe",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            },
+            "trunk_open": {
+                "name": "Bagażnik",
+                "state": {
+                    "off": "Zamknięty",
+                    "on": "Otwarty"
+                }
+            },
+            "windows_open": {
+                "name": "Okna",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Klimatyzacja"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Położenie",
+                "state": {
+                    "home": "Dom",
+                    "not_home": "Poza domem",
+                    "vehicle_in_motion": "Wykryto ruch"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Render pojazdu"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Limit Ładowania"
+            }
+        },
+        "sensor": {
+            "battery_percentage": {
+                "name": "Procent baterii"
+            },
+            "car_captured": {
+                "name": "Ostatnia aktualizacja"
+            },
+            "charge_type": {
+                "name": "Typ Ładowania",
+                "state": {
+                    "ac": "Prąd zmienny",
+                    "dc": "Prąd stały",
+                    "off": "Wyłączone"
+                }
+            },
+            "charging_power": {
+                "name": "Moc ładowania"
+            },
+            "charging_rate": {
+                "name": "Moc ładowania"
+            },
+            "charging_state": {
+                "name": "Stan ładowania",
+                "state": {
+                    "charging": "Ładowanie",
+                    "connect_cable": "Brak zasilania",
+                    "conserving": "Utrzymywanie poziomu naładowania baterii",
+                    "ready_for_charging": "Gotowy do ładowania"
+                }
+            },
+            "inspection": {
+                "name": "Następna inspekcja"
+            },
+            "mileage": {
+                "name": "Przebieg"
+            },
+            "range": {
+                "name": "Zasięg"
+            },
+            "remaining_charging_time": {
+                "name": "Pozostały czas ładowania"
+            },
+            "software_version": {
+                "name": "Wersja oprogramowania"
+            },
+            "target_battery_percentage": {
+                "name": "Docelowy procent baterii"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "name": "Tryb ochrony baterii"
+            },
+            "charging": {
+                "name": "Ładowanie"
+            },
+            "charging_switch": {
+                "name": "Ładowanie"
+            },
+            "reduced_current": {
+                "name": "Ograniczenie prądu"
+            },
+            "window_heating": {
+                "name": "Ogrzewanie okien"
+            }
+        }
+    },
+    "options": {
+        "error": {
+            "invalid_polling_interval": "Podano nieprawidłową częstotliwość odświeżania. Wybierz wartość od 1 do 1440 minut"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "Śledzenie odpowiedzi API. Wymaga włączonego logowania w trybie debug w configuration.yaml.",
+                    "poll_interval_in_minutes": "Częstotliwość odświeżania w minutach, gdy samochód jest bezczynny."
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Ustaw częstotliwość odświeżania w zakresie od 1 do 1440 minut. (domyślnie 30)"
+                }
+            }
+        }
+    }
+}
