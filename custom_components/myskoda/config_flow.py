@@ -10,10 +10,11 @@ import voluptuous as vol
 
 from homeassistant.config_entries import (
     ConfigEntry,
-    ConfigFlow as BaseConfigFlow,
+    ConfigFlow,
     ConfigFlowResult,
     OptionsFlow,
     callback,
+    SOURCE_REAUTH,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
@@ -53,8 +54,9 @@ async def validate_options_input(
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
     """Check that the inputs are valid."""
-    hub = MySkoda(async_get_clientsession(hass), get_default_context())
-
+    hub = MySkoda(
+        async_get_clientsession(hass), get_default_context(), mqtt_enabled=False
+    )
     await hub.connect(data["email"], data["password"])
 
 
@@ -78,10 +80,23 @@ OPTIONS_FLOW = {
 }
 
 
-class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
+class MySkodaConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for MySkoda."""
 
-    VERSION = 1
+    myskoda: MySkoda | None = None
+
+    VERSION = 2
+    MINOR_VERSION = 1
+
+    async def async_connect_myskoda(self, data: dict[str, Any]) -> MySkoda:
+        """Verify the connection to MySkoda."""
+        hub = MySkoda(
+            async_get_clientsession(self.hass),
+            get_default_context(),
+            mqtt_enabled=False,
+        )
+        await hub.connect(data["email"], data["password"])
+        return hub
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -95,7 +110,9 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
         errors = {}
 
         try:
-            await validate_input(self.hass, user_input)
+            myskoda = await self.async_connect_myskoda(user_input)
+            user = await myskoda.get_user()
+            await self.async_set_unique_id(user.id)
         except CannotConnect:
             errors["base"] = "cannot_connect"
         except InvalidAuth:
@@ -103,7 +120,15 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
         except Exception:  # pylint: disable=broad-except
             _LOGGER.exception("Unexpected exception")
             errors["base"] = "unknown"
-        else:
+
+        if not errors:
+            self._abort_if_unique_id_configured()
+
+            if self.source == SOURCE_REAUTH:
+                self._abort_if_unique_id_mismatch()
+                return self.async_update_reload_and_abort(self._get_reauth_entry())
+
+            self._abort_if_unique_id_configured()
             return self.async_create_entry(title=user_input["email"], data=user_input)
 
         # Only called if there was an error.
