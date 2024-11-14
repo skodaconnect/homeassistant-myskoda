@@ -54,7 +54,7 @@
                     "on": "Geöffnet"
                 }
             },
-            "lights_on": {
+            "parkinglights_on": {
                 "name": "Parklicht",
                 "state": {
                     "off": "Aus",
