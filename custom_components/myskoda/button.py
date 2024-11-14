@@ -50,14 +50,12 @@ class Honk(MySkodaButton):
     """Honk."""
 
     entity_description = ButtonEntityDescription(
-        key="honk",
-        translation_key="honk",
-        device_class=ButtonDeviceClass.IDENTIFY
+        key="honk", translation_key="honk", device_class=ButtonDeviceClass.IDENTIFY
     )
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_press(self) -> None:
-        await self.coordinator.myskoda.honk_flash(self.vehicle.info.vin, True)
+        await self.coordinator.myskoda.honk_flash(self.vehicle.info.vin)
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.HONK_AND_FLASH]
@@ -67,14 +65,12 @@ class Flash(MySkodaButton):
     """Flash."""
 
     entity_description = ButtonEntityDescription(
-        key="flash",
-        translation_key="flash",
-        device_class=ButtonDeviceClass.IDENTIFY
+        key="flash", translation_key="flash", device_class=ButtonDeviceClass.IDENTIFY
     )
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_press(self) -> None:
-        await self.coordinator.myskoda.honk_flash(self.vehicle.info.vin, False)
+        await self.coordinator.myskoda.flash(self.vehicle.info.vin)
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.HONK_AND_FLASH]
