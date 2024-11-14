@@ -169,6 +169,9 @@ class ChargingPower(ChargingSensor):
         if status := self._status():
             return status.charge_power_in_kw
 
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_MQB]
+
 
 class CombustionRange(MySkodaSensor):
     """The vehicle's combustion range - only for hybrid vehicles."""
@@ -279,6 +282,9 @@ class TargetBatteryPercentage(ChargingSensor):
     def native_value(self) -> int | None:  # noqa: D102
         if charging := self._charging():
             return charging.settings.target_state_of_charge_in_percent
+
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_MQB]
 
 
 class Mileage(MySkodaSensor):
@@ -450,6 +456,9 @@ class ChargingRate(ChargingSensor):
     def native_value(self) -> float | None:
         if status := self._status():
             return status.charging_rate_in_kilometers_per_hour
+
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_MQB]
 
 
 class LastUpdated(MySkodaSensor):
