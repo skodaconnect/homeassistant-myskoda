@@ -169,8 +169,8 @@ class ChargingPower(ChargingSensor):
         if status := self._status():
             return status.charge_power_in_kw
 
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.CHARGING_MEB]
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_MQB]
 
 
 class CombustionRange(MySkodaSensor):
@@ -283,8 +283,8 @@ class TargetBatteryPercentage(ChargingSensor):
         if charging := self._charging():
             return charging.settings.target_state_of_charge_in_percent
 
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.CHARGING_MEB]
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_MQB]
 
 
 class Mileage(MySkodaSensor):
@@ -457,8 +457,8 @@ class ChargingRate(ChargingSensor):
         if status := self._status():
             return status.charging_rate_in_kilometers_per_hour
 
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.CHARGING_MEB]
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_MQB]
 
 
 class LastUpdated(MySkodaSensor):
