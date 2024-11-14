@@ -171,6 +171,15 @@
             },
             "target_battery_percentage": {
                 "name": "Цель заряда батареи"
+            },
+            "fuel_level": {
+                "name": "Уровень топлива"
+            },
+            "combustion_range": {
+                "name": "Запас хода"
+            },
+            "electric_range": {
+                "name": "Запас хода электро"
             }
         },
         "switch": {
@@ -188,6 +197,14 @@
             },
             "window_heating": {
                 "name": "Обогрев окон"
+            }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Сигналить и мигать"
+            },
+            "flash": {
+                "name": "Сигналить"
             }
         }
     },
