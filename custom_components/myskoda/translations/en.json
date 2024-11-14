@@ -200,8 +200,8 @@
             }
         },
         "button": {
-            "honk": {
-                "name": "Honk"
+            "honk_flash": {
+                "name": "Honk and Flash"
             },
             "flash": {
                 "name": "Flash"

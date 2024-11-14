@@ -29,9 +29,9 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    """Set up the sensor platform."""
+    """Set up the button platform."""
     add_supported_entities(
-        available_entities=[Honk, Flash],
+        available_entities=[HonkFlash, Flash],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
@@ -46,11 +46,13 @@ class MySkodaButton(MySkodaEntity, ButtonEntity):
     pass
 
 
-class Honk(MySkodaButton):
-    """Honk."""
+class HonkFlash(MySkodaButton):
+    """Honk and Flash."""
 
     entity_description = ButtonEntityDescription(
-        key="honk", translation_key="honk", device_class=ButtonDeviceClass.IDENTIFY
+        key="honk_flash",
+        translation_key="honk_flash",
+        device_class=ButtonDeviceClass.IDENTIFY,
     )
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))

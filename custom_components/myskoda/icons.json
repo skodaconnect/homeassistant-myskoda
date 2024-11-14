@@ -153,7 +153,7 @@
 			}
 		},
         	"button": {
-            		"honk": {
+            		"honk_flash": {
                 		"default": "mdi:bugle"
             		},
             		"flash": {
