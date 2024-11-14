@@ -54,18 +54,18 @@
                     "on": "Aberto"
                 }
             },
-            "lights_on": {
-                "name": "Luzes",
-                "state": {
-                    "off": "Desativadas",
-                    "on": "Ativadas"
-                }
-            },
             "locked": {
                 "name": "Veículo trancado",
                 "state": {
                     "off": "Bloqueado",
                     "on": "Desbloqueado"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Luzes do estacionamento",
+                "state": {
+                    "off": "Desabilitado",
+                    "on": "Habilitado"
                 }
             },
             "sunroof_open": {
@@ -148,8 +148,17 @@
             "inspection": {
                 "name": "Próxima inspeção"
             },
+            "inspection_in_km": {
+                "name": "Nova inspeção em KM"
+            },
             "mileage": {
                 "name": "Quilometragem"
+            },
+            "oil_service_in_days": {
+                "name": "Serviço de petróleo"
+            },
+            "oil_service_in_km": {
+                "name": "Serviço de petróleo em KM"
             },
             "range": {
                 "name": "Alcance"
@@ -162,6 +171,15 @@
             },
             "target_battery_percentage": {
                 "name": "Percentagem limite da bateria"
+            },
+            "fuel_level": {
+                "name": "Nível de combustível"
+            },
+            "combustion_range": {
+                "name": "Alcance de combustão"
+            },
+            "electric_range": {
+                "name": "Alcance elétrico"
             }
         },
         "switch": {
