@@ -47,14 +47,17 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     session = async_create_clientsession(hass, trace_configs=trace_configs)
     myskoda = MySkoda(session, get_default_context())
 
+    # TODO @webspider: Figure out how to make these show nicely and transatable in UI
     try:
         await myskoda.connect(config.data["email"], config.data["password"])
     except AuthorizationFailedError:
         _LOGGER.debug("Authorization with MySkoda failed.")
         raise ConfigEntryAuthFailed("Authentication failed.")
     except TermsAndConditionsError:
-        _LOGGER.debug("New terms and conditions detected in login flow.")
-        raise
+        _LOGGER.error(
+            "New terms and conditions detected while logging in. Please log into the MySkoda app (may require a logout first) to access the new Terms and Condidions. This HomeAssistant integration currently can not continue."
+        )
+        raise TermsAndConditionsError("New Terms and Conditions detected during login")
     except (CSRFError, InvalidUrlClientError):
         _LOGGER.debug("An error occurred during login.")
         raise ConfigEntryNotReady("An error occurred during login.")
