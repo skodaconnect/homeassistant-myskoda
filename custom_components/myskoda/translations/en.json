@@ -110,6 +110,11 @@
                 "name": "Main Render of Vehicle"
             }
         },
+	"lock": {
+	    "door_lock": {
+		"name": "Door Lock"
+	    }
+	},
         "number": {
             "charge_limit": {
                 "name": "Charge Limit"
@@ -209,18 +214,21 @@
         }
     },
     "options": {
-        "error": {
-            "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes"
-        },
+	"error": {
+	    "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes",
+	    "invalid_spin_format": "Invalid format for S-PIN"
+	},
         "step": {
             "init": {
                 "data": {
                     "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml.",
-                    "poll_interval_in_minutes": "Polling interval in minutes when car is idle."
+		    "poll_interval_in_minutes": "Polling interval in minutes when car is idle.",
+		    "s-pin": "Security PIN"
                 },
-                "data_description": {
-                    "poll_interval_in_minutes": "Specify a polling interval between 1 and 1440 minutes. (default 30)"
-                }
+		"data_description": {
+		    "poll_interval_in_minutes": "Specify a polling interval between 1 and 1440 minutes. (default 30)",
+		    "s-pin": "Specify the Security PIN. WARNING: This enables remote lock/unlock"
+		}
             }
         }
     }

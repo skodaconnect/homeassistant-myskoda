@@ -37,13 +37,18 @@ type RefreshFunction = Callable[[], Coroutine[None, None, None]]
 class MySkodaDebouncer(Debouncer):
     """Class to rate limit calls to MySkoda REST APIs."""
 
-    def __init__(self, hass: HomeAssistant, func: RefreshFunction) -> None:
+    def __init__(
+        self, hass: HomeAssistant, func: RefreshFunction, immediate: bool
+    ) -> None:
         """Initialize debounce."""
+
+        self.immediate = immediate
+
         super().__init__(
             hass,
             _LOGGER,
             cooldown=API_COOLDOWN_IN_SECONDS,
-            immediate=False,
+            immediate=immediate,
             function=func,
         )
 
@@ -139,6 +144,11 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.STOP_CHARGING,
         ]:
             await self.update_charging()
+        if event.operation.operation in [
+            OperationName.LOCK,
+            OperationName.UNLOCK,
+        ]:
+            await self.update_status(immediate=True)
 
     async def _on_charging_event(self, event: EventCharging):
         # TODO @webspider: Refactor with proper classes
@@ -221,6 +231,18 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         vehicle.air_conditioning = air_conditioning
         self.set_updated_vehicle(vehicle)
 
+    async def _update_status(self) -> None:
+        _LOGGER.debug("Updating vehicle status for %s", self.vin)
+        try:
+            status = await self.myskoda.get_status(self.vin)
+        except ClientError as err:
+            self.async_set_update_error(err)
+            return
+
+        vehicle = self.data.vehicle
+        vehicle.status = status
+        self.set_updated_vehicle(vehicle)
+
     async def _update_vehicle(self) -> None:
         _LOGGER.debug("Updating full vehicle for %s", self.vin)
         try:
@@ -232,5 +254,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         self.set_updated_vehicle(vehicle)
 
-    def _debounce(self, func: RefreshFunction) -> RefreshFunction:
-        return MySkodaDebouncer(self.hass, func).async_call
+    def _debounce(
+        self, func: RefreshFunction, immediate: bool = False
+    ) -> RefreshFunction:
+        return MySkodaDebouncer(self.hass, func, immediate).async_call
+
+    async def update_status(self, immediate: bool = False) -> RefreshFunction:
+        return self._debounce(self._update_status, immediate)
