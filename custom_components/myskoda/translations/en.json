@@ -215,7 +215,8 @@
     },
     "issues": {
         "new_tandc": {
-            "title": "Review new Terms and Conditions for MySkoda"
+            "title": "Review new Terms and Conditions for MySkoda",
+	    "description": "Detected login failure due to missing acceptance of Terms and Conditions. Skoda may have issued new Terms and Conditions. Please review them."
 	}
     },
     "options": {
