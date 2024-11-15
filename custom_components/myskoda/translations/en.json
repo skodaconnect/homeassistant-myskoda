@@ -213,6 +213,11 @@
             }
         }
     },
+    "issues": {
+        "new_tandc": {
+            "title": "Review new Terms and Conditions for MySkoda"
+	}
+    },
     "options": {
 	"error": {
 	    "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes",
