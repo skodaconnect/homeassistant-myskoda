@@ -110,6 +110,11 @@
                 "name": "Hlavní vykreslení vozidla"
             }
         },
+        "lock": {
+            "door_lock": {
+                "name": "Zamknout dveře"
+            }
+        },
         "number": {
             "charge_limit": {
                 "name": "Limit nabíjení"
@@ -171,6 +176,15 @@
             },
             "target_battery_percentage": {
                 "name": "Cílové nabití baterie"
+            },
+            "fuel_level": {
+                "name": "Hladina paliva"
+            },
+            "combustion_range": {
+                "name": "Dojezd"
+            },
+            "electric_range": {
+                "name": "Dojezd na elektřinu"
             }
         },
         "switch": {
@@ -189,20 +203,31 @@
             "window_heating": {
                 "name": "Vytápění okna"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Troubit a blikat"
+            },
+            "flash": {
+                "name": "Blikat"
+            }
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Zadán neplatný interval dotazování. Zvolte prosím hodnotu 1 až 1440 minut"
+            "invalid_polling_interval": "Zadán neplatný interval dotazování. Zvolte prosím hodnotu 1 až 1440 minut",
+            "invalid_spin_format": "Neplatný formát pro S-PIN"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "Zjišťování odezvy API. Vyžaduje povolený debug logging v konfiguraci configuration.yaml.",
-                    "poll_interval_in_minutes": "Interval dotazování v minutách při nečinnosti vozidla."
+                    "poll_interval_in_minutes": "Interval dotazování v minutách při nečinnosti vozidla.",
+                    "s-pin": "Bezpečnostní PIN"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Zadejte interval dotazování mezi 1 a 1440 minutami. (výchozí 30)"
+                    "poll_interval_in_minutes": "Zadejte interval dotazování mezi 1 a 1440 minutami. (výchozí 30)",
+                    "s-pin": "Zadejte bezpečnostní kód PIN. VAROVÁNÍ: Toto povolí zamknutí/odemknutí na dálku"
                 }
             }
         }

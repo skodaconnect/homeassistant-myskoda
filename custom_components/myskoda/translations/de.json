@@ -54,18 +54,18 @@
                     "on": "Geöffnet"
                 }
             },
-            "parkinglights_on": {
-                "name": "Parklicht",
-                "state": {
-                    "off": "Aus",
-                    "on": "An"
-                }
-            },
             "locked": {
                 "name": "Fahrzeug verriegelt",
                 "state": {
                     "off": "Verriegelt",
                     "on": "Entriegelt"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Parklicht",
+                "state": {
+                    "off": "Aus",
+                    "on": "An"
                 }
             },
             "sunroof_open": {
@@ -110,6 +110,11 @@
                 "name": "Hauptansicht des Fahrzeugs"
             }
         },
+        "lock": {
+            "door_lock": {
+                "name": "Türschloss"
+            }
+        },
         "number": {
             "charge_limit": {
                 "name": "Ladelimit"
@@ -148,8 +153,17 @@
             "inspection": {
                 "name": "Nächste Inspektion"
             },
+            "inspection_in_km": {
+                "name": "Nächste Inspektion in km"
+            },
             "mileage": {
                 "name": "Kilometerstand"
+            },
+            "oil_service_in_days": {
+                "name": "Öl-Service"
+            },
+            "oil_service_in_km": {
+                "name": "Öl-Service in km"
             },
             "range": {
                 "name": "Reichweite"
@@ -162,6 +176,15 @@
             },
             "target_battery_percentage": {
                 "name": "Ladegrenze in Prozent"
+            },
+            "fuel_level": {
+                "name": "Füllstand Tank"
+            },
+            "combustion_range": {
+                "name": "Fossile Reichweite"
+            },
+            "electric_range": {
+                "name": "Elektrische Reichweite"
             }
         },
         "switch": {
@@ -180,20 +203,31 @@
             "window_heating": {
                 "name": "Scheiben beheizen"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Hupen und blinken"
+            },
+            "flash": {
+                "name": "Blinken"
+            }
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Ungültiges Abfrageintervall angegeben. Bitte wählen Sie zwischen 1 und 1440 Minuten"
+            "invalid_polling_interval": "Ungültiges Abfrageintervall angegeben. Bitte wählen Sie zwischen 1 und 1440 Minuten",
+            "invalid_spin_format": "Ungültiges Format der S-PIN"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "API response tracing. Erfordert die Aktivierung der Debug-Protokollierung in der configuration.yaml.",
-                    "poll_interval_in_minutes": "Abfrageintervall in Minuten, wenn das Auto untätig ist."
+                    "poll_interval_in_minutes": "Abfrageintervall in Minuten, wenn das Auto untätig ist.",
+                    "s-pin": "Sicherheitscode (PIN)"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Geben Sie ein Abfrageintervall zwischen 1 und 1440 Minuten an. (Standardwert 30)"
+                    "poll_interval_in_minutes": "Geben Sie ein Abfrageintervall zwischen 1 und 1440 Minuten an. (Standardwert 30)",
+                    "s-pin": "Bitte Sicherheitscode (PIN) angeben. Achtung: Dies ermöglicht öffnen/schliessen aus der Ferne"
                 }
             }
         }
