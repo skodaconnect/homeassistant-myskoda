@@ -66,3 +66,19 @@ class MySkodaEntity(CoordinatorEntity):
         {"main": "https://ip-modcwp.azureedge.net/path/render.png"}
         """
         return {render.view_point: render.url for render in self.vehicle.info.renders}
+
+    def get_composite_renders(self) -> dict[str, list[dict[str, str]]]:
+        """Return a dict of all vehicle composite render URLs, keyed by view_type, lower cased.
+        Value contains a list of available renders, keyed by view_point.
+
+        E.g.
+        {"home": [ {"exterior_side": "https://ip-modcwp.azureedge.net/path/render.png"} ] }
+        """
+        composite_renders = {}
+        for cr in self.vehicle.info.composite_renders:
+            for render in cr.layers:
+                composite_renders[cr.view_type.lower()] = []
+                composite_renders[cr.view_type.lower()].append(
+                    {render.view_point: render.url}
+                )
+        return composite_renders

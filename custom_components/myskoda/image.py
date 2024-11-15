@@ -71,3 +71,18 @@ class MainRenderImage(MySkodaImage):
     @property
     def image_url(self) -> str | None:
         return self.get_renders().get("main")
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Return extra state attributes."""
+        attributes = {}
+        if render := self.get_renders():
+            attributes["vehicle_renders"] = {}
+            for r in render:
+                attributes["vehicle_renders"][r] = render[r]
+
+        if composite_renders := self.get_composite_renders():
+            attributes["composite_renders"] = {}
+            for r in composite_renders:
+                attributes["composite_renders"][r] = composite_renders[r]
+        return attributes
