@@ -110,6 +110,11 @@
                 "name": "Renderização principal do veículo"
             }
         },
+        "lock": {
+            "door_lock": {
+                "name": "Fechadura da porta"
+            }
+        },
         "number": {
             "charge_limit": {
                 "name": "Limite de carga"
@@ -210,16 +215,19 @@
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Intervalo de consulta específica inválida. Escolha entre 1 a 1440 minutos"
+            "invalid_polling_interval": "Intervalo de consulta específica inválida. Escolha entre 1 a 1440 minutos",
+            "invalid_spin_format": "Formato inválido para S-PIN"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "Rastreamento de resposta da API. Requer registo de depuração habilitada em configuration.yaml.",
-                    "poll_interval_in_minutes": "Intervalo de consulta quando o carro está ocioso."
+                    "poll_interval_in_minutes": "Intervalo de consulta quando o carro está ocioso.",
+                    "s-pin": "PIN de segurança"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Especifique um intervalo de consulta entre 1 e 1440 minutos (padrão 30)"
+                    "poll_interval_in_minutes": "Especifique um intervalo de consulta entre 1 e 1440 minutos (padrão 30)",
+                    "s-pin": "Especifique o PIN de segurança. ATENÇÃO: Isto ativa o bloqueio/desbloqueio remoto"
                 }
             }
         }
