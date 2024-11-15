@@ -76,8 +76,8 @@ class MySkodaEntity(CoordinatorEntity):
         """
         composite_renders = {}
         for cr in self.vehicle.info.composite_renders:
+            composite_renders[cr.view_type.lower()] = []
             for render in cr.layers:
-                composite_renders[cr.view_type.lower()] = []
                 composite_renders[cr.view_type.lower()].append(
                     {render.view_point: render.url}
                 )
