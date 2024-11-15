@@ -25,14 +25,14 @@
 			"doors_open": {
 				"default": "mdi:car-door"
 			},
-			"lights_on": {
-				"default": "mdi:car-light-high"
-			},
 			"locked": {
 				"default": "mdi:lock",
 				"state": {
 					"on": "mdi:lock-open"
 				}
+			},
+			"parkinglights_on": {
+				"default": "mdi:car-parking-lights"
 			},
 			"sunroof_open": {
 				"default": "mdi:car-select"
@@ -89,12 +89,27 @@
 			"inspection": {
 				"default": "mdi:car-wrench"
 			},
+			"inspection_in_km": {
+				"default": "mdi:car-wrench"
+			},
 			"mileage": {
 				"default": "mdi:counter"
 			},
-			"range": {
-				"default": "mdi:speedometer"
+			"oil_service_in_days": {
+				"default": "mdi:oil"
 			},
+			"oil_service_in_km": {
+				"default": "mdi:oil"
+			},
+            "combustion_range": {
+                "default": "mdi:gas-station"
+            },
+            "electric_range": {
+                "default": "mdi:ev-station"
+            },
+            "fuel_level": {
+                "default": "mdi:fuel"
+            },
 			"remaining_charging_time": {
 				"default": "mdi:timer"
 			},
@@ -136,6 +151,14 @@
 					"on": "mdi:heat-wave"
 				}
 			}
-		}
+		},
+        	"button": {
+            		"honk_flash": {
+                		"default": "mdi:bugle"
+            		},
+            		"flash": {
+                		"default": "mdi:car-parking-lights"
+            		}
+        	}
 	}
 }

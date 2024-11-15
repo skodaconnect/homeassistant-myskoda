@@ -54,18 +54,18 @@
                     "on": "Открыты"
                 }
             },
-            "lights_on": {
-                "name": "Фары",
-                "state": {
-                    "off": "Выключены",
-                    "on": "Включены"
-                }
-            },
             "locked": {
                 "name": "Автомобиль заблокирован",
                 "state": {
                     "off": "Заблокирован",
                     "on": "Разблокирован"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Габаритные огни",
+                "state": {
+                    "off": "Выключены",
+                    "on": "Включены"
                 }
             },
             "sunroof_open": {
@@ -125,12 +125,15 @@
             "charge_type": {
                 "name": "Тип зарядки",
                 "state": {
-                    "ac": "AC",
-                    "dc": "DC",
+                    "ac": "Переменный ток",
+                    "dc": "Постоянный ток",
                     "off": "Выключено"
                 }
             },
             "charging_power": {
+                "name": "Мощность зарядки"
+            },
+            "charging_rate": {
                 "name": "Мощность зарядки"
             },
             "charging_state": {
@@ -145,8 +148,17 @@
             "inspection": {
                 "name": "Следующая проверка"
             },
+            "inspection_in_km": {
+                "name": "Следующая инспекция в КМ"
+            },
             "mileage": {
                 "name": "Пробег"
+            },
+            "oil_service_in_days": {
+                "name": "Сервис масла"
+            },
+            "oil_service_in_km": {
+                "name": "Сервис масла в КМ"
             },
             "range": {
                 "name": "Запас хода"
@@ -159,6 +171,15 @@
             },
             "target_battery_percentage": {
                 "name": "Цель заряда батареи"
+            },
+            "fuel_level": {
+                "name": "Уровень топлива"
+            },
+            "combustion_range": {
+                "name": "Запас хода"
+            },
+            "electric_range": {
+                "name": "Запас хода электро"
             }
         },
         "switch": {
@@ -176,6 +197,14 @@
             },
             "window_heating": {
                 "name": "Обогрев окон"
+            }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Сигналить и мигать"
+            },
+            "flash": {
+                "name": "Сигналить"
             }
         }
     },
