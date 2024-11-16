@@ -22,6 +22,7 @@ from myskoda.auth.authorization import CSRFError, TermsAndConditionsError
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
+from .issues import async_create_tnc_issue, async_delete_tnc_issue
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -50,23 +51,25 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     )
     myskoda = MySkoda(session, get_default_context())
 
-    # TODO @webspider: Figure out how to make these show nicely and transatable in UI
     try:
         await myskoda.connect(config.data["email"], config.data["password"])
-    except AuthorizationFailedError:
+    except AuthorizationFailedError as exc:
         _LOGGER.debug("Authorization with MySkoda failed.")
-        raise ConfigEntryAuthFailed("Authentication failed.")
-    except TermsAndConditionsError:
+        raise ConfigEntryAuthFailed from exc
+    except TermsAndConditionsError as exc:
         _LOGGER.error(
-            "New terms and conditions detected while logging in. Please log into the MySkoda app (may require a logout first) to access the new Terms and Condidions. This HomeAssistant integration currently can not continue."
+            "New terms and conditions detected while logging in. Please log into the MySkoda app (may require a logout first) to access the new Terms and Conditions. This HomeAssistant integration currently can not continue."
         )
-        raise TermsAndConditionsError("New Terms and Conditions detected during login")
-    except (CSRFError, InvalidUrlClientError):
+        async_create_tnc_issue(hass, config.entry_id)
+        raise ConfigEntryNotReady from exc
+    except (CSRFError, InvalidUrlClientError) as exc:
         _LOGGER.debug("An error occurred during login.")
-        raise ConfigEntryNotReady("An error occurred during login.")
+        raise ConfigEntryNotReady from exc
     except Exception:
         _LOGGER.exception("Login with MySkoda failed for an unknown reason.")
         return False
+
+    async_delete_tnc_issue(hass, config.entry_id)
 
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
     vehicles = await myskoda.list_vehicle_vins()
