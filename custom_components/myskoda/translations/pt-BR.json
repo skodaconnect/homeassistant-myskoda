@@ -198,6 +198,14 @@
             "window_heating": {
                 "name": "Aquecimento da janela"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Buzinar e piscar as luzes"
+            },
+            "flash": {
+                "name": "Piscar"
+            }
         }
     },
     "options": {
