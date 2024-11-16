@@ -22,7 +22,7 @@ from myskoda.auth.authorization import CSRFError, TermsAndConditionsError
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
-from .issues import create_tnc_issue, delete_tnc_issue
+from .issues import async_create_tnc_issue, async_delete_tnc_issue
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
         _LOGGER.error(
             "New terms and conditions detected while logging in. Please log into the MySkoda app (may require a logout first) to access the new Terms and Conditions. This HomeAssistant integration currently can not continue."
         )
-        create_tnc_issue(hass, config.entry_id)
+        async_create_tnc_issue(hass, config.entry_id)
         raise ConfigEntryNotReady from exc
     except (CSRFError, InvalidUrlClientError) as exc:
         _LOGGER.debug("An error occurred during login.")
@@ -69,7 +69,7 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
         _LOGGER.exception("Login with MySkoda failed for an unknown reason.")
         return False
 
-    delete_tnc_issue(hass, config.entry_id)
+    async_delete_tnc_issue(hass, config.entry_id)
 
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
     vehicles = await myskoda.list_vehicle_vins()

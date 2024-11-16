@@ -11,7 +11,7 @@ def _get_issue_id(entry_id: str) -> str:
 
 
 @callback
-def create_tnc_issue(hass: HomeAssistant, entry_id: str) -> None:
+def async_create_tnc_issue(hass: HomeAssistant, entry_id: str) -> None:
     """Create issue for new terms and conditions."""
     ir.async_create_issue(
         hass=hass,
@@ -27,6 +27,6 @@ def create_tnc_issue(hass: HomeAssistant, entry_id: str) -> None:
 
 
 @callback
-def delete_tnc_issue(hass: HomeAssistant, entry_id: str) -> None:
+def async_delete_tnc_issue(hass: HomeAssistant, entry_id: str) -> None:
     """Remove issue for new terms and conditions."""
     ir.async_delete_issue(hass=hass, domain=DOMAIN, issue_id=_get_issue_id(entry_id))
