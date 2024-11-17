@@ -110,6 +110,11 @@
                 "name": "Hovedvisning av kjøretøyet"
             }
         },
+        "lock": {
+            "door_lock": {
+                "name": "Dørlås"
+            }
+        },
         "number": {
             "charge_limit": {
                 "name": "Ladegrense"
@@ -171,6 +176,15 @@
             },
             "target_battery_percentage": {
                 "name": "Ønsket batteriprosent"
+            },
+            "fuel_level": {
+                "name": "Drivstoffnivå"
+            },
+            "combustion_range": {
+                "name": "Drivstoff rekkevidde"
+            },
+            "electric_range": {
+                "name": "Elektrisk rekkevidde"
             }
         },
         "switch": {
@@ -189,20 +203,37 @@
             "window_heating": {
                 "name": "Vindusvarme"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Fløyt og blink"
+            },
+            "flash": {
+                "name": "Blink"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "Gjennomgå nye vilkår og betingelser for MySkoda",
+            "description": "Det ser ut til at du har opplevd en innloggingsfeil på grunn av manglende aksept av Škodas nye vilkår og betingelser. \n\nFor å løse dette, vennligst logg ut av MyŠkoda-appen og logg deretter inn igjen for å gjennomgå og godta de oppdaterte vilkårene. Denne integrasjonen kan ikke fortsette uten at vilkårene er akseptert."
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Ugyldig polling-intervall angitt. Vennligst velg et intervall mellom 1 og 1440 minutter"
+            "invalid_polling_interval": "Ugyldig polling-intervall angitt. Vennligst velg et intervall mellom 1 og 1440 minutter",
+            "invalid_spin_format": "Ugyldig format for S-PIN-kode"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "Sporing av API-respons. Krever at feilsøkingslogging er aktivert i configuration.yaml.",
-                    "poll_interval_in_minutes": "Polling-intervall i minutter når bilen er inaktiv."
+                    "poll_interval_in_minutes": "Polling-intervall i minutter når bilen er inaktiv.",
+                    "s-pin": "Sikkerhets PIN-kode"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Angi et polling-intervall mellom 1 og 1440 minutter. (standard er 30)"
+                    "poll_interval_in_minutes": "Angi et polling-intervall mellom 1 og 1440 minutter. (standard er 30)",
+                    "s-pin": "Angi sikkerhets PIN-koden. ADVARSEL: Dette gjør det mulig å låse opp/låse eksternt"
                 }
             }
         }
