@@ -110,6 +110,11 @@
                 "name": "Illustration du véhicule"
             }
         },
+        "lock": {
+            "door_lock": {
+                "name": "Verrouillage des portes"
+            }
+        },
         "number": {
             "charge_limit": {
                 "name": "Limite de charge"
@@ -171,6 +176,15 @@
             },
             "target_battery_percentage": {
                 "name": "Pourcentage de batterie cible"
+            },
+            "fuel_level": {
+                "name": "Niveau de carburant"
+            },
+            "combustion_range": {
+                "name": "Autonomie du carburant"
+            },
+            "electric_range": {
+                "name": "Autonomie en électrique"
             }
         },
         "switch": {
@@ -189,20 +203,37 @@
             "window_heating": {
                 "name": "Chauffage des fenêtres"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Klaxonner et appels de phares"
+            },
+            "flash": {
+                "name": "Appels de phares"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "Revoir les nouvelles conditions générales pour MySkoda",
+            "description": "Échec de connexion détecté en raison de l'acceptation manquante des Conditions Générales.\n\nSkoda peut avoir publié de nouvelles Conditions Générales.\n\nVeuillez vous déconnecter et revenir dans l'application MySkoda pour les examiner.\nCette intégration ne peut pas continuer sans les conditions acceptées."
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Intervalle de requêtes non valide. Veuillez choisir entre 1 et 1440 minutes"
+            "invalid_polling_interval": "Intervalle de requêtes non valide. Veuillez choisir entre 1 et 1440 minutes",
+            "invalid_spin_format": "Format non valide du S-PIN"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "Suivi des réponses de l'API. Nécessite d'activer le mode débogage dans configuration.yaml.",
-                    "poll_interval_in_minutes": "Intervalle de requêtes, en minutes, lorsque la voiture est inactive."
+                    "poll_interval_in_minutes": "Intervalle de requêtes, en minutes, lorsque la voiture est inactive.",
+                    "s-pin": "Code de sécurité"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Spécifiez un intervalle de requêtes entre 1 et 1440 minutes. (par défaut 30)"
+                    "poll_interval_in_minutes": "Spécifiez un intervalle de requêtes entre 1 et 1440 minutes. (par défaut 30)",
+                    "s-pin": "Spécifiez le code PIN de sécurité. AVERTISSEMENT : Cela active le verrouillage à distance / déverrouillage"
                 }
             }
         }

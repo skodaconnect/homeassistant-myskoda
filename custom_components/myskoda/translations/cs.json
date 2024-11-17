@@ -213,6 +213,12 @@
             }
         }
     },
+    "issues": {
+        "new_tandc": {
+            "title": "Zkontrolujte nové obchodní podmínky pro MySkoda",
+            "description": "Zjištěno selhání přihlášení kvůli chybějícímu přijetí obchodních podmínek.\n\nŠkoda mohla publikovat nové obchodní podmínky.\n\nOdhlaste se z aplikace MySkoda a znovu se přihlašte pro zkontrolování.\nTato integrace nemůže pokračovat bez přijetí obchodních podmínek."
+        }
+    },
     "options": {
         "error": {
             "invalid_polling_interval": "Zadán neplatný interval dotazování. Zvolte prosím hodnotu 1 až 1440 minut",
