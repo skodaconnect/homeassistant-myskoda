@@ -130,8 +130,8 @@
             "charge_type": {
                 "name": "Ladetype",
                 "state": {
-                    "ac": "AC",
-                    "dc": "DC",
+                    "ac": "Vekselstrøm",
+                    "dc": "Likestrøm",
                     "off": "AV"
                 }
             },
