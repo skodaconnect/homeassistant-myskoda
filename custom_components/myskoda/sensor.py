@@ -18,12 +18,14 @@ from homeassistant.const import (
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
+from homeassistant.helpers.typing import (
+    DiscoveryInfoType,  # pyright: ignore [reportAttributeAccessIssue]
+)
 
 from myskoda.models import charging
 from myskoda.models.charging import Charging, ChargingStatus
-from myskoda.models.info import CapabilityId
 from myskoda.models.driving_range import EngineType
+from myskoda.models.info import CapabilityId
 
 from .const import COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
@@ -64,7 +66,14 @@ async def async_setup_entry(
 
 
 class MySkodaSensor(MySkodaEntity, SensorEntity):
-    pass
+    def _charging(self) -> Charging | None:
+        if charging := self.vehicle.charging:
+            return charging
+
+    def _status(self) -> ChargingStatus | None:
+        if charging := self._charging():
+            if status := charging.status:
+                return status
 
 
 class SoftwareVersion(MySkodaSensor):
@@ -84,15 +93,6 @@ class SoftwareVersion(MySkodaSensor):
 
 
 class ChargingSensor(MySkodaSensor):
-    def _charging(self) -> Charging | None:
-        if charging := self.vehicle.charging:
-            return charging
-
-    def _status(self) -> ChargingStatus | None:
-        if charging := self._charging():
-            if status := charging.status:
-                return status
-
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING]
 
@@ -245,13 +245,23 @@ class Range(MySkodaSensor):
         translation_key="range",
     )
 
+    def is_supported(self) -> bool:
+        status = self._status()
+        driving_range = self.vehicle.driving_range
+        return any(
+            [
+                driving_range and driving_range.total_range_in_km,
+                status and status.battery.remaining_cruising_range_in_meters,
+            ]
+        )
+
     @property
     def icon(self) -> str:  # noqa: D102
         if (
             self.vehicle.driving_range is None
             or self.vehicle.driving_range.car_type is None
         ):
-            return "mdi:gas-station"
+            return "mdi:ev-station"
         else:
             if self.vehicle.driving_range.car_type == EngineType.ELECTRIC:
                 return "mdi:ev-station"
@@ -263,8 +273,10 @@ class Range(MySkodaSensor):
         if range := self.vehicle.driving_range:
             return range.total_range_in_km
 
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.STATE]
+        # Fall back to getting range from battery
+        if status := self._status():
+            if status.battery.remaining_cruising_range_in_meters is not None:
+                return status.battery.remaining_cruising_range_in_meters / 1000
 
 
 class TargetBatteryPercentage(ChargingSensor):
