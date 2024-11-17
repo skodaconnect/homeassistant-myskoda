@@ -213,6 +213,12 @@
             }
         }
     },
+    "issues": {
+        "new_tandc": {
+            "title": "Rever novos termos e condições para MySkoda",
+            "description": "Foi detectado uma falha de registro devido à falta de aceitação dos Termos e condições.\n\nSkoda talvez tenha emitido novos Termos e condições.\n\nRegistre-se novamente no aplicativo MySkoda para revê-las.\nEsta integração não pode continuar sem aceitar os Termos e condições."
+        }
+    },
     "options": {
         "error": {
             "invalid_polling_interval": "Intervalo inserido inválido. Escolha entre 1 a 1440 minutos",
