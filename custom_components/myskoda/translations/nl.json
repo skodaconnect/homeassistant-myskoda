@@ -213,6 +213,12 @@
             }
         }
     },
+    "issues": {
+        "new_tandc": {
+            "title": "Bekijk nieuwe voorwaarden voor MySkoda",
+            "description": "Inlogfout vanwege niet geaccepteerde algemene voorwaarden.\n\nŠkoda heeft misschien nieuwe voorwaarden bekendgemaakt.\n\nLog uit en weer in de MyŠkoda app om ze te bekijken, of druk op \"Meer informatie\" hieronder\nDeze integratie kan niet doorgaan zonder acceptatie."
+        }
+    },
     "options": {
         "error": {
             "invalid_polling_interval": "Ongeldige waarde opgegeven. Kies tussen 1 en 1440 minuten",

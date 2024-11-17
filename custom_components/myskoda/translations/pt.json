@@ -213,6 +213,12 @@
             }
         }
     },
+    "issues": {
+        "new_tandc": {
+            "title": "Rever novos termos e condições do MySkoda",
+            "description": "Foi detetado um erro de início de sessão devido à falta de aceitação dos Termos e condições.\n\nSkoda talvez tenha emitido novos Termos e condições.\n\nPor favor, reinicie a sua sessão na aplicação MySkoda para revê-las.\nEsta integração não continuará sem aceitar os Termos e condições."
+        }
+    },
     "options": {
         "error": {
             "invalid_polling_interval": "Intervalo de consulta específica inválida. Escolha entre 1 a 1440 minutos",
