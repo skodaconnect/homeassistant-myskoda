@@ -34,6 +34,10 @@ If your desired language is not available, please [open an issue](https://github
 - Remaining Charging Time
 - Last Updated
 - Maintenance Interval
+- Oil Service Interval
+- Fuel Level
+- Combustion range
+- Electric range 
 
 ### Binary Sensors
 
@@ -52,10 +56,16 @@ If your desired language is not available, please [open an issue](https://github
 - Window Heating
 - Reduced Current
 - Battery Care Mode
+- Doors
+
+### Buttons
+- Honk and Flash
+- Flash
 
 ### Climate
 
-Air conditioning is exposed as climate.
+- Air conditioning is exposed as climate.
+- Auxiliary heater is exposed as climate.
 
 ### Numbers
 
