@@ -143,8 +143,8 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
     """Auxiliary heater control for MySkoda vehicles."""
 
     entity_description = ClimateEntityDescription(
-        key="auxiliary",
-        translation_key="auxiliary",
+        key="auxiliary_heater",
+        translation_key="auxiliary_heater",
     )
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
     _attr_supported_features = (
