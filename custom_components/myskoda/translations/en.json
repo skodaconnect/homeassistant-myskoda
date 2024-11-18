@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Air Conditioning"
+            },
+            "auxiliary_heater": {
+                "name": "Auxiliary Heater"
             }
         },
         "device_tracker": {

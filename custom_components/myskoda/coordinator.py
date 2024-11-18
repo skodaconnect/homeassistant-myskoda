@@ -134,6 +134,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.SET_AIR_CONDITIONING_TARGET_TEMPERATURE,
             OperationName.START_WINDOW_HEATING,
             OperationName.STOP_WINDOW_HEATING,
+            OperationName.START_AUXILIARY_HEATING,
+            OperationName.STOP_AUXILIARY_HEATING,
         ]:
             await self.update_air_conditioning()
         if event.operation.operation in [
