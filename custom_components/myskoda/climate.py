@@ -203,7 +203,8 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                 return
 
             if hvac_mode == HVACMode.HEAT:
-                if self.coordinator.config.options.get(CONF_SPIN):
+                spin = self.coordinator.config.options.get(CONF_SPIN)
+                if spin is not None:
                     if (
                         ac.state != AirConditioningState.OFF
                         and ac.state != AirConditioningState.HEATING_AUXILIARY
@@ -214,7 +215,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                     await self.coordinator.myskoda.start_auxiliary_heating(
                         self.vehicle.info.vin,
                         target_temperature.temperature_value,
-                        spin=self.coordinator.config.options.get(CONF_SPIN),
+                        spin,
                     )
                 else:
                     _LOGGER.error("Cannot start auxiliary heater: No S-PIN set.")
