@@ -105,24 +105,21 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
 
             if hvac_mode == HVACMode.HEAT_COOL:
                 if ac.state == AirConditioningState.HEATING_AUXILIARY:
-                    _LOGGER.info(
-                        "Auxiliary heating detected for %s, stopping first.",
-                        self.vehicle.info.vin,
-                    )
+                    _LOGGER.info("Auxiliary heating detected, stopping first.")
                     await self.coordinator.myskoda.stop_auxiliary_heating(
                         self.vehicle.info.vin
                     )
-                _LOGGER.info("Starting Air conditioning for %s.", self.vehicle.info.vin)
+                _LOGGER.info("Starting Air conditioning.")
                 await self.coordinator.myskoda.start_air_conditioning(
                     self.vehicle.info.vin,
                     target_temperature.temperature_value,
                 )
             else:
-                _LOGGER.info("Stopping Air conditioning for %s.", self.vehicle.info.vin)
+                _LOGGER.info("Stopping Air conditioning.")
                 await self.coordinator.myskoda.stop_air_conditioning(
                     self.vehicle.info.vin
                 )
-            _LOGGER.info("HVAC mode set to %s for %s.", hvac_mode, self.vin)
+            _LOGGER.info("HVAC mode set to %s.", hvac_mode)
 
     async def async_turn_on(self):  # noqa: D102
         await self.async_set_hvac_mode(HVACMode.HEAT_COOL)
@@ -136,9 +133,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
         await self.coordinator.myskoda.set_target_temperature(
             self.vehicle.info.vin, temp
         )
-        _LOGGER.info(
-            "Target temperature for AC set to %s for %s.", temp, self.vehicle.info.vin
-        )
+        _LOGGER.info("Target temperature for AC set to %s.", temp)
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [
@@ -217,16 +212,11 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                         ac.state != AirConditioningState.OFF
                         and ac.state != AirConditioningState.HEATING_AUXILIARY
                     ):
-                        _LOGGER.info(
-                            "Air conditioning detected for %s, stopping first.",
-                            self.vehicle.info.vin,
-                        )
+                        _LOGGER.info("Air conditioning detected, stopping first.")
                         await self.coordinator.myskoda.stop_air_conditioning(
                             self.vehicle.info.vin
                         )
-                    _LOGGER.info(
-                        "Starting Auxiliary heating for %s.", self.vehicle.info.vin
-                    )
+                    _LOGGER.info("Starting Auxiliary heating.")
                     await self.coordinator.myskoda.start_auxiliary_heating(
                         self.vehicle.info.vin,
                         target_temperature.temperature_value,
@@ -235,17 +225,11 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                 else:
                     _LOGGER.error("Cannot start auxiliary heater: No S-PIN set.")
             else:
-                _LOGGER.info(
-                    "Stopping Auxiliary heating for %s.", self.vehicle.info.vin
-                )
+                _LOGGER.info("Stopping Auxiliary heating.")
                 await self.coordinator.myskoda.stop_auxiliary_heating(
                     self.vehicle.info.vin
                 )
-            _LOGGER.info(
-                "Auxiliary HVAC mode set to %s for %s.",
-                hvac_mode,
-                self.vehicle.info.vin,
-            )
+            _LOGGER.info("Auxiliary HVAC mode set to %s.", hvac_mode)
 
     async def async_turn_on(self):  # noqa: D102
         await self.async_set_hvac_mode(HVACMode.HEAT)
@@ -259,11 +243,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
         await self.coordinator.myskoda.set_target_temperature(
             self.vehicle.info.vin, temp
         )
-        _LOGGER.info(
-            "Target temperature for auxiliary heater set to %s for %s.",
-            temp,
-            self.vehicle.info.vin,
-        )
+        _LOGGER.info("Target temperature for auxiliary heater set to %s.", temp)
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [
