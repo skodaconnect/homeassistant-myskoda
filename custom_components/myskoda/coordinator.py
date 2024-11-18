@@ -1,3 +1,4 @@
+import asyncio
 from collections.abc import Coroutine
 from dataclasses import dataclass
 from datetime import timedelta
@@ -15,6 +16,7 @@ from myskoda.event import (
     Event,
     EventAccess,
     EventAirConditioning,
+    EventDeparture,
     EventOperation,
     ServiceEventTopic,
 )
@@ -91,6 +93,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
         self.update_vehicle = self._debounce(self._update_vehicle)
+        self.update_positions = self._debounce(self._update_positions)
 
         myskoda.subscribe(self._on_mqtt_event)
 
@@ -116,6 +119,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 await self._on_access_event(event)
             if event.topic == ServiceEventTopic.AIR_CONDITIONING:
                 await self._on_air_conditioning_event(event)
+            if event.topic == ServiceEventTopic.DEPARTURE:
+                await self._on_departure_event(event)
 
     async def _on_operation_event(self, event: EventOperation) -> None:
         if event.operation.status == OperationStatus.IN_PROGRESS:
@@ -193,6 +198,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     async def _on_air_conditioning_event(self, event: EventAirConditioning):
         await self.update_air_conditioning()
 
+    async def _on_departure_event(self, event: EventDeparture):
+        await self.update_positions()
+
     def _unsub_refresh(self):
         return
 
@@ -260,6 +268,20 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self, func: RefreshFunction, immediate: bool = False
     ) -> RefreshFunction:
         return MySkodaDebouncer(self.hass, func, immediate).async_call
+
+    async def _update_positions(self) -> None:
+        _LOGGER.debug("Updating positions for %s", self.vin)
+        try:
+            await asyncio.sleep(60)  # GPS is not updated immediately, wait 60 seconds
+            positions = await self.myskoda.get_positions(self.vin)
+        except (ClientError, ClientResponseError) as err:
+            raise UpdateFailed(
+                "Error getting positions update from MySkoda API: %s", err
+            )
+
+        vehicle = self.data.vehicle
+        vehicle.positions = positions
+        self.set_updated_vehicle(vehicle)
 
     async def update_status(self, immediate: bool = False) -> RefreshFunction:
         return self._debounce(self._update_status, immediate)
