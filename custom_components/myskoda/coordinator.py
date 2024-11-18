@@ -1,3 +1,4 @@
+import asyncio
 from collections.abc import Coroutine
 from dataclasses import dataclass
 from datetime import timedelta
@@ -269,6 +270,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     async def _update_positions(self) -> None:
         _LOGGER.debug("Updating positions for %s", self.vin)
         try:
+            await asyncio.sleep(60)  # GPS is not updated immediately, wait 60 seconds
             positions = await self.myskoda.get_positions(self.vin)
         except (ClientError, ClientResponseError) as err:
             raise UpdateFailed(
