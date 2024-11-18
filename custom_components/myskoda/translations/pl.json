@@ -54,18 +54,18 @@
                     "on": "Otwarte"
                 }
             },
-            "lights_on": {
-                "name": "Światła",
-                "state": {
-                    "off": "Wyłączone",
-                    "on": "Włączone"
-                }
-            },
             "locked": {
                 "name": "Pojazd zablokowany",
                 "state": {
                     "off": "Zablokowany",
                     "on": "Odblokowany"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Światła",
+                "state": {
+                    "off": "Wyłączone",
+                    "on": "Włączone"
                 }
             },
             "sunroof_open": {
@@ -110,6 +110,11 @@
                 "name": "Render pojazdu"
             }
         },
+        "lock": {
+            "door_lock": {
+                "name": "Blokada drzwi"
+            }
+        },
         "number": {
             "charge_limit": {
                 "name": "Limit Ładowania"
@@ -148,8 +153,17 @@
             "inspection": {
                 "name": "Następna inspekcja"
             },
+            "inspection_in_km": {
+                "name": "Serwis za (km)"
+            },
             "mileage": {
                 "name": "Przebieg"
+            },
+            "oil_service_in_days": {
+                "name": "Serwis olejowy"
+            },
+            "oil_service_in_km": {
+                "name": "Serwis olejowy (km)"
             },
             "range": {
                 "name": "Zasięg"
@@ -162,6 +176,15 @@
             },
             "target_battery_percentage": {
                 "name": "Docelowy procent baterii"
+            },
+            "fuel_level": {
+                "name": "Poziom paliwa"
+            },
+            "combustion_range": {
+                "name": "Zasięg (paliwo)"
+            },
+            "electric_range": {
+                "name": "Zasięg (prąd)"
             }
         },
         "switch": {
@@ -180,20 +203,37 @@
             "window_heating": {
                 "name": "Ogrzewanie okien"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Klakson i miganie"
+            },
+            "flash": {
+                "name": "Miganie"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "Przejrzyj nowe zasady i warunki aplikacji MySkoda",
+            "description": "Wykryto niepowodzenie logowania z powodu braku akceptacji Regulaminu.\n\nSkoda mogła wydać nową wersję zasad i warunków korzystania z aplikacji.\n\nWyloguj się i ponownie z aplikacji MySkoda, aby je przejrzeć.\nIntegracja nie będzie działać poprawnie bez akceptacji nowych warunków."
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Podano nieprawidłową częstotliwość odświeżania. Wybierz wartość od 1 do 1440 minut"
+            "invalid_polling_interval": "Podano nieprawidłową częstotliwość odświeżania. Wybierz wartość od 1 do 1440 minut",
+            "invalid_spin_format": "Nieprawidłowy format S-PIN"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "Śledzenie odpowiedzi API. Wymaga włączonego logowania w trybie debug w configuration.yaml.",
-                    "poll_interval_in_minutes": "Częstotliwość odświeżania w minutach, gdy samochód jest bezczynny."
+                    "poll_interval_in_minutes": "Częstotliwość odświeżania w minutach, gdy samochód jest bezczynny.",
+                    "s-pin": "Kod S-PIN"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Ustaw częstotliwość odświeżania w zakresie od 1 do 1440 minut. (domyślnie 30)"
+                    "poll_interval_in_minutes": "Ustaw częstotliwość odświeżania w zakresie od 1 do 1440 minut. (domyślnie 30)",
+                    "s-pin": "Wprowadź kod S-PIN. UWAGA: Umożliwia to zdalne odblokowanie samochodu"
                 }
             }
         }
