@@ -54,18 +54,18 @@
                     "on": "Open"
                 }
             },
-            "lights_on": {
-                "name": "Verlichting",
-                "state": {
-                    "off": "Uit",
-                    "on": "Aan"
-                }
-            },
             "locked": {
                 "name": "Voertuigvergrendeling",
                 "state": {
                     "off": "Vergrendeld",
                     "on": "Ontgrendeld"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Parkeerlichten",
+                "state": {
+                    "off": "Uit",
+                    "on": "Aan"
                 }
             },
             "sunroof_open": {
@@ -110,6 +110,11 @@
                 "name": "Hoofdafbeelding"
             }
         },
+        "lock": {
+            "door_lock": {
+                "name": "Deurvergrendeling"
+            }
+        },
         "number": {
             "charge_limit": {
                 "name": "Laadlimiet"
@@ -148,8 +153,17 @@
             "inspection": {
                 "name": "Volgend onderhoud"
             },
+            "inspection_in_km": {
+                "name": "Volgend onderhoud (km)"
+            },
             "mileage": {
                 "name": "Kilometerstand"
+            },
+            "oil_service_in_days": {
+                "name": "Olie onderhoud"
+            },
+            "oil_service_in_km": {
+                "name": "Olie onderhoud (km)"
             },
             "range": {
                 "name": "Actieradius"
@@ -162,6 +176,15 @@
             },
             "target_battery_percentage": {
                 "name": "Laadlimiet in procenten"
+            },
+            "fuel_level": {
+                "name": "Brandstof niveau"
+            },
+            "combustion_range": {
+                "name": "Bereik motor"
+            },
+            "electric_range": {
+                "name": "Bereik accu"
             }
         },
         "switch": {
@@ -180,20 +203,37 @@
             "window_heating": {
                 "name": "Verwarming raam"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Claxon en licht"
+            },
+            "flash": {
+                "name": "Flits"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "Bekijk nieuwe voorwaarden voor MySkoda",
+            "description": "Inlogfout vanwege niet geaccepteerde algemene voorwaarden.\n\nŠkoda heeft misschien nieuwe voorwaarden bekendgemaakt.\n\nLog uit en weer in de MyŠkoda app om ze te bekijken, of druk op \"Meer informatie\" hieronder\nDeze integratie kan niet doorgaan zonder acceptatie."
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Ongeldige waarde opgegeven. Kies tussen 1 en 1440 minuten"
+            "invalid_polling_interval": "Ongeldige waarde opgegeven. Kies tussen 1 en 1440 minuten",
+            "invalid_spin_format": "Ongeldig formaat voor S-PIN"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "API respons traceren. Debug logging ingeschakeld in configuration.yaml.",
-                    "poll_interval_in_minutes": "Verversinterval in minuten wanneer de auto inactief is."
+                    "poll_interval_in_minutes": "Verversinterval in minuten wanneer de auto inactief is.",
+                    "s-pin": "Beveiligings PIN"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Geef een waarde tussen 1 en 1440 minuten. (standaard 30)"
+                    "poll_interval_in_minutes": "Geef een waarde tussen 1 en 1440 minuten. (standaard 30)",
+                    "s-pin": "Geef de beveiligings-PIN. WAARSCHUWING: Hiermee kunt u op afstand vergrendelen/ontgrendelen"
                 }
             }
         }

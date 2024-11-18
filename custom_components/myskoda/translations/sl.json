@@ -1,0 +1,235 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Naprava (vozilo) je že konfigurirana(o)"
+        },
+        "error": {
+            "cannot_connect": "Povezava ni uspela",
+            "invalid_auth": "Neveljavna prijava",
+            "unknown": "Prišlo je do nepričakovane napake. Preverite dnevnike v HomeAssistant."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "E–poštni naslov",
+                    "password": "Geslo"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "bonnet_open": {
+                "name": "Pokrov motorja",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "charger_connected": {
+                "name": "Polnilnik",
+                "state": {
+                    "off": "Odklopljen",
+                    "on": "Priklopljen"
+                }
+            },
+            "charger_locked": {
+                "name": "Zaklep polnjenja",
+                "state": {
+                    "off": "Zaklenjeno",
+                    "on": "Odklenjeno"
+                }
+            },
+            "doors_locked": {
+                "name": "Vrata zaklep",
+                "state": {
+                    "off": "Zaklenjeno",
+                    "on": "Odklenjeno"
+                }
+            },
+            "doors_open": {
+                "name": "Vrata",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "locked": {
+                "name": "Vozilo zaklep",
+                "state": {
+                    "off": "Zaklenjeno",
+                    "on": "Odklenjeno"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Parkirne luči",
+                "state": {
+                    "off": "Vklopljeno",
+                    "on": "Izklopljeno"
+                }
+            },
+            "sunroof_open": {
+                "name": "Strešno okno",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "trunk_open": {
+                "name": "Prtljažnik",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "windows_open": {
+                "name": "Okno",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Klima"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Položaj",
+                "state": {
+                    "home": "Doma",
+                    "not_home": "Odsoten",
+                    "vehicle_in_motion": "Zaznano premikanje"
+                }
+            }
+        },
+        "image": {
+            "render_vehicle_main": {
+                "name": "Slika vozila – glavna"
+            }
+        },
+        "lock": {
+            "door_lock": {
+                "name": "Ključavnica vrata"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Omejitev polnjenja"
+            }
+        },
+        "sensor": {
+            "battery_percentage": {
+                "name": "Baterija – odstotek"
+            },
+            "car_captured": {
+                "name": "Nazadnje povezan"
+            },
+            "charge_type": {
+                "name": "Vrsta polnjenja",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "Izključeno"
+                }
+            },
+            "charging_power": {
+                "name": "Polnilna moč"
+            },
+            "charging_rate": {
+                "name": "Stopnja polnjenja"
+            },
+            "charging_state": {
+                "name": "Status polnjenje",
+                "state": {
+                    "charging": "Polnjenja",
+                    "connect_cable": "Ni elektrike",
+                    "conserving": "Ohranjanje",
+                    "ready_for_charging": "Pripravljen na polnjenje"
+                }
+            },
+            "inspection": {
+                "name": "Naslednji servis"
+            },
+            "inspection_in_km": {
+                "name": "km do servisa"
+            },
+            "mileage": {
+                "name": "Prevoženi kilometri"
+            },
+            "oil_service_in_days": {
+                "name": "Menjava olja"
+            },
+            "oil_service_in_km": {
+                "name": "km do menjave olja"
+            },
+            "range": {
+                "name": "Doseg"
+            },
+            "remaining_charging_time": {
+                "name": "Preostali čas polnjenja"
+            },
+            "software_version": {
+                "name": "Različica programske opreme"
+            },
+            "target_battery_percentage": {
+                "name": "Polnjenje baterije do"
+            },
+            "fuel_level": {
+                "name": "Gorivo"
+            },
+            "combustion_range": {
+                "name": "Skupni doseg"
+            },
+            "electric_range": {
+                "name": "Doseg z elektriko"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "name": "Vzdrževanje baterije"
+            },
+            "charging": {
+                "name": "Polnjenje"
+            },
+            "charging_switch": {
+                "name": "Polnjenje"
+            },
+            "reduced_current": {
+                "name": "Zmanjšan tok"
+            },
+            "window_heating": {
+                "name": "Ogrevanje vetrobrana"
+            }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Hupanje in utripanje"
+            },
+            "flash": {
+                "name": "Utripanje"
+            }
+        }
+    },
+    "options": {
+        "error": {
+            "invalid_polling_interval": "Neveljaven interval poizvedb. Izberite med 1 in 1440 minutami",
+            "invalid_spin_format": "Neveljaven format za S-PIN"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "API debug logging (dnevniško beleženje). Omogočeno mora biti tudi v configiration.yaml.",
+                    "poll_interval_in_minutes": "Interval poizvedb v minutah, ko vozilo miruje.",
+                    "s-pin": "S-PIN"
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Določite interval poizvedovanja med 1 in 1440 minutami. (privzeto 30)",
+                    "s-pin": "Nastavite S-PIN. OPOZORILO: To bo omogočilo zaklep/odklep na daljavo"
+                }
+            }
+        }
+    }
+}
