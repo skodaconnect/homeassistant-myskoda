@@ -47,6 +47,9 @@
 		"climate": {
 			"climate": {
 				"default": "mdi:air-conditioner"
+			},
+			"auxiliary": {
+				"default": "mdi:radiator"
 			}
 		},
 		"device_tracker": {
