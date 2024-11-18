@@ -94,7 +94,7 @@
             "climate": {
                 "name": "Air Conditioning"
             },
-            "auxiliary": {
+            "auxiliary_heater": {
                 "name": "Auxiliary Heater"
             }
         },
