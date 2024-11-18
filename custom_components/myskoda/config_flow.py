@@ -32,6 +32,7 @@ from .const import (
     CONF_POLL_INTERVAL_MIN,
     CONF_POLL_INTERVAL_MAX,
     CONF_SPIN,
+    CONF_READONLY,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -72,6 +73,7 @@ OPTIONS_SCHEMA = vol.Schema(
     {
         vol.Required("tracing", default=False): bool,
         vol.Optional(CONF_POLL_INTERVAL): int,
+        vol.Optional(CONF_READONLY, default=False): bool,
         vol.Optional(CONF_SPIN): str,
     }
 )
