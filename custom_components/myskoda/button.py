@@ -16,7 +16,7 @@ from homeassistant.util import Throttle
 
 from myskoda.models.info import CapabilityId
 
-from .const import API_COOLDOWN_IN_SECONDS, COORDINATORS, DOMAIN
+from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
@@ -43,7 +43,13 @@ class MySkodaButton(MySkodaEntity, ButtonEntity):
     Base class for all button entities in the MySkoda integration.
     """
 
-    pass
+    def is_supported(self) -> bool:
+        all_capabilities_present = all(
+            self.vehicle.has_capability(cap) for cap in self.required_capabilities()
+        )
+        readonly = self.coordinator.config.options.get(CONF_READONLY)
+
+        return all_capabilities_present and not readonly
 
 
 class HonkFlash(MySkodaButton):

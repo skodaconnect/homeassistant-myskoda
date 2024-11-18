@@ -229,11 +229,13 @@
                 "data": {
                     "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml.",
 		    "poll_interval_in_minutes": "Polling interval in minutes when car is idle.",
-		    "s-pin": "Security PIN"
+		    "s-pin": "Security PIN",
+		    "readonly": "Read-only mode"
                 },
 		"data_description": {
 		    "poll_interval_in_minutes": "Specify a polling interval between 1 and 1440 minutes. (default 30)",
-		    "s-pin": "Specify the Security PIN. WARNING: This enables remote lock/unlock"
+		    "s-pin": "Specify the Security PIN. WARNING: This enables remote lock/unlock",
+		    "readonly": "You cannot make any changes to the car, only read data"
 		}
             }
         }
