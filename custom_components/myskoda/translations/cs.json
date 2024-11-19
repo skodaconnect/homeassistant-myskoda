@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Klimatizace"
+            },
+            "auxiliary_heater": {
+                "name": "Nezávislé topení"
             }
         },
         "device_tracker": {
