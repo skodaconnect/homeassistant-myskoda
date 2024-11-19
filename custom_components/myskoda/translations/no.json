@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Air Condition"
+            },
+            "auxiliary_heater": {
+                "name": "Tilleggsvarmer"
             }
         },
         "device_tracker": {
