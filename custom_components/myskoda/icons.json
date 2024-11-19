@@ -47,6 +47,9 @@
 		"climate": {
 			"climate": {
 				"default": "mdi:air-conditioner"
+			},
+			"auxiliary_heater": {
+				"default": "mdi:radiator"
 			}
 		},
 		"device_tracker": {
@@ -64,6 +67,14 @@
 				"default": "mdi:file-image"
 			}
 		},
+    "lock": {
+	      "door_lock" : {
+            "default": "mdi:car-door-lock",
+		        "state": {
+		            "open": "mdi:car-door-lock-open"
+		        }
+	      }
+	  },
 		"sensor": {
 			"car_captured": {
 				"default": "mdi:clock"

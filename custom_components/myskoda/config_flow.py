@@ -33,6 +33,8 @@ from .const import (
     CONF_POLL_INTERVAL,
     CONF_POLL_INTERVAL_MIN,
     CONF_POLL_INTERVAL_MAX,
+    CONF_SPIN,
+    CONF_READONLY,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -45,9 +47,13 @@ async def validate_options_input(
 
     if CONF_POLL_INTERVAL in user_input:
         polling_interval: int = user_input[CONF_POLL_INTERVAL]
-        if CONF_POLL_INTERVAL_MIN <= polling_interval <= CONF_POLL_INTERVAL_MAX:
-            return user_input
-        raise SchemaFlowError("invalid_polling_interval")
+        if not CONF_POLL_INTERVAL_MIN <= polling_interval <= CONF_POLL_INTERVAL_MAX:
+            raise SchemaFlowError("invalid_polling_interval")
+
+    if CONF_SPIN in user_input:
+        s_pin: str = user_input[CONF_SPIN]
+        if not s_pin.isdigit():
+            raise SchemaFlowError("invalid_spin_format")
 
     return user_input
 
@@ -70,6 +76,8 @@ OPTIONS_SCHEMA = vol.Schema(
     {
         vol.Required("tracing", default=False): bool,
         vol.Optional(CONF_POLL_INTERVAL): int,
+        vol.Optional(CONF_READONLY, default=False): bool,
+        vol.Optional(CONF_SPIN): str,
     }
 )
 OPTIONS_FLOW = {

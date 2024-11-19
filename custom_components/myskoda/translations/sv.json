@@ -54,18 +54,18 @@
                     "on": "Öppna"
                 }
             },
-            "lights_on": {
-                "name": "Ljus",
-                "state": {
-                    "off": "Av",
-                    "on": "På"
-                }
-            },
             "locked": {
                 "name": "Fordonet låst",
                 "state": {
                     "off": "Låst",
                     "on": "Olåst"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Parkeringsljus",
+                "state": {
+                    "off": "Av",
+                    "on": "På"
                 }
             },
             "sunroof_open": {
@@ -110,6 +110,11 @@
                 "name": "Huvudrendering av fordon"
             }
         },
+        "lock": {
+            "door_lock": {
+                "name": "Dörrlås"
+            }
+        },
         "number": {
             "charge_limit": {
                 "name": "Laddningsgräns"
@@ -148,8 +153,17 @@
             "inspection": {
                 "name": "Nästa inspektion"
             },
+            "inspection_in_km": {
+                "name": "Nästa inspektion i km"
+            },
             "mileage": {
                 "name": "Mätarställning"
+            },
+            "oil_service_in_days": {
+                "name": "Service oljebyte"
+            },
+            "oil_service_in_km": {
+                "name": "Service oljebyte i km"
             },
             "range": {
                 "name": "Räckvidd"
@@ -162,6 +176,15 @@
             },
             "target_battery_percentage": {
                 "name": "Mål batteriprocent"
+            },
+            "fuel_level": {
+                "name": "Bränslenivå"
+            },
+            "combustion_range": {
+                "name": "Räckvidd förbränningsbränsle"
+            },
+            "electric_range": {
+                "name": "Räckvidd el"
             }
         },
         "switch": {
@@ -180,20 +203,37 @@
             "window_heating": {
                 "name": "Fönstervärme"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Tuta och blinka"
+            },
+            "flash": {
+                "name": "Blinka"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "Granska de nya villkoren för MySkoda",
+            "description": "Misslyckades med att logga in på grund av att användarvillkoren inte accepterades.\n\nSkoda kan ha utfärdat nya villkor.\n\nLogga ut och in igen i appen MySkoda för att granska dem.\nDenna integration kan inte fortsätta utan accepterade villkor."
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Ogiltigt intervall för polling. Vänligen välj mellan 1 och 1440 minuter"
+            "invalid_polling_interval": "Ogiltigt intervall för polling. Vänligen välj mellan 1 och 1440 minuter",
+            "invalid_spin_format": "Ogiltigt format för S-pinkod"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "Spårning av API-svar. Kräver att felsökningsloggning är aktiverad i configuration.yaml.",
-                    "poll_interval_in_minutes": "Pollning intervall i minuter när bilen är inaktiv."
+                    "poll_interval_in_minutes": "Pollning intervall i minuter när bilen är inaktiv.",
+                    "s-pin": "PIN-kod för säkerhet"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Ange pollinering intervall mellan 1 och 1440 minuter. (standard 30)"
+                    "poll_interval_in_minutes": "Ange pollinering intervall mellan 1 och 1440 minuter. (standard 30)",
+                    "s-pin": "Ange säkerhets-PIN-kod. VARNING: Detta aktiverar fjärrlås/fjärrlåsning"
                 }
             }
         }

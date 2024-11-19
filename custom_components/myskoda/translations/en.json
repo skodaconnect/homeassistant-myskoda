@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Air Conditioning"
+            },
+            "auxiliary_heater": {
+                "name": "Auxiliary Heater"
             }
         },
         "device_tracker": {
@@ -110,6 +113,11 @@
                 "name": "Main Render of Vehicle"
             }
         },
+	"lock": {
+	    "door_lock": {
+		"name": "Door Lock"
+	    }
+	},
         "number": {
             "charge_limit": {
                 "name": "Charge Limit"
@@ -208,19 +216,30 @@
             }
         }
     },
+    "issues": {
+        "new_tandc": {
+            "title": "Review new Terms and Conditions for MySkoda",
+	    "description": "Detected login failure due to missing acceptance of Terms and Conditions.\n\nSkoda may have issued new Terms and Conditions.\n\nPlease log out and back in of the MySkoda app to review them.\nThis integration cannot continue without accepted Terms and Conditions."
+	}
+    },
     "options": {
-        "error": {
-            "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes"
-        },
+	"error": {
+	    "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes",
+	    "invalid_spin_format": "Invalid format for S-PIN"
+	},
         "step": {
             "init": {
                 "data": {
                     "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml.",
-                    "poll_interval_in_minutes": "Polling interval in minutes when car is idle."
+		    "poll_interval_in_minutes": "Polling interval in minutes when car is idle.",
+		    "s-pin": "Security PIN",
+		    "readonly": "Read-only mode"
                 },
-                "data_description": {
-                    "poll_interval_in_minutes": "Specify a polling interval between 1 and 1440 minutes. (default 30)"
-                }
+		"data_description": {
+		    "poll_interval_in_minutes": "Specify a polling interval between 1 and 1440 minutes. (default 30)",
+		    "s-pin": "Specify the Security PIN. WARNING: This enables remote lock/unlock",
+		    "readonly": "You cannot make any changes to the car, only read data"
+		}
             }
         }
     }

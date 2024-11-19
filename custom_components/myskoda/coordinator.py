@@ -1,3 +1,4 @@
+import asyncio
 from collections.abc import Coroutine
 from dataclasses import dataclass
 from datetime import timedelta
@@ -15,6 +16,7 @@ from myskoda.event import (
     Event,
     EventAccess,
     EventAirConditioning,
+    EventDeparture,
     EventOperation,
     ServiceEventTopic,
 )
@@ -37,13 +39,18 @@ type RefreshFunction = Callable[[], Coroutine[None, None, None]]
 class MySkodaDebouncer(Debouncer):
     """Class to rate limit calls to MySkoda REST APIs."""
 
-    def __init__(self, hass: HomeAssistant, func: RefreshFunction) -> None:
+    def __init__(
+        self, hass: HomeAssistant, func: RefreshFunction, immediate: bool
+    ) -> None:
         """Initialize debounce."""
+
+        self.immediate = immediate
+
         super().__init__(
             hass,
             _LOGGER,
             cooldown=API_COOLDOWN_IN_SECONDS,
-            immediate=False,
+            immediate=immediate,
             function=func,
         )
 
@@ -86,6 +93,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
         self.update_vehicle = self._debounce(self._update_vehicle)
+        self.update_positions = self._debounce(self._update_positions)
 
         myskoda.subscribe(self._on_mqtt_event)
 
@@ -111,6 +119,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 await self._on_access_event(event)
             if event.topic == ServiceEventTopic.AIR_CONDITIONING:
                 await self._on_air_conditioning_event(event)
+            if event.topic == ServiceEventTopic.DEPARTURE:
+                await self._on_departure_event(event)
 
     async def _on_operation_event(self, event: EventOperation) -> None:
         if event.operation.status == OperationStatus.IN_PROGRESS:
@@ -129,6 +139,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.SET_AIR_CONDITIONING_TARGET_TEMPERATURE,
             OperationName.START_WINDOW_HEATING,
             OperationName.STOP_WINDOW_HEATING,
+            OperationName.START_AUXILIARY_HEATING,
+            OperationName.STOP_AUXILIARY_HEATING,
         ]:
             await self.update_air_conditioning()
         if event.operation.operation in [
@@ -139,6 +151,11 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.STOP_CHARGING,
         ]:
             await self.update_charging()
+        if event.operation.operation in [
+            OperationName.LOCK,
+            OperationName.UNLOCK,
+        ]:
+            await self.update_status(immediate=True)
 
     async def _on_charging_event(self, event: EventCharging):
         # TODO @webspider: Refactor with proper classes
@@ -181,6 +198,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     async def _on_air_conditioning_event(self, event: EventAirConditioning):
         await self.update_air_conditioning()
 
+    async def _on_departure_event(self, event: EventDeparture):
+        await self.update_positions()
+
     def _unsub_refresh(self):
         return
 
@@ -221,6 +241,18 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         vehicle.air_conditioning = air_conditioning
         self.set_updated_vehicle(vehicle)
 
+    async def _update_status(self) -> None:
+        _LOGGER.debug("Updating vehicle status for %s", self.vin)
+        try:
+            status = await self.myskoda.get_status(self.vin)
+        except ClientError as err:
+            self.async_set_update_error(err)
+            return
+
+        vehicle = self.data.vehicle
+        vehicle.status = status
+        self.set_updated_vehicle(vehicle)
+
     async def _update_vehicle(self) -> None:
         _LOGGER.debug("Updating full vehicle for %s", self.vin)
         try:
@@ -232,5 +264,24 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         self.set_updated_vehicle(vehicle)
 
-    def _debounce(self, func: RefreshFunction) -> RefreshFunction:
-        return MySkodaDebouncer(self.hass, func).async_call
+    def _debounce(
+        self, func: RefreshFunction, immediate: bool = False
+    ) -> RefreshFunction:
+        return MySkodaDebouncer(self.hass, func, immediate).async_call
+
+    async def _update_positions(self) -> None:
+        _LOGGER.debug("Updating positions for %s", self.vin)
+        try:
+            await asyncio.sleep(60)  # GPS is not updated immediately, wait 60 seconds
+            positions = await self.myskoda.get_positions(self.vin)
+        except (ClientError, ClientResponseError) as err:
+            raise UpdateFailed(
+                "Error getting positions update from MySkoda API: %s", err
+            )
+
+        vehicle = self.data.vehicle
+        vehicle.positions = positions
+        self.set_updated_vehicle(vehicle)
+
+    async def update_status(self, immediate: bool = False) -> RefreshFunction:
+        return self._debounce(self._update_status, immediate)

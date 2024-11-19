@@ -4,18 +4,27 @@ from __future__ import annotations
 
 import logging
 
+from aiohttp import InvalidUrlClientError
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.util.ssl import get_default_context
-from myskoda import MySkoda
+from myskoda import (
+    MySkoda,
+    AuthorizationFailedError,
+)
 from myskoda.myskoda import TRACE_CONFIG
-from myskoda.auth.authorization import AuthorizationFailedError
+from myskoda.auth.authorization import (
+    CSRFError,
+    TermsAndConditionsError,
+)
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
+from .issues import async_create_tnc_issue, async_delete_tnc_issue
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -27,6 +36,7 @@ PLATFORMS: list[Platform] = [
     Platform.NUMBER,
     Platform.BINARY_SENSOR,
     Platform.IMAGE,
+    Platform.LOCK,
     Platform.BUTTON,
 ]
 
@@ -49,15 +59,34 @@ async def async_connect_myskoda(
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up MySkoda integration from a config entry."""
 
+    trace_configs = []
+    if entry.options.get("tracing"):
+        trace_configs.append(TRACE_CONFIG)
+
+    session = async_create_clientsession(
+        hass, trace_configs=trace_configs, auto_cleanup=False
+    )
+    myskoda = MySkoda(session, get_default_context())
+
     try:
-        myskoda = await async_connect_myskoda(hass, entry)
+        await myskoda.connect(entry.data["email"], entry.data["password"])
     except AuthorizationFailedError as exc:
-        raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
-    except Exception as exc:
-        _LOGGER.exception(
-            "Login with %s failed for unknown reason. Details: %s", DOMAIN, exc
+        _LOGGER.debug("Authorization with MySkoda failed.")
+        raise ConfigEntryAuthFailed from exc
+    except TermsAndConditionsError as exc:
+        _LOGGER.error(
+            "New terms and conditions detected while logging in. Please log into the MySkoda app (may require a logout first) to access the new Terms and Conditions. This HomeAssistant integration currently can not continue."
         )
+        async_create_tnc_issue(hass, entry.entry_id)
+        raise ConfigEntryNotReady from exc
+    except (CSRFError, InvalidUrlClientError) as exc:
+        _LOGGER.debug("An error occurred during login.")
+        raise ConfigEntryNotReady from exc
+    except Exception:
+        _LOGGER.exception("Login with MySkoda failed for an unknown reason.")
         return False
+
+    async_delete_tnc_issue(hass, entry.entry_id)
 
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
     vehicles = await myskoda.list_vehicle_vins()

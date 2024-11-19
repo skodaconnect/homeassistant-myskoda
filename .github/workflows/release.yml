@@ -25,6 +25,6 @@ jobs:
           zip homeassistant-myskoda.zip -r ./
 
       - name: "Upload the ZIP file to the release"
-        uses: "softprops/action-gh-release@v2.0.9"
+        uses: "softprops/action-gh-release@v2.1.0"
         with:
           files: ${{ github.workspace }}/custom_components/myskoda/homeassistant-myskoda.zip

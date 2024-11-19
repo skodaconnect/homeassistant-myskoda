@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Ar condicionado"
+            },
+            "auxiliary_heater": {
+                "name": "Aquecedor auxiliar"
             }
         },
         "device_tracker": {
@@ -108,6 +111,11 @@
         "image": {
             "render_vehicle_main": {
                 "name": "Renderização principal do veículo"
+            }
+        },
+        "lock": {
+            "door_lock": {
+                "name": "Fechadura"
             }
         },
         "number": {
@@ -208,18 +216,27 @@
             }
         }
     },
+    "issues": {
+        "new_tandc": {
+            "title": "Rever novos termos e condições para MySkoda",
+            "description": "Foi detectado uma falha de registro devido à falta de aceitação dos Termos e condições.\n\nSkoda talvez tenha emitido novos Termos e condições.\n\nRegistre-se novamente no aplicativo MySkoda para revê-las.\nEsta integração não pode continuar sem aceitar os Termos e condições."
+        }
+    },
     "options": {
         "error": {
-            "invalid_polling_interval": "Intervalo inserido inválido. Escolha entre 1 a 1440 minutos"
+            "invalid_polling_interval": "Intervalo inserido inválido. Escolha entre 1 a 1440 minutos",
+            "invalid_spin_format": "Formato inválido de S-PIN"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "Rastreamento de resposta da API. Requer registro de depuração ativo em configuration.yaml.",
-                    "poll_interval_in_minutes": "Intervalos em minuto quando o carro está ausente."
+                    "poll_interval_in_minutes": "Intervalos em minuto quando o carro está ausente.",
+                    "s-pin": "PIN de segurança"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Especifique os minutos do intervalo entre 1 a 1440 minutos. (padrão 30)"
+                    "poll_interval_in_minutes": "Especifique os minutos do intervalo entre 1 a 1440 minutos. (padrão 30)",
+                    "s-pin": "Especifique o PIN de segurança. ATENÇÃO: Isso ativará o bloqueio/desbloqueio remoto de portas"
                 }
             }
         }
