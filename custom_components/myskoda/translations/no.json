@@ -232,11 +232,13 @@
                 "data": {
                     "tracing": "Sporing av API-respons. Krever at feilsøkingslogging er aktivert i configuration.yaml.",
                     "poll_interval_in_minutes": "Polling-intervall i minutter når bilen er inaktiv.",
-                    "s-pin": "Sikkerhets PIN-kode"
+                    "s-pin": "Sikkerhets PIN-kode",
+                    "readonly": "Lesemodus"
                 },
                 "data_description": {
                     "poll_interval_in_minutes": "Angi et polling-intervall mellom 1 og 1440 minutter. (standard er 30)",
-                    "s-pin": "Angi sikkerhets PIN-koden. ADVARSEL: Dette gjør det mulig å låse opp/låse eksternt"
+                    "s-pin": "Angi sikkerhets PIN-koden. ADVARSEL: Dette gjør det mulig å låse opp/låse eksternt",
+                    "readonly": "Du kan ikke gjøre noen endringer med bilen, bare lese data"
                 }
             }
         }
