@@ -20,7 +20,13 @@ from homeassistant.util import Throttle
 from myskoda.models.air_conditioning import AirConditioning, AirConditioningState
 from myskoda.models.info import CapabilityId
 
-from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, COORDINATORS, DOMAIN
+from .const import (
+    API_COOLDOWN_IN_SECONDS,
+    CONF_READONLY,
+    CONF_SPIN,
+    COORDINATORS,
+    DOMAIN,
+)
 from .coordinator import MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
@@ -149,6 +155,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
         readonly = self.coordinator.config.options.get(CONF_READONLY)
 
         return all_capabilities_present and not readonly
+
 
 class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
     """Auxiliary heater control for MySkoda vehicles."""
