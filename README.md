@@ -165,3 +165,15 @@ action: homeassistant.update_entity
 target:
   entity_id: device_tracker.skoda_4ever
 ```
+
+## S-PIN
+
+For some operations, such as locking and unlocking doors, it is required to fill in the S-PIN that you have set for privileged access to your car via the App. This integration does not support setting the S-PIN yet.
+Fill in the required S-PIN in Settings > Integrations > MySkoda > Configuration > S-PIN and after a few seconds you will have the options available in HomeAssistant.
+
+## Read-only mode
+
+The opposite to S-PIN is read-only mode. In this mode, all buttons, switches and other functionality that allows you to change settings remotely are disabled.
+In order not to accidentally delete data, we do not delete the entities
+
+Also, if you disable read-only mode, the buttons, switches, etc will become available again.
