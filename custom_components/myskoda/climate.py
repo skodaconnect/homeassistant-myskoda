@@ -20,7 +20,13 @@ from homeassistant.util import Throttle
 from myskoda.models.air_conditioning import AirConditioning, AirConditioningState
 from myskoda.models.info import CapabilityId
 
-from .const import API_COOLDOWN_IN_SECONDS, COORDINATORS, DOMAIN, CONF_SPIN
+from .const import (
+    API_COOLDOWN_IN_SECONDS,
+    CONF_READONLY,
+    CONF_SPIN,
+    COORDINATORS,
+    DOMAIN,
+)
 from .coordinator import MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
@@ -49,11 +55,6 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
         translation_key="climate",
     )
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
-    _attr_supported_features = (
-        ClimateEntityFeature.TARGET_TEMPERATURE
-        | ClimateEntityFeature.TURN_ON
-        | ClimateEntityFeature.TURN_OFF
-    )
 
     def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:  # noqa: D107
         super().__init__(
@@ -61,6 +62,12 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
             vin,
         )
         ClimateEntity.__init__(self)
+        if self.is_supported():
+            _attr_supported_features = (
+                ClimateEntityFeature.TARGET_TEMPERATURE
+                | ClimateEntityFeature.TURN_ON
+                | ClimateEntityFeature.TURN_OFF
+            )
 
     def _air_conditioning(self) -> AirConditioning | None:
         return self.vehicle.air_conditioning
@@ -140,6 +147,14 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
             CapabilityId.AIR_CONDITIONING,
             CapabilityId.AIR_CONDITIONING_SAVE_AND_ACTIVATE,
         ]
+
+    def is_supported(self) -> bool:
+        all_capabilities_present = all(
+            self.vehicle.has_capability(cap) for cap in self.required_capabilities()
+        )
+        readonly = self.coordinator.config.options.get(CONF_READONLY)
+
+        return all_capabilities_present and not readonly
 
 
 class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
