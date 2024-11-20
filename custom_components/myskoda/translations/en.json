@@ -223,7 +223,7 @@
 	},
 	"spin_error": {
 	    "title": "Incorrect S-PIN detected",
-	    "description": "We received an erro indicating your S-PIN is incorrect.\n\nPlease enter the correct S-PIN in the integration settings."
+	    "description": "We received an error indicating your S-PIN is incorrect.\n\nPlease enter the correct S-PIN in the integration settings."
 	}
     },
     "options": {
