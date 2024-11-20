@@ -37,7 +37,7 @@ If your desired language is not available, please [open an issue](https://github
 - Oil Service Interval
 - Fuel Level
 - Combustion range
-- Electric range 
+- Electric range
 
 ### Binary Sensors
 
@@ -177,3 +177,11 @@ The opposite to S-PIN is read-only mode. In this mode, all buttons, switches and
 In order not to accidentally delete data, we do not delete the entities
 
 Also, if you disable read-only mode, the buttons, switches, etc will become available again.
+
+## Disclaimer
+
+This Homeassistant integration uses an unofficial API client for the Skoda API and is not affiliated with, endorsed by, or associated with Skoda Auto or any of its subsidiaries.
+
+Use this project at your own risk. Skoda Auto may update or modify its API without notice, which could render this integration inoperative or non-compliant. The maintainers of this project are not responsible for any misuse, legal implications, or damages arising from its use.
+
+Ensure compliance with Skoda Auto's terms of service and any applicable laws when using this software.
