@@ -232,11 +232,13 @@
                 "data": {
                     "tracing": "Zjišťování odezvy API. Vyžaduje povolený debug logging v konfiguraci configuration.yaml.",
                     "poll_interval_in_minutes": "Interval dotazování v minutách při nečinnosti vozidla.",
-                    "s-pin": "Bezpečnostní PIN"
+                    "s-pin": "Bezpečnostní PIN",
+                    "readonly": "Režim pouze pro čtení"
                 },
                 "data_description": {
                     "poll_interval_in_minutes": "Zadejte interval dotazování mezi 1 a 1440 minutami. (výchozí 30)",
-                    "s-pin": "Zadejte bezpečnostní kód PIN. VAROVÁNÍ: Toto povolí zamknutí/odemknutí na dálku"
+                    "s-pin": "Zadejte bezpečnostní kód PIN. VAROVÁNÍ: Toto povolí zamknutí/odemknutí na dálku",
+                    "readonly": "Ve vozidle nelze provádět žádné změny, pouze číst data"
                 }
             }
         }
