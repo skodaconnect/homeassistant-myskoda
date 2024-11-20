@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Klimaanlage"
+            },
+            "auxiliary_heater": {
+                "name": "Zuheizer"
             }
         },
         "device_tracker": {
@@ -213,6 +216,12 @@
             }
         }
     },
+    "issues": {
+        "new_tandc": {
+            "title": "Neue Nutzungsbedingungen für MySkoda ansehen",
+            "description": "Login-Fehler aufgrund fehlender Zustimmung zu den Nutzungsbedingungen.\n\nSkoda hat möglicherweise neue Nutzungsbedingungen ausgestellt.\n\nBitte melden Sie sich ab und wieder in der MySkoda App ab, um sie zu überprüfen.\nDiese Integration kann nicht ohne akzeptierte Nutzungsbedingungen fortgesetzt werden."
+        }
+    },
     "options": {
         "error": {
             "invalid_polling_interval": "Ungültiges Abfrageintervall angegeben. Bitte wählen Sie zwischen 1 und 1440 Minuten",
@@ -223,11 +232,13 @@
                 "data": {
                     "tracing": "API response tracing. Erfordert die Aktivierung der Debug-Protokollierung in der configuration.yaml.",
                     "poll_interval_in_minutes": "Abfrageintervall in Minuten, wenn das Auto untätig ist.",
-                    "s-pin": "Sicherheitscode (PIN)"
+                    "s-pin": "Sicherheitscode (PIN)",
+                    "readonly": "Schreibgeschützter Modus"
                 },
                 "data_description": {
                     "poll_interval_in_minutes": "Geben Sie ein Abfrageintervall zwischen 1 und 1440 Minuten an. (Standardwert 30)",
-                    "s-pin": "Bitte Sicherheitscode (PIN) angeben. Achtung: Dies ermöglicht öffnen/schliessen aus der Ferne"
+                    "s-pin": "Bitte Sicherheitscode (PIN) angeben. Achtung: Dies ermöglicht öffnen/schliessen aus der Ferne",
+                    "readonly": "Sie können keine Änderungen am Auto vornehmen, nur Daten lesen"
                 }
             }
         }
