@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from aiohttp import InvalidUrlClientError
+from aiohttp import ClientResponseError, InvalidUrlClientError
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -22,7 +22,12 @@ from myskoda.auth.authorization import CSRFError, TermsAndConditionsError
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
-from .issues import async_create_tnc_issue, async_delete_tnc_issue
+from .issues import (
+    async_create_tnc_issue,
+    async_delete_tnc_issue,
+    async_delete_spin_issue,
+)
+from .utils import handle_aiohttp_error
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -65,11 +70,14 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     except (CSRFError, InvalidUrlClientError) as exc:
         _LOGGER.debug("An error occurred during login.")
         raise ConfigEntryNotReady from exc
+    except ClientResponseError as err:
+        handle_aiohttp_error("setup", err, hass, config)
     except Exception:
         _LOGGER.exception("Login with MySkoda failed for an unknown reason.")
         return False
 
     async_delete_tnc_issue(hass, config.entry_id)
+    async_delete_spin_issue(hass, config.entry_id)
 
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
     vehicles = await myskoda.list_vehicle_vins()

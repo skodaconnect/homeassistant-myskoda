@@ -31,6 +31,8 @@ from .const import (
     DEFAULT_FETCH_INTERVAL_IN_MINUTES,
 )
 
+from .utils import handle_aiohttp_error
+
 _LOGGER = logging.getLogger(__name__)
 
 type RefreshFunction = Callable[[], Coroutine[None, None, None]]
@@ -98,13 +100,21 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         myskoda.subscribe(self._on_mqtt_event)
 
     async def _async_update_data(self) -> State:
+        vehicle = None
+        user = None
+
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
         try:
             vehicle = await self.myskoda.get_vehicle(self.vin)
             user = await self.myskoda.get_user()
-        except (ClientError, ClientResponseError) as err:
+        except ClientResponseError as err:
+            handle_aiohttp_error("user and vehicle", err, self.hass, self.config)
+        except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
-        return State(vehicle, user)
+
+        if vehicle and user:
+            return State(vehicle, user)
+        raise UpdateFailed("Incomplete update received")
 
     async def _on_mqtt_event(self, event: Event) -> None:
         if event.vin != self.vin:
@@ -209,60 +219,82 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.async_set_updated_data(self.data)
 
     async def _update_driving_range(self) -> None:
+        driving_range = None
+
         _LOGGER.debug("Updating driving range for %s", self.vin)
         try:
             driving_range = await self.myskoda.get_driving_range(self.vin)
-        except (ClientError, ClientResponseError) as err:
-            raise UpdateFailed("Error getting driving range from MySkoda API: %s", err)
+        except ClientResponseError as err:
+            handle_aiohttp_error("driving range", err, self.hass, self.config)
+        except ClientError as err:
+            raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        vehicle = self.data.vehicle
-        vehicle.driving_range = driving_range
-        self.set_updated_vehicle(vehicle)
+        if driving_range:
+            vehicle = self.data.vehicle
+            vehicle.driving_range = driving_range
+            self.set_updated_vehicle(vehicle)
 
     async def _update_charging(self) -> None:
+        charging = None
+
         _LOGGER.debug("Updating charging information for %s", self.vin)
         try:
             charging = await self.myskoda.get_charging(self.vin)
-        except (ClientError, ClientResponseError) as err:
-            raise UpdateFailed("Error getting charging info from MySkoda API: %s", err)
+        except ClientResponseError as err:
+            handle_aiohttp_error("charging information", err, self.hass, self.config)
+        except ClientError as err:
+            raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        vehicle = self.data.vehicle
-        vehicle.charging = charging
-        self.set_updated_vehicle(vehicle)
+        if charging:
+            vehicle = self.data.vehicle
+            vehicle.charging = charging
+            self.set_updated_vehicle(vehicle)
 
     async def _update_air_conditioning(self) -> None:
+        air_conditioning = None
+
         _LOGGER.debug("Updating air conditioning for %s", self.vin)
         try:
             air_conditioning = await self.myskoda.get_air_conditioning(self.vin)
-        except (ClientError, ClientResponseError) as err:
-            raise UpdateFailed("Error getting AC update from MySkoda API: %s", err)
+        except ClientResponseError as err:
+            handle_aiohttp_error("AC update", err, self.hass, self.config)
+        except ClientError as err:
+            raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        vehicle = self.data.vehicle
-        vehicle.air_conditioning = air_conditioning
-        self.set_updated_vehicle(vehicle)
+        if air_conditioning:
+            vehicle = self.data.vehicle
+            vehicle.air_conditioning = air_conditioning
+            self.set_updated_vehicle(vehicle)
 
     async def _update_status(self) -> None:
+        status = None
+
         _LOGGER.debug("Updating vehicle status for %s", self.vin)
         try:
             status = await self.myskoda.get_status(self.vin)
+        except ClientResponseError as err:
+            handle_aiohttp_error("vehicle status", err, self.hass, self.config)
         except ClientError as err:
-            self.async_set_update_error(err)
-            return
+            raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        vehicle = self.data.vehicle
-        vehicle.status = status
-        self.set_updated_vehicle(vehicle)
+        if status:
+            vehicle = self.data.vehicle
+            vehicle.status = status
+            self.set_updated_vehicle(vehicle)
 
     async def _update_vehicle(self) -> None:
+        vehicle = None
+
         _LOGGER.debug("Updating full vehicle for %s", self.vin)
         try:
             vehicle = await self.myskoda.get_vehicle(self.vin)
-        except (ClientError, ClientResponseError) as err:
-            raise UpdateFailed(
-                "Error getting complete update from MySkoda API: %s", err
-            )
+        except ClientResponseError as err:
+            handle_aiohttp_error("vehicle update", err, self.hass, self.config)
+        except ClientError as err:
+            raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        self.set_updated_vehicle(vehicle)
+        if vehicle:
+            self.set_updated_vehicle(vehicle)
 
     def _debounce(
         self, func: RefreshFunction, immediate: bool = False
@@ -270,18 +302,20 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         return MySkodaDebouncer(self.hass, func, immediate).async_call
 
     async def _update_positions(self) -> None:
+        positions = None
         _LOGGER.debug("Updating positions for %s", self.vin)
         try:
             await asyncio.sleep(60)  # GPS is not updated immediately, wait 60 seconds
             positions = await self.myskoda.get_positions(self.vin)
-        except (ClientError, ClientResponseError) as err:
-            raise UpdateFailed(
-                "Error getting positions update from MySkoda API: %s", err
-            )
+        except ClientResponseError as err:
+            handle_aiohttp_error("positions", err, self.hass, self.config)
+        except ClientError as err:
+            raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        vehicle = self.data.vehicle
-        vehicle.positions = positions
-        self.set_updated_vehicle(vehicle)
+        if positions:
+            vehicle = self.data.vehicle
+            vehicle.positions = positions
+            self.set_updated_vehicle(vehicle)
 
     async def update_status(self, immediate: bool = False) -> RefreshFunction:
         return self._debounce(self._update_status, immediate)
