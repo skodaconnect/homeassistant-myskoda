@@ -31,7 +31,7 @@ from .const import (
     DEFAULT_FETCH_INTERVAL_IN_MINUTES,
 )
 
-from .utils import handle_aiohttp_error
+from . import handle_aiohttp_error
 
 _LOGGER = logging.getLogger(__name__)
 
