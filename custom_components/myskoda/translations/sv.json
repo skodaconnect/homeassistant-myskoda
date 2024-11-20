@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Luftkonditionering"
+            },
+            "auxiliary_heater": {
+                "name": "Tillsatsvärmare"
             }
         },
         "device_tracker": {
@@ -229,11 +232,13 @@
                 "data": {
                     "tracing": "Spårning av API-svar. Kräver att felsökningsloggning är aktiverad i configuration.yaml.",
                     "poll_interval_in_minutes": "Pollning intervall i minuter när bilen är inaktiv.",
-                    "s-pin": "PIN-kod för säkerhet"
+                    "s-pin": "PIN-kod för säkerhet",
+                    "readonly": "Skrivskyddad läge"
                 },
                 "data_description": {
                     "poll_interval_in_minutes": "Ange pollinering intervall mellan 1 och 1440 minuter. (standard 30)",
-                    "s-pin": "Ange säkerhets-PIN-kod. VARNING: Detta aktiverar fjärrlås/fjärrlåsning"
+                    "s-pin": "Ange säkerhets-PIN-kod. VARNING: Detta aktiverar fjärrlås/fjärrlåsning",
+                    "readonly": "Du kan inte göra några ändringar av bilen, bara läsa data"
                 }
             }
         }
