@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Luchtbehandeling"
+            },
+            "auxiliary_heater": {
+                "name": "Standverwarming"
             }
         },
         "device_tracker": {
@@ -229,11 +232,13 @@
                 "data": {
                     "tracing": "API respons traceren. Debug logging ingeschakeld in configuration.yaml.",
                     "poll_interval_in_minutes": "Verversinterval in minuten wanneer de auto inactief is.",
-                    "s-pin": "Beveiligings PIN"
+                    "s-pin": "Beveiligings PIN",
+                    "readonly": "Alleen-lezen modus"
                 },
                 "data_description": {
                     "poll_interval_in_minutes": "Geef een waarde tussen 1 en 1440 minuten. (standaard 30)",
-                    "s-pin": "Geef de beveiligings-PIN. WAARSCHUWING: Hiermee kunt u op afstand vergrendelen/ontgrendelen"
+                    "s-pin": "Geef de beveiligings-PIN. WAARSCHUWING: Hiermee kunt u op afstand vergrendelen/ontgrendelen",
+                    "readonly": "Je kunt geen wijzigingen aanbrengen in de auto, alleen gegevens lezen"
                 }
             }
         }

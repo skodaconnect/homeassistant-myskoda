@@ -232,11 +232,13 @@
                 "data": {
                     "tracing": "Rastreamento de resposta da API. Requer registro de depuração ativo em configuration.yaml.",
                     "poll_interval_in_minutes": "Intervalos em minuto quando o carro está ausente.",
-                    "s-pin": "PIN de segurança"
+                    "s-pin": "PIN de segurança",
+                    "readonly": "Modo leitura"
                 },
                 "data_description": {
                     "poll_interval_in_minutes": "Especifique os minutos do intervalo entre 1 a 1440 minutos. (padrão 30)",
-                    "s-pin": "Especifique o PIN de segurança. ATENÇÃO: Isso ativará o bloqueio/desbloqueio remoto de portas"
+                    "s-pin": "Especifique o PIN de segurança. ATENÇÃO: Isso ativará o bloqueio/desbloqueio remoto de portas",
+                    "readonly": "Você não pode fazer nenhuma mudança ao carro, apenas ler dados"
                 }
             }
         }
