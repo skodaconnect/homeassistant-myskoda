@@ -312,7 +312,8 @@ class InspectionInterval(MySkodaSensor):
 
     entity_description = SensorEntityDescription(
         key="inspection",
-        device_class=SensorDeviceClass.DURATION,
+        # Not a duration until https://github.com/home-assistant/frontend/issues/18151 is fixed
+        # device_class=SensorDeviceClass.DURATION,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTime.DAYS,
         translation_key="inspection",
@@ -352,7 +353,8 @@ class OilServiceIntervalDays(MySkodaSensor):
 
     entity_description = SensorEntityDescription(
         key="oil_service_in_days",
-        device_class=SensorDeviceClass.DURATION,
+        # Not a duration until https://github.com/home-assistant/frontend/issues/18151 is fixed
+        # device_class=SensorDeviceClass.DURATION,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTime.DAYS,
         translation_key="oil_service_in_days",
