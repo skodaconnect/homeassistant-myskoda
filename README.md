@@ -100,7 +100,7 @@ You can manually install this integration as an custom_component under Home Assi
 The `myskoda` repository is also compatible with HACS (Home Assistant Community Store), making installation and updates easier.
 
 1. **Install HACS** (if not already installed):
-   - Follow instructions here: [HACS Installation Guide](https://hacs.xyz/docs/installation/manual)
+   - Follow instructions here: [HACS Installation Guide](https://hacs.xyz/docs/use/download/download/#to-download-hacs)
 2. **Add `myskoda` Repository** to HACS:
    - In Home Assistant, go to **HACS** > **Settings** tab.
    - Select **Custom Repositories** and add the repository URL `https://github.com/skodaconnect/homeassistant-myskoda`.
@@ -110,7 +110,7 @@ The `myskoda` repository is also compatible with HACS (Home Assistant Community 
 
 Following these steps should successfully install the `myskoda` integration for use with your Home Assistant setup.
 
-For more guidance on HACS, you can refer to the [HACS Getting Started Guide](https://hacs.xyz/docs/basic/getting_started).
+For more guidance on HACS, you can refer to the [HACS Getting Started Guide](https://hacs.xyz/docs/use/).
 
 ## Enable debug logging
 
