@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Air conditionné"
+            },
+            "auxiliary_heater": {
+                "name": "Chauffage auxiliaire"
             }
         },
         "device_tracker": {
@@ -229,11 +232,13 @@
                 "data": {
                     "tracing": "Suivi des réponses de l'API. Nécessite d'activer le mode débogage dans configuration.yaml.",
                     "poll_interval_in_minutes": "Intervalle de requêtes, en minutes, lorsque la voiture est inactive.",
-                    "s-pin": "Code de sécurité"
+                    "s-pin": "Code de sécurité",
+                    "readonly": "Mode lecture seule"
                 },
                 "data_description": {
                     "poll_interval_in_minutes": "Spécifiez un intervalle de requêtes entre 1 et 1440 minutes. (par défaut 30)",
-                    "s-pin": "Spécifiez le code PIN de sécurité. AVERTISSEMENT : Cela active le verrouillage à distance / déverrouillage"
+                    "s-pin": "Spécifiez le code PIN de sécurité. AVERTISSEMENT : Cela active le verrouillage à distance / déverrouillage",
+                    "readonly": "Vous ne pouvez pas apporter de modifications à la voiture, seulement lire les données"
                 }
             }
         }
