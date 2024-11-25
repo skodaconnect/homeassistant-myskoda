@@ -8,6 +8,9 @@ from homeassistant.components.button import (
     ButtonEntity,
     ButtonEntityDescription,
 )
+from homeassistant.components.persistent_notification import (
+    async_create as async_create_persistent_notification,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
@@ -19,6 +22,7 @@ from myskoda.models.fixtures import Endpoint
 from myskoda.models.info import CapabilityId
 
 from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, COORDINATORS, DOMAIN
+from .coordinator import MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
@@ -96,12 +100,43 @@ class GenerateFixtures(MySkodaButton):
         entity_category=EntityCategory.DIAGNOSTIC,
     )
 
+    def __init__(
+        self,
+        coordinator: MySkodaDataUpdateCoordinator,
+        vin: str,
+    ):
+        super().__init__(coordinator, vin)
+        self._is_enabled = True  # Track whether the button is enabled
+
+    @property
+    def available(self) -> bool:
+        """Return whether the button is available."""
+        return self._is_enabled
+
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_press(self) -> None:
-        vin: list[str] = [self.vehicle.info.vin]
-        description = f"Fixture for {self.vehicle.info.specification.model} {self.vehicle.info.specification.trim_level} {self.vehicle.info.specification.model_year}"
+        if not self._is_enabled:
+            return  # Ignore presses when disabled
 
-        result = await self.coordinator.myskoda.generate_get_fixture(
-            self.vehicle.info.specification.model, description, vin, Endpoint.ALL
-        )
-        _LOGGER.debug(f"{description}: {result.to_json()}")
+        # Disable the button
+        self._is_enabled = False
+        self.async_write_ha_state()
+
+        try:
+            vin: list[str] = [self.vehicle.info.vin]
+            description = f"Fixtures for {self.vehicle.info.specification.model} {self.vehicle.info.specification.trim_level} {self.vehicle.info.specification.model_year}"
+
+            result = await self.coordinator.myskoda.generate_get_fixture(
+                self.vehicle.info.specification.model, description, vin, Endpoint.ALL
+            )
+            _LOGGER.info(f"{description}: {result.to_json()}")
+
+            async_create_persistent_notification(
+                self.hass,
+                title="Fixtures Generated",
+                message=f"{description} has been successfully generated, check the log.",
+            )
+        finally:
+            # Re-enable the button
+            self._is_enabled = True
+            self.async_write_ha_state()
