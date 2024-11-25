@@ -169,6 +169,9 @@
             		},
             		"flash": {
                 		"default": "mdi:car-parking-lights"
+            		},
+            		"generate_fixtures": {
+                		"default": "mdi:information"
             		}
         	}
 	}
