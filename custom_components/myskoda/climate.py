@@ -55,6 +55,11 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
         translation_key="climate",
     )
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
+    _attr_supported_features = (
+        ClimateEntityFeature.TARGET_TEMPERATURE
+        | ClimateEntityFeature.TURN_ON
+        | ClimateEntityFeature.TURN_OFF
+    )
 
     def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:  # noqa: D107
         super().__init__(
@@ -62,12 +67,6 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
             vin,
         )
         ClimateEntity.__init__(self)
-        if self.is_supported():
-            _attr_supported_features = (
-                ClimateEntityFeature.TARGET_TEMPERATURE
-                | ClimateEntityFeature.TURN_ON
-                | ClimateEntityFeature.TURN_OFF
-            )
 
     def _air_conditioning(self) -> AirConditioning | None:
         return self.vehicle.air_conditioning
