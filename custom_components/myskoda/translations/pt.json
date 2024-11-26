@@ -213,6 +213,9 @@
             },
             "flash": {
                 "name": "Piscar"
+            },
+            "generate_fixtures": {
+                "name": "Gerar instalações"
             }
         }
     },
