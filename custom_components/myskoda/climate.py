@@ -17,7 +17,12 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
 
-from myskoda.models.air_conditioning import AirConditioning, AirConditioningState
+from myskoda.models.air_conditioning import (
+    AirConditioning,
+    AirConditioningState,
+    TargetTemperature,
+)
+from myskoda.models.auxiliary_heating import AuxiliaryConfig
 from myskoda.models.info import CapabilityId
 
 from .const import (
@@ -232,9 +237,13 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                         )
                     _LOGGER.info("Starting Auxiliary heating.")
                     await self.coordinator.myskoda.start_auxiliary_heating(
-                        self.vehicle.info.vin,
-                        target_temperature.temperature_value,
-                        spin,
+                        vin=self.vehicle.info.vin,
+                        spin=spin,
+                        config=AuxiliaryConfig(
+                            target_temperature=TargetTemperature(
+                                temperature_value=target_temperature.temperature_value,
+                            ),
+                        ),
                     )
                 else:
                     _LOGGER.error("Cannot start auxiliary heater: No S-PIN set.")
