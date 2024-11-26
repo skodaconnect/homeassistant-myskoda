@@ -213,6 +213,9 @@
             },
             "flash": {
                 "name": "Blikat"
+            },
+            "generate_fixtures": {
+                "name": "Generovat fixace"
             }
         }
     },
