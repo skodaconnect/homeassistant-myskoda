@@ -203,8 +203,20 @@
             "reduced_current": {
                 "name": "Reduced Current"
             },
-            "window_heating": {
-                "name": "Window Heating"
+            "ac_at_unlock": {
+                "name": "AC when Unlocked"
+            },
+            "ac_without_external_power": {
+                "name": "AC without External Power"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Left Seat Heating with AC"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Right Seat Heating with AC"
+            },
+            "ac_window_heating": {
+                "name": "Window Heating with AC"
             }
         },
         "button": {
