@@ -175,7 +175,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 )
                 status.battery.state_of_charge_in_percent = data.soc
                 if data.time_to_finish is not None:
-                    status.remaining_time_to_fully_charged_in_minutes = data.time_to_finish
+                    status.remaining_time_to_fully_charged_in_minutes = (
+                        data.time_to_finish
+                    )
                 status.state = data.state
 
         if vehicle.driving_range is None:
