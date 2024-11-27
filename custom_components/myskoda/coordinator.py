@@ -21,6 +21,7 @@ from myskoda.event import (
     ServiceEventTopic,
 )
 from myskoda.models.operation_request import OperationName, OperationStatus
+from myskoda.models.service_event import ServiceEventChangeSoc
 from myskoda.models.user import User
 from myskoda.mqtt import EventCharging, EventType
 
@@ -168,27 +169,25 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         else:
             status = vehicle.charging.status
 
-            if data.charged_range is not None:
+            if isinstance(event.event, ServiceEventChangeSoc):
                 status.battery.remaining_cruising_range_in_meters = (
                     data.charged_range * 1000
                 )
-            if data.soc is not None:
                 status.battery.state_of_charge_in_percent = data.soc
-            if data.time_to_finish is not None:
-                status.remaining_time_to_fully_charged_in_minutes = data.time_to_finish
-            if data.state is not None:
+                if data.time_to_finish is not None:
+                    status.remaining_time_to_fully_charged_in_minutes = data.time_to_finish
                 status.state = data.state
 
         if vehicle.driving_range is None:
             await self.update_driving_range()
         else:
-            if data.soc is not None:
+            if isinstance(event.event, ServiceEventChangeSoc):
                 vehicle.driving_range.primary_engine_range.current_soc_in_percent = (
                     data.soc
                 )
-            vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
-                data.charged_range
-            )
+                vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
+                    data.charged_range
+                )
 
         self.set_updated_vehicle(vehicle)
 
