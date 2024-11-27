@@ -57,6 +57,12 @@ If your desired language is not available, please [open an issue](https://github
 - Reduced Current
 - Battery Care Mode
 - Doors
+- AC when Unlocked
+- AC without External Power
+- Left Seat Heating with AC
+- Right Seat Heating with AC
+- Window Heating with AC
+
 
 ### Buttons
 - Honk and Flash
