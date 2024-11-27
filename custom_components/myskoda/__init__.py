@@ -17,8 +17,10 @@ from myskoda import (
     AuthorizationFailedError,
 )
 from myskoda.myskoda import TRACE_CONFIG
-from myskoda.auth.authorization import CSRFError, TermsAndConditionsError
-
+from myskoda.auth.authorization import (
+    CSRFError,
+    TermsAndConditionsError,
+)
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
@@ -39,11 +41,26 @@ PLATFORMS: list[Platform] = [
 ]
 
 
-async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
+async def async_connect_myskoda(
+    hass: HomeAssistant, entry: ConfigEntry, mqtt_enabled: bool = True
+) -> MySkoda:
+    """Connect to MySkoda."""
+
+    trace_configs = []
+    if entry.options.get("tracing"):
+        trace_configs.append(TRACE_CONFIG)
+
+    session = async_create_clientsession(hass, trace_configs=trace_configs)
+    myskoda = MySkoda(session, get_default_context(), mqtt_enabled=mqtt_enabled)
+    await myskoda.connect(entry.data["email"], entry.data["password"])
+    return myskoda
+
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up MySkoda integration from a config entry."""
 
     trace_configs = []
-    if config.options.get("tracing"):
+    if entry.options.get("tracing"):
         trace_configs.append(TRACE_CONFIG)
 
     session = async_create_clientsession(
@@ -52,7 +69,7 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     myskoda = MySkoda(session, get_default_context())
 
     try:
-        await myskoda.connect(config.data["email"], config.data["password"])
+        await myskoda.connect(entry.data["email"], entry.data["password"])
     except AuthorizationFailedError as exc:
         _LOGGER.debug("Authorization with MySkoda failed.")
         raise ConfigEntryAuthFailed from exc
@@ -60,7 +77,7 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
         _LOGGER.error(
             "New terms and conditions detected while logging in. Please log into the MySkoda app (may require a logout first) to access the new Terms and Conditions. This HomeAssistant integration currently can not continue."
         )
-        async_create_tnc_issue(hass, config.entry_id)
+        async_create_tnc_issue(hass, entry.entry_id)
         raise ConfigEntryNotReady from exc
     except (CSRFError, InvalidUrlClientError) as exc:
         _LOGGER.debug("An error occurred during login.")
@@ -69,20 +86,20 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
         _LOGGER.exception("Login with MySkoda failed for an unknown reason.")
         return False
 
-    async_delete_tnc_issue(hass, config.entry_id)
+    async_delete_tnc_issue(hass, entry.entry_id)
 
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
     vehicles = await myskoda.list_vehicle_vins()
     for vin in vehicles:
-        coordinator = MySkodaDataUpdateCoordinator(hass, config, myskoda, vin)
+        coordinator = MySkodaDataUpdateCoordinator(hass, entry, myskoda, vin)
         await coordinator.async_config_entry_first_refresh()
         coordinators[vin] = coordinator
 
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][config.entry_id] = {COORDINATORS: coordinators}
+    hass.data[DOMAIN][entry.entry_id] = {COORDINATORS: coordinators}
 
-    await hass.config_entries.async_forward_entry_setups(config, PLATFORMS)
-    config.async_on_unload(config.add_update_listener(_async_update_listener))
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    entry.async_on_unload(entry.add_update_listener(_async_update_listener))
 
     return True
 
@@ -100,3 +117,52 @@ async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry):
     """Handle options update."""
     # Do a lazy reload of integration when configuration changed
     await hass.config_entries.async_reload(entry.entry_id)
+
+
+async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Handle config entry schema migration."""
+    _LOGGER.debug(
+        "Migrating configuration entry %s from v%s.%s",
+        entry.entry_id,
+        entry.version,
+        entry.minor_version,
+    )
+
+    if entry.version > 2:
+        return False
+
+    if entry.version == 1:
+        # v1 could have a missing unique_id. Bump to 2.1
+        if not entry.unique_id or entry.unique_id == "":
+            _LOGGER.debug("Starting migration of unique_id")
+
+            new_version = 2
+            new_minor_version = 1
+            try:
+                myskoda = await async_connect_myskoda(hass, entry, mqtt_enabled=False)
+                user = await myskoda.get_user()
+                unique_id = user.id
+            except AuthorizationFailedError as exc:
+                raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
+            except Exception as exc:
+                _LOGGER.exception(
+                    "Login with %s failed for unknown reason. Details: %s", DOMAIN, exc
+                )
+                return False
+            _LOGGER.debug("Add unique_id %s to entry %s", unique_id, entry.entry_id)
+            hass.config_entries.async_update_entry(
+                entry,
+                version=new_version,
+                minor_version=new_minor_version,
+                unique_id=unique_id,
+            )
+
+    if new_entry := hass.config_entries.async_get_entry(entry_id=entry.entry_id):
+        _LOGGER.debug(
+            "Migration of %s to v%s.%s successful",
+            entry.entry_id,
+            new_entry.version,
+            new_entry.minor_version,
+        )
+
+    return True
