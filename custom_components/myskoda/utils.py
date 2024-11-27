@@ -1,13 +1,9 @@
-import logging
-
 from typing import Callable
 
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .coordinator import MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
-
-_LOGGER = logging.getLogger(__name__)
 
 
 def add_supported_entities(
