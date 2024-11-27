@@ -8,6 +8,7 @@ authors = [
     "Fabrice Devaux <fabrice.devaux@gmail.com>",
 ]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "~3.12,<3.13"
