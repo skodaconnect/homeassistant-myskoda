@@ -53,8 +53,8 @@ async def async_setup_entry(
             BatteryCareMode,
             AcAtUnlock,
             AcWithoutExternalPower,
-            AcSeatsHeatingFrontLeft,
-            AcSeatsHeatingFrontRight,
+            AcSeatHeatingFrontLeft,
+            AcSeatHeatingFrontRight,
             AcWindowHeating,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
@@ -262,7 +262,7 @@ class AcAtUnlock(MySkodaSwitch):
     @property
     def is_on(self) -> bool | None:  # noqa: D102
         if ac := self.vehicle.air_conditioning:
-            if ac.air_conditioning_at_unlock is None:
+            if ac.air_conditioning_at_unlock is not None:
                 return ac.air_conditioning_at_unlock
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
@@ -304,7 +304,7 @@ class AcWithoutExternalPower(MySkodaSwitch):
     @property
     def is_on(self) -> bool | None:  # noqa: D102
         if ac := self.vehicle.air_conditioning:
-            if ac.air_conditioning_without_external_power is None:
+            if ac.air_conditioning_without_external_power is not None:
                 return ac.air_conditioning_without_external_power
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
@@ -328,20 +328,20 @@ class AcWithoutExternalPower(MySkodaSwitch):
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info("AC without external poweractivated.")
+        _LOGGER.info("AC without external power activated.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_ELECTRIC]
 
 
-class AcSeatsHeatingFrontLeft(MySkodaSwitch):
+class AcSeatHeatingFrontLeft(MySkodaSwitch):
     """Enable/disable front left seat heating during climatisation."""
 
     entity_description = SwitchEntityDescription(
         key="ac_seat_heating_front_left",
         name="Front Left Seat Heating with AC",
         device_class=SwitchDeviceClass.SWITCH,
-        translation_key="ac_seats_heating_front_left",
+        translation_key="ac_seat_heating_front_left",
         entity_category=EntityCategory.CONFIG,
     )
 
@@ -379,14 +379,14 @@ class AcSeatsHeatingFrontLeft(MySkodaSwitch):
         return [CapabilityId.AIR_CONDITIONING_SMART_SETTINGS]
 
 
-class AcSeatsHeatingFrontRight(MySkodaSwitch):
+class AcSeatHeatingFrontRight(MySkodaSwitch):
     """Enable/disable front right seat heating during climatisation."""
 
     entity_description = SwitchEntityDescription(
         key="ac_seat_heating_front_right",
         name="Front Right Seat Heating with AC",
         device_class=SwitchDeviceClass.SWITCH,
-        translation_key="ac_seats_heating_front_right",
+        translation_key="ac_seat_heating_front_right",
         entity_category=EntityCategory.CONFIG,
     )
 
@@ -438,7 +438,7 @@ class AcWindowHeating(MySkodaSwitch):
     @property
     def is_on(self) -> bool | None:  # noqa: D102
         if ac := self.vehicle.air_conditioning:
-            if ac.window_heating_enabled is None:
+            if ac.window_heating_enabled is not None:
                 return ac.window_heating_enabled
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
