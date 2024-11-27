@@ -161,6 +161,36 @@
 				"state": {
 					"on": "mdi:heat-wave"
 				}
+			},
+			"ac_at_unlock": {
+				"default": "mdi:toggle-switch-off",
+				"state": {
+					"on": "mdi:toggle-switch"
+				}
+			},
+			"ac_without_external_power": {
+				"default": "mdi:toggle-switch-off",
+				"state": {
+					"on": "mdi:toggle-switch"
+				}
+			},
+			"ac_seat_heating_front_left": {
+				"default": "mdi:car-seat",
+				"state": {
+					"on": "mdi:car-seat-heater"
+				}
+			},
+			"ac_seat_heating_front_right": {
+				"default": "mdi:car-seat",
+				"state": {
+					"on": "mdi:car-seat-heater"
+				}
+			},
+			"ac_window_heating": {
+				"default": "mdi:toggle-switch-off",
+				"state": {
+					"on": "mdi:toggle-switch"
+				}
 			}
 		},
         	"button": {
