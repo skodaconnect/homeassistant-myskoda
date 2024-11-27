@@ -203,6 +203,9 @@
             "reduced_current": {
                 "name": "Reduced Current"
             },
+            "window_heating": {
+                "name": "Window Heating"
+            },
             "ac_at_unlock": {
                 "name": "AC when Unlocked"
             },
