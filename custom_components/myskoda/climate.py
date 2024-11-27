@@ -147,10 +147,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
         _LOGGER.info("Target temperature for AC set to %s.", temp)
 
     def required_capabilities(self) -> list[CapabilityId]:
-        return [
-            CapabilityId.AIR_CONDITIONING,
-            CapabilityId.AIR_CONDITIONING_SAVE_AND_ACTIVATE,
-        ]
+        return [CapabilityId.AIR_CONDITIONING]
 
     def is_supported(self) -> bool:
         all_capabilities_present = all(
