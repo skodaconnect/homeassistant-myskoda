@@ -11,7 +11,6 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
-from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util.ssl import get_default_context
 from myskoda import (
     MySkoda,
@@ -23,10 +22,10 @@ from myskoda.auth.authorization import CSRFError, TermsAndConditionsError
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
+from .error_handlers import handle_aiohttp_error
 from .issues import (
     async_create_tnc_issue,
     async_delete_tnc_issue,
-    async_create_spin_issue,
     async_delete_spin_issue,
 )
 
@@ -109,28 +108,3 @@ async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry):
     """Handle options update."""
     # Do a lazy reload of integration when configuration changed
     await hass.config_entries.async_reload(entry.entry_id)
-
-
-def handle_aiohttp_error(
-    poll_type: str,
-    e: ClientResponseError,
-    hass: HomeAssistant,
-    config: ConfigEntry,
-) -> None:
-    _LOGGER.debug("Received error %d with content %s", e.status, e.message)
-
-    if e.status == 412:
-        # Handle precondition failed by creating an issue for incorrect S-PIN
-        async_create_spin_issue(hass, config.entry_id)
-        return
-
-    elif e.status == 500:
-        # Log message for error 500, otherwise ignore
-        _LOGGER.error(
-            f"Error requesting {poll_type} from MySkoda API: {e.message} ({e.status}), ignoring this"
-        )
-        return
-    else:
-        raise UpdateFailed(
-            f"Error requesting {poll_type} from MySkoda API: {e.message} ({e.status})"
-        )
