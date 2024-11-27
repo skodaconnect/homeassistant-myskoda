@@ -205,6 +205,21 @@
             },
             "window_heating": {
                 "name": "Aquecimento da janela"
+            },
+            "ac_at_unlock": {
+                "name": "Corrente alternada quando desbloqueada"
+            },
+            "ac_without_external_power": {
+                "name": "Corrente alternada sem energia externa"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Aquecimento do assento esquerdo com corrente alternada"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Aquecimento do assento direito com corrente alternada"
+            },
+            "ac_window_heating": {
+                "name": "Aquecimento da janela com corrente alternada"
             }
         },
         "button": {
