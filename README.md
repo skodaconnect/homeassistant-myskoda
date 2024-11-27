@@ -37,7 +37,7 @@ If your desired language is not available, please [open an issue](https://github
 - Oil Service Interval
 - Fuel Level
 - Combustion range
-- Electric range 
+- Electric range
 
 ### Binary Sensors
 
@@ -61,6 +61,7 @@ If your desired language is not available, please [open an issue](https://github
 ### Buttons
 - Honk and Flash
 - Flash
+- Generate Fixtures
 
 ### Climate
 
@@ -100,7 +101,7 @@ You can manually install this integration as an custom_component under Home Assi
 The `myskoda` repository is also compatible with HACS (Home Assistant Community Store), making installation and updates easier.
 
 1. **Install HACS** (if not already installed):
-   - Follow instructions here: [HACS Installation Guide](https://hacs.xyz/docs/installation/manual)
+   - Follow instructions here: [HACS Installation Guide](https://hacs.xyz/docs/use/download/download/#to-download-hacs)
 2. **Add `myskoda` Repository** to HACS:
    - In Home Assistant, go to **HACS** > **Settings** tab.
    - Select **Custom Repositories** and add the repository URL `https://github.com/skodaconnect/homeassistant-myskoda`.
@@ -110,7 +111,7 @@ The `myskoda` repository is also compatible with HACS (Home Assistant Community 
 
 Following these steps should successfully install the `myskoda` integration for use with your Home Assistant setup.
 
-For more guidance on HACS, you can refer to the [HACS Getting Started Guide](https://hacs.xyz/docs/basic/getting_started).
+For more guidance on HACS, you can refer to the [HACS Getting Started Guide](https://hacs.xyz/docs/use/).
 
 ## Enable debug logging
 
@@ -177,3 +178,19 @@ The opposite to S-PIN is read-only mode. In this mode, all buttons, switches and
 In order not to accidentally delete data, we do not delete the entities
 
 Also, if you disable read-only mode, the buttons, switches, etc will become available again.
+
+## Fixture generation
+
+The Generate Fixtures button allows users to generate car-related fixtures directly from the Home Assistant UI without requiring the use of myskoda[cli].
+
+When pressed, the button triggers the fixture generation process, and the generated fixtures are logged at the Info level in the Home Assistant Core log. Upon successful completion, a notification is displayed in the UI to inform the user that the fixtures have been successfully generated.
+
+This feature simplifies the process of creating fixtures by providing a user-friendly interface for initiating the operation.
+
+## Disclaimer
+
+This Homeassistant integration uses an unofficial API client for the Skoda API and is not affiliated with, endorsed by, or associated with Skoda Auto or any of its subsidiaries.
+
+Use this project at your own risk. Skoda Auto may update or modify its API without notice, which could render this integration inoperative or non-compliant. The maintainers of this project are not responsible for any misuse, legal implications, or damages arising from its use.
+
+Ensure compliance with Skoda Auto's terms of service and any applicable laws when using this software.

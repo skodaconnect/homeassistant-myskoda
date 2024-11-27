@@ -17,7 +17,12 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
 
-from myskoda.models.air_conditioning import AirConditioning, AirConditioningState
+from myskoda.models.air_conditioning import (
+    AirConditioning,
+    AirConditioningState,
+    TargetTemperature,
+)
+from myskoda.models.auxiliary_heating import AuxiliaryConfig
 from myskoda.models.info import CapabilityId
 
 from .const import (
@@ -55,6 +60,11 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
         translation_key="climate",
     )
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
+    _attr_supported_features = (
+        ClimateEntityFeature.TARGET_TEMPERATURE
+        | ClimateEntityFeature.TURN_ON
+        | ClimateEntityFeature.TURN_OFF
+    )
 
     def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:  # noqa: D107
         super().__init__(
@@ -62,12 +72,6 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
             vin,
         )
         ClimateEntity.__init__(self)
-        if self.is_supported():
-            _attr_supported_features = (
-                ClimateEntityFeature.TARGET_TEMPERATURE
-                | ClimateEntityFeature.TURN_ON
-                | ClimateEntityFeature.TURN_OFF
-            )
 
     def _air_conditioning(self) -> AirConditioning | None:
         return self.vehicle.air_conditioning
@@ -143,10 +147,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
         _LOGGER.info("Target temperature for AC set to %s.", temp)
 
     def required_capabilities(self) -> list[CapabilityId]:
-        return [
-            CapabilityId.AIR_CONDITIONING,
-            CapabilityId.AIR_CONDITIONING_SAVE_AND_ACTIVATE,
-        ]
+        return [CapabilityId.AIR_CONDITIONING]
 
     def is_supported(self) -> bool:
         all_capabilities_present = all(
@@ -233,9 +234,13 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                         )
                     _LOGGER.info("Starting Auxiliary heating.")
                     await self.coordinator.myskoda.start_auxiliary_heating(
-                        self.vehicle.info.vin,
-                        target_temperature.temperature_value,
-                        spin,
+                        vin=self.vehicle.info.vin,
+                        spin=spin,
+                        config=AuxiliaryConfig(
+                            target_temperature=TargetTemperature(
+                                temperature_value=target_temperature.temperature_value,
+                            ),
+                        ),
                     )
                 else:
                     _LOGGER.error("Cannot start auxiliary heater: No S-PIN set.")

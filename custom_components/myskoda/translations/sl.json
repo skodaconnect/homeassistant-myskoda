@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Klima"
+            },
+            "auxiliary_heater": {
+                "name": "Ogrevanje na mestu"
             }
         },
         "device_tracker": {
@@ -130,8 +133,8 @@
             "charge_type": {
                 "name": "Vrsta polnjenja",
                 "state": {
-                    "ac": "AC",
-                    "dc": "DC",
+                    "ac": "AC – enosmerni tok",
+                    "dc": "DC – izmenični tok",
                     "off": "Izključeno"
                 }
             },
@@ -213,6 +216,12 @@
             }
         }
     },
+    "issues": {
+        "new_tandc": {
+            "title": "Preglejte in potrdite nova določila in pogoje uporabe aplikacije MySkoda",
+            "description": "Zaznana napaka pri prijavi zaradi nesprejetja določil in pogojev.\n\nŠkoda je morda izdala nova določila in pogoje uporabe.\n\nProsimo, da se odjavite in znova prijavite v aplikacijo MySkoda, da jih pregledate in potrdite.\nTe integracije ni mogoče nadaljevati brez sprejetih določil in pogojev."
+        }
+    },
     "options": {
         "error": {
             "invalid_polling_interval": "Neveljaven interval poizvedb. Izberite med 1 in 1440 minutami",
@@ -223,11 +232,13 @@
                 "data": {
                     "tracing": "API debug logging (dnevniško beleženje). Omogočeno mora biti tudi v configiration.yaml.",
                     "poll_interval_in_minutes": "Interval poizvedb v minutah, ko vozilo miruje.",
-                    "s-pin": "S-PIN"
+                    "s-pin": "S-PIN",
+                    "readonly": "Način samo za branje"
                 },
                 "data_description": {
                     "poll_interval_in_minutes": "Določite interval poizvedovanja med 1 in 1440 minutami. (privzeto 30)",
-                    "s-pin": "Nastavite S-PIN. OPOZORILO: To bo omogočilo zaklep/odklep na daljavo"
+                    "s-pin": "Nastavite S-PIN. OPOZORILO: To bo omogočilo zaklep/odklep na daljavo",
+                    "readonly": "Ne morete upravljati vozila, lahko samo vidite podatke"
                 }
             }
         }
