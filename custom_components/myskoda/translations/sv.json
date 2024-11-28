@@ -205,6 +205,21 @@
             },
             "window_heating": {
                 "name": "Fönstervärme"
+            },
+            "ac_at_unlock": {
+                "name": "AC vid upplåsning"
+            },
+            "ac_without_external_power": {
+                "name": "AC utan extern ström"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Vänster sätesvärmning med AC"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Höger sätesvärmning med AC"
+            },
+            "ac_window_heating": {
+                "name": "Fönstervärmning med AC"
             }
         },
         "button": {
@@ -213,6 +228,9 @@
             },
             "flash": {
                 "name": "Blinka"
+            },
+            "generate_fixtures": {
+                "name": "Skapa fixturer"
             }
         }
     },
