@@ -238,6 +238,10 @@
         "new_tandc": {
             "title": "Rever novos termos e condições para MySkoda",
             "description": "Foi detectado uma falha de registro devido à falta de aceitação dos Termos e condições.\n\nSkoda talvez tenha emitido novos Termos e condições.\n\nRegistre-se novamente no aplicativo MySkoda para revê-las.\nEsta integração não pode continuar sem aceitar os Termos e condições."
+        },
+        "spin_error": {
+            "title": "S-PIN incorreto detectado",
+            "description": "Recebemos um erro indicando que seu S-PIN está incorreto.\n\nRe-insira o S-PIN correto nas opções de integração."
         }
     },
     "options": {
