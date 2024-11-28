@@ -9,9 +9,10 @@ from homeassistant.components.number import (
     NumberEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE
+from homeassistant.const import EntityCategory, PERCENTAGE, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
 
@@ -32,7 +33,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up the sensor platform."""
     add_supported_entities(
-        available_entities=[ChargeLimit],
+        available_entities=[ChargeLimit, HeaterDuration],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
@@ -87,3 +88,60 @@ class ChargeLimit(MySkodaNumber):
 
     def forbidden_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING_MQB]
+
+
+class HeaterDuration(MySkodaNumber, RestoreEntity):
+    """Auxiliary heater timer."""
+
+    entity_description = NumberEntityDescription(
+        key="heater_duration",
+        mode="slider",
+        native_max_value=60,
+        native_min_value=5,
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        native_step=5,
+        translation_key="heater_duration",
+        entity_category=EntityCategory.CONFIG,
+    )
+
+    _attr_native_value: float = 15  # Default value
+
+    def __init__(self, coordinator, vehicle_id):
+        """Initialize the auxiliary heater timer."""
+        super().__init__(coordinator, vehicle_id)
+
+    @property
+    def native_value(self) -> float | None:
+        """Return the current value of the timer."""
+        return self.coordinator.duration
+
+    async def async_set_native_value(self, value: float) -> None:
+        """Asynchronously update the current value."""
+        self.coordinator.duration = value
+        self.async_write_ha_state()
+
+    async def async_added_to_hass(self) -> None:
+        """Handle entity which is added to Home Assistant."""
+        await super().async_added_to_hass()
+
+        # Attempt to restore the previous state
+        if (last_state := await self.async_get_last_state()) is not None:
+            try:
+                restored_value = float(last_state.state)
+                # Restore the coordinator duration from the last known state
+                self.coordinator.duration = restored_value
+            except ValueError:
+                # If error, use the default value
+                self.coordinator.duration = self._attr_native_value
+        else:
+            # If no state to restore, use the default value
+            self.coordinator.duration = self._attr_native_value
+
+        # Update HA state to reflect the restored value
+        self.async_write_ha_state()
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.AUXILIARY_HEATING]
+
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.AUXILIARY_HEATING_TEMPERATURE_SETTING]

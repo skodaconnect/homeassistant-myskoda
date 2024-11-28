@@ -96,6 +96,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
         self.update_vehicle = self._debounce(self._update_vehicle)
         self.update_positions = self._debounce(self._update_positions)
+        self.duration: float | None = None
 
         myskoda.subscribe(self._on_mqtt_event)
 

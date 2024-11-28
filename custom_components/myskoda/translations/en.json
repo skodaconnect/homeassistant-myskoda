@@ -121,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Charge Limit"
+            },
+            "heater_duration": {
+                "name": "Heater Duration"
             }
         },
         "sensor": {
