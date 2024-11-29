@@ -205,6 +205,21 @@
             },
             "window_heating": {
                 "name": "Verwarming raam"
+            },
+            "ac_at_unlock": {
+                "name": "Luchtbehandeling bij ontgrendelen"
+            },
+            "ac_without_external_power": {
+                "name": "Luchtbehandeling zonder externe stroom"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Stoelverwarming linksvoor"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Stoelverwarming rechtsvoor"
+            },
+            "ac_window_heating": {
+                "name": "Raam verwarmen bij luchtbehandeling"
             }
         },
         "button": {
@@ -213,6 +228,9 @@
             },
             "flash": {
                 "name": "Flits"
+            },
+            "generate_fixtures": {
+                "name": "Genereer fixtures"
             }
         }
     },
@@ -220,6 +238,10 @@
         "new_tandc": {
             "title": "Bekijk nieuwe voorwaarden voor MySkoda",
             "description": "Inlogfout vanwege niet geaccepteerde algemene voorwaarden.\n\nŠkoda heeft misschien nieuwe voorwaarden bekendgemaakt.\n\nLog uit en weer in de MyŠkoda app om ze te bekijken, of druk op \"Meer informatie\" hieronder\nDeze integratie kan niet doorgaan zonder acceptatie."
+        },
+        "spin_error": {
+            "title": "Onjuiste S-PIN gedetecteerd",
+            "description": "We hebben een fout ontvangen die aangeeft dat je S-PIN onjuist is.\n\nVoer de juiste S-PIN in de integratie-instelling."
         }
     },
     "options": {
