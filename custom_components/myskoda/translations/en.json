@@ -113,11 +113,11 @@
                 "name": "Main Render of Vehicle"
             }
         },
-	"lock": {
-	    "door_lock": {
-		"name": "Door Lock"
-	    }
-	},
+        "lock": {
+            "door_lock": {
+                "name": "Door Lock"
+            }
+        },
         "number": {
             "charge_limit": {
                 "name": "Charge Limit"
@@ -156,23 +156,26 @@
             "inspection": {
                 "name": "Next Inspection"
             },
-	    "inspection_in_km": {
-		"name": "Next Inspection in KM"
-	    },
+            "inspection_in_km": {
+                "name": "Next Inspection in KM"
+            },
             "mileage": {
                 "name": "Mileage"
             },
-	    "oil_service_in_days": {
-		"name": "Oil Service"
-	    },
-	    "oil_service_in_km": {
-		"name": "Oil Service in KM"
-	    },
+            "oil_service_in_days": {
+                "name": "Oil Service"
+            },
+            "oil_service_in_km": {
+                "name": "Oil Service in KM"
+            },
             "range": {
                 "name": "Range"
             },
             "remaining_charging_time": {
                 "name": "Remaining Charging Time"
+            },
+            "operation": {
+                "name": "Last Operation"
             },
             "software_version": {
                 "name": "Software Version"
@@ -237,31 +240,31 @@
     "issues": {
         "new_tandc": {
             "title": "Review new Terms and Conditions for MySkoda",
-	    "description": "Detected login failure due to missing acceptance of Terms and Conditions.\n\nSkoda may have issued new Terms and Conditions.\n\nPlease log out and back in of the MySkoda app to review them.\nThis integration cannot continue without accepted Terms and Conditions."
-	},
-	"spin_error": {
-	    "title": "Incorrect S-PIN detected",
-	    "description": "We received an error indicating your S-PIN is incorrect.\n\nPlease enter the correct S-PIN in the integration settings."
-	}
+            "description": "Detected login failure due to missing acceptance of Terms and Conditions.\n\nSkoda may have issued new Terms and Conditions.\n\nPlease log out and back in of the MySkoda app to review them.\nThis integration cannot continue without accepted Terms and Conditions."
+        },
+        "spin_error": {
+            "title": "Incorrect S-PIN detected",
+            "description": "We received an error indicating your S-PIN is incorrect.\n\nPlease enter the correct S-PIN in the integration settings."
+        }
     },
     "options": {
-	"error": {
-	    "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes",
-	    "invalid_spin_format": "Invalid format for S-PIN"
-	},
+        "error": {
+            "invalid_polling_interval": "Invalid polling interval specified. Please choose between 1 and 1440 minutes",
+            "invalid_spin_format": "Invalid format for S-PIN"
+        },
         "step": {
             "init": {
                 "data": {
                     "tracing": "API response tracing. Requires debug logging enabled in configuration.yaml.",
-		    "poll_interval_in_minutes": "Polling interval in minutes when car is idle.",
-		    "s-pin": "Security PIN",
-		    "readonly": "Read-only mode"
+                    "poll_interval_in_minutes": "Polling interval in minutes when car is idle.",
+                    "s-pin": "Security PIN",
+                    "readonly": "Read-only mode"
                 },
-		"data_description": {
-		    "poll_interval_in_minutes": "Specify a polling interval between 1 and 1440 minutes. (default 30)",
-		    "s-pin": "Specify the Security PIN. WARNING: This enables remote lock/unlock",
-		    "readonly": "You cannot make any changes to the car, only read data"
-		}
+                "data_description": {
+                    "poll_interval_in_minutes": "Specify a polling interval between 1 and 1440 minutes. (default 30)",
+                    "s-pin": "Specify the Security PIN. WARNING: This enables remote lock/unlock",
+                    "readonly": "You cannot make any changes to the car, only read data"
+                }
             }
         }
     }
