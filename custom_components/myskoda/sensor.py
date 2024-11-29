@@ -116,41 +116,44 @@ class BatteryPercentage(ChargingSensor):
     @property
     def native_value(self) -> int | None:  # noqa: D102
         if status := self._status():
-            return status.battery.state_of_charge_in_percent
+            if status.battery.state_of_charge_in_percent:
+                return status.battery.state_of_charge_in_percent
 
     @property
     def icon(self) -> str:  # noqa: D102
         if not (status := self._status()):
             return "mdi:battery-outline"
 
-        if status.battery.state_of_charge_in_percent >= 95:
-            suffix = "100"
-        elif status.battery.state_of_charge_in_percent >= 85:
-            suffix = "90"
-        elif status.battery.state_of_charge_in_percent >= 75:
-            suffix = "80"
-        elif status.battery.state_of_charge_in_percent >= 65:
-            suffix = "70"
-        elif status.battery.state_of_charge_in_percent >= 55:
-            suffix = "60"
-        elif status.battery.state_of_charge_in_percent >= 45:
-            suffix = "50"
-        elif status.battery.state_of_charge_in_percent >= 35:
-            suffix = "40"
-        elif status.battery.state_of_charge_in_percent >= 25:
-            suffix = "30"
-        elif status.battery.state_of_charge_in_percent >= 15:
-            suffix = "20"
-        elif status.battery.state_of_charge_in_percent >= 5:
-            suffix = "10"
-        else:
-            suffix = "outline"
+        if soc := status.battery.state_of_charge_in_percent:
+            if soc >= 95:
+                suffix = "100"
+            elif soc >= 85:
+                suffix = "90"
+            elif soc >= 75:
+                suffix = "80"
+            elif soc >= 65:
+                suffix = "70"
+            elif soc >= 55:
+                suffix = "60"
+            elif soc >= 45:
+                suffix = "50"
+            elif soc >= 35:
+                suffix = "40"
+            elif soc >= 25:
+                suffix = "30"
+            elif soc >= 15:
+                suffix = "20"
+            elif soc >= 5:
+                suffix = "10"
+            else:
+                suffix = "outline"
 
-        if status.state != charging.ChargingState.CONNECT_CABLE:
-            return f"mdi:battery-charging-{suffix}"
-        if suffix == "100":
-            return "mdi:battery"
-        return f"mdi:battery-{suffix}"
+            if status.state != charging.ChargingState.CONNECT_CABLE:
+                return f"mdi:battery-charging-{suffix}"
+            if suffix == "100":
+                return "mdi:battery"
+            return f"mdi:battery-{suffix}"
+        return "mdi:battery-unknown"
 
 
 class ChargingPower(ChargingSensor):

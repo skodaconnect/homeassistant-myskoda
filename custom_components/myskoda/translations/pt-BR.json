@@ -205,6 +205,21 @@
             },
             "window_heating": {
                 "name": "Aquecimento da janela"
+            },
+            "ac_at_unlock": {
+                "name": "Corrente alternada quando desbloqueada"
+            },
+            "ac_without_external_power": {
+                "name": "Corrente alternada sem energia externa"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Aquecimento do assento esquerdo com corrente alternada"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Aquecimento do assento direito com corrente alternada"
+            },
+            "ac_window_heating": {
+                "name": "Aquecimento da janela com corrente alternada"
             }
         },
         "button": {
@@ -223,6 +238,10 @@
         "new_tandc": {
             "title": "Rever novos termos e condições para MySkoda",
             "description": "Foi detectado uma falha de registro devido à falta de aceitação dos Termos e condições.\n\nSkoda talvez tenha emitido novos Termos e condições.\n\nRegistre-se novamente no aplicativo MySkoda para revê-las.\nEsta integração não pode continuar sem aceitar os Termos e condições."
+        },
+        "spin_error": {
+            "title": "S-PIN incorreto detectado",
+            "description": "Recebemos um erro indicando que seu S-PIN está incorreto.\n\nRe-insira o S-PIN correto nas opções de integração."
         }
     },
     "options": {
