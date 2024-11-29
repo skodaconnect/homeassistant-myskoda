@@ -9,7 +9,7 @@ from homeassistant.components.number import (
     NumberEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE
+from homeassistant.const import EntityCategory, PERCENTAGE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
@@ -66,6 +66,7 @@ class ChargeLimit(MySkodaNumber):
         native_unit_of_measurement=PERCENTAGE,
         native_step=10,
         translation_key="charge_limit",
+        entity_category=EntityCategory.CONFIG,
     )
 
     _attr_device_class = NumberDeviceClass.BATTERY
