@@ -159,38 +159,35 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             await self.update_status(immediate=True)
 
     async def _on_charging_event(self, event: EventCharging):
-        # TODO @webspider: Refactor with proper classes
         vehicle = self.data.vehicle
-
         data = event.event.data
 
         if vehicle.charging is None or vehicle.charging.status is None:
             await self.update_charging()
         else:
-            status = vehicle.charging.status
-
-            if isinstance(event.event, ServiceEventChangeSoc):
-                status.battery.remaining_cruising_range_in_meters = (
-                    data.charged_range * 1000
-                )
-                status.battery.state_of_charge_in_percent = data.soc
-                if data.time_to_finish is not None:
-                    status.remaining_time_to_fully_charged_in_minutes = (
-                        data.time_to_finish
+            # TODO: support other charging events
+            match event.event:
+                case ServiceEventChangeSoc():
+                    status = vehicle.charging.status
+                    status.battery.remaining_cruising_range_in_meters = (
+                        data.charged_range * 1000
                     )
-                status.state = data.state
+                    status.battery.state_of_charge_in_percent = data.soc
+                    if data.time_to_finish is not None:
+                        status.remaining_time_to_fully_charged_in_minutes = (
+                            data.time_to_finish
+                        )
+                        status.state = data.state
 
         if vehicle.driving_range is None:
             await self.update_driving_range()
         else:
-            if isinstance(event.event, ServiceEventChangeSoc):
-                vehicle.driving_range.primary_engine_range.current_soc_in_percent = (
-                    data.soc
-                )
-                vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
-                    data.charged_range
-                )
-
+            match event.event:
+                case ServiceEventChangeSoc():
+                    vehicle.driving_range.primary_engine_range.current_soc_in_percent = data.soc
+                    vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
+                        data.charged_range
+                    )
         self.set_updated_vehicle(vehicle)
 
     async def _on_access_event(self, event: EventAccess):
