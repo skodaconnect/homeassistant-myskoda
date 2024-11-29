@@ -103,7 +103,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
     @property
     def min_temp(self) -> float:
         """Return the minimum temperature that can be set."""
-        return 16.0  # Restrict to a minimum of 16°C
+        return 15.5  # Restrict to a minimum of 15.5°C
 
     @property
     def max_temp(self) -> float:
@@ -254,7 +254,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                 CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,
             ]
         ):
-            duration = self.coordinator.duration
+            duration = self.coordinator.data.config.auxiliary_heater_duration
             if duration is not None:
                 return int(duration) * 60
         return None
@@ -293,7 +293,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
     @property
     def min_temp(self) -> float:
         """Return the minimum temperature that can be set."""
-        return 16.0  # Restrict to a minimum of 16°C
+        return 15.5  # Restrict to a minimum of 15.5°C
 
     @property
     def max_temp(self) -> float:
@@ -358,8 +358,11 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                         duration_in_seconds=self._duration_in_seconds,
                         start_mode=AuxiliaryStartMode.VENTILATION,
                     )
-                    # TODO check if some other mode is not running
                     _LOGGER.info("Starting ventilation [%s]", config)
+
+                    await self.coordinator.myskoda.start_auxiliary_heating(
+                        vin=self.vehicle.info.vin, spin=spin, config=config
+                    )
                 else:
                     _LOGGER.error("Cannot start ventilation: No S-PIN set.")
             else:
@@ -397,11 +400,9 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
 
     def is_supported(self) -> bool:
         """Return true if any supported capability is present."""
-        if self.vehicle.has_capability(
-            CapabilityId.AUXILIARY_HEATING
-        ) or self.vehicle.has_capability(
-            CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY
-        ):
-            return True
-        else:
-            return False
+        return self._has_any_capability(
+            [
+                CapabilityId.AUXILIARY_HEATING,
+                CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,
+            ]
+        )

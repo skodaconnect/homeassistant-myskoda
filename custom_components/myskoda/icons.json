@@ -61,7 +61,7 @@
 			"charge_limit": {
 				"default": "mdi:battery-lock"
 			},
-			"heater_duration": {
+			"auxiliary_heater_duration": {
 				"default": "mdi:timer"
 			}
 		},

@@ -122,7 +122,7 @@
             "charge_limit": {
                 "name": "Charge Limit"
             },
-            "heater_duration": {
+            "auxiliary_heater_duration": {
                 "name": "Heater Duration"
             }
         },

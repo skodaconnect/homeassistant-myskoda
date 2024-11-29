@@ -58,9 +58,15 @@ class MySkodaDebouncer(Debouncer):
 
 
 @dataclass
+class Config:
+    auxiliary_heater_duration: float | None = None
+
+
+@dataclass
 class State:
     vehicle: Vehicle
     user: User
+    config: Config
 
 
 class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
@@ -96,13 +102,13 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
         self.update_vehicle = self._debounce(self._update_vehicle)
         self.update_positions = self._debounce(self._update_positions)
-        self.duration: float | None = None
 
         myskoda.subscribe(self._on_mqtt_event)
 
     async def _async_update_data(self) -> State:
         vehicle = None
         user = None
+        config = self.data.config if self.data and self.data.config else Config()
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
         try:
@@ -114,7 +120,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
         if vehicle and user:
-            return State(vehicle, user)
+            return State(vehicle, user, config)
         raise UpdateFailed("Incomplete update received")
 
     async def _on_mqtt_event(self, event: Event) -> None:
