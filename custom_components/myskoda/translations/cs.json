@@ -11,7 +11,7 @@
         "step": {
             "user": {
                 "data": {
-                    "email": "E-mail",
+                    "email": "E-mailová adresa",
                     "password": "Heslo"
                 }
             }
@@ -133,8 +133,8 @@
             "charge_type": {
                 "name": "Typ nabíjení",
                 "state": {
-                    "ac": "AC",
-                    "dc": "DC",
+                    "ac": "Střídavý proud",
+                    "dc": "Stejnosměrný proud",
                     "off": "Vypnuto"
                 }
             },
@@ -205,6 +205,21 @@
             },
             "window_heating": {
                 "name": "Vytápění okna"
+            },
+            "ac_at_unlock": {
+                "name": "Střídavý proud při odemknutí"
+            },
+            "ac_without_external_power": {
+                "name": "Střídavý proud bez externího napájení"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Vyhřívání levého sedadla se střídavým proudem"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Vyhřívání pravého sedadla se střídavým proudem"
+            },
+            "ac_window_heating": {
+                "name": "Vyhřívání oken se střídavým proudem"
             }
         },
         "button": {
@@ -223,6 +238,10 @@
         "new_tandc": {
             "title": "Zkontrolujte nové obchodní podmínky pro MySkoda",
             "description": "Zjištěno selhání přihlášení kvůli chybějícímu přijetí obchodních podmínek.\n\nŠkoda mohla publikovat nové obchodní podmínky.\n\nOdhlaste se z aplikace MySkoda a znovu se přihlašte pro zkontrolování.\nTato integrace nemůže pokračovat bez přijetí obchodních podmínek."
+        },
+        "spin_error": {
+            "title": "Byl zjištěn nesprávný S-PIN",
+            "description": "Obdrželi jsme chybu indikující, že váš S-PIN není správný. Prosím zadejte správný S-PIN v nastavení integrace."
         }
     },
     "options": {

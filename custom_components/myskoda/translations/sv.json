@@ -238,6 +238,10 @@
         "new_tandc": {
             "title": "Granska de nya villkoren för MySkoda",
             "description": "Misslyckades med att logga in på grund av att användarvillkoren inte accepterades.\n\nSkoda kan ha utfärdat nya villkor.\n\nLogga ut och in igen i appen MySkoda för att granska dem.\nDenna integration kan inte fortsätta utan accepterade villkor."
+        },
+        "spin_error": {
+            "title": "Felaktig S-PIN upptäckt",
+            "description": "Vi fick en fel indikering gällande att din S-PIN är felaktig.\n\nAnge rätt S-PIN i integreringsinställningarna."
         }
     },
     "options": {
