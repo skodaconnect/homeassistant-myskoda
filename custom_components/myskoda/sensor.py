@@ -11,6 +11,7 @@ from homeassistant.components.sensor import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     PERCENTAGE,
+    EntityCategory,
     UnitOfLength,
     UnitOfPower,
     UnitOfSpeed,
@@ -26,6 +27,7 @@ from myskoda.models import charging
 from myskoda.models.charging import Charging, ChargingStatus
 from myskoda.models.driving_range import EngineType
 from myskoda.models.info import CapabilityId
+from myskoda.models.operation_request import OperationStatus
 
 from .const import COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
@@ -46,19 +48,20 @@ async def async_setup_entry(
             ChargingPower,
             ChargingRate,
             ChargingState,
+            CombustionRange,
+            ElectricRange,
+            FuelLevel,
+            InspectionInterval,
+            InspectionIntervalKM,
             LastUpdated,
             Mileage,
-            RemainingChargingTime,
-            Range,
-            SoftwareVersion,
-            TargetBatteryPercentage,
-            InspectionInterval,
-            ElectricRange,
-            CombustionRange,
-            FuelLevel,
-            InspectionIntervalKM,
             OilServiceIntervalDays,
             OilServiceIntervalKM,
+            Operation,
+            Range,
+            RemainingChargingTime,
+            SoftwareVersion,
+            TargetBatteryPercentage,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -74,6 +77,54 @@ class MySkodaSensor(MySkodaEntity, SensorEntity):
         if charging := self._charging():
             if status := charging.status:
                 return status
+
+
+class Operation(MySkodaSensor):
+    """Report the most recent operation."""
+
+    entity_description = SensorEntityDescription(
+        key="operation",
+        translation_key="operation",
+        device_class=SensorDeviceClass.ENUM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    )
+
+    _attr_options = [status.value.lower() for status in OperationStatus]
+
+    @property
+    def native_value(self) -> str | None:  # noqa: D102
+        """Returns the status of the last seen operation."""
+        if self.operations:
+            last_operation = list(self.operations.values())[-1]
+            return last_operation.operation.status.lower()
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Returns additional attributes for the operation sensor.
+
+        - request_id, operation name, error_code and timestamp of the last seen operation.
+        - history: a list of dicts with the same fields for the previously seen operations.
+        """
+        attributes = {}
+        if not self.operations:
+            return attributes
+
+        operations = list(self.operations.values())
+        operations.reverse()
+        filtered = [
+            {
+                "request_id": event.operation.request_id,
+                "operation": event.operation.operation,
+                "status": event.operation.status.lower(),
+                "error_code": event.operation.error_code,
+                "timestamp": event.timestamp,
+            }
+            for event in operations
+        ]
+        attributes = filtered[0]
+        attributes["history"] = filtered[1:]
+
+        return attributes
 
 
 class SoftwareVersion(MySkodaSensor):

@@ -1,16 +1,18 @@
 import asyncio
+import logging
+from collections import OrderedDict
 from collections.abc import Coroutine
 from dataclasses import dataclass
 from datetime import timedelta
-import logging
 from typing import Callable
+
 from aiohttp import ClientError
 from aiohttp.client_exceptions import ClientResponseError
-
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+
 from myskoda import MySkoda, Vehicle
 from myskoda.event import (
     Event,
@@ -27,10 +29,10 @@ from myskoda.mqtt import EventCharging, EventType
 from .const import (
     API_COOLDOWN_IN_SECONDS,
     CONF_POLL_INTERVAL,
-    DOMAIN,
     DEFAULT_FETCH_INTERVAL_IN_MINUTES,
+    DOMAIN,
+    MAX_STORED_OPERATIONS,
 )
-
 from .error_handlers import handle_aiohttp_error
 
 _LOGGER = logging.getLogger(__name__)
@@ -57,10 +59,15 @@ class MySkodaDebouncer(Debouncer):
         )
 
 
+# History of EventType.OPERATION events, keyed by request_id
+Operations = OrderedDict[str, EventOperation]
+
+
 @dataclass
 class State:
     vehicle: Vehicle
     user: User
+    operations: Operations
 
 
 class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
@@ -90,6 +97,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.hass = hass
         self.vin = vin
         self.myskoda = myskoda
+        self.operations = OrderedDict()
         self.config = config
         self.update_driving_range = self._debounce(self._update_driving_range)
         self.update_charging = self._debounce(self._update_charging)
@@ -113,7 +121,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
         if vehicle and user:
-            return State(vehicle, user)
+            return State(vehicle, user, self.operations)
         raise UpdateFailed("Incomplete update received")
 
     async def _on_mqtt_event(self, event: Event) -> None:
@@ -133,6 +141,13 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 await self._on_departure_event(event)
 
     async def _on_operation_event(self, event: EventOperation) -> None:
+        # Store the last MAX_STORED_OPERATIONS operations
+        if request_id := event.operation.request_id:
+            self.operations[request_id] = event
+            while len(self.operations) > MAX_STORED_OPERATIONS:
+                self.operations.popitem(last=False)
+            self.async_set_updated_data(self.data)
+
         if event.operation.status == OperationStatus.IN_PROGRESS:
             return
         if event.operation.status == OperationStatus.ERROR:
