@@ -67,6 +67,7 @@ class ChargeLimit(MySkodaNumber):
         native_unit_of_measurement=PERCENTAGE,
         native_step=10,
         translation_key="charge_limit",
+        entity_category=EntityCategory.CONFIG,
     )
 
     _attr_device_class = NumberDeviceClass.BATTERY

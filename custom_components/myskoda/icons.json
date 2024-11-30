@@ -124,88 +124,91 @@
             "fuel_level": {
                 "default": "mdi:fuel"
             },
-			"remaining_charging_time": {
-				"default": "mdi:timer"
-			},
-			"software_version": {
-				"default": "mdi:update"
-			},
-			"target_battery_percentage": {
-				"default": "mdi:percent"
-			}
-		},
-		"switch": {
-			"battery_care_mode": {
-				"default": "mdi:battery-heart-variant",
-				"state": {
-					"off": "mdi:battery-plus"
-				}
-			},
-			"charging": {
-				"default": "mdi:power-plug-battery",
-				"state": {
-					"off": "mdi:power-plug-battery-outline"
-				}
-			},
-			"charging_switch": {
-				"default": "mdi:car-electric",
-				"state": {
-					"off": "mdi:car-electric-outline"
-				}
-			},
-			"reduced_current": {
-				"default": "mdi:current-ac",
-				"state": {
-					"on": "mdi:turtle"
-				}
-			},
-			"window_heating": {
-				"default": "mdi:car-defrost-front",
-				"state": {
-					"on": "mdi:heat-wave"
-				}
-			},
-			"ac_at_unlock": {
-				"default": "mdi:toggle-switch-off",
-				"state": {
-					"on": "mdi:toggle-switch"
-				}
-			},
-			"ac_without_external_power": {
-				"default": "mdi:toggle-switch-off",
-				"state": {
-					"on": "mdi:toggle-switch"
-				}
-			},
-			"ac_seat_heating_front_left": {
-				"default": "mdi:car-seat",
-				"state": {
-					"on": "mdi:car-seat-heater"
-				}
-			},
-			"ac_seat_heating_front_right": {
-				"default": "mdi:car-seat",
-				"state": {
-					"on": "mdi:car-seat-heater"
-				}
-			},
-			"ac_window_heating": {
-				"default": "mdi:toggle-switch-off",
-				"state": {
-					"on": "mdi:toggle-switch"
-				}
-			}
-		},
-        	"button": {
-            		"honk_flash": {
-                		"default": "mdi:bugle"
-            		},
-            		"flash": {
-                		"default": "mdi:car-parking-lights"
-            		},
-            		"generate_fixtures": {
-                		"default": "mdi:information"
-            		}
-        	}
-	}
+            "remaining_charging_time": {
+                "default": "mdi:timer"
+            },
+            "operation": {
+                "default": "mdi:cog-transfer"
+            },
+            "software_version": {
+                "default": "mdi:update"
+            },
+            "target_battery_percentage": {
+                "default": "mdi:percent"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "default": "mdi:battery-heart-variant",
+                "state": {
+                    "off": "mdi:battery-plus"
+                }
+            },
+            "charging": {
+                "default": "mdi:power-plug-battery",
+                "state": {
+                    "off": "mdi:power-plug-battery-outline"
+                }
+            },
+            "charging_switch": {
+                "default": "mdi:car-electric",
+                "state": {
+                    "off": "mdi:car-electric-outline"
+                }
+            },
+            "reduced_current": {
+                "default": "mdi:current-ac",
+                "state": {
+                    "on": "mdi:turtle"
+                }
+            },
+            "window_heating": {
+                "default": "mdi:car-defrost-front",
+                "state": {
+                    "on": "mdi:heat-wave"
+                }
+            },
+            "ac_at_unlock": {
+                "default": "mdi:toggle-switch-off",
+                "state": {
+                    "on": "mdi:toggle-switch"
+                }
+            },
+            "ac_without_external_power": {
+                "default": "mdi:toggle-switch-off",
+                "state": {
+                    "on": "mdi:toggle-switch"
+                }
+            },
+            "ac_seat_heating_front_left": {
+                "default": "mdi:car-seat",
+                "state": {
+                    "on": "mdi:car-seat-heater"
+                }
+            },
+            "ac_seat_heating_front_right": {
+                "default": "mdi:car-seat",
+                "state": {
+                    "on": "mdi:car-seat-heater"
+                }
+            },
+            "ac_window_heating": {
+                "default": "mdi:toggle-switch-off",
+                "state": {
+                    "on": "mdi:toggle-switch"
+                }
+            }
+        },
+        "button": {
+            "honk_flash": {
+                "default": "mdi:bugle"
+            },
+            "flash": {
+                "default": "mdi:car-parking-lights"
+            },
+            "generate_fixtures": {
+                "default": "mdi:information"
+            }
+        }
+    }
 }
