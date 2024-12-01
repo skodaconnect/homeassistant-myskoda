@@ -197,6 +197,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
     async def _on_charging_event(self, event: EventCharging):
         vehicle = self.data.vehicle
+        if vehicle.status and (timestamp := event.event.timestamp):
+            vehicle.status.car_captured_timestamp = timestamp
+
         data = event.event.data
 
         if vehicle.charging is None or vehicle.charging.status is None:
@@ -228,12 +231,18 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.set_updated_vehicle(vehicle)
 
     async def _on_access_event(self, event: EventAccess):
+        if self.data.vehicle.status and (timestamp := event.event.timestamp):
+            self.data.vehicle.status.car_captured_timestamp = timestamp
         await self.update_vehicle()
 
     async def _on_air_conditioning_event(self, event: EventAirConditioning):
+        if self.data.vehicle.status and (timestamp := event.event.timestamp):
+            self.data.vehicle.status.car_captured_timestamp = timestamp
         await self.update_air_conditioning()
 
     async def _on_departure_event(self, event: EventDeparture):
+        if self.data.vehicle.status and (timestamp := event.event.timestamp):
+            self.data.vehicle.status.car_captured_timestamp = timestamp
         await self.update_positions()
 
     def _unsub_refresh(self):
