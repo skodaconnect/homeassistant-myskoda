@@ -194,20 +194,13 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
             ClimateEntityFeature.TURN_ON | ClimateEntityFeature.TURN_OFF
         )
 
-        if self.vehicle.has_capability(
-            CapabilityId.AUXILIARY_HEATING_TEMPERATURE_SETTING
-        ) or self.vehicle.has_capability(
-            CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY
+        if self.has_any_capability(
+            [
+                CapabilityId.AUXILIARY_HEATING_TEMPERATURE_SETTING,
+                CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,
+            ]
         ):
             self._attr_supported_features |= ClimateEntityFeature.TARGET_TEMPERATURE
-
-    def _has_any_capability(self, cap: list[CapabilityId]) -> bool:
-        """Check if any capabilities in the list is supported."""
-        return any(self.vehicle.has_capability(capability) for capability in cap)
-
-    def _has_capability(self, cap: list[CapabilityId]) -> bool:
-        """Check if all capabilities in the list are supported."""
-        return all(self.vehicle.has_capability(capability) for capability in cap)
 
     def _air_conditioning(self) -> AirConditioning | None:
         return self.vehicle.air_conditioning
@@ -215,7 +208,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
     @property
     def _target_temperature(self) -> TargetTemperature | None:
         """Return target temp object for auxiliary heater."""
-        if self._has_any_capability(
+        if self.has_any_capability(
             [
                 CapabilityId.AUXILIARY_HEATING_TEMPERATURE_SETTING,
                 CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,
@@ -225,30 +218,27 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                 target_temperature = ac.target_temperature
                 if target_temperature is not None:
                     return target_temperature
-        return None
 
     @property
     def _heater_source(self) -> HeaterSource | None:
         """Return heater source for auxiliary heater."""
-        if self._has_capability(
+        if self.has_all_capabilities(
             [CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY]
         ):
             return HeaterSource.AUTOMATIC
-        return None
 
     @property
     def _start_mode(self) -> AuxiliaryStartMode | None:
         """Return start mode for auxiliary heater."""
-        if self._has_capability(
+        if self.has_all_capabilities(
             [CapabilityId.AUXILIARY_HEATING, CapabilityId.ACTIVE_VENTILATION]
         ):
             return AuxiliaryStartMode.HEATING
-        return None
 
     @property
     def _duration_in_seconds(self) -> int | None:
         """Return duration formated to seconds."""
-        if not self._has_any_capability(
+        if not self.has_any_capability(
             [
                 CapabilityId.AUXILIARY_HEATING_TEMPERATURE_SETTING,
                 CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,
@@ -257,7 +247,6 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
             duration = self.coordinator.data.config.auxiliary_heater_duration
             if duration is not None:
                 return int(duration) * 60
-        return None
 
     @property
     def available(self) -> bool:  # noqa: D102
@@ -268,7 +257,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
     @property
     def hvac_modes(self) -> list[HVACMode]:  # noqa: D102
         modes = [HVACMode.HEAT, HVACMode.OFF]
-        if self._has_capability([CapabilityId.ACTIVE_VENTILATION]):
+        if self.has_all_capabilities([CapabilityId.ACTIVE_VENTILATION]):
             modes.append(HVACMode.FAN_ONLY)
         return modes
 
@@ -311,69 +300,58 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_hvac_mode(self, hvac_mode: HVACMode):  # noqa: D102
         if ac := self._air_conditioning():
+
+            async def handle_mode(desired_state, start_mode=None, **kwargs):
+                if ac.state == desired_state:
+                    _LOGGER.info("%s already running.", ac.state)
+                    return
+
+                if ac.state != AirConditioningState.OFF:
+                    _LOGGER.info("%s mode detected, stopping first.", ac.state)
+                    await self.coordinator.myskoda.stop_air_conditioning(
+                        self.vehicle.info.vin
+                    )
+
+                config = AuxiliaryConfig(
+                    duration_in_seconds=self._duration_in_seconds,
+                    start_mode=start_mode,
+                    **kwargs,
+                )
+                spin = self.coordinator.config.options.get(CONF_SPIN)
+                if spin is None:
+                    _LOGGER.error("Cannot start %s: No S-PIN set.", desired_state)
+                    return
+
+                _LOGGER.info("Starting %s [%s]", start_mode or "heating", config)
+                await self.coordinator.myskoda.start_auxiliary_heating(
+                    vin=self.vehicle.info.vin,
+                    spin=spin,
+                    config=config,
+                )
+
             if hvac_mode == HVACMode.HEAT:
-                spin = self.coordinator.config.options.get(CONF_SPIN)
-                if spin is not None:
-                    if (
-                        ac.state != AirConditioningState.OFF
-                        and ac.state != AirConditioningState.HEATING_AUXILIARY
-                    ):
-                        _LOGGER.info("%s mode detected, stopping first.", ac.state)
-                        await self.coordinator.myskoda.stop_air_conditioning(
-                            self.vehicle.info.vin
-                        )
-                    if ac.state == AirConditioningState.HEATING_AUXILIARY:
-                        _LOGGER.info("%s already running.", ac.state)
-                        return
+                await handle_mode(
+                    desired_state=AirConditioningState.HEATING_AUXILIARY,
+                    target_temperature=self._target_temperature,
+                    start_mode=self._start_mode,
+                    heater_source=self._heater_source,
+                )
 
-                    config = AuxiliaryConfig(
-                        target_temperature=self._target_temperature,
-                        duration_in_seconds=self._duration_in_seconds,
-                        start_mode=self._start_mode,
-                        heater_source=self._heater_source,
-                    )
-                    _LOGGER.info("Starting Auxiliary heating [%s]", config)
-
-                    await self.coordinator.myskoda.start_auxiliary_heating(
-                        vin=self.vehicle.info.vin, spin=spin, config=config
-                    )
-                else:
-                    _LOGGER.error("Cannot start auxiliary heater: No S-PIN set.")
             elif hvac_mode == HVACMode.FAN_ONLY:
-                spin = self.coordinator.config.options.get(CONF_SPIN)
-                if spin is not None:
-                    if (
-                        ac.state != AirConditioningState.OFF
-                        and ac.state != AirConditioningState.VENTILATION
-                    ):
-                        _LOGGER.info("%s mode detected, stopping first.", ac.state)
-                        await self.coordinator.myskoda.stop_air_conditioning(
-                            self.vehicle.info.vin
-                        )
-                    if ac.state == AirConditioningState.VENTILATION:
-                        _LOGGER.info("%s already running.", ac.state)
-                        return
+                await handle_mode(
+                    desired_state=AirConditioningState.VENTILATION,
+                    start_mode=AuxiliaryStartMode.VENTILATION,
+                )
 
-                    config = AuxiliaryConfig(
-                        duration_in_seconds=self._duration_in_seconds,
-                        start_mode=AuxiliaryStartMode.VENTILATION,
-                    )
-                    _LOGGER.info("Starting ventilation [%s]", config)
-
-                    await self.coordinator.myskoda.start_auxiliary_heating(
-                        vin=self.vehicle.info.vin, spin=spin, config=config
-                    )
-                else:
-                    _LOGGER.error("Cannot start ventilation: No S-PIN set.")
             else:
                 if ac.state == AirConditioningState.OFF:
                     _LOGGER.info("Auxiliary heater already OFF.")
-                    return
+                else:
+                    _LOGGER.info("Stopping Auxiliary heater.")
+                    await self.coordinator.myskoda.stop_auxiliary_heating(
+                        self.vehicle.info.vin
+                    )
 
-                _LOGGER.info("Stopping Auxiliary heater.")
-                await self.coordinator.myskoda.stop_auxiliary_heating(
-                    self.vehicle.info.vin
-                )
             _LOGGER.info("Auxiliary HVAC mode set to %s.", hvac_mode)
         else:
             _LOGGER.error("Can't retrieve air-conditioning info")
@@ -400,7 +378,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
 
     def is_supported(self) -> bool:
         """Return true if any supported capability is present."""
-        return self._has_any_capability(
+        return self.has_any_capability(
             [
                 CapabilityId.AUXILIARY_HEATING,
                 CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,

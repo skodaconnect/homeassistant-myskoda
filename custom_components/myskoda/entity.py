@@ -64,6 +64,14 @@ class MySkodaEntity(CoordinatorEntity):
             self.vehicle.has_capability(cap) for cap in self.forbidden_capabilities()
         )
 
+    def has_any_capability(self, cap: list[CapabilityId]) -> bool:
+        """Check if any capabilities in the list is supported."""
+        return any(self.vehicle.has_capability(capability) for capability in cap)
+
+    def has_all_capabilities(self, cap: list[CapabilityId]) -> bool:
+        """Check if all capabilities in the list are supported."""
+        return all(self.vehicle.has_capability(capability) for capability in cap)
+
     def get_renders(self) -> dict[str, str]:
         """Return a dict of all vehicle image render URLs, keyed by view_point.
 
