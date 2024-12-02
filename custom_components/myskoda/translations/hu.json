@@ -54,18 +54,18 @@
                     "on": "Nyitva"
                 }
             },
-            "lights_on": {
-                "name": "Lámpák",
-                "state": {
-                    "off": "Kikapcsolva",
-                    "on": "Bekapcsolva"
-                }
-            },
             "locked": {
                 "name": "Jármű zárva",
                 "state": {
                     "off": "Zárva",
                     "on": "Feloldva"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Parkoló lámpák",
+                "state": {
+                    "off": "Ki",
+                    "on": "Be"
                 }
             },
             "sunroof_open": {
@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Légkondicionálás"
+            },
+            "auxiliary_heater": {
+                "name": "Kiegészítő fűtés"
             }
         },
         "device_tracker": {
@@ -108,6 +111,11 @@
         "image": {
             "render_vehicle_main": {
                 "name": "A jármű elsődleges megjelenítése"
+            }
+        },
+        "lock": {
+            "door_lock": {
+                "name": "Ajtó zár"
             }
         },
         "number": {
@@ -148,8 +156,17 @@
             "inspection": {
                 "name": "Következő inspekció"
             },
+            "inspection_in_km": {
+                "name": "Következő inspekció"
+            },
             "mileage": {
                 "name": "Futásteljesítmény"
+            },
+            "oil_service_in_days": {
+                "name": "Olajcsere"
+            },
+            "oil_service_in_km": {
+                "name": "Olajcsere km múlva"
             },
             "range": {
                 "name": "Hatótáv"
@@ -157,11 +174,23 @@
             "remaining_charging_time": {
                 "name": "Hátralévő töltési idő"
             },
+            "operation": {
+                "name": "Utolsó művelet"
+            },
             "software_version": {
                 "name": "Szoftververzió"
             },
             "target_battery_percentage": {
                 "name": "Cél akku százalék"
+            },
+            "fuel_level": {
+                "name": "Üzemanyagszint"
+            },
+            "combustion_range": {
+                "name": "Belsőégésű hatótáv"
+            },
+            "electric_range": {
+                "name": "Elektromos hatótáv"
             }
         },
         "switch": {
@@ -179,21 +208,62 @@
             },
             "window_heating": {
                 "name": "Szélvédő fűtés"
+            },
+            "ac_at_unlock": {
+                "name": "Klíma amikor kinyitva"
+            },
+            "ac_without_external_power": {
+                "name": "Klíma külső töltés nélkül"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Bal ülésfűtés klímával"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Jobb ülésfűtés klímával"
+            },
+            "ac_window_heating": {
+                "name": "Szélvédő fűtés klímával"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Dudálás és villogás"
+            },
+            "flash": {
+                "name": "Villogás"
+            },
+            "generate_fixtures": {
+                "name": "Tartozékok generálása"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "A MySkoda új általános szerződési feltételeinek áttekintése",
+            "description": "A bejelentkezés sikertelenségét észlelte a Felhasználási feltételek elfogadásának hiánya miatt.\n\nA Skoda új Általános Szerződési Feltételeket adhatott ki.\n\nKérjük, jelentkezzen ki és lépjen be újra a MySkoda alkalmazásból, hogy áttekintse azokat.\nAz integráció nem folytatható az elfogadott Általános Szerződési Feltételek nélkül."
+        },
+        "spin_error": {
+            "title": "Hibás S-PIN",
+            "description": "Hibát észleltünk, amely szerint az Ön S-PIN-je helytelen.\n\nKérjük, adja meg a helyes S-PIN-t az integrációs beállításoknál."
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Érvénytelen frissítési időköz lett megadva. Válasszon 1 és 1440 perc között!"
+            "invalid_polling_interval": "Érvénytelen frissítési időköz lett megadva. Válasszon 1 és 1440 perc között!",
+            "invalid_spin_format": "Helytelen S-PIN formátum"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "API válasz nyomon követése. Engedélyezett hibakeresési naplózást igényel a configuration.yaml fájlban.",
-                    "poll_interval_in_minutes": "Frissítési időköz (perc) a jármű nyugalmi helyzetében."
+                    "poll_interval_in_minutes": "Frissítési időköz (perc) a jármű nyugalmi helyzetében.",
+                    "s-pin": "Biztonsági PIN",
+                    "readonly": "Csak olvasás mód"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Adjon meg frissítési időközt 1 és 1440 perc között. (alapértelmezett 30 perc)"
+                    "poll_interval_in_minutes": "Adjon meg frissítési időközt 1 és 1440 perc között. (alapértelmezett 30 perc)",
+                    "s-pin": "Adja meg a biztonsági PIN-kódot. FIGYELMEZTETÉS: Ez lehetővé teszi a távoli lezárást/feloldást",
+                    "readonly": "A gépkocsin nem lehet módosítani, csak adatokat olvasni"
                 }
             }
         }
