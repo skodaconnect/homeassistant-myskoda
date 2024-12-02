@@ -65,9 +65,15 @@ Operations = OrderedDict[str, EventOperation]
 
 
 @dataclass
+class Config:
+    auxiliary_heater_duration: float | None = None
+
+
+@dataclass
 class State:
     vehicle: Vehicle
     user: User
+    config: Config
     operations: Operations
 
 
@@ -111,6 +117,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     async def _async_update_data(self) -> State:
         vehicle = None
         user = None
+        config = self.data.config if self.data and self.data.config else Config()
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
         try:
@@ -122,7 +129,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
         if vehicle and user:
-            return State(vehicle, user, self.operations)
+            return State(vehicle, user, config, self.operations)
         raise UpdateFailed("Incomplete update received")
 
     async def _on_mqtt_event(self, event: Event) -> None:

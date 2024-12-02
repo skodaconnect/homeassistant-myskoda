@@ -60,7 +60,10 @@
         "number": {
             "charge_limit": {
                 "default": "mdi:battery-lock"
-            }
+            },
+			"auxiliary_heater_duration": {
+				"default": "mdi:timer"
+			}
         },
         "image": {
             "render_url_main": {
