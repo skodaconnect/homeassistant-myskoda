@@ -135,7 +135,10 @@
             },
             "target_battery_percentage": {
                 "default": "mdi:percent"
-            }
+            },
+	    "outside_temperature": {
+		"default": "mdi:thermometer"
+	    }
         },
         "switch": {
             "battery_care_mode": {

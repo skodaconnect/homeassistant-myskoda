@@ -15,6 +15,7 @@ from homeassistant.const import (
     UnitOfLength,
     UnitOfPower,
     UnitOfSpeed,
+    UnitOfTemperature,
     UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
@@ -543,3 +544,24 @@ class LastUpdated(MySkodaSensor):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE]
+
+
+class OutsideTemperature(MySkodaSensor):
+    """Measured temperature outside the car."""
+
+    entity_description = SensorEntityDescription(
+        key="outside_temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        translation_key="outside_temperature",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+    )
+
+    @property
+    def native_value(self) -> float | None:  # noqa: D102
+        if aux_heat := self.vehicle.auxiliary_heating:
+            if outside_temp := aux_heat.outside_temperature:
+                return outside_temp.temperature_value
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.AUXILIARY_HEATING, CapabilityId.OUTSIDE_TEMPERATURE]
