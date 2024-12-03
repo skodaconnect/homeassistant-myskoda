@@ -22,6 +22,7 @@ from myskoda.event import (
     EventOperation,
     ServiceEventTopic,
 )
+from myskoda.models.info import CapabilityId
 from myskoda.models.operation_request import OperationName, OperationStatus
 from myskoda.models.service_event import ServiceEventChangeSoc
 from myskoda.models.user import User
@@ -109,6 +110,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_driving_range = self._debounce(self._update_driving_range)
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
+        self.update_auxiliary_heating = self._debounce(self._update_auxiliary_heating)
         self.update_vehicle = self._debounce(self._update_vehicle)
         self.update_positions = self._debounce(self._update_positions)
 
@@ -172,10 +174,13 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.SET_AIR_CONDITIONING_TARGET_TEMPERATURE,
             OperationName.START_WINDOW_HEATING,
             OperationName.STOP_WINDOW_HEATING,
+        ]:
+            await self.update_air_conditioning()
+        if event.operation.operation in [
             OperationName.START_AUXILIARY_HEATING,
             OperationName.STOP_AUXILIARY_HEATING,
         ]:
-            await self.update_air_conditioning()
+            await self.update_auxiliary_heating()
         if event.operation.operation in [
             OperationName.UPDATE_CHARGE_LIMIT,
             OperationName.UPDATE_CARE_MODE,
@@ -284,6 +289,27 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         if air_conditioning:
             vehicle = self.data.vehicle
             vehicle.air_conditioning = air_conditioning
+            self.set_updated_vehicle(vehicle)
+
+    async def _update_auxiliary_heating(self) -> None:
+        # PHEV vehicles are not using auxiliary_heating endpoint, but air_conditioning instead
+        if not self.data.vehicle.has_capability(CapabilityId.AUXILIARY_HEATING):
+            await self.update_air_conditioning()
+            return
+
+        auxiliary_heating = None
+
+        _LOGGER.debug("Updating auxiliary heating for %s", self.vin)
+        try:
+            auxiliary_heating = await self.myskoda.get_auxiliary_heating(self.vin)
+        except ClientResponseError as err:
+            handle_aiohttp_error("Auxiliary update", err, self.hass, self.config)
+        except ClientError as err:
+            raise UpdateFailed("Error getting update from MySkoda API: %s", err)
+
+        if auxiliary_heating:
+            vehicle = self.data.vehicle
+            vehicle.auxiliary_heating = auxiliary_heating
             self.set_updated_vehicle(vehicle)
 
     async def _update_status(self) -> None:

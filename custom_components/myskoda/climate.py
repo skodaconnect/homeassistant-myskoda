@@ -23,7 +23,12 @@ from myskoda.models.air_conditioning import (
     HeaterSource,
     TargetTemperature,
 )
-from myskoda.models.auxiliary_heating import AuxiliaryConfig, AuxiliaryStartMode
+from myskoda.models.auxiliary_heating import (
+    AuxiliaryConfig,
+    AuxiliaryHeating,
+    AuxiliaryState,
+    AuxiliaryStartMode,
+)
 from myskoda.models.info import CapabilityId
 
 from .const import (
@@ -205,19 +210,20 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
     def _air_conditioning(self) -> AirConditioning | None:
         return self.vehicle.air_conditioning
 
+    def _auxiliary_heating(self) -> AuxiliaryHeating | None:
+        return self.vehicle.auxiliary_heating
+
     @property
     def _target_temperature(self) -> TargetTemperature | None:
         """Return target temp object for auxiliary heater."""
-        if self.has_any_capability(
-            [
-                CapabilityId.AUXILIARY_HEATING_TEMPERATURE_SETTING,
-                CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,
-            ]
-        ):
+        target_temperature = None
+        if self.has_all_capabilities([CapabilityId.AUXILIARY_HEATING_TEMPERATURE_SETTING]):
+            if ac := self._auxiliary_heating():
+                target_temperature = ac.target_temperature
+        elif self.has_any_capability([CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY]):
             if ac := self._air_conditioning():
                 target_temperature = ac.target_temperature
-                if target_temperature is not None:
-                    return target_temperature
+        return target_temperature
 
     @property
     def _heater_source(self) -> HeaterSource | None:
@@ -249,6 +255,17 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                 return int(duration) * 60
 
     @property
+    def _state(self) -> str | None:
+        state = None
+        if self.has_all_capabilities([CapabilityId.AUXILIARY_HEATING]):
+            if ac := self._auxiliary_heating():
+                state = ac.state
+        else:
+            if ac := self._air_conditioning():
+                state = ac.state
+        return state
+
+    @property
     def available(self) -> bool:  # noqa: D102
         if not self.coordinator.config.options.get(CONF_SPIN):
             return False
@@ -263,19 +280,19 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
 
     @property
     def hvac_mode(self) -> HVACMode | None:  # noqa: D102
-        if ac := self._air_conditioning():
-            if ac.state == AirConditioningState.HEATING_AUXILIARY:
+        if state := self._state:
+            if state == AuxiliaryState.HEATING_AUXILIARY:
                 return HVACMode.HEAT
-            if ac.state == AirConditioningState.VENTILATION:
+            if state == AuxiliaryState.VENTILATION:
                 return HVACMode.FAN_ONLY
             return HVACMode.OFF
 
     @property
     def hvac_action(self) -> HVACAction | None:  # noqa: D102
-        if ac := self._air_conditioning():
-            if ac.state == AirConditioningState.HEATING_AUXILIARY:
+        if state := self._state:
+            if state == AuxiliaryState.HEATING_AUXILIARY:
                 return HVACAction.HEATING
-            if ac.state == AirConditioningState.VENTILATION:
+            if state == AuxiliaryState.VENTILATION:
                 return HVACAction.FAN
             return HVACAction.OFF
 
@@ -291,23 +308,20 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
 
     @property
     def target_temperature(self) -> None | float:  # noqa: D102
-        if ac := self._air_conditioning():
-            target_temperature = ac.target_temperature
-            if target_temperature is None:
-                return
+        if target_temperature := self._target_temperature:
             return target_temperature.temperature_value
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_hvac_mode(self, hvac_mode: HVACMode):  # noqa: D102
-        if ac := self._air_conditioning():
+        if state := self._state:
 
             async def handle_mode(desired_state, start_mode=None, **kwargs):
-                if ac.state == desired_state:
-                    _LOGGER.info("%s already running.", ac.state)
+                if state == desired_state:
+                    _LOGGER.info("%s already running.", state)
                     return
 
-                if ac.state != AirConditioningState.OFF:
-                    _LOGGER.info("%s mode detected, stopping first.", ac.state)
+                if state != AirConditioningState.OFF:
+                    _LOGGER.info("%s mode detected, stopping first.", state)
                     await self.coordinator.myskoda.stop_air_conditioning(
                         self.vehicle.info.vin
                     )
@@ -344,7 +358,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                 )
 
             else:
-                if ac.state == AirConditioningState.OFF:
+                if state == AirConditioningState.OFF:
                     _LOGGER.info("Auxiliary heater already OFF.")
                 else:
                     _LOGGER.info("Stopping Auxiliary heater.")
