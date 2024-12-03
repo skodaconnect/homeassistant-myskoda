@@ -121,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Limit nabíjení"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Doba trvání ohřevu"
             }
         },
         "sensor": {

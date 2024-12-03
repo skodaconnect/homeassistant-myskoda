@@ -121,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Limite de carga"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Duração do aquecedor"
             }
         },
         "sensor": {
