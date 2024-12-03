@@ -343,7 +343,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             self.set_updated_vehicle(vehicle)
 
     def _debounce(
-        self, func: RefreshFunction, immediate: bool = False
+        self, func: RefreshFunction, immediate: bool = True
     ) -> RefreshFunction:
         return MySkodaDebouncer(self.hass, func, immediate).async_call
 

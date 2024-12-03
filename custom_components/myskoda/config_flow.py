@@ -58,9 +58,12 @@ async def validate_options_input(
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
     """Check that the inputs are valid."""
-    hub = MySkoda(async_get_clientsession(hass), get_default_context())
+    hub = MySkoda(
+        async_get_clientsession(hass), get_default_context(), mqtt_enabled=False
+    )
 
     await hub.connect(data["email"], data["password"])
+    await hub.disconnect()
 
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
