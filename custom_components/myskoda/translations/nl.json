@@ -224,10 +224,10 @@
         },
         "button": {
             "honk_flash": {
-                "name": "Claxon en licht"
+                "name": "Claxon en alarm lichten"
             },
             "flash": {
-                "name": "Flits"
+                "name": "Knipper alarm lichten"
             },
             "generate_fixtures": {
                 "name": "Genereer specificaties"
