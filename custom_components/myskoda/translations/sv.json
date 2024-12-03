@@ -121,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Laddningsgräns"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Värmarens varaktighet"
             }
         },
         "sensor": {
