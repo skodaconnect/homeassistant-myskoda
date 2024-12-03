@@ -230,7 +230,7 @@
                 "name": "Flits"
             },
             "generate_fixtures": {
-                "name": "Genereer fixtures"
+                "name": "Genereer specificaties"
             }
         }
     },
