@@ -213,6 +213,9 @@
             },
             "flash": {
                 "name": "Blinken"
+            },
+            "generate_fixtures": {
+                "name": "Spezifikationen generieren"
             }
         }
     },
