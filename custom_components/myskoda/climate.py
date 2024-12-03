@@ -216,18 +216,16 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
     @property
     def _target_temperature(self) -> TargetTemperature | None:
         """Return target temp object for auxiliary heater."""
-        target_temperature = None
         if self.has_all_capabilities(
             [CapabilityId.AUXILIARY_HEATING_TEMPERATURE_SETTING]
         ):
             if ac := self._auxiliary_heating():
-                target_temperature = ac.target_temperature
-        elif self.has_any_capability(
+                return ac.target_temperature
+        elif self.has_all_capabilities(
             [CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY]
         ):
             if ac := self._air_conditioning():
-                target_temperature = ac.target_temperature
-        return target_temperature
+                return ac.target_temperature
 
     @property
     def _heater_source(self) -> HeaterSource | None:
