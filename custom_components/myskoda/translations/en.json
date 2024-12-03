@@ -194,7 +194,10 @@
             },
             "electric_range": {
                 "name": "Electric Range"
-            }
+            },
+	    "outside_temperature": {
+		"name": "Outside Temperature"
+	    }
         },
         "switch": {
             "battery_care_mode": {
