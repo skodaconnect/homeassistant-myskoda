@@ -121,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Лимит заряда"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Длительность нагрева"
             }
         },
         "sensor": {
