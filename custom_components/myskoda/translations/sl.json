@@ -121,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Omejitev polnjenja"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Trajanje ogrevanja"
             }
         },
         "sensor": {
@@ -174,6 +177,9 @@
             "remaining_charging_time": {
                 "name": "Preostali čas polnjenja"
             },
+            "operation": {
+                "name": "Zadnja dejavnost"
+            },
             "software_version": {
                 "name": "Različica programske opreme"
             },
@@ -205,6 +211,21 @@
             },
             "window_heating": {
                 "name": "Ogrevanje vetrobrana"
+            },
+            "ac_at_unlock": {
+                "name": "AC ko je odklenjeno"
+            },
+            "ac_without_external_power": {
+                "name": "AC brez zunanjega vira"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Ogrevanje levega sedeža z AC"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Ogrevanje desnega sedeža z AC"
+            },
+            "ac_window_heating": {
+                "name": "Ogrevanje vetrobranskega stekla z AC"
             }
         },
         "button": {
@@ -213,6 +234,9 @@
             },
             "flash": {
                 "name": "Utripanje"
+            },
+            "generate_fixtures": {
+                "name": ""
             }
         }
     },
@@ -220,6 +244,10 @@
         "new_tandc": {
             "title": "Preglejte in potrdite nova določila in pogoje uporabe aplikacije MySkoda",
             "description": "Zaznana napaka pri prijavi zaradi nesprejetja določil in pogojev.\n\nŠkoda je morda izdala nova določila in pogoje uporabe.\n\nProsimo, da se odjavite in znova prijavite v aplikacijo MySkoda, da jih pregledate in potrdite.\nTe integracije ni mogoče nadaljevati brez sprejetih določil in pogojev."
+        },
+        "spin_error": {
+            "title": "Nepravilen S-PIN",
+            "description": "Prejeli smo obvestilo, da je S-PIN nepravilen.\n\nProsim vnesite pravilen S-PIN v nastavitvah integracije."
         }
     },
     "options": {
