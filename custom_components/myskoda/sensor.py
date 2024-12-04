@@ -560,9 +560,17 @@ class OutsideTemperature(MySkodaSensor):
 
     @property
     def native_value(self) -> float | None:  # noqa: D102
-        if aux_heat := self.vehicle.auxiliary_heating:
-            if outside_temp := aux_heat.outside_temperature:
-                return outside_temp.temperature_value
+        aux_heat = (
+            self.vehicle.auxiliary_heating
+            if self.has_any_capability([CapabilityId.AUXILIARY_HEATING])
+            else None
+        )
+        source = aux_heat or self.vehicle.air_conditioning
+        return (
+            source.outside_temperature.temperature_value
+            if source and source.outside_temperature
+            else None
+        )
 
     def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.AUXILIARY_HEATING, CapabilityId.OUTSIDE_TEMPERATURE]
+        return [CapabilityId.OUTSIDE_TEMPERATURE]
