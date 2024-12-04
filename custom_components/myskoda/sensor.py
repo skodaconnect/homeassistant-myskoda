@@ -59,6 +59,7 @@ async def async_setup_entry(
             OilServiceIntervalDays,
             OilServiceIntervalKM,
             Operation,
+            OutsideTemperature,
             Range,
             RemainingChargingTime,
             SoftwareVersion,
