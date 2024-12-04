@@ -239,7 +239,9 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
     def _start_mode(self) -> AuxiliaryStartMode | None:
         """Return start mode for auxiliary heater."""
         if self.has_all_capabilities(
-            [CapabilityId.AUXILIARY_HEATING, CapabilityId.ACTIVE_VENTILATION]
+            [CapabilityId.AUXILIARY_HEATING]
+        ) and self.has_any_capability(
+            [CapabilityId.ACTIVE_VENTILATION, CapabilityId.AUXILIARY_HEATING_BASIC]
         ):
             return AuxiliaryStartMode.HEATING
 
@@ -276,7 +278,9 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
     @property
     def hvac_modes(self) -> list[HVACMode]:  # noqa: D102
         modes = [HVACMode.HEAT, HVACMode.OFF]
-        if self.has_all_capabilities([CapabilityId.ACTIVE_VENTILATION]):
+        if self.has_any_capability(
+            [CapabilityId.ACTIVE_VENTILATION, CapabilityId.AUXILIARY_HEATING_BASIC]
+        ):
             modes.append(HVACMode.FAN_ONLY)
         return modes
 
