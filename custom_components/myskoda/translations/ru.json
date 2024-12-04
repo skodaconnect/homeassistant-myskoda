@@ -194,6 +194,9 @@
             },
             "electric_range": {
                 "name": "Запас хода электро"
+            },
+            "outside_temperature": {
+                "name": "Наружная температура"
             }
         },
         "switch": {
