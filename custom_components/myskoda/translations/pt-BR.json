@@ -194,6 +194,9 @@
             },
             "electric_range": {
                 "name": "Alcance elétrico"
+            },
+            "outside_temperature": {
+                "name": "Temperatura externa"
             }
         },
         "switch": {
