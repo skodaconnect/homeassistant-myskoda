@@ -178,7 +178,13 @@
                 "name": "Remaining Charging Time"
             },
             "operation": {
-                "name": "Last Operation"
+                "name": "Last Operation",
+		"state": {
+		    "in_progress": "In Progress", 
+		    "completed_success": "Completed succesfully", 
+		    "completed_warning": "Completed with warning", 
+		    "error": "Error"
+		}
             },
             "software_version": {
                 "name": "Software Version"
