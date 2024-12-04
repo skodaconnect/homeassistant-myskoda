@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Klimatyzacja"
+            },
+            "auxiliary_heater": {
+                "name": "Ogrzewanie postojowe"
             }
         },
         "device_tracker": {
@@ -118,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Limit Ładowania"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Czas trwania ogrzewania"
             }
         },
         "sensor": {
@@ -171,6 +177,15 @@
             "remaining_charging_time": {
                 "name": "Pozostały czas ładowania"
             },
+            "operation": {
+                "name": "Ostatnia operacja",
+                "state": {
+                    "in_progress": "W toku",
+                    "completed_success": "Zakończono pomyślnie",
+                    "completed_warning": "Zakończono z ostrzeżeniem",
+                    "error": "Błąd"
+                }
+            },
             "software_version": {
                 "name": "Wersja oprogramowania"
             },
@@ -185,6 +200,9 @@
             },
             "electric_range": {
                 "name": "Zasięg (prąd)"
+            },
+            "outside_temperature": {
+                "name": "Temperatura na zewnątrz"
             }
         },
         "switch": {
@@ -202,6 +220,21 @@
             },
             "window_heating": {
                 "name": "Ogrzewanie okien"
+            },
+            "ac_at_unlock": {
+                "name": "AC po odblokowaniu"
+            },
+            "ac_without_external_power": {
+                "name": "AC bez zasilania zewnętrznego"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Ogrzewanie lewego siedzenia za pomocą AC"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Ogrzewanie prawego siedzenia za pomocą AC"
+            },
+            "ac_window_heating": {
+                "name": "Ogrzewanie szyb za pomocą AC"
             }
         },
         "button": {
@@ -210,6 +243,9 @@
             },
             "flash": {
                 "name": "Miganie"
+            },
+            "generate_fixtures": {
+                "name": "Generuj Fixtures"
             }
         }
     },
@@ -217,6 +253,10 @@
         "new_tandc": {
             "title": "Przejrzyj nowe zasady i warunki aplikacji MySkoda",
             "description": "Wykryto niepowodzenie logowania z powodu braku akceptacji Regulaminu.\n\nSkoda mogła wydać nową wersję zasad i warunków korzystania z aplikacji.\n\nWyloguj się i ponownie z aplikacji MySkoda, aby je przejrzeć.\nIntegracja nie będzie działać poprawnie bez akceptacji nowych warunków."
+        },
+        "spin_error": {
+            "title": "Nieprawidłowy kod S-PIN",
+            "description": "Otrzymany błąd wskazuje nieprawidłowy kod S-PIN.\n\nWprowadź poprawny kod S-PIN w ustawieniach integracji."
         }
     },
     "options": {
@@ -229,11 +269,13 @@
                 "data": {
                     "tracing": "Śledzenie odpowiedzi API. Wymaga włączonego logowania w trybie debug w configuration.yaml.",
                     "poll_interval_in_minutes": "Częstotliwość odświeżania w minutach, gdy samochód jest bezczynny.",
-                    "s-pin": "Kod S-PIN"
+                    "s-pin": "Kod S-PIN",
+                    "readonly": "Tryb tylko do odczytu"
                 },
                 "data_description": {
                     "poll_interval_in_minutes": "Ustaw częstotliwość odświeżania w zakresie od 1 do 1440 minut. (domyślnie 30)",
-                    "s-pin": "Wprowadź kod S-PIN. UWAGA: Umożliwia to zdalne odblokowanie samochodu"
+                    "s-pin": "Wprowadź kod S-PIN. UWAGA: Umożliwia to zdalne odblokowanie samochodu",
+                    "readonly": "Nie można wykonać żadnych akcji na samochodzie, integracja pozwala wyłącznie na odczyt danych"
                 }
             }
         }
