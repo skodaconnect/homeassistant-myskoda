@@ -178,7 +178,13 @@
                 "name": "Zbývající čas nabíjení"
             },
             "operation": {
-                "name": "Poslední operace"
+                "name": "Poslední operace",
+                "state": {
+                    "in_progress": "Probíhá",
+                    "completed_success": "Úspěšně dokončeno",
+                    "completed_warning": "Dokončeno s varováním",
+                    "error": "Chyba"
+                }
             },
             "software_version": {
                 "name": "Verze softwaru"
@@ -194,6 +200,9 @@
             },
             "electric_range": {
                 "name": "Dojezd na elektřinu"
+            },
+            "outside_temperature": {
+                "name": "Venkovní teplota"
             }
         },
         "switch": {
