@@ -178,7 +178,13 @@
                 "name": "Оставшееся время зарядки"
             },
             "operation": {
-                "name": "Последняя операция"
+                "name": "Последняя операция",
+                "state": {
+                    "in_progress": "Выполняется",
+                    "completed_success": "Выполнено успешно",
+                    "completed_warning": "Выполнено с предупреждением",
+                    "error": "Ошибка"
+                }
             },
             "software_version": {
                 "name": "Версия ПО"

@@ -121,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Laadlimiet"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Duur verwarming"
             }
         },
         "sensor": {
@@ -174,6 +177,15 @@
             "remaining_charging_time": {
                 "name": "Laadtijd resterend"
             },
+            "operation": {
+                "name": "Laatste actie",
+                "state": {
+                    "in_progress": "Actief",
+                    "completed_success": "Succesvol afgerond",
+                    "completed_warning": "Met waarschuwing afgerond",
+                    "error": "Fout"
+                }
+            },
             "software_version": {
                 "name": "Software versie"
             },
@@ -188,6 +200,9 @@
             },
             "electric_range": {
                 "name": "Bereik accu"
+            },
+            "outside_temperature": {
+                "name": "Buitentemperatuur"
             }
         },
         "switch": {
