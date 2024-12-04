@@ -178,7 +178,13 @@
                 "name": "Tempo de carga restante"
             },
             "operation": {
-                "name": "Última operação"
+                "name": "Última operação",
+                "state": {
+                    "in_progress": "Em andamento",
+                    "completed_success": "Concluído com êxito",
+                    "completed_warning": "Concluído com aviso",
+                    "error": "Erro"
+                }
             },
             "software_version": {
                 "name": "Versão do software"
