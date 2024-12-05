@@ -8,7 +8,7 @@ from typing import Callable
 
 from aiohttp import ClientError
 from aiohttp.client_exceptions import ClientResponseError
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -119,7 +119,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         user = None
         config = self.data.config if self.data and self.data.config else Config()
 
-        if not self.myskoda.mqtt:
+        if (
+            not self.myskoda.mqtt
+            and self.config_entry.state is not ConfigEntryState.SETUP_IN_PROGRESS
+        ):
             _LOGGER.debug("MQTT is not set up yet. Connecting now.")
             await self.myskoda.enable_mqtt()
             self.myskoda.subscribe(self._on_mqtt_event)
