@@ -54,7 +54,7 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     session = async_create_clientsession(
         hass, trace_configs=trace_configs, auto_cleanup=False
     )
-    myskoda = MySkoda(session, get_default_context())
+    myskoda = MySkoda(session, get_default_context(), mqtt_enabled=False)
 
     try:
         await myskoda.connect(config.data["email"], config.data["password"])

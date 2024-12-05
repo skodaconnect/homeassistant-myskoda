@@ -114,12 +114,15 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_vehicle = self._debounce(self._update_vehicle)
         self.update_positions = self._debounce(self._update_positions)
 
-        myskoda.subscribe(self._on_mqtt_event)
-
     async def _async_update_data(self) -> State:
         vehicle = None
         user = None
         config = self.data.config if self.data and self.data.config else Config()
+
+        if not self.myskoda.mqtt:
+            _LOGGER.debug("MQTT is not set up yet. Connecting now.")
+            await self.myskoda.enable_mqtt()
+            self.myskoda.subscribe(self._on_mqtt_event)
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
         try:
