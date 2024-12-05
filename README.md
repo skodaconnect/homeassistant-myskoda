@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/github/v/release/skodaconnect/homeassistant-myskoda)
+[![GitHub Release][releases-shield]][releases]
 ![Downloads](https://img.shields.io/github/downloads/skodaconnect/homeassistant-myskoda/total)
 ![Contributors](https://img.shields.io/github/contributors/skodaconnect/homeassistant-myskoda)
 ![Translation](https://badges.crowdin.net/homeassistant-myskoda/localized.svg)
