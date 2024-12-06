@@ -1,7 +1,7 @@
-![Version](https://img.shields.io/github/v/release/skodaconnect/homeassistant-myskoda)
+[![Version](https://img.shields.io/github/v/release/skodaconnect/homeassistant-myskoda)](https://github.com/skodaconnect/homeassistant-myskoda/releases)
 ![Downloads](https://img.shields.io/github/downloads/skodaconnect/homeassistant-myskoda/total)
 ![Contributors](https://img.shields.io/github/contributors/skodaconnect/homeassistant-myskoda)
-![Translation](https://badges.crowdin.net/homeassistant-myskoda/localized.svg)
+[![Translation](https://badges.crowdin.net/homeassistant-myskoda/localized.svg)](https://crowdin.com/project/homeassistant-myskoda/invite?h=1c4f8152c707b666f570b9cb68678ece2227331)
 
 # MySkoda Integration for Skoda vehicles compatible with MySkoda-App.
 
