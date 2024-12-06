@@ -8,7 +8,7 @@ from typing import Callable
 
 from aiohttp import ClientError
 from aiohttp.client_exceptions import ClientResponseError
-from homeassistant.config_entries import ConfigEntry, ConfigEntryState
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -102,30 +102,26 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             ),
             always_update=False,
         )
-        self.hass = hass
-        self.vin = vin
-        self.myskoda = myskoda
-        self.operations = OrderedDict()
-        self.config = config
+        self.hass: HomeAssistant = hass
+        self.vin: str = vin
+        self.myskoda: MySkoda = myskoda
+        self.operations: OrderedDict = OrderedDict()
+        self.config: ConfigEntry = config
         self.update_driving_range = self._debounce(self._update_driving_range)
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
         self.update_auxiliary_heating = self._debounce(self._update_auxiliary_heating)
         self.update_vehicle = self._debounce(self._update_vehicle)
         self.update_positions = self._debounce(self._update_positions)
+        self._mqtt_connecting: bool = False
 
     async def _async_update_data(self) -> State:
         vehicle = None
         user = None
         config = self.data.config if self.data and self.data.config else Config()
 
-        if (
-            not self.myskoda.mqtt
-            and self.config_entry.state is not ConfigEntryState.SETUP_IN_PROGRESS
-        ):
-            _LOGGER.debug("MQTT is not set up yet. Connecting now.")
-            await self.myskoda.enable_mqtt()
-            self.myskoda.subscribe(self._on_mqtt_event)
+        if not self.myskoda.mqtt and not self._mqtt_connecting:
+            self.hass.async_create_task(self._mqtt_connect())
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
         try:
@@ -139,6 +135,14 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         if vehicle and user:
             return State(vehicle, user, config, self.operations)
         raise UpdateFailed("Incomplete update received")
+
+    async def _mqtt_connect(self) -> None:
+        """Connect to MQTT and handle internals."""
+        _LOGGER.debug("Connecting to MQTT.")
+        self._mqtt_connecting = True
+        await self.myskoda.enable_mqtt()
+        self.myskoda.subscribe(self._on_mqtt_event)
+        self._mqtt_connecting = False
 
     async def _on_mqtt_event(self, event: Event) -> None:
         if event.vin != self.vin:
