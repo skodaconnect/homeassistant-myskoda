@@ -178,7 +178,13 @@
                 "name": "Återstående laddningstid"
             },
             "operation": {
-                "name": "Senaste åtgärd"
+                "name": "Senaste åtgärd",
+                "state": {
+                    "in_progress": "Pågående",
+                    "completed_success": "Slutförd utan fel",
+                    "completed_warning": "Slutförd med varning",
+                    "error": "Fel"
+                }
             },
             "software_version": {
                 "name": "Programvaruversion"
@@ -194,6 +200,9 @@
             },
             "electric_range": {
                 "name": "Räckvidd el"
+            },
+            "outside_temperature": {
+                "name": "Utomhustemperatur"
             }
         },
         "switch": {
