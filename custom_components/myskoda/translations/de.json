@@ -121,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Ladelimit"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Heizungsdauer"
             }
         },
         "sensor": {
@@ -174,6 +177,15 @@
             "remaining_charging_time": {
                 "name": "Verbleibende Ladezeit"
             },
+            "operation": {
+                "name": "Letzter Vorgang",
+                "state": {
+                    "in_progress": "Im Gange",
+                    "completed_success": "Erfolgreich abgeschlossen",
+                    "completed_warning": "Mit Warnungen abgeschlossen",
+                    "error": "Fehler"
+                }
+            },
             "software_version": {
                 "name": "Software-Version"
             },
@@ -188,6 +200,9 @@
             },
             "electric_range": {
                 "name": "Elektrische Reichweite"
+            },
+            "outside_temperature": {
+                "name": "Außentemperatur"
             }
         },
         "switch": {
@@ -205,6 +220,21 @@
             },
             "window_heating": {
                 "name": "Scheiben beheizen"
+            },
+            "ac_at_unlock": {
+                "name": "AC, wenn entsperrt"
+            },
+            "ac_without_external_power": {
+                "name": "AC ohne externe Stromversorgung"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Linke Sitzheizung mit AC"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Rechte Sitzheizung mit AC"
+            },
+            "ac_window_heating": {
+                "name": "Fensterheizung mit AC"
             }
         },
         "button": {
@@ -223,6 +253,10 @@
         "new_tandc": {
             "title": "Neue Nutzungsbedingungen für MySkoda ansehen",
             "description": "Login-Fehler aufgrund fehlender Zustimmung zu den Nutzungsbedingungen.\n\nSkoda hat möglicherweise neue Nutzungsbedingungen ausgestellt.\n\nBitte melden Sie sich ab und wieder in der MySkoda App ab, um sie zu überprüfen.\nDiese Integration kann nicht ohne akzeptierte Nutzungsbedingungen fortgesetzt werden."
+        },
+        "spin_error": {
+            "title": "Ungültiger S-PIN erkannt",
+            "description": "Wir haben einen Fehler bei der Angabe von ihrer S-PIN erhalten.\n\nBitte geben Sie die korrekte S-PIN in den Integrationseinstellungen ein."
         }
     },
     "options": {
