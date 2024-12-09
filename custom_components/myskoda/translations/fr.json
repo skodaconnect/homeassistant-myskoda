@@ -121,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Limite de charge"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Durée du chauffage"
             }
         },
         "sensor": {
@@ -174,6 +177,15 @@
             "remaining_charging_time": {
                 "name": "Temps de recharge restant"
             },
+            "operation": {
+                "name": "Dernière opération",
+                "state": {
+                    "in_progress": "En cours",
+                    "completed_success": "Terminé avec succès",
+                    "completed_warning": "Terminé avec un avertissement",
+                    "error": "Erreur"
+                }
+            },
             "software_version": {
                 "name": "Version du logiciel"
             },
@@ -188,6 +200,9 @@
             },
             "electric_range": {
                 "name": "Autonomie en électrique"
+            },
+            "outside_temperature": {
+                "name": "Température extérieure"
             }
         },
         "switch": {
@@ -205,6 +220,21 @@
             },
             "window_heating": {
                 "name": "Chauffage des fenêtres"
+            },
+            "ac_at_unlock": {
+                "name": "AC quand déverrouillé"
+            },
+            "ac_without_external_power": {
+                "name": "AC sans alimentation externe"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Chauffage siège gauche"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Chauffage siège droit"
+            },
+            "ac_window_heating": {
+                "name": "Chauffage des fenêtres avec AC"
             }
         },
         "button": {
@@ -213,6 +243,9 @@
             },
             "flash": {
                 "name": "Appels de phares"
+            },
+            "generate_fixtures": {
+                "name": ""
             }
         }
     },
@@ -220,6 +253,10 @@
         "new_tandc": {
             "title": "Revoir les nouvelles conditions générales pour MySkoda",
             "description": "Échec de connexion détecté en raison de l'acceptation manquante des Conditions Générales.\n\nSkoda peut avoir publié de nouvelles Conditions Générales.\n\nVeuillez vous déconnecter et revenir dans l'application MySkoda pour les examiner.\nCette intégration ne peut pas continuer sans les conditions acceptées."
+        },
+        "spin_error": {
+            "title": "Le S-PIN est incorrect",
+            "description": "Nous avons reçu une erreur indiquant que votre S-PIN est incorrect.\n\nVeuillez entrer le S-PIN correct dans les paramètres d'intégration."
         }
     },
     "options": {
