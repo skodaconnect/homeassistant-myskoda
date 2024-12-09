@@ -193,6 +193,21 @@ When pressed, the button triggers the fixture generation process, and the genera
 
 This feature simplifies the process of creating fixtures by providing a user-friendly interface for initiating the operation.
 
+## Diagnostics
+
+In addition to **Generate Fixtures feature** which generates the vehicle fixtures into Home Assitant Core log, the **Diagnostics** feature allows you to directly download diagnostic data for sharing in issue reports. Providing diagnostics data when reporting an issue helps developers diagnose and resolve your problem more efficiently.
+
+You can download the diagnostics data as a text file from the device page or the integrations dashboard.
+
+Diagnostics file include:
+
+- Home Assistant version and details
+- List of installed components and their versions
+- MySkoda integration version and details
+- Anonymized vehicle fixtures from the MySkoda API. (fixtures can be found under the `data` key in the diagnostics response)
+
+> **Note:** Vehicle fixtures are responses from all available MySkoda API endpoints always returned in both raw and serialized format.
+
 ## Disclaimer
 
 This Homeassistant integration uses an unofficial API client for the Skoda API and is not affiliated with, endorsed by, or associated with Skoda Auto or any of its subsidiaries.
