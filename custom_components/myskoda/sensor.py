@@ -569,8 +569,11 @@ class OutsideTemperature(MySkodaSensor):
             outside_temp := ac.outside_temperature
         ):
             temp_value = outside_temp.temperature_value
-        if temp_value:
-            return OUTSIDE_TEMP_MIN_BOUND <= temp_value <= OUTSIDE_TEMP_MAX_BOUND
+        if (
+            temp_value
+            and OUTSIDE_TEMP_MIN_BOUND <= temp_value <= OUTSIDE_TEMP_MAX_BOUND
+        ):
+            return temp_value
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.OUTSIDE_TEMPERATURE]
