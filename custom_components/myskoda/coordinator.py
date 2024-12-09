@@ -120,18 +120,30 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         vehicle = None
         user = None
         config = self.data.config if self.data and self.data.config else Config()
+        operations = self.operations
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
+
+        # Obtain user data. This is allowed to fail if we already have this in state.
         try:
-            vehicle = await self.myskoda.get_vehicle(self.vin)
             user = await self.myskoda.get_user()
         except ClientResponseError as err:
-            handle_aiohttp_error("user and vehicle", err, self.hass, self.config)
+            handle_aiohttp_error("user", err, self.hass, self.config)
+            if self.data.user:
+                user = self.data.user
+            else:
+                raise UpdateFailed("Error getting user data from MySkoda API: %s", err)
+
+        # Obtain vehicle data.
+        try:
+            vehicle = await self.myskoda.get_vehicle(self.vin)
+        except ClientResponseError as err:
+            handle_aiohttp_error("vehicle", err, self.hass, self.config)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
         if vehicle and user:
-            return State(vehicle, user, config, self.operations)
+            return State(vehicle, user, config, operations)
         raise UpdateFailed("Incomplete update received")
 
     async def _on_mqtt_event(self, event: Event) -> None:
