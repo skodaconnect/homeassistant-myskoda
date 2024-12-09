@@ -28,7 +28,7 @@ def handle_aiohttp_error(
         async_create_spin_issue(hass, config.entry_id)
         return
 
-    elif e.status == 500:
+    elif e.status in [429, 500]:
         # Log message for error 500, otherwise ignore
         _LOGGER.error(
             f"Error requesting {poll_type} from MySkoda API: {e.message} ({e.status}), ignoring this"
