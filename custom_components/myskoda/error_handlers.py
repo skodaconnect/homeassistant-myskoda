@@ -30,7 +30,7 @@ def handle_aiohttp_error(
 
     elif e.status in [429, 500]:
         # Log message for error otherwise ignore
-        _LOGGER.error(
+        _LOGGER.warning(
             f"Error requesting {poll_type} from MySkoda API: {e.message} ({e.status}), ignoring this"
         )
         return
