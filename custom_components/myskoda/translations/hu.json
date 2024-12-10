@@ -121,6 +121,9 @@
         "number": {
             "charge_limit": {
                 "name": "Töltési limit"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Fűtés ideje"
             }
         },
         "sensor": {
@@ -175,7 +178,13 @@
                 "name": "Hátralévő töltési idő"
             },
             "operation": {
-                "name": "Utolsó művelet"
+                "name": "Utolsó művelet",
+                "state": {
+                    "in_progress": "Folyamatban",
+                    "completed_success": "Sikeresen befejezve",
+                    "completed_warning": "Befejezve hibajelzéssel",
+                    "error": "Hiba"
+                }
             },
             "software_version": {
                 "name": "Szoftververzió"
@@ -191,6 +200,9 @@
             },
             "electric_range": {
                 "name": "Elektromos hatótáv"
+            },
+            "outside_temperature": {
+                "name": "Külső hőmérséklet"
             }
         },
         "switch": {
