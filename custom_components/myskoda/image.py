@@ -1,10 +1,12 @@
 """Images for the MySkoda integration."""
 
+import httpx
 import logging
 
 from homeassistant.components.image import (
     ImageEntity,
     ImageEntityDescription,
+    GET_IMAGE_TIMEOUT,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
@@ -57,6 +59,34 @@ class MySkodaImage(MySkodaEntity, ImageEntity):
         """Initialize the Image for MySkoda."""
         ImageEntity.__init__(self, hass)
         super().__init__(coordinator, vin)
+
+
+class RenderImage(MySkodaImage):
+    async def _fetch_url(self, url: str) -> httpx.Response | None:
+        """Fetch a URL passing in the MySkoda access token."""
+
+        try:
+            response = await self._client.get(
+                url,
+                timeout=GET_IMAGE_TIMEOUT,
+                follow_redirects=True,
+                headers={
+                    "authorization": f"Bearer {await self.coordinator.myskoda.authorization.get_access_token()}"
+                },
+            )
+            response.raise_for_status()
+        except httpx.TimeoutException:
+            _LOGGER.error("%s: Timeout getting image from %s", self.entity_id, url)
+            return None
+        except (httpx.RequestError, httpx.HTTPStatusError) as err:
+            _LOGGER.error(
+                "%s: Error getting new image from %s: %s",
+                self.entity_id,
+                url,
+                err,
+            )
+            return None
+        return response
 
 
 class MainRenderImage(MySkodaImage):
