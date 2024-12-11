@@ -30,7 +30,7 @@ from myskoda.models.driving_range import EngineType
 from myskoda.models.info import CapabilityId
 from myskoda.models.operation_request import OperationStatus
 
-from .const import COORDINATORS, DOMAIN
+from .const import COORDINATORS, DOMAIN, OUTSIDE_TEMP_MIN_BOUND, OUTSIDE_TEMP_MAX_BOUND
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
@@ -560,14 +560,11 @@ class OutsideTemperature(MySkodaSensor):
 
     @property
     def native_value(self) -> float | None:  # noqa: D102
-        if (aux_heat := self.vehicle.auxiliary_heating) and (
-            outside_temp := aux_heat.outside_temperature
-        ):
-            return outside_temp.temperature_value
-        if (ac := self.vehicle.air_conditioning) and (
-            outside_temp := ac.outside_temperature
-        ):
-            return outside_temp.temperature_value
+        for source in [self.vehicle.auxiliary_heating, self.vehicle.air_conditioning]:
+            if source and (outside_temp := source.outside_temperature):
+                temp_value = outside_temp.temperature_value
+                if OUTSIDE_TEMP_MIN_BOUND < temp_value < OUTSIDE_TEMP_MAX_BOUND:
+                    return temp_value
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.OUTSIDE_TEMPERATURE]
