@@ -109,6 +109,12 @@
             }
         },
         "image": {
+	    "render_dark_3x": {
+		"name": "Dark Status Render of Vehicle"
+	    },
+	    "render_light_3x": {
+		"name": "Light Status Render of Vehicle"
+	    },
             "render_vehicle_main": {
                 "name": "Main Render of Vehicle"
             }

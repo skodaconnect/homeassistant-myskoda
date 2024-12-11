@@ -33,7 +33,11 @@ async def async_setup_entry(
 
     entities = []
     for vin in hass.data[DOMAIN][config.entry_id][COORDINATORS]:
-        for SensorClass in [MainRenderImage]:
+        for SensorClass in [
+            MainRenderImage,
+            DarkStatusImage,
+            LightStatusImage,
+        ]:
             entities.append(
                 SensorClass(
                     hass.data[DOMAIN][config.entry_id][COORDINATORS][vin], vin, hass
@@ -61,7 +65,9 @@ class MySkodaImage(MySkodaEntity, ImageEntity):
         super().__init__(coordinator, vin)
 
 
-class RenderImage(MySkodaImage):
+class StatusImage(MySkodaImage):
+    """A render of the current status of the vehicle."""
+
     async def _fetch_url(self, url: str) -> httpx.Response | None:
         """Fetch a URL passing in the MySkoda access token."""
 
@@ -116,3 +122,33 @@ class MainRenderImage(MySkodaImage):
             for r in composite_renders:
                 attributes["composite_renders"][r] = composite_renders[r]
         return attributes
+
+
+class LightStatusImage(StatusImage):
+    """Light 3x render of the vehicle status."""
+
+    entity_description = ImageEntityDescription(
+        key="render_light_3x",
+        translation_key="render_light_3x",
+        entity_registry_enabled_default=False,
+    )
+
+    @property
+    def image_url(self) -> str | None:
+        if status := self.vehicle.status:
+            return status.renders.light_mode.three_x
+
+
+class DarkStatusImage(StatusImage):
+    """Dark 3x render of the vehicle status."""
+
+    entity_description = ImageEntityDescription(
+        key="render_dark_3x",
+        translation_key="render_dark_3x",
+        entity_registry_enabled_default=False,
+    )
+
+    @property
+    def image_url(self) -> str | None:
+        if status := self.vehicle.status:
+            return status.renders.dark_mode.three_x
