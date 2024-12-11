@@ -119,21 +119,55 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         vehicle = None
         user = None
         config = self.data.config if self.data and self.data.config else Config()
+        operations = self.operations
 
         if not self.myskoda.mqtt and not self._mqtt_connecting:
             self.hass.async_create_task(self._mqtt_connect())
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
+
+        # Obtain user data. This is allowed to fail if we already have this in state.
         try:
-            vehicle = await self.myskoda.get_vehicle(self.vin)
             user = await self.myskoda.get_user()
         except ClientResponseError as err:
-            handle_aiohttp_error("user and vehicle", err, self.hass, self.config)
+            handle_aiohttp_error("user", err, self.hass, self.config)
+            if self.data.user:
+                user = self.data.user
+            else:
+                raise UpdateFailed("Error getting user data from MySkoda API: %s", err)
+
+        # Obtain vehicle data.
+        try:
+            if self.data:
+                if (
+                    self.data.vehicle.info.device_platform == "MBB"
+                    and self.data.vehicle.info.specification.model == "CitigoE iV"
+                ):
+                    _LOGGER.debug(
+                        "Detected CitigoE iV, requesting only partial update without health"
+                    )
+                    vehicle = await self.myskoda.get_partial_vehicle(
+                        self.vin,
+                        [
+                            CapabilityId.AIR_CONDITIONING,
+                            CapabilityId.AUXILIARY_HEATING,
+                            CapabilityId.CHARGING,
+                            CapabilityId.PARKING_POSITION,
+                            CapabilityId.STATE,
+                            CapabilityId.TRIP_STATISTICS,
+                        ],
+                    )
+                else:
+                    vehicle = await self.myskoda.get_vehicle(self.vin)
+            else:
+                vehicle = await self.myskoda.get_vehicle(self.vin)
+        except ClientResponseError as err:
+            handle_aiohttp_error("vehicle", err, self.hass, self.config)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
         if vehicle and user:
-            return State(vehicle, user, config, self.operations)
+            return State(vehicle, user, config, operations)
         raise UpdateFailed("Incomplete update received")
 
     async def _mqtt_connect(self) -> None:
