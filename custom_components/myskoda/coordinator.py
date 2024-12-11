@@ -125,7 +125,27 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
         try:
-            vehicle = await self.myskoda.get_vehicle(self.vin)
+            if (
+                self.data.vehicle.info.device_platform == "MBB"
+                and self.data.vehicle.info.specification.model == "CitigoE iV"
+            ):
+                _LOGGER.debug(
+                    "Detected CitigoE iV, requesting only partial update without health"
+                )
+                vehicle = await self.myskoda.get_partial_vehicle(
+                    self.vin,
+                    [
+                        CapabilityId.AIR_CONDITIONING,
+                        CapabilityId.AUXILIARY_HEATING,
+                        CapabilityId.CHARGING,
+                        CapabilityId.PARKING_POSITION,
+                        CapabilityId.STATE,
+                        CapabilityId.TRIP_STATISTICS,
+                        CapabilityId.VEHICLE_HEALTH_INSPECTION,
+                    ],
+                )
+            else:
+                vehicle = await self.myskoda.get_vehicle(self.vin)
             user = await self.myskoda.get_user()
         except ClientResponseError as err:
             handle_aiohttp_error("user and vehicle", err, self.hass, self.config)
