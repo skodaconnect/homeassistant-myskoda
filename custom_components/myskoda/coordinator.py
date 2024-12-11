@@ -141,7 +141,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                         CapabilityId.PARKING_POSITION,
                         CapabilityId.STATE,
                         CapabilityId.TRIP_STATISTICS,
-                        CapabilityId.VEHICLE_HEALTH_INSPECTION,
                     ],
                 )
             else:
