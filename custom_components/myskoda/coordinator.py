@@ -157,6 +157,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                             CapabilityId.TRIP_STATISTICS,
                         ],
                     )
+                else:
+                    vehicle = await self.myskoda.get_vehicle(self.vin)
             else:
                 vehicle = await self.myskoda.get_vehicle(self.vin)
         except ClientResponseError as err:
