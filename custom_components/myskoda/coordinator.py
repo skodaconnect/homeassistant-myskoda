@@ -138,24 +138,25 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         # Obtain vehicle data.
         try:
-            if (
-                self.data.vehicle.info.device_platform == "MBB"
-                and self.data.vehicle.info.specification.model == "CitigoE iV"
-            ):
-                _LOGGER.debug(
-                    "Detected CitigoE iV, requesting only partial update without health"
-                )
-                vehicle = await self.myskoda.get_partial_vehicle(
-                    self.vin,
-                    [
-                        CapabilityId.AIR_CONDITIONING,
-                        CapabilityId.AUXILIARY_HEATING,
-                        CapabilityId.CHARGING,
-                        CapabilityId.PARKING_POSITION,
-                        CapabilityId.STATE,
-                        CapabilityId.TRIP_STATISTICS,
-                    ],
-                )
+            if self.data:
+                if (
+                    self.data.vehicle.info.device_platform == "MBB"
+                    and self.data.vehicle.info.specification.model == "CitigoE iV"
+                ):
+                    _LOGGER.debug(
+                        "Detected CitigoE iV, requesting only partial update without health"
+                    )
+                    vehicle = await self.myskoda.get_partial_vehicle(
+                        self.vin,
+                        [
+                            CapabilityId.AIR_CONDITIONING,
+                            CapabilityId.AUXILIARY_HEATING,
+                            CapabilityId.CHARGING,
+                            CapabilityId.PARKING_POSITION,
+                            CapabilityId.STATE,
+                            CapabilityId.TRIP_STATISTICS,
+                        ],
+                    )
             else:
                 vehicle = await self.myskoda.get_vehicle(self.vin)
         except ClientResponseError as err:
