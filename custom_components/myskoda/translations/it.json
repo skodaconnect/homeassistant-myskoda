@@ -54,18 +54,18 @@
                     "on": "Aperto"
                 }
             },
-            "lights_on": {
-                "name": "Luci",
-                "state": {
-                    "off": "Non attivo",
-                    "on": "Attivo"
-                }
-            },
             "locked": {
                 "name": "Veicolo bloccato",
                 "state": {
                     "off": "Bloccato",
                     "on": "Sbloccato"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Luci Di Parcheggio",
+                "state": {
+                    "off": "Non attivo",
+                    "on": "Attivo"
                 }
             },
             "sunroof_open": {
@@ -93,6 +93,9 @@
         "climate": {
             "climate": {
                 "name": "Aria condizionata"
+            },
+            "auxiliary_heater": {
+                "name": "Riscaldamento Ausiliario"
             }
         },
         "device_tracker": {
@@ -110,9 +113,17 @@
                 "name": "Immagine del veicolo"
             }
         },
+        "lock": {
+            "door_lock": {
+                "name": "Chiusura Porte"
+            }
+        },
         "number": {
             "charge_limit": {
                 "name": "Limite di carica"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Durata Riscaldamento"
             }
         },
         "sensor": {
@@ -148,8 +159,17 @@
             "inspection": {
                 "name": "Prossima Ispezione"
             },
+            "inspection_in_km": {
+                "name": "Prossimo controllo entro km"
+            },
             "mileage": {
                 "name": "Chilometraggio"
+            },
+            "oil_service_in_days": {
+                "name": "Controllo Olio"
+            },
+            "oil_service_in_km": {
+                "name": "Controllo olio tra Km"
             },
             "range": {
                 "name": "Gamma"
@@ -157,11 +177,32 @@
             "remaining_charging_time": {
                 "name": "Tempo di ricarica rimanente"
             },
+            "operation": {
+                "name": "Ultima Operazione",
+                "state": {
+                    "in_progress": "In corso",
+                    "completed_success": "Completato con successo",
+                    "completed_warning": "Completato con avvertimento",
+                    "error": "Errore"
+                }
+            },
             "software_version": {
                 "name": "Versione software"
             },
             "target_battery_percentage": {
                 "name": "Percentuale limite di carica"
+            },
+            "fuel_level": {
+                "name": "Livello Carburante"
+            },
+            "combustion_range": {
+                "name": "Autonomia con motore a combustione"
+            },
+            "electric_range": {
+                "name": "Autonomia in Elettrico"
+            },
+            "outside_temperature": {
+                "name": "Temperatura esterna"
             }
         },
         "switch": {
@@ -179,21 +220,62 @@
             },
             "window_heating": {
                 "name": "Riscaldamento finestrini"
+            },
+            "ac_at_unlock": {
+                "name": "Aria Condizionata a veicolo chiuso"
+            },
+            "ac_without_external_power": {
+                "name": "Aria Condizionata senza energia esterna"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Riscaldamento sedile sinistro durante climatizzazione"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Riscaldamento sedile destro durante climatizzazione"
+            },
+            "ac_window_heating": {
+                "name": "Riscaldamento finestrini durante climatizzazione"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Clacson e flash abbagliante"
+            },
+            "flash": {
+                "name": "Flash"
+            },
+            "generate_fixtures": {
+                "name": "Genera Correzioni"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "Accetta le nuove condizioni da MySkoda",
+            "description": "Rilevato problema di login poichè non sono stati accati i termini e le condizioni.\n\nSkoda potrebbe aver rilasciato nuovi termini e condizioni.\n\nPerfavore chiudi e riapri l'app MySkoda per accettarli.\nQuesta integrazione non può funzionare se non vengono accettati i termini."
+        },
+        "spin_error": {
+            "title": "S-PIN errato",
+            "description": "Abbiamo ricevuto un errore che indica che il tuo S-PIN è errato.\n\nInserisci l'S-PIN nelle impostazioni dell'integrazione."
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Intervallo di aggiornamento specificato non valido. Si prega di scegliere tra 1 e 1440 minuti"
+            "invalid_polling_interval": "Intervallo di aggiornamento specificato non valido. Si prega di scegliere tra 1 e 1440 minuti",
+            "invalid_spin_format": "Formato non corretto per S-PIN"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "Rilevamento risposta API. Richiede la registrazione del debug abilitata nel file di configurazione configuration.yaml.",
-                    "poll_interval_in_minutes": "Intervallo di aggiornamento in minuti quando l'auto è inattiva."
+                    "poll_interval_in_minutes": "Intervallo di aggiornamento in minuti quando l'auto è inattiva.",
+                    "s-pin": "PIN di Sicurezza",
+                    "readonly": "Modalità di sola lettura"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Specificare un intervallo di aggiornamento tra 1 e 1440 minuti (predefinito 30)"
+                    "poll_interval_in_minutes": "Specificare un intervallo di aggiornamento tra 1 e 1440 minuti (predefinito 30)",
+                    "s-pin": "Specifica il tuo S-PIN. ATTENZIONE: Abilita l'apertura/chiusura remota!",
+                    "readonly": "Non puoi fare modifiche alla macchina, modalità sola lettura"
                 }
             }
         }

@@ -91,13 +91,20 @@ class Flash(MySkodaButton):
 
 
 class GenerateFixtures(MySkodaButton):
-    """Generate Fixtures."""
+    """Generate Fixtures.
+    This entity is deprecated and disabled by default, scheduled to be removed in v2.0.0
+
+    The functionality is implemented in the 'Diagnostics' function for the HA device,
+    which is where it should be.
+    """
 
     entity_description = ButtonEntityDescription(
         key="generate_fixtures",
         translation_key="generate_fixtures",
         device_class=ButtonDeviceClass.IDENTIFY,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        entity_registry_visible_default=False,
     )
 
     def __init__(
