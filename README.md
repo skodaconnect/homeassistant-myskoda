@@ -67,7 +67,7 @@ If your desired language is not available, please [open an issue](https://github
 ### Buttons
 - Honk and Flash
 - Flash
-- Generate Fixtures
+- Generate Fixtures (deprecated, use Device Diagnostics instead)
 
 ### Climate
 
