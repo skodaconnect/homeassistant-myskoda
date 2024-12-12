@@ -17,6 +17,7 @@ from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [r
 from homeassistant.util import Throttle
 
 from myskoda.models.info import CapabilityId
+from myskoda.mqtt import OperationFailedError
 
 from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
@@ -80,9 +81,12 @@ class ChargeLimit(MySkodaNumber):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_native_value(self, value: float):  # noqa: D102
-        await self.coordinator.myskoda.set_charge_limit(
-            self.vehicle.info.vin, int(value)
-        )
+        try:
+            await self.coordinator.myskoda.set_charge_limit(
+                self.vehicle.info.vin, int(value)
+            )
+        except OperationFailedError as exc:
+            _LOGGER.error("Failed to set charging limit: %s", exc)
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING]

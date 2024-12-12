@@ -15,6 +15,7 @@ from homeassistant.util import Throttle
 
 from myskoda.models.common import DoorLockedState
 from myskoda.models.info import CapabilityId
+from myskoda.mqtt import OperationFailedError
 
 from .const import API_COOLDOWN_IN_SECONDS, COORDINATORS, CONF_SPIN, DOMAIN
 from .entity import MySkodaEntity
@@ -67,10 +68,13 @@ class DoorLock(MySkodaLock):
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def _async_lock_unlock(self, lock: bool, spin: str, **kwargs):  # noqa: D102
         """Internal method to have a central location for the Throttle."""
-        if lock:
-            await self.coordinator.myskoda.lock(self.vehicle.info.vin, spin)
-        else:
-            await self.coordinator.myskoda.unlock(self.vehicle.info.vin, spin)
+        try:
+            if lock:
+                await self.coordinator.myskoda.lock(self.vehicle.info.vin, spin)
+            else:
+                await self.coordinator.myskoda.unlock(self.vehicle.info.vin, spin)
+        except OperationFailedError as exc:
+            _LOGGER.error("Failed to unlock vehicle: %s", exc)
 
     async def async_lock(self, **kwargs) -> None:
         if self.coordinator.config.options.get(CONF_SPIN):
