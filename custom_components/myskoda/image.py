@@ -67,6 +67,8 @@ class MySkodaImage(MySkodaEntity, ImageEntity):
 class StatusImage(MySkodaImage):
     """A render of the current status of the vehicle."""
 
+    _attr_should_poll: bool = True
+
     async def _fetch_url(self, url: str) -> httpx.Response | None:
         """Fetch a URL passing in the MySkoda access token."""
 
