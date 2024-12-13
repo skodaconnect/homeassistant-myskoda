@@ -11,6 +11,7 @@ from aiohttp.client_exceptions import ClientResponseError
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.debounce import Debouncer
+from homeassistant.helpers.start import async_at_started
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from myskoda import MySkoda, Vehicle
@@ -115,16 +116,63 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_positions = self._debounce(self._update_positions)
         self._mqtt_connecting: bool = False
 
+    async def _async_get_vehicle_data(self) -> Vehicle:
+        """Internal method that fetches vehicle data."""
+        if self.data:
+            if (
+                self.data.vehicle.info.device_platform == "MBB"
+                and self.data.vehicle.info.specification.model == "CitigoE iV"
+            ):
+                _LOGGER.debug(
+                    "Detected Citigo iV, requesting only partial update without health"
+                )
+                vehicle = await self.myskoda.get_partial_vehicle(
+                    self.vin,
+                    [
+                        CapabilityId.AIR_CONDITIONING,
+                        CapabilityId.AUXILIARY_HEATING,
+                        CapabilityId.CHARGING,
+                        CapabilityId.PARKING_POSITION,
+                        CapabilityId.STATE,
+                        CapabilityId.TRIP_STATISTICS,
+                    ],
+                )
+            else:
+                vehicle = await self.myskoda.get_vehicle(self.vin)
+        else:
+            vehicle = await self.myskoda.get_vehicle(self.vin)
+        return vehicle
+
     async def _async_update_data(self) -> State:
         vehicle = None
         user = None
         config = self.data.config if self.data and self.data.config else Config()
         operations = self.operations
 
-        if self.config.state == ConfigEntryState.LOADED:
-            # Make sure we are ready for prime time, connect to MQTT
-            if not self.myskoda.mqtt and not self._mqtt_connecting:
-                self.hass.async_create_task(self._mqtt_connect())
+        if self.config.state == ConfigEntryState.SETUP_IN_PROGRESS:
+            _LOGGER.debug("Performing initial data fetch for vin %s", self.vin)
+            try:
+                user = await self.myskoda.get_user()
+                vehicle = await self._async_get_vehicle_data()
+            except ClientResponseError as err:
+                handle_aiohttp_error(
+                    "setup user and vehicle", err, self.hass, self.config
+                )
+                raise UpdateFailed("Failed to retrieve initial data during setup")
+
+            def _async_finish_startup(self) -> None:
+                """Tasks to execute when we have finished starting up."""
+                if not self.myskoda.mqtt and not self._mqtt_connecting:
+                    self.hass.async_create_task(self._mqtt_connect())
+
+            async_at_started(
+                self.hass, _async_finish_startup
+            )  # Schedule post-setup tasks
+            return State(vehicle, user, config, operations)
+
+        # Regular update
+        if not self.myskoda.mqtt and not self._mqtt_connecting:
+            self.hass.async_create_task(self._mqtt_connect())
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
 
@@ -140,29 +188,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         # Obtain vehicle data.
         try:
-            if self.data:
-                if (
-                    self.data.vehicle.info.device_platform == "MBB"
-                    and self.data.vehicle.info.specification.model == "CitigoE iV"
-                ):
-                    _LOGGER.debug(
-                        "Detected CitigoE iV, requesting only partial update without health"
-                    )
-                    vehicle = await self.myskoda.get_partial_vehicle(
-                        self.vin,
-                        [
-                            CapabilityId.AIR_CONDITIONING,
-                            CapabilityId.AUXILIARY_HEATING,
-                            CapabilityId.CHARGING,
-                            CapabilityId.PARKING_POSITION,
-                            CapabilityId.STATE,
-                            CapabilityId.TRIP_STATISTICS,
-                        ],
-                    )
-                else:
-                    vehicle = await self.myskoda.get_vehicle(self.vin)
-            else:
-                vehicle = await self.myskoda.get_vehicle(self.vin)
+            vehicle = await self._async_get_vehicle_data()
         except ClientResponseError as err:
             handle_aiohttp_error("vehicle", err, self.hass, self.config)
         except ClientError as err:
@@ -176,8 +202,11 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         """Connect to MQTT and handle internals."""
         _LOGGER.debug("Connecting to MQTT.")
         self._mqtt_connecting = True
-        await self.myskoda.enable_mqtt()
-        self.myskoda.subscribe(self._on_mqtt_event)
+        try:
+            await self.myskoda.enable_mqtt()
+            self.myskoda.subscribe(self._on_mqtt_event)
+        except Exception:
+            pass
         self._mqtt_connecting = False
 
     async def _on_mqtt_event(self, event: Event) -> None:
