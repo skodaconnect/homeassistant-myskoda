@@ -20,6 +20,7 @@ from homeassistant.util import Throttle
 
 from myskoda.models.fixtures import Endpoint
 from myskoda.models.info import CapabilityId
+from myskoda.mqtt import OperationFailedError
 
 from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, COORDINATORS, DOMAIN
 from .coordinator import MySkodaDataUpdateCoordinator
@@ -69,7 +70,10 @@ class HonkFlash(MySkodaButton):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_press(self) -> None:
-        await self.coordinator.myskoda.honk_flash(self.vehicle.info.vin)
+        try:
+            await self.coordinator.myskoda.honk_flash(self.vehicle.info.vin)
+        except OperationFailedError as exc:
+            _LOGGER.error("Failed honk and flash: %s", exc)
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.HONK_AND_FLASH]
@@ -84,7 +88,10 @@ class Flash(MySkodaButton):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_press(self) -> None:
-        await self.coordinator.myskoda.flash(self.vehicle.info.vin)
+        try:
+            await self.coordinator.myskoda.flash(self.vehicle.info.vin)
+        except OperationFailedError as exc:
+            _LOGGER.error("Failed to flash lights: %s", exc)
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.HONK_AND_FLASH]
