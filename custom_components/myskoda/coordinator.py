@@ -8,7 +8,7 @@ from typing import Callable
 
 from aiohttp import ClientError
 from aiohttp.client_exceptions import ClientResponseError
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -121,8 +121,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         config = self.data.config if self.data and self.data.config else Config()
         operations = self.operations
 
-        if not self.myskoda.mqtt and not self._mqtt_connecting:
-            self.hass.async_create_task(self._mqtt_connect())
+        if self.config.state == ConfigEntryState.LOADED:
+            # Make sure we are ready for prime time, connect to MQTT
+            if not self.myskoda.mqtt and not self._mqtt_connecting:
+                self.hass.async_create_task(self._mqtt_connect())
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
 
