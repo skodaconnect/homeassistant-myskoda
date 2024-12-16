@@ -251,8 +251,8 @@
     },
     "issues": {
         "new_tandc": {
-            "title": "Review new Terms and Conditions for MySkoda",
-            "description": "Detected login failure due to missing acceptance of Terms and Conditions.\n\nSkoda may have issued new Terms and Conditions.\n\nPlease log out and back in of the MySkoda app to review them.\nThis integration cannot continue without accepted Terms and Conditions."
+            "title": "Review new consents and T/C for MySkoda",
+            "description": "Detected login failure due to missing acceptance of Terms and Conditions or consents.\n\nSkoda may have issued new Terms and Conditions or requires new consents.\n\nPlease log out and back in of the MySkoda app to review them.\nThis integration cannot continue right now."
         },
         "spin_error": {
             "title": "Incorrect S-PIN detected",
