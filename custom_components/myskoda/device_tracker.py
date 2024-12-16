@@ -100,14 +100,16 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
                         attributes["entity_picture"] = render["exterior_front"]
                         break
         else:
-            _LOGGER.debug("'unmodified_exterior_front' not found, falling back to 'unmodified_exterior_side'.")
+            _LOGGER.debug(
+                "'unmodified_exterior_front' not found, falling back to 'unmodified_exterior_side'."
+            )
             render_list = self.get_composite_renders().get("unmodified_exterior_side")
             if isinstance(render_list, list) and render_list:
                 for render in render_list:
                     if isinstance(render, dict) and "exterior_side" in render:
                         attributes["entity_picture"] = render["exterior_side"]
                         break
-        
+
         return attributes
 
     @property
