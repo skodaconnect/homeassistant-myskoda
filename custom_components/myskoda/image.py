@@ -70,7 +70,11 @@ class MainRenderImage(MySkodaImage):
 
     @property
     def image_url(self) -> str | None:
-        return self.get_renders().get("main")
+        render_list = self.get_composite_renders().get("unmodified_exterior_front")
+        if isinstance(render_list, list) and render_list:
+            for render in render_list:
+                if isinstance(render, dict) and "exterior_front" in render:
+                    return render["exterior_front"]
 
     @property
     def extra_state_attributes(self) -> dict:
