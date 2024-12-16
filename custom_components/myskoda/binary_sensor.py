@@ -1,6 +1,5 @@
 """Binary Sensors for MySkoda."""
 
-import logging
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
@@ -25,8 +24,6 @@ from myskoda.models.status import DoorWindowState, Status
 from .const import COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
-
-_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
