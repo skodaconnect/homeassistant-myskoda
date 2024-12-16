@@ -42,7 +42,31 @@
             },
             "windows_open": {
                 "default": "mdi:car-door"
-            }
+            },
+            "door_open_front_left": {
+                "default": "mdi:car-door"
+            },
+            "door_open_front_right": {
+                "default": "mdi:car-door"
+            },
+            "door_open_rear_left": {
+                "default": "mdi:car-door"
+            },
+            "door_open_rear_right": {
+                "default": "mdi:car-door"
+            },
+            "window_open_front_left": {
+                "default": "mdi:car-door"
+            },
+            "window_open_front_right": {
+                "default": "mdi:car-door"
+            },
+            "window_open_rear_left": {
+                "default": "mdi:car-door"
+            },
+            "window_open_rear_right": {
+                "default": "mdi:car-door"
+            }            
         },
         "climate": {
             "climate": {

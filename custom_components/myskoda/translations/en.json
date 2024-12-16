@@ -88,6 +88,62 @@
                     "off": "Closed",
                     "on": "Open"
                 }
+            },
+            "door_open_front_left": {
+                "name": "Door Open Front Left",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Door Open Front Right",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Door Open Rear Left",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Door Open Rear Right",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Window Open Front Left",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Window Open Front Right",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Window Open Rear Left",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Window Open Rear Right",
+                "state": {
+                    "off": "Closed",
+                    "on": "Open"
+                }
             }
         },
         "climate": {

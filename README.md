@@ -50,6 +50,14 @@ If your desired language is not available, please [open an issue](https://github
 - Trunk Open
 - Bonnet Open
 - Lights On
+- Door Open Front Left
+- Door Open Front Right
+- Door Open Rear Left
+- Door Open Rear Right
+- Window Open Front Left
+- Window Open Front Right
+- Window Open Rear Left
+- Window Open Rear Right
 
 ### Switches
 
@@ -77,6 +85,7 @@ If your desired language is not available, please [open an issue](https://github
 ### Numbers
 
 - Charging Limit
+- Heater Duration
 
 ### Device Tracker
 
