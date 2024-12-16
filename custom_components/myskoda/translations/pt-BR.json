@@ -88,6 +88,62 @@
                     "off": "Fechado",
                     "on": "Aberto"
                 }
+            },
+            "door_open_front_left": {
+                "name": "Porta frontal esquerda: ",
+                "state": {
+                    "off": "Fechada",
+                    "on": "Aberta"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Porta frontal direita: ",
+                "state": {
+                    "off": "Fechada",
+                    "on": "Aberta"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Porta traseira esquerda: ",
+                "state": {
+                    "off": "Fechada",
+                    "on": "Aberta"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Porta traseira direita: ",
+                "state": {
+                    "off": "Fechada",
+                    "on": "Aberta"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Janela frontal esquerda: ",
+                "state": {
+                    "off": "Fechada",
+                    "on": "Aberta"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Janela frontal direita: ",
+                "state": {
+                    "off": "Fechada",
+                    "on": "Aberta"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Janela traseira esquerda:",
+                "state": {
+                    "off": "Fechada",
+                    "on": "Aberta"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Janela traseira direita: ",
+                "state": {
+                    "off": "Fechada",
+                    "on": "Aberta"
+                }
             }
         },
         "climate": {
