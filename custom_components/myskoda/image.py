@@ -1,5 +1,6 @@
 """Images for the MySkoda integration."""
 
+from datetime import datetime as dt
 import httpx
 import logging
 
@@ -138,3 +139,8 @@ class LightStatusImage(StatusImage):
     def image_url(self) -> str | None:
         if status := self.vehicle.status:
             return status.renders.light_mode.three_x
+
+    @property
+    def image_last_updated(self) -> dt | None:
+        if status := self.vehicle.status:
+            return status.car_captured_timestamp
