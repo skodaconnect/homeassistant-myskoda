@@ -251,6 +251,12 @@
             "fuel_level": {
                 "name": "Fuel Level"
             },
+            "gas_level": {
+                "name": "Gas Level"
+            },
+            "gas_range": {
+                "name": "Gas Range"
+            },
             "combustion_range": {
                 "name": "Combustion Range"
             },
