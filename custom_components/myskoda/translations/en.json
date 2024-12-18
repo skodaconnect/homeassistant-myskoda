@@ -251,6 +251,9 @@
             "fuel_level": {
                 "name": "Fuel Level"
             },
+            "adblue_range": {
+                "name": "AdBlue Range"
+            },
             "gas_level": {
                 "name": "Gas Level"
             },
