@@ -44,6 +44,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     add_supported_entities(
         available_entities=[
+            AddBlueRange,
             BatteryPercentage,
             ChargeType,
             ChargingPower,
@@ -227,6 +228,29 @@ class ChargingPower(ChargingSensor):
 
     def forbidden_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING_MQB]
+
+
+class AddBlueRange(MySkodaSensor):
+    """The vehicles's AdBlue range - only for vehicles where its available."""
+
+    entity_description = SensorEntityDescription(
+        key="adblue_range",
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
+        device_class=SensorDeviceClass.DISTANCE,
+        translation_key="adblue_range",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: D102
+        if range := self.vehicle.driving_range:
+            if range.ad_blue_range is not None:
+                return range.ad_blue_range
+
+    def is_supported(self) -> bool:
+        if range := self.vehicle.driving_range:
+            return range.ad_blue_range is not None
+        return False
 
 
 class CombustionRange(MySkodaSensor):
