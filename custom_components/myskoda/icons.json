@@ -42,7 +42,31 @@
             },
             "windows_open": {
                 "default": "mdi:car-door"
-            }
+            },
+            "door_open_front_left": {
+                "default": "mdi:car-door"
+            },
+            "door_open_front_right": {
+                "default": "mdi:car-door"
+            },
+            "door_open_rear_left": {
+                "default": "mdi:car-door"
+            },
+            "door_open_rear_right": {
+                "default": "mdi:car-door"
+            },
+            "window_open_front_left": {
+                "default": "mdi:car-door"
+            },
+            "window_open_front_right": {
+                "default": "mdi:car-door"
+            },
+            "window_open_rear_left": {
+                "default": "mdi:car-door"
+            },
+            "window_open_rear_right": {
+                "default": "mdi:car-door"
+            }            
         },
         "climate": {
             "climate": {
@@ -115,14 +139,23 @@
             "oil_service_in_km": {
                 "default": "mdi:oil"
             },
+            "adblue_range": {
+                "default": "mdi:gauge"
+            },
             "combustion_range": {
                 "default": "mdi:gas-station"
             },
             "electric_range": {
                 "default": "mdi:ev-station"
             },
+            "gas_range": {
+                "default": "mdi:gas-station"
+            },
             "fuel_level": {
                 "default": "mdi:fuel"
+            },
+            "gas_level": {
+                "default": "mdi:gauge"
             },
             "remaining_charging_time": {
                 "default": "mdi:timer"

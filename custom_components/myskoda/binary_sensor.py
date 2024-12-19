@@ -19,7 +19,7 @@ from myskoda.models.common import (
     ChargerLockedState,
 )
 from myskoda.models.info import CapabilityId
-from myskoda.models.status import Status
+from myskoda.models.status import DoorWindowState, Status
 
 from .const import COORDINATORS, DOMAIN
 from .entity import MySkodaEntity
@@ -45,6 +45,14 @@ async def async_setup_entry(
             ChargerConnected,
             ChargerLocked,
             SunroofOpen,
+            DoorOpenFrontLeft,
+            DoorOpenFrontRight,
+            DoorOpenRearLeft,
+            DoorOpenRearRight,
+            WindowOpenFrontLeft,
+            WindowOpenFrontRight,
+            WindowOpenRearLeft,
+            WindowOpenRearRight,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -235,3 +243,153 @@ class ParkingLightsOn(StatusBinarySensor):
     def is_on(self) -> bool | None:  # noqa: D102
         if status := self._status():
             return status.overall.lights == OnOffState.ON
+
+
+class DoorOpenFrontLeft(StatusBinarySensor):
+    """Left front door status."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="door_open_front_left",
+        device_class=BinarySensorDeviceClass.DOOR,
+        translation_key="door_open_front_left",
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if status := self._status():
+            return status.left_front_door in {
+                DoorWindowState.DOOR_OPEN,
+                DoorWindowState.ALL_OPEN,
+            }
+
+
+class DoorOpenFrontRight(StatusBinarySensor):
+    """Right front door status."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="door_open_front_right",
+        device_class=BinarySensorDeviceClass.DOOR,
+        translation_key="door_open_front_right",
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if status := self._status():
+            return status.right_front_door in {
+                DoorWindowState.DOOR_OPEN,
+                DoorWindowState.ALL_OPEN,
+            }
+
+
+class DoorOpenRearLeft(StatusBinarySensor):
+    """Left rear door status."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="door_open_rear_left",
+        device_class=BinarySensorDeviceClass.DOOR,
+        translation_key="door_open_rear_left",
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if status := self._status():
+            return status.left_back_door in {
+                DoorWindowState.DOOR_OPEN,
+                DoorWindowState.ALL_OPEN,
+            }
+
+
+class DoorOpenRearRight(StatusBinarySensor):
+    """Right rear door status."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="door_open_rear_right",
+        device_class=BinarySensorDeviceClass.DOOR,
+        translation_key="door_open_rear_right",
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if status := self._status():
+            return status.right_back_door in {
+                DoorWindowState.DOOR_OPEN,
+                DoorWindowState.ALL_OPEN,
+            }
+
+
+class WindowOpenFrontLeft(StatusBinarySensor):
+    """Left front window status."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="window_open_front_left",
+        device_class=BinarySensorDeviceClass.WINDOW,
+        translation_key="window_open_front_left",
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if status := self._status():
+            return status.left_front_door in {
+                DoorWindowState.WINDOW_OPEN,
+                DoorWindowState.ALL_OPEN,
+            }
+
+
+class WindowOpenFrontRight(StatusBinarySensor):
+    """Right front window status."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="window_open_front_right",
+        device_class=BinarySensorDeviceClass.WINDOW,
+        translation_key="window_open_front_right",
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if status := self._status():
+            if status.right_front_door == DoorWindowState.UNKNOWN:
+                return None
+            return status.right_front_door in {
+                DoorWindowState.WINDOW_OPEN,
+                DoorWindowState.ALL_OPEN,
+            }
+
+
+class WindowOpenRearLeft(StatusBinarySensor):
+    """Left rear window status."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="window_open_rear_left",
+        device_class=BinarySensorDeviceClass.WINDOW,
+        translation_key="window_open_rear_left",
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if status := self._status():
+            if status.left_back_door == DoorWindowState.UNKNOWN:
+                return None
+            return status.left_back_door in {
+                DoorWindowState.WINDOW_OPEN,
+                DoorWindowState.ALL_OPEN,
+            }
+
+
+class WindowOpenRearRight(StatusBinarySensor):
+    """Right rear door status."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="window_open_rear_right",
+        device_class=BinarySensorDeviceClass.WINDOW,
+        translation_key="window_open_rear_right",
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if status := self._status():
+            if status.right_back_door == DoorWindowState.UNKNOWN:
+                return None
+            return status.right_back_door in {
+                DoorWindowState.WINDOW_OPEN,
+                DoorWindowState.ALL_OPEN,
+            }
