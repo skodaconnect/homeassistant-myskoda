@@ -165,6 +165,9 @@
             }
         },
         "image": {
+	    "render_light_3x": {
+		"name": "Light Status Render of Vehicle"
+	    },
             "render_vehicle_main": {
                 "name": "Main Render of Vehicle"
             }
