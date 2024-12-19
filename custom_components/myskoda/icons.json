@@ -148,8 +148,14 @@
             "electric_range": {
                 "default": "mdi:ev-station"
             },
+            "gas_range": {
+                "default": "mdi:gas-station"
+            },
             "fuel_level": {
                 "default": "mdi:fuel"
+            },
+            "gas_level": {
+                "default": "mdi:gauge"
             },
             "remaining_charging_time": {
                 "default": "mdi:timer"

@@ -267,11 +267,18 @@ class CombustionRange(MySkodaSensor):
     @property
     def native_value(self) -> int | None:  # noqa: D102
         if range := self.vehicle.driving_range:
-            if range.primary_engine_range is not None:
-                return range.primary_engine_range.remaining_range_in_km
+            if primary := range.primary_engine_range:
+                if primary.engine_type in [EngineType.GASOLINE, EngineType.DIESEL]:
+                    return primary.remaining_range_in_km
+            if secondary := range.secondary_engine_range:
+                if secondary.engine_type in [EngineType.GASOLINE, EngineType.DIESEL]:
+                    return secondary.remaining_range_in_km
 
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.STATE, CapabilityId.FUEL_STATUS, CapabilityId.CHARGING_MQB]
+    def is_supported(self) -> bool:
+        if self.has_all_capabilities([CapabilityId.STATE, CapabilityId.FUEL_STATUS]):
+            if range := self.vehicle.driving_range:
+                return range.car_type == EngineType.HYBRID
+        return False
 
 
 class ElectricRange(MySkodaSensor):
@@ -295,6 +302,60 @@ class ElectricRange(MySkodaSensor):
         return [CapabilityId.STATE, CapabilityId.FUEL_STATUS, CapabilityId.CHARGING_MQB]
 
 
+class GasRange(MySkodaSensor):
+    """The vehicle's gas range - only for hybrid CNG vehicles."""
+
+    entity_description = SensorEntityDescription(
+        key="gas_range",
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
+        device_class=SensorDeviceClass.DISTANCE,
+        translation_key="gas_range",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: D102
+        if range := self.vehicle.driving_range:
+            if range.primary_engine_range is not None:
+                return range.primary_engine_range.remaining_range_in_km
+
+    def is_supported(self) -> bool:
+        if self.has_all_capabilities([CapabilityId.STATE, CapabilityId.FUEL_STATUS]):
+            if range := self.vehicle.driving_range:
+                return (
+                    range.car_type == EngineType.HYBRID
+                    and (primary_engine_range := range.primary_engine_range)
+                    and primary_engine_range.engine_type == EngineType.CNG
+                )
+        return False
+
+
+class GasLevel(MySkodaSensor):
+    """The vehicle's gas level - only for hybrid CNG vehicles."""
+
+    entity_description = SensorEntityDescription(
+        key="gas_level",
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=PERCENTAGE,
+        translation_key="gas_level",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: D102
+        if range := self.vehicle.driving_range:
+            return range.primary_engine_range.current_fuel_level_in_percent
+
+    def is_supported(self) -> bool:
+        if self.has_all_capabilities([CapabilityId.STATE, CapabilityId.FUEL_STATUS]):
+            if range := self.vehicle.driving_range:
+                return (
+                    range.car_type == EngineType.HYBRID
+                    and (primary_engine_range := range.primary_engine_range)
+                    and primary_engine_range.engine_type == EngineType.CNG
+                )
+        return False
+
+
 class FuelLevel(MySkodaSensor):
     """The vehicle's combustion engine fuel level - only for non electric vehicles."""
 
@@ -308,7 +369,12 @@ class FuelLevel(MySkodaSensor):
     @property
     def native_value(self) -> int | None:  # noqa: D102
         if range := self.vehicle.driving_range:
-            return range.primary_engine_range.current_fuel_level_in_percent
+            if primary := range.primary_engine_range:
+                if primary.engine_type in [EngineType.GASOLINE, EngineType.DIESEL]:
+                    return primary.current_fuel_level_in_percent
+            if secondary := range.secondary_engine_range:
+                if secondary.engine_type in [EngineType.GASOLINE, EngineType.DIESEL]:
+                    return secondary.current_fuel_level_in_percent
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE, CapabilityId.FUEL_STATUS]
