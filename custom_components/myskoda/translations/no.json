@@ -251,6 +251,9 @@
             "fuel_level": {
                 "name": "Drivstoffnivå"
             },
+            "adblue_range": {
+                "name": "AdBlue-rekkevidde"
+            },
             "combustion_range": {
                 "name": "Drivstoff rekkevidde"
             },
