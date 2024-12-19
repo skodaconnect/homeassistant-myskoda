@@ -251,6 +251,9 @@
             "fuel_level": {
                 "name": "Nível de combustível"
             },
+            "adblue_range": {
+                "name": "Alcance AdBlue"
+            },
             "combustion_range": {
                 "name": "Alcance de combustão"
             },
