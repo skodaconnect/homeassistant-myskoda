@@ -1,6 +1,5 @@
 """Images for the MySkoda integration."""
 
-from datetime import datetime as dt
 import httpx
 import logging
 
@@ -13,7 +12,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     EntityCategory,
 )
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 
@@ -68,8 +67,6 @@ class MySkodaImage(MySkodaEntity, ImageEntity):
 class StatusImage(MySkodaImage):
     """A render of the current status of the vehicle."""
 
-    _attr_should_poll: bool = True
-
     async def _fetch_url(self, url: str) -> httpx.Response | None:
         """Fetch a URL passing in the MySkoda access token."""
 
@@ -95,6 +92,17 @@ class StatusImage(MySkodaImage):
             )
             return None
         return response
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        if status := self.vehicle.status:
+            if status.car_captured_timestamp != self._attr_image_last_updated:
+                _LOGGER.debug("Image updated. Flushing caches.")
+
+                self._cached_image = None
+                self._attr_image_last_updated = status.car_captured_timestamp
+        super()._handle_coordinator_update()
 
 
 class MainRenderImage(MySkodaImage):
@@ -139,8 +147,3 @@ class LightStatusImage(StatusImage):
     def image_url(self) -> str | None:
         if status := self.vehicle.status:
             return status.renders.light_mode.three_x
-
-    @property
-    def image_last_updated(self) -> dt | None:
-        if status := self.vehicle.status:
-            return status.car_captured_timestamp
