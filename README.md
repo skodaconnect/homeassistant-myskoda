@@ -102,6 +102,11 @@ So:
 
 The requests will silently be ignored by HomeAssistant, so make sure you wait at least 30s before sending another request
 
+## New Vehicles
+
+If you become the owner of an additional vehicle and that gets added to the same MySkoda account: Congrats!
+In order for the integration to discover this new vehicle, you will need to reload the integration or restart HomeAssistant
+
 ## Installation
 You can manually install this integration as an custom_component under Home Assistant or install it using HACS (Home Assistant Community Store).
 
