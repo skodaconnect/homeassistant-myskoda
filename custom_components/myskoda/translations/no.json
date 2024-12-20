@@ -165,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Lysstatus i visning av kjøretøyet"
+            },
             "render_vehicle_main": {
                 "name": "Hovedvisning av kjøretøyet"
             }
@@ -253,6 +256,12 @@
             },
             "adblue_range": {
                 "name": "AdBlue-rekkevidde"
+            },
+            "gas_level": {
+                "name": "Drivstoffnivå"
+            },
+            "gas_range": {
+                "name": "Drivstoffrekkevidde"
             },
             "combustion_range": {
                 "name": "Drivstoff rekkevidde"
