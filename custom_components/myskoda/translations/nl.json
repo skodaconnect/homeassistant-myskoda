@@ -165,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Voertuigstatus"
+            },
             "render_vehicle_main": {
                 "name": "Hoofdafbeelding"
             }
@@ -250,6 +253,15 @@
             },
             "fuel_level": {
                 "name": "Brandstof niveau"
+            },
+            "adblue_range": {
+                "name": "AdBlue bereik"
+            },
+            "gas_level": {
+                "name": "Gas Niveau"
+            },
+            "gas_range": {
+                "name": "Gas Bereik"
             },
             "combustion_range": {
                 "name": "Bereik motor"

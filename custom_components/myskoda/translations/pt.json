@@ -165,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Renderização do estado da luz do veículo"
+            },
             "render_vehicle_main": {
                 "name": "Renderização principal do veículo"
             }
@@ -253,6 +256,12 @@
             },
             "adblue_range": {
                 "name": "Alcance AdBlue"
+            },
+            "gas_level": {
+                "name": "Nível do gás"
+            },
+            "gas_range": {
+                "name": "Alcance do gás"
             },
             "combustion_range": {
                 "name": "Alcance de combustão"
