@@ -165,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Ljusstatus för fordonet"
+            },
             "render_vehicle_main": {
                 "name": "Huvudrendering av fordon"
             }
@@ -253,6 +256,12 @@
             },
             "adblue_range": {
                 "name": "AdBlue räckvidd"
+            },
+            "gas_level": {
+                "name": "Bränsle nivå"
+            },
+            "gas_range": {
+                "name": "Bränsle räckvidd"
             },
             "combustion_range": {
                 "name": "Räckvidd förbränningsbränsle"
