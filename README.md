@@ -89,7 +89,15 @@ If your desired language is not available, please [open an issue](https://github
 
 ### Device Tracker
 
-Location of vehicles are exposed as device trackers.
+Location of vehicles are exposed as device trackers. While the vehicle is moving the Skoda API does not return GPS coordinates and the device tracker will report the location `vehicle_in_motion`.
+
+If you need a binary sensor to report if the vehicle is in motion this can be achieve using a template binary sensor for e.g.
+
+```
+{% if states('device_tracker.skoda_enyaq_position') == 'vehicle_in_motion' %}
+True
+{% endif %}
+```
 
 ## Sending updates
 
