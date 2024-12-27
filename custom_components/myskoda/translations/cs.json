@@ -165,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Znázornění stavu světel vozidla"
+            },
             "render_vehicle_main": {
                 "name": "Hlavní vykreslení vozidla"
             }
@@ -253,6 +256,12 @@
             },
             "adblue_range": {
                 "name": "Dojezd na AdBlue"
+            },
+            "gas_level": {
+                "name": "Hladina plynu"
+            },
+            "gas_range": {
+                "name": "Dojezd na plyn"
             },
             "combustion_range": {
                 "name": "Dojezd"
