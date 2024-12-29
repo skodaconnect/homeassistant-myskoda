@@ -88,6 +88,62 @@
                     "off": "Zaprto",
                     "on": "Odprto"
                 }
+            },
+            "door_open_front_left": {
+                "name": "Vrata spredaj levo",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Vrata spredaj desno",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Vrata zadaj levo",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Vrata zadaj desno",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Okno spredaj levo",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Okno spredaj desno",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Okno zadaj levo",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Okno zadaj desno",
+                "state": {
+                    "off": "Zaprto",
+                    "on": "Odprto"
+                }
             }
         },
         "climate": {
@@ -109,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Slika vozila – svetila"
+            },
             "render_vehicle_main": {
                 "name": "Slika vozila – glavna"
             }
@@ -178,7 +237,13 @@
                 "name": "Preostali čas polnjenja"
             },
             "operation": {
-                "name": "Zadnja dejavnost"
+                "name": "Zadnja dejavnost",
+                "state": {
+                    "in_progress": "V teku",
+                    "completed_success": "Uspešno končano",
+                    "completed_warning": "Končano z opozorilom",
+                    "error": "Napaka"
+                }
             },
             "software_version": {
                 "name": "Različica programske opreme"
@@ -189,11 +254,23 @@
             "fuel_level": {
                 "name": "Gorivo"
             },
+            "adblue_range": {
+                "name": "Doseg AdBlue"
+            },
+            "gas_level": {
+                "name": "Plin"
+            },
+            "gas_range": {
+                "name": "Doseg plin"
+            },
             "combustion_range": {
                 "name": "Skupni doseg"
             },
             "electric_range": {
                 "name": "Doseg z elektriko"
+            },
+            "outside_temperature": {
+                "name": "Zunanja temperatura"
             }
         },
         "switch": {
@@ -236,7 +313,7 @@
                 "name": "Utripanje"
             },
             "generate_fixtures": {
-                "name": ""
+                "name": "Ustvari testne podatke"
             }
         }
     },
