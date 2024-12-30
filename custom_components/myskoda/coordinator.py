@@ -120,6 +120,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_departure_info = self._debounce(self._update_departure_info)
         self._mqtt_connecting: bool = False
 
+    async def _async_get_minimal_data(self) -> Vehicle:
+        """Internal method that fetches only basic vehicle info."""
+        return await self.myskoda.get_partial_vehicle(self.vin, [])
+
     async def _async_get_vehicle_data(self) -> Vehicle:
         """Internal method that fetches vehicle data."""
         if self.data:
@@ -157,7 +161,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             _LOGGER.debug("Performing initial data fetch for vin %s", self.vin)
             try:
                 user = await self.myskoda.get_user()
-                vehicle = await self._async_get_vehicle_data()
+                vehicle = await self._async_get_minimal_data()
             except ClientResponseError as err:
                 handle_aiohttp_error(
                     "setup user and vehicle", err, self.hass, self.config
@@ -166,6 +170,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
             def _async_finish_startup(self) -> None:
                 """Tasks to execute when we have finished starting up."""
+                _LOGGER.debug(
+                    "MySkoda has finished starting up. Scheduling post-start tasks."
+                )
                 if not self.myskoda.mqtt and not self._mqtt_connecting:
                     self.hass.async_create_task(self._mqtt_connect())
 
