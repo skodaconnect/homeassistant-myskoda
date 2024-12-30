@@ -116,6 +116,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_auxiliary_heating = self._debounce(self._update_auxiliary_heating)
         self.update_vehicle = self._debounce(self._update_vehicle)
         self.update_positions = self._debounce(self._update_positions)
+        self.update_departure_info = self._debounce(self._update_departure_info)
         self._mqtt_connecting: bool = False
 
     async def _async_update_data(self) -> State:
@@ -240,6 +241,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.UNLOCK,
         ]:
             await self.update_status(immediate=True)
+        if event.operation.operation in [
+            OperationName.UPDATE_DEPARTURE_TIMERS,
+        ]:
+            await self.update_departure_info()
 
     async def _on_charging_event(self, event: EventCharging):
         vehicle = self.data.vehicle
@@ -372,6 +377,22 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         if status:
             vehicle = self.data.vehicle
             vehicle.status = status
+            self.set_updated_vehicle(vehicle)
+
+    async def _update_departure_info(self) -> None:
+        departure_info = None
+
+        _LOGGER.debug("Updating departure info for %s", self.vin)
+        try:
+            departure_info = await self.myskoda.get_departure_timers(self.vin)
+        except ClientResponseError as err:
+            handle_aiohttp_error("departure info", err, self.hass, self.config)
+        except ClientError as err:
+            raise UpdateFailed("Error getting update from MySkoda API: %s", err)
+
+        if departure_info:
+            vehicle = self.data.vehicle
+            vehicle.departure_info = departure_info
             self.set_updated_vehicle(vehicle)
 
     async def _update_vehicle(self) -> None:

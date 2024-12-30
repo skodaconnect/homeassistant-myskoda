@@ -233,6 +233,24 @@
                 "state": {
                     "on": "mdi:toggle-switch"
                 }
+            },
+            "departure_timer_1": {
+                "default": "mdi:timer-cancel",
+                "state": {
+                    "on": "mdi:timer-check"
+                }
+            },
+            "departure_timer_2": {
+                "default": "mdi:timer-cancel",
+                "state": {
+                    "on": "mdi:timer-check"
+                }
+            },
+            "departure_timer_3": {
+                "default": "mdi:timer-cancel",
+                "state": {
+                    "on": "mdi:timer-check"
+                }
             }
         },
         "button": {
