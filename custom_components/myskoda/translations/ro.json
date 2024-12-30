@@ -1,0 +1,351 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Dispozitivul este deja configurat"
+        },
+        "error": {
+            "cannot_connect": "Nu s-a putut conecta",
+            "invalid_auth": "Autentificare invalidă",
+            "unknown": "A apărut o eroare neașteptată. Vă rugăm să verificați fișierele jurnal HomeAssistant."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "E-mail",
+                    "password": "Parolă"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "bonnet_open": {
+                "name": "Capotă",
+                "state": {
+                    "off": "Închisă",
+                    "on": "Deschisă"
+                }
+            },
+            "charger_connected": {
+                "name": "Încărcător conectat",
+                "state": {
+                    "off": "Deconectat",
+                    "on": "Conectat"
+                }
+            },
+            "charger_locked": {
+                "name": "Încărcător încuiat",
+                "state": {
+                    "off": "Blocat",
+                    "on": "Deblocat"
+                }
+            },
+            "doors_locked": {
+                "name": "Uși blocate",
+                "state": {
+                    "off": "Blocate",
+                    "on": "Deblocate"
+                }
+            },
+            "doors_open": {
+                "name": "Uși deschise",
+                "state": {
+                    "off": "Închise",
+                    "on": "Deschise"
+                }
+            },
+            "locked": {
+                "name": "Vehicul încuiat",
+                "state": {
+                    "off": "Încuiat",
+                    "on": "Descuiat"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Lumini de parcare",
+                "state": {
+                    "off": "Oprite",
+                    "on": "Pornite"
+                }
+            },
+            "sunroof_open": {
+                "name": "Trapă",
+                "state": {
+                    "off": "Închisă",
+                    "on": "Deschisă"
+                }
+            },
+            "trunk_open": {
+                "name": "Portbagaj",
+                "state": {
+                    "off": "Închis",
+                    "on": "Deschis"
+                }
+            },
+            "windows_open": {
+                "name": "Geamuri",
+                "state": {
+                    "off": "Închise",
+                    "on": "Deschise"
+                }
+            },
+            "door_open_front_left": {
+                "name": "Ușă deschisă stânga față",
+                "state": {
+                    "off": "Închisă",
+                    "on": "Deschisă"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Ușă deschisă dreapta față",
+                "state": {
+                    "off": "Închisă",
+                    "on": "Deschisă"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Ușă deschisă stânga spate",
+                "state": {
+                    "off": "Închisă",
+                    "on": "Deschisă"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Ușă deschisă dreapta spate",
+                "state": {
+                    "off": "Închisă",
+                    "on": "Deschisă"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Geam deschis stânga față",
+                "state": {
+                    "off": "Închis",
+                    "on": "Deschis"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Geam deschis dreapta față",
+                "state": {
+                    "off": "Închis",
+                    "on": "Deschis"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Geam deschis stânga spate",
+                "state": {
+                    "off": "Închis",
+                    "on": "Deschis"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Geam deschis dreapta spate",
+                "state": {
+                    "off": "Închis",
+                    "on": "Deschis"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Aer condiționat"
+            },
+            "auxiliary_heater": {
+                "name": "Încălzitor auxiliar"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Poziție",
+                "state": {
+                    "home": "Acasă",
+                    "not_home": "Plecat",
+                    "vehicle_in_motion": "Vehicul în mișcare"
+                }
+            }
+        },
+        "image": {
+            "render_light_3x": {
+                "name": "Stare lumină vehicul"
+            },
+            "render_vehicle_main": {
+                "name": "Redare principală a vehiculului"
+            }
+        },
+        "lock": {
+            "door_lock": {
+                "name": "Blocare ușă"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Limită încărcare"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Durată încălzitor auxiliar"
+            }
+        },
+        "sensor": {
+            "battery_percentage": {
+                "name": "Procent baterie"
+            },
+            "car_captured": {
+                "name": "Ultima actualizare"
+            },
+            "charge_type": {
+                "name": "Tip încărcare",
+                "state": {
+                    "ac": "AC",
+                    "dc": "DC",
+                    "off": "OPRIT"
+                }
+            },
+            "charging_power": {
+                "name": "Putere de încărcare"
+            },
+            "charging_rate": {
+                "name": "Rată de încărcare"
+            },
+            "charging_state": {
+                "name": "Stare încărcare",
+                "state": {
+                    "charging": "Încărcare",
+                    "connect_cable": "Fără putere",
+                    "conserving": "Conservare energie",
+                    "ready_for_charging": "Pregătit pentru încărcare"
+                }
+            },
+            "inspection": {
+                "name": "Următoarea inspecție"
+            },
+            "inspection_in_km": {
+                "name": "Următoarea inspecție în km"
+            },
+            "mileage": {
+                "name": "Kilometraj"
+            },
+            "oil_service_in_days": {
+                "name": "Revizie ulei"
+            },
+            "oil_service_in_km": {
+                "name": "Revizie ulei în km"
+            },
+            "range": {
+                "name": "Autonomie"
+            },
+            "remaining_charging_time": {
+                "name": "Timp rămas pentru încărcare"
+            },
+            "operation": {
+                "name": "Ultima operație",
+                "state": {
+                    "in_progress": "În desfășurare",
+                    "completed_success": "Finalizat cu succes",
+                    "completed_warning": "Finalizat cu avertisment",
+                    "error": "Eroare"
+                }
+            },
+            "software_version": {
+                "name": "Versiune software"
+            },
+            "target_battery_percentage": {
+                "name": "Procent baterie la finalul încărcării"
+            },
+            "fuel_level": {
+                "name": "Nivel combustibil"
+            },
+            "adblue_range": {
+                "name": "Autonomie AdBlue"
+            },
+            "gas_level": {
+                "name": "Nivel gaz"
+            },
+            "gas_range": {
+                "name": "Autonomie gaz"
+            },
+            "combustion_range": {
+                "name": "Autonomie combustie"
+            },
+            "electric_range": {
+                "name": "Autonomie electrică"
+            },
+            "outside_temperature": {
+                "name": "Temperatură exterioară"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "name": "Mod îngrijire baterie"
+            },
+            "charging": {
+                "name": "Încărcare"
+            },
+            "charging_switch": {
+                "name": "Încărcare"
+            },
+            "reduced_current": {
+                "name": "Curent redus"
+            },
+            "window_heating": {
+                "name": "Încălzire geam"
+            },
+            "ac_at_unlock": {
+                "name": "AC la deblocare"
+            },
+            "ac_without_external_power": {
+                "name": "AC fără alimentare externă"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Încălzire scaun stânga cu AC"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Încălzire scaun dreapta cu AC"
+            },
+            "ac_window_heating": {
+                "name": "Încălzire geam cu AC"
+            }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Claxon și lumini"
+            },
+            "flash": {
+                "name": "Lumini"
+            },
+            "generate_fixtures": {
+                "name": "Generare dispozitive"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "Revizuire noi consimțăminte pentru MySkoda",
+            "description": "S-a detectat o eroare de autentificare din cauza lipsei acceptării termenilor și condițiilor sau consimțămintelor.\n\nSkoda ar putea să fi emis termeni și condiții noi sau să solicite consimțăminte noi.\n\nVă rugăm să vă deconectați și să vă reconectați în aplicația MySkoda pentru a le revizui.\nAceastă integrare nu poate continua momentan."
+        },
+        "spin_error": {
+            "title": "S-PIN incorect detectat",
+            "description": "Am primit o eroare care indică faptul că S-PIN-ul este incorect.\n\nVă rugăm să introduceți S-PIN-ul corect în setările integrării."
+        }
+    },
+    "options": {
+        "error": {
+            "invalid_polling_interval": "Interval de interogare specificat invalid. Vă rugăm să alegeți între 1 și 1440 de minute",
+            "invalid_spin_format": "Format invalid pentru S-PIN"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "Urmărirea răspunsului API. Necesită activarea jurnalizării de depanare în configuration.yaml.",
+                    "poll_interval_in_minutes": "Interval de interogare în minute când mașina este inactivă.",
+                    "s-pin": "PIN de securitate",
+                    "readonly": "Mod doar pentru citire"
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Specificați un interval de interogare între 1 și 1440 de minute. (implicit 30)",
+                    "s-pin": "Specificați PIN-ul de securitate. AVERTISMENT: Acest lucru activează blocarea/deblocarea de la distanță",
+                    "readonly": "Nu puteți face modificări la mașină, doar citiți datele"
+                }
+            }
+        }
+    }
+}

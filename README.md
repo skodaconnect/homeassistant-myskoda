@@ -70,6 +70,7 @@ If your desired language is not available, please [open an issue](https://github
 - Left Seat Heating with AC
 - Right Seat Heating with AC
 - Window Heating with AC
+- Departure Timer 1,2 & 3 (timer configuration is stored inside custom attributes)
 
 
 ### Buttons
