@@ -88,6 +88,62 @@
                     "off": "Zamknięte",
                     "on": "Otwarte"
                 }
+            },
+            "door_open_front_left": {
+                "name": "Drzwi przednie lewe",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Drzwi przednie prawe",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Drzwi tylne lewe",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Drzwi tylne prawe",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Okno przednie lewe",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Okno przednie prawe",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Okno tylne lewe",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Okno tylne prawe",
+                "state": {
+                    "off": "Zamknięte",
+                    "on": "Otwarte"
+                }
             }
         },
         "climate": {
@@ -109,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Render statusu świateł pojazdu"
+            },
             "render_vehicle_main": {
                 "name": "Render pojazdu"
             }
@@ -194,6 +253,15 @@
             },
             "fuel_level": {
                 "name": "Poziom paliwa"
+            },
+            "adblue_range": {
+                "name": "Zasięg AdBlue"
+            },
+            "gas_level": {
+                "name": "Poziom gazu"
+            },
+            "gas_range": {
+                "name": "Zasięg (gaz)"
             },
             "combustion_range": {
                 "name": "Zasięg (paliwo)"

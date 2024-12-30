@@ -88,6 +88,62 @@
                     "off": "Stängda",
                     "on": "Öppna"
                 }
+            },
+            "door_open_front_left": {
+                "name": "Dörr öppen vänster fram",
+                "state": {
+                    "off": "Stängd",
+                    "on": "Öppen"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Dörr öppen höger fram",
+                "state": {
+                    "off": "Stängd",
+                    "on": "Öppen"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Dörr öppen vänster bak",
+                "state": {
+                    "off": "Stängd",
+                    "on": "Öppen"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Dörr öppen höger bak",
+                "state": {
+                    "off": "Stängd",
+                    "on": "Öppen"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Fönster öppen vänster fram",
+                "state": {
+                    "off": "Stängd",
+                    "on": "Öppen"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Fönster öppen höger fram",
+                "state": {
+                    "off": "Stängd",
+                    "on": "Öppen"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Fönster öppen vänster bak",
+                "state": {
+                    "off": "Stängd",
+                    "on": "Öppen"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Fönster öppen höger bak",
+                "state": {
+                    "off": "Stängd",
+                    "on": "Öppen"
+                }
             }
         },
         "climate": {
@@ -109,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Ljusstatus för fordonet"
+            },
             "render_vehicle_main": {
                 "name": "Huvudrendering av fordon"
             }
@@ -194,6 +253,15 @@
             },
             "fuel_level": {
                 "name": "Bränslenivå"
+            },
+            "adblue_range": {
+                "name": "AdBlue räckvidd"
+            },
+            "gas_level": {
+                "name": "Bränsle nivå"
+            },
+            "gas_range": {
+                "name": "Bränsle räckvidd"
             },
             "combustion_range": {
                 "name": "Räckvidd förbränningsbränsle"

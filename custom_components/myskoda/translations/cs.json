@@ -88,6 +88,62 @@
                     "off": "Zavřeno",
                     "on": "Otevřeno"
                 }
+            },
+            "door_open_front_left": {
+                "name": "Levé přední dveře otevřeny",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Pravé přední dveře otevřeny",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Levé zadní dveře otevřeny",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Pravé zadní dveře otevřeny",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Levé přední okno otevřeno",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Pravé přední okno otevřeno",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Levé zadní okno otevřeno",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Pravé zadní okno otevřeno",
+                "state": {
+                    "off": "Zavřeno",
+                    "on": "Otevřeno"
+                }
             }
         },
         "climate": {
@@ -109,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Znázornění stavu světel vozidla"
+            },
             "render_vehicle_main": {
                 "name": "Hlavní vykreslení vozidla"
             }
@@ -194,6 +253,15 @@
             },
             "fuel_level": {
                 "name": "Hladina paliva"
+            },
+            "adblue_range": {
+                "name": "Dojezd na AdBlue"
+            },
+            "gas_level": {
+                "name": "Hladina plynu"
+            },
+            "gas_range": {
+                "name": "Dojezd na plyn"
             },
             "combustion_range": {
                 "name": "Dojezd"

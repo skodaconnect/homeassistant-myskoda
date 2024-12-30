@@ -88,6 +88,62 @@
                     "off": "Закрыты",
                     "on": "Открыты"
                 }
+            },
+            "door_open_front_left": {
+                "name": "Дверь передняя левая",
+                "state": {
+                    "off": "Закрыта",
+                    "on": "Открыта"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Дверь передняя правая",
+                "state": {
+                    "off": "Закрыта",
+                    "on": "Открыта"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Дверь задняя левая",
+                "state": {
+                    "off": "Закрыта",
+                    "on": "Открыта"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Дверь задняя правая",
+                "state": {
+                    "off": "Закрыта",
+                    "on": "Открыта"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Окно переднее левое",
+                "state": {
+                    "off": "Закрыто",
+                    "on": "Открыто"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Окно переднее правое",
+                "state": {
+                    "off": "Закрыто",
+                    "on": "Открыто"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Окно заднее левое",
+                "state": {
+                    "off": "Закрыто",
+                    "on": "Открыто"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Окно заднее правое",
+                "state": {
+                    "off": "Закрыто",
+                    "on": "Открыто"
+                }
             }
         },
         "climate": {
@@ -109,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Изображение статуса автомобиля светлое"
+            },
             "render_vehicle_main": {
                 "name": "Основное изображение автомобиля"
             }
@@ -194,6 +253,15 @@
             },
             "fuel_level": {
                 "name": "Уровень топлива"
+            },
+            "adblue_range": {
+                "name": "Запас AdBlue"
+            },
+            "gas_level": {
+                "name": "Уровень газ"
+            },
+            "gas_range": {
+                "name": "Запас газ"
             },
             "combustion_range": {
                 "name": "Запас хода"

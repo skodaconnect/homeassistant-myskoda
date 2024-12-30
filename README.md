@@ -50,6 +50,14 @@ If your desired language is not available, please [open an issue](https://github
 - Trunk Open
 - Bonnet Open
 - Lights On
+- Door Open Front Left
+- Door Open Front Right
+- Door Open Rear Left
+- Door Open Rear Right
+- Window Open Front Left
+- Window Open Front Right
+- Window Open Rear Left
+- Window Open Rear Right
 
 ### Switches
 
@@ -77,10 +85,19 @@ If your desired language is not available, please [open an issue](https://github
 ### Numbers
 
 - Charging Limit
+- Heater Duration
 
 ### Device Tracker
 
-Location of vehicles are exposed as device trackers.
+Location of vehicles are exposed as device trackers. While the vehicle is moving the Skoda API does not return GPS coordinates and the device tracker will report the location `vehicle_in_motion`.
+
+If you need a binary sensor to report if the vehicle is in motion this can be achieve using a template binary sensor for e.g.
+
+```
+{% if states('device_tracker.skoda_enyaq_position') == 'vehicle_in_motion' %}
+True
+{% endif %}
+```
 
 ## Sending updates
 
@@ -92,6 +109,11 @@ So:
 - If you change the seat-heating to on, you cannot turn it back off again for 30s
 
 The requests will silently be ignored by HomeAssistant, so make sure you wait at least 30s before sending another request
+
+## New Vehicles
+
+If you become the owner of an additional vehicle and that gets added to the same MySkoda account: Congrats!
+In order for the integration to discover this new vehicle, you will need to reload the integration or restart HomeAssistant
 
 ## Installation
 You can manually install this integration as an custom_component under Home Assistant or install it using HACS (Home Assistant Community Store).

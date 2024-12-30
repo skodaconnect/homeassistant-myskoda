@@ -17,7 +17,11 @@ from myskoda import (
     AuthorizationFailedError,
 )
 from myskoda.myskoda import TRACE_CONFIG
-from myskoda.auth.authorization import CSRFError, TermsAndConditionsError
+from myskoda.auth.authorization import (
+    CSRFError,
+    TermsAndConditionsError,
+    MarketingConsentError,
+)
 
 
 from .const import COORDINATORS, DOMAIN
@@ -61,9 +65,9 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
     except AuthorizationFailedError as exc:
         _LOGGER.debug("Authorization with MySkoda failed.")
         raise ConfigEntryAuthFailed from exc
-    except TermsAndConditionsError as exc:
+    except (TermsAndConditionsError, MarketingConsentError) as exc:
         _LOGGER.error(
-            "New terms and conditions detected while logging in. Please log into the MySkoda app (may require a logout first) to access the new Terms and Conditions. This HomeAssistant integration currently can not continue."
+            "Change to terms and conditions or consents detected while logging in. Please log into the MySkoda app (may require a logout first) to access the new Terms and Conditions. This HomeAssistant integration currently can not continue."
         )
         async_create_tnc_issue(hass, config.entry_id)
         raise ConfigEntryNotReady from exc

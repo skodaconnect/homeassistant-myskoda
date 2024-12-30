@@ -88,6 +88,62 @@
                     "off": "Lukket",
                     "on": "Åpne"
                 }
+            },
+            "door_open_front_left": {
+                "name": "Fremre venstre dør åpen",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpen"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Fremre høyre dør åpen",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpen"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Bakre venstre dør åpen",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpen"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Bakre høyre dør åpen",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpen"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Fremre venstre vindu åpent",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpent"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Fremre høyre vindu åpent",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpent"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Bakre venstre vindu åpent",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpent"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Bakre høyre vindu åpent",
+                "state": {
+                    "off": "Lukket",
+                    "on": "Åpent"
+                }
             }
         },
         "climate": {
@@ -109,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Lysstatus i visning av kjøretøyet"
+            },
             "render_vehicle_main": {
                 "name": "Hovedvisning av kjøretøyet"
             }
@@ -121,6 +180,9 @@
         "number": {
             "charge_limit": {
                 "name": "Ladegrense"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Varighet for varmeapparat"
             }
         },
         "sensor": {
@@ -174,6 +236,15 @@
             "remaining_charging_time": {
                 "name": "Gjenstående ladetid"
             },
+            "operation": {
+                "name": "Siste aksjon",
+                "state": {
+                    "in_progress": "Pågår",
+                    "completed_success": "Fullført",
+                    "completed_warning": "Fullført med advarsel",
+                    "error": "Feil"
+                }
+            },
             "software_version": {
                 "name": "Programvareversjon"
             },
@@ -183,11 +254,23 @@
             "fuel_level": {
                 "name": "Drivstoffnivå"
             },
+            "adblue_range": {
+                "name": "AdBlue-rekkevidde"
+            },
+            "gas_level": {
+                "name": "Drivstoffnivå"
+            },
+            "gas_range": {
+                "name": "Drivstoffrekkevidde"
+            },
             "combustion_range": {
                 "name": "Drivstoff rekkevidde"
             },
             "electric_range": {
                 "name": "Elektrisk rekkevidde"
+            },
+            "outside_temperature": {
+                "name": "Utvendig temperatur"
             }
         },
         "switch": {
@@ -205,6 +288,21 @@
             },
             "window_heating": {
                 "name": "Vindusvarme"
+            },
+            "ac_at_unlock": {
+                "name": "Klimaanlegg når ulåst"
+            },
+            "ac_without_external_power": {
+                "name": "Klimaanlegg uten ekstern strømtilførsel"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Setevarme venstre side med klimaanlegg"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Setevarme høyre side med klimaanlegg"
+            },
+            "ac_window_heating": {
+                "name": "Vindusvarme med klimaanlegg"
             }
         },
         "button": {
@@ -213,6 +311,9 @@
             },
             "flash": {
                 "name": "Blink"
+            },
+            "generate_fixtures": {
+                "name": "Generer testdata"
             }
         }
     },
@@ -220,6 +321,10 @@
         "new_tandc": {
             "title": "Gjennomgå nye vilkår og betingelser for MySkoda",
             "description": "Det ser ut til at du har opplevd en innloggingsfeil på grunn av manglende aksept av Škodas nye vilkår og betingelser. \n\nFor å løse dette, vennligst logg ut av MyŠkoda-appen og logg deretter inn igjen for å gjennomgå og godta de oppdaterte vilkårene. Denne integrasjonen kan ikke fortsette uten at vilkårene er akseptert."
+        },
+        "spin_error": {
+            "title": "Feil S-PIN oppdaget",
+            "description": "Vi mottok en feil som indikerer at din S-PIN er feil.\n\nSkriv inn riktig S-PIN i integrasjonsinnstillingene."
         }
     },
     "options": {

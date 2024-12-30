@@ -25,7 +25,10 @@ from myskoda.event import (
 )
 from myskoda.models.info import CapabilityId
 from myskoda.models.operation_request import OperationName, OperationStatus
-from myskoda.models.service_event import ServiceEventChangeSoc
+from myskoda.models.service_event import (
+    ServiceEventChargingData,
+    ServiceEventData,
+)
 from myskoda.models.user import User
 from myskoda.mqtt import EventCharging, EventType
 
@@ -272,35 +275,35 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
     async def _on_charging_event(self, event: EventCharging):
         vehicle = self.data.vehicle
-        data = event.event.data
-
+        update_charging_request_sent = False
         if vehicle.charging is None or vehicle.charging.status is None:
             await self.update_charging()
-        else:
-            # TODO: support other charging events
-            match event.event:
-                case ServiceEventChangeSoc():
-                    status = vehicle.charging.status
-                    status.battery.remaining_cruising_range_in_meters = (
-                        data.charged_range * 1000
-                    )
-                    status.battery.state_of_charge_in_percent = data.soc
-                    if data.time_to_finish is not None:
-                        status.remaining_time_to_fully_charged_in_minutes = (
-                            data.time_to_finish
-                        )
-                        status.state = data.state
-
+            update_charging_request_sent = True
         if vehicle.driving_range is None:
             await self.update_driving_range()
-        else:
-            match event.event:
-                case ServiceEventChangeSoc():
-                    vehicle.driving_range.primary_engine_range.current_soc_in_percent = data.soc
-                    vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
-                        data.charged_range
+
+        event_data = event.event.data
+        match event_data:
+            case ServiceEventChargingData():
+                if vehicle.charging and (status := vehicle.charging.status):
+                    status.battery.remaining_cruising_range_in_meters = (
+                        event_data.charged_range * 1000
                     )
-        self.set_updated_vehicle(vehicle)
+                    status.battery.state_of_charge_in_percent = event_data.soc
+                    if event_data.time_to_finish is not None:
+                        status.remaining_time_to_fully_charged_in_minutes = (
+                            event_data.time_to_finish
+                        )
+                        status.state = event_data.state
+                if vehicle.driving_range:
+                    vehicle.driving_range.primary_engine_range.current_soc_in_percent = event_data.soc
+                    vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
+                        event_data.charged_range
+                    )
+                self.set_updated_vehicle(vehicle)
+            case ServiceEventData():
+                if not update_charging_request_sent:
+                    await self.update_charging()
 
     async def _on_access_event(self, event: EventAccess):
         await self.update_vehicle()

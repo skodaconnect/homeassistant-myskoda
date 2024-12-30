@@ -88,6 +88,62 @@
                     "off": "Gesloten",
                     "on": "Open"
                 }
+            },
+            "door_open_front_left": {
+                "name": "Deur linksvoor",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Deur rechtsvoor",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Deur rechtsachter",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Deur rechtsachter",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Raam linksvoor",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Raam rechtsvoor",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Raam linksachter",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Raam rechtsachter",
+                "state": {
+                    "off": "Gesloten",
+                    "on": "Open"
+                }
             }
         },
         "climate": {
@@ -109,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Voertuigstatus"
+            },
             "render_vehicle_main": {
                 "name": "Hoofdafbeelding"
             }
@@ -194,6 +253,15 @@
             },
             "fuel_level": {
                 "name": "Brandstof niveau"
+            },
+            "adblue_range": {
+                "name": "AdBlue bereik"
+            },
+            "gas_level": {
+                "name": "Gas Niveau"
+            },
+            "gas_range": {
+                "name": "Gas Bereik"
             },
             "combustion_range": {
                 "name": "Bereik motor"
