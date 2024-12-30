@@ -61,3 +61,42 @@ async def async_get_device_diagnostics(
         return {
             "error": error_message,
         }
+
+
+async def async_get_config_entry_diagnostics(
+    hass: HomeAssistant, config_entry: ConfigEntry
+) -> dict[str, Any]:
+    """Return diagnostics for all vehicles in the config entry."""
+    coordinators = hass.data[DOMAIN][config_entry.entry_id][COORDINATORS]
+    results = []
+
+    for vin, coordinator in coordinators.items():
+        if not coordinator:
+            error_message = f"No coordinator found for VIN: {vin}"
+            _LOGGER.error(error_message)
+            results.append({"error": error_message})
+            continue
+
+        try:
+            # Fetch diagnostics data from the MySkoda API
+            specs = coordinator.data.vehicle.info.specification
+            description = (
+                f"Fixtures for {specs.model} {specs.trim_level} {specs.model_year}"
+            )
+
+            result = await coordinator.myskoda.generate_get_fixture(
+                coordinator.data.vehicle.info.specification.model,
+                description,
+                [vin],
+                Endpoint.ALL,
+            )
+
+            # Append the successful data
+            results.append({"fixtures": json.loads(result.to_json())})
+
+        except Exception as e:
+            error_message = f"Error generating diagnostics for VIN {vin}: {e}"
+            _LOGGER.error(error_message)
+            results.append({"error": error_message})
+
+    return {"results": results}
