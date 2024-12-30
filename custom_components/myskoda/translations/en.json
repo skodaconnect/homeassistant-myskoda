@@ -303,6 +303,15 @@
             },
             "ac_window_heating": {
                 "name": "Window Heating with AC"
+            },
+            "departure_timer_1": {
+                "name": "Departure Timer 1"
+            },
+            "departure_timer_2": {
+                "name": "Departure Timer 2"
+            },
+            "departure_timer_3": {
+                "name": "Departure Timer 3"
             }
         },
         "button": {
