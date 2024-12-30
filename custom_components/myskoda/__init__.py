@@ -24,7 +24,7 @@ from myskoda.auth.authorization import (
 )
 
 
-from .const import COORDINATORS, DOMAIN
+from .const import COORDINATORS, DOMAIN, VINLIST
 from .coordinator import MySkodaDataUpdateCoordinator
 from .error_handlers import handle_aiohttp_error
 from .issues import (
@@ -48,20 +48,30 @@ PLATFORMS: list[Platform] = [
 ]
 
 
-async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
-    """Set up MySkoda integration from a config entry."""
+async def async_connect_myskoda(
+    hass: HomeAssistant, entry: ConfigEntry, mqtt_enabled: bool = True
+) -> MySkoda:
+    """Generic connector to MySkoda REST API."""
 
     trace_configs = []
-    if config.options.get("tracing"):
+    if entry.options.get("tracing"):
         trace_configs.append(TRACE_CONFIG)
 
     session = async_create_clientsession(
         hass, trace_configs=trace_configs, auto_cleanup=False
     )
-    myskoda = MySkoda(session, get_default_context(), mqtt_enabled=False)
+    myskoda = MySkoda(session, get_default_context(), mqtt_enabled=mqtt_enabled)
+
+    return myskoda
+
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up MySkoda integration from a config entry."""
+
+    myskoda = await async_connect_myskoda(hass, entry, mqtt_enabled=False)
 
     try:
-        await myskoda.connect(config.data["email"], config.data["password"])
+        await myskoda.connect(entry.data["email"], entry.data["password"])
     except AuthorizationFailedError as exc:
         _LOGGER.debug("Authorization with MySkoda failed.")
         raise ConfigEntryAuthFailed from exc
@@ -69,32 +79,47 @@ async def async_setup_entry(hass: HomeAssistant, config: ConfigEntry) -> bool:
         _LOGGER.error(
             "Change to terms and conditions or consents detected while logging in. Please log into the MySkoda app (may require a logout first) to access the new Terms and Conditions. This HomeAssistant integration currently can not continue."
         )
-        async_create_tnc_issue(hass, config.entry_id)
+        async_create_tnc_issue(hass, entry.entry_id)
         raise ConfigEntryNotReady from exc
     except (CSRFError, InvalidUrlClientError) as exc:
         _LOGGER.debug("An error occurred during login.")
         raise ConfigEntryNotReady from exc
     except ClientResponseError as err:
-        handle_aiohttp_error("setup", err, hass, config)
+        handle_aiohttp_error("setup", err, hass, entry)
     except Exception:
         _LOGGER.exception("Login with MySkoda failed for an unknown reason.")
         return False
 
-    async_delete_tnc_issue(hass, config.entry_id)
-    async_delete_spin_issue(hass, config.entry_id)
+    async_delete_tnc_issue(hass, entry.entry_id)
+    async_delete_spin_issue(hass, entry.entry_id)
 
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
-    vehicles = await myskoda.list_vehicle_vins()
+    cached_vins: list = entry.data[VINLIST]
+
+    try:
+        vehicles = await myskoda.list_vehicle_vins()
+        if vehicles != cached_vins:
+            _LOGGER.info("New vehicles detected. Storing new vehicle list in cache")
+            entry_data = {**entry.data}
+            entry_data[VINLIST] = vehicles
+            hass.config_entries.async_update_entry(entry, data=entry_data)
+    except Exception:
+        if cached_vins:
+            vehicles = cached_vins
+            pass
+        else:
+            raise
+
     for vin in vehicles:
-        coordinator = MySkodaDataUpdateCoordinator(hass, config, myskoda, vin)
+        coordinator = MySkodaDataUpdateCoordinator(hass, entry, myskoda, vin)
         await coordinator.async_config_entry_first_refresh()
         coordinators[vin] = coordinator
 
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][config.entry_id] = {COORDINATORS: coordinators}
+    hass.data[DOMAIN][entry.entry_id] = {COORDINATORS: coordinators}
 
-    await hass.config_entries.async_forward_entry_setups(config, PLATFORMS)
-    config.async_on_unload(config.add_update_listener(_async_update_listener))
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    entry.async_on_unload(entry.add_update_listener(_async_update_listener))
 
     return True
 
@@ -112,3 +137,90 @@ async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry):
     """Handle options update."""
     # Do a lazy reload of integration when configuration changed
     await hass.config_entries.async_reload(entry.entry_id)
+
+
+async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Handle config entry schema migrations."""
+    _LOGGER.debug(
+        "Migrating configuration entry %s from v%s.%s",
+        entry.entry_id,
+        entry.version,
+        entry.minor_version,
+    )
+
+    if entry.version > 2:
+        """We do not support config entry v3 yet."""
+        _LOGGER.error(
+            "Configuration for %s is too new. This can happen if you downgraded. Automatic config migration aborted."
+        )
+        return False
+
+    if entry.version == 1:
+        # v1 might be missing a unique_id. Migrate to 2.1 that has this.
+        if not entry.unique_id or entry.unique_id == "":
+            _LOGGER.debug("Starting migration to config schema 2.1, adding unique_id")
+
+            new_version = 2
+            new_minor_version = 1
+
+            try:
+                myskoda = await async_connect_myskoda(hass, entry, mqtt_enabled=False)
+                user = await myskoda.get_user()
+                unique_id = user.id
+            except AuthorizationFailedError as exc:
+                raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
+            except Exception as exc:
+                _LOGGER.exception(
+                    "Login with %s failed for unknown reason. Details: %s", DOMAIN, exc
+                )
+                return False
+
+            _LOGGER.debug("Add unique_id %s to entry %s", unique_id, entry.entry_id)
+            hass.config_entries.async_update_entry(
+                entry,
+                version=new_version,
+                minor_version=new_minor_version,
+                unique_id=unique_id,
+            )
+
+    if entry.version == 2:
+        if entry.minor_version < 2:
+            # v2.1 does not have the vinlist. Add it.
+            _LOGGER.debug("Starting migration to config schema 2.2, adding vinlist")
+
+            new_version = 2
+            new_minor_version = 2
+
+            entry_data = {**entry.data}
+            vinlist = []
+
+            try:
+                myskoda = await async_connect_myskoda(hass, entry, mqtt_enabled=False)
+                vinlist = myskoda.list_vehicle_vins()
+                entry_data[VINLIST] = vinlist
+            except AuthorizationFailedError as exc:
+                raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
+            except Exception as exc:
+                _LOGGER.exception(
+                    "Login with %s failed for unknown reason. Details: %s", DOMAIN, exc
+                )
+                return False
+            _LOGGER.debug("Add vinlist %s to entry %s", vinlist, entry.entry_id)
+            hass.config_entries.async_update_entry(
+                entry,
+                version=new_version,
+                minor_version=new_minor_version,
+                data=entry_data,
+            )
+
+    # Add any more migrations here
+
+    if new_entry := hass.config_entries.async_get_entry(entry_id=entry.entry_id):
+        _LOGGER.debug(
+            "Migration of %s to v%s.%s successful",
+            entry.entry_id,
+            new_entry.version,
+            new_entry.minor_version,
+        )
+
+    return True
