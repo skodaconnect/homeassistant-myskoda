@@ -303,6 +303,15 @@
             },
             "ac_window_heating": {
                 "name": "Aquecimento da Janela com corrente alternada"
+            },
+            "departure_timer_1": {
+                "name": "Tempo de Partida 1"
+            },
+            "departure_timer_2": {
+                "name": "Tempo de Partida 2"
+            },
+            "departure_timer_3": {
+                "name": "Tempo de Partida 3"
             }
         },
         "button": {
