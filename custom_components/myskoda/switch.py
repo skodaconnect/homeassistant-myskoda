@@ -2,7 +2,7 @@
 
 import logging
 from datetime import timedelta
-from typing import Any, Optional
+from typing import Any
 
 from homeassistant.components.switch import (
     SwitchDeviceClass,
@@ -511,7 +511,7 @@ class DepartureTimerSwitch(MySkodaSwitch):
         super().__init__(coordinator, vin)  # Initialize parent class (MySkodaEntity)
         self.timer_id = timer_id  # Store the specific timer ID for each subclass
 
-    def get_timer(self) -> Optional[DepartureTimer]:
+    def get_timer(self) -> DepartureTimer | None:
         """Retrieve the specific departure timer by ID."""
         if departure_info := self.vehicle.departure_info:
             if departure_info.timers:
@@ -523,14 +523,12 @@ class DepartureTimerSwitch(MySkodaSwitch):
                     ),
                     None,
                 )
-        return None
 
     @property
     def is_on(self) -> bool | None:
         """Check if the timer is enabled."""
         if timer := self.get_timer():
             return timer.enabled
-        return None
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
