@@ -303,6 +303,15 @@
             },
             "ac_window_heating": {
                 "name": "Aquecimento da janela com corrente alternada"
+            },
+            "departure_timer_1": {
+                "name": "1 Temporizador de Partida"
+            },
+            "departure_timer_2": {
+                "name": "2 Temporizador de Partida"
+            },
+            "departure_timer_3": {
+                "name": "3 Temporizador de Partida"
             }
         },
         "button": {
