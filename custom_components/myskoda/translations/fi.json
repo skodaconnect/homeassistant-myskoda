@@ -54,18 +54,18 @@
                     "on": "Auki"
                 }
             },
-            "lights_on": {
-                "name": "Valot",
-                "state": {
-                    "off": "Pois",
-                    "on": "Päällä"
-                }
-            },
             "locked": {
                 "name": "Ajoneuvon lukitus",
                 "state": {
                     "off": "Lukossa",
                     "on": "Lukitsematta"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Pysäköintivalot",
+                "state": {
+                    "off": "Pois",
+                    "on": "Päällä"
                 }
             },
             "sunroof_open": {
@@ -88,11 +88,70 @@
                     "off": "Kiinni",
                     "on": "Auki"
                 }
+            },
+            "door_open_front_left": {
+                "name": "Ovi auki etu vasen",
+                "state": {
+                    "off": "Suljettu",
+                    "on": "Auki"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Ovi auki etu oikea",
+                "state": {
+                    "off": "Suljettu",
+                    "on": "Auki"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Ovi auki taka vasen",
+                "state": {
+                    "off": "Suljettu",
+                    "on": "Auki"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Ovi auki taka oikea",
+                "state": {
+                    "off": "Suljettu",
+                    "on": "Auki"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Ikkuna auki etu vasen",
+                "state": {
+                    "off": "Suljettu",
+                    "on": "Auki"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Ikkuna auki etu oikea",
+                "state": {
+                    "off": "Suljettu",
+                    "on": "Auki"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Ikkuna auki taka vasen",
+                "state": {
+                    "off": "Suljettu",
+                    "on": "Auki"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Ikkuna auki taka oikea",
+                "state": {
+                    "off": "Suljettu",
+                    "on": "Auki"
+                }
             }
         },
         "climate": {
             "climate": {
                 "name": "Ilmastointi"
+            },
+            "auxiliary_heater": {
+                "name": "Lisälämmitin"
             }
         },
         "device_tracker": {
@@ -106,13 +165,24 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Valojen tila kuva"
+            },
             "render_vehicle_main": {
                 "name": "Pääkuva"
+            }
+        },
+        "lock": {
+            "door_lock": {
+                "name": "Oven lukitus"
             }
         },
         "number": {
             "charge_limit": {
                 "name": "Latausraja"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Lämmityksen kesto"
             }
         },
         "sensor": {
@@ -148,8 +218,17 @@
             "inspection": {
                 "name": "Huoltotarkistus"
             },
+            "inspection_in_km": {
+                "name": "Seuraava tarkastus km"
+            },
             "mileage": {
                 "name": "Kilometrilukema"
+            },
+            "oil_service_in_days": {
+                "name": "Öljynvaihto"
+            },
+            "oil_service_in_km": {
+                "name": "Öljynvaihto km"
             },
             "range": {
                 "name": "Toimintamatka"
@@ -157,11 +236,41 @@
             "remaining_charging_time": {
                 "name": "Jäljellä oleva latausaika"
             },
+            "operation": {
+                "name": "Viimeisin toiminto",
+                "state": {
+                    "in_progress": "Kesken",
+                    "completed_success": "Suoritettu onnistuneesti",
+                    "completed_warning": "Suoritettu varoituksella",
+                    "error": "Virhe"
+                }
+            },
             "software_version": {
                 "name": "Ohjelmistoversio"
             },
             "target_battery_percentage": {
                 "name": "Latausraja"
+            },
+            "fuel_level": {
+                "name": "Polttoainetaso"
+            },
+            "adblue_range": {
+                "name": "AdBlue-kantama"
+            },
+            "gas_level": {
+                "name": "Kaasun taso"
+            },
+            "gas_range": {
+                "name": "Toimintamatka kaasulla"
+            },
+            "combustion_range": {
+                "name": "Toimintamatka polttomoottorilla"
+            },
+            "electric_range": {
+                "name": "Toimintamatka sähköllä"
+            },
+            "outside_temperature": {
+                "name": "Ulkolämpötila"
             }
         },
         "switch": {
@@ -179,21 +288,71 @@
             },
             "window_heating": {
                 "name": "Ikkunoiden lämmitys"
+            },
+            "ac_at_unlock": {
+                "name": "Ilmastointi avattaessa"
+            },
+            "ac_without_external_power": {
+                "name": "Ilmastointi ilman ulkoista virtaa"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Vasemman istuimen lämmitys ilmastoinnilla"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Oikean istuimen lämmitys ilmastoinnilla"
+            },
+            "ac_window_heating": {
+                "name": "Ikkunan lämmitys ilmastoinnilla"
+            },
+            "departure_timer_1": {
+                "name": "Lähtöajastin 1"
+            },
+            "departure_timer_2": {
+                "name": "Lähtöajastin 2"
+            },
+            "departure_timer_3": {
+                "name": "Lähtöajastin 3"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Tööttää ja vilkuta"
+            },
+            "flash": {
+                "name": "Vilkuta"
+            },
+            "generate_fixtures": {
+                "name": "Luo kuvaukset"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "Tarkista ja hyväksy MySkoda-sovelluksen päivittyneet käyttöehdot ja säännöt.",
+            "description": "Havaittu kirjautumisvirhe johtuen puuttuvista käyttöehtojen tai suostumusten hyväksymisistä.\n\nSkoda on saattanut lisätä ehtoja tai edellyttää uusia hyväksyntöjä.\n\nKirjaudu uudelleen MySkoda-sovellukseen tarkistaaksesi ne.\nPuuttuvat hyväksennät estävät tämä integraation toiminnan."
+        },
+        "spin_error": {
+            "title": "Virheellinen S-PIN-koodi havaittu",
+            "description": "Saimme virheen, joka osoittaa S-PIN-koodisi olevan virheellinen.\n\nSyötä oikea S-PIN-koodi integraation asetuksiin."
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Virheellinen päivitysväli. Arvon tulee olla välillä 1-1440 minuuttia."
+            "invalid_polling_interval": "Virheellinen päivitysväli. Arvon tulee olla välillä 1-1440 minuuttia.",
+            "invalid_spin_format": "S-PIN-koodin muoto on virheellinen"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "API-vastauksen jäljitys. Vaatii debug-lokituksen aktivoimisen configuration.yaml-asetustiedostossa.",
-                    "poll_interval_in_minutes": "Päivitysväli minuuteissa, kun auto ei ole aktiivinen."
+                    "poll_interval_in_minutes": "Päivitysväli minuuteissa, kun auto ei ole aktiivinen.",
+                    "s-pin": "S-PIN-koodi",
+                    "readonly": "Vain luku -tila"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Määritä päivitysväli minuuteissa välillä 1-1440. (vakioarvo 30)"
+                    "poll_interval_in_minutes": "Määritä päivitysväli minuuteissa välillä 1-1440. (vakioarvo 30)",
+                    "s-pin": "Määritä suojaus PIN-koodi. VAROITUS: Tämä mahdollistaa etälukituksen/-avauksen",
+                    "readonly": "Et voi tehdä mitään muutoksia autoon, voit vain lukea tietoja"
                 }
             }
         }
