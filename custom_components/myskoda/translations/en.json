@@ -286,6 +286,9 @@
             "reduced_current": {
                 "name": "Reduced Current"
             },
+            "auto_unlock_plug": {
+                "name": "Unlock Plug when Charged"
+            },
             "window_heating": {
                 "name": "Window Heating"
             },
