@@ -286,6 +286,9 @@
             "reduced_current": {
                 "name": "Ograniczenie prądu"
             },
+            "auto_unlock_plug": {
+                "name": "Odblokuj wtyczkę po naładowaniu"
+            },
             "window_heating": {
                 "name": "Ogrzewanie okien"
             },
@@ -303,6 +306,15 @@
             },
             "ac_window_heating": {
                 "name": "Ogrzewanie szyb za pomocą AC"
+            },
+            "departure_timer_1": {
+                "name": "Timer odjazdu 1"
+            },
+            "departure_timer_2": {
+                "name": "Timer odjazdu 2"
+            },
+            "departure_timer_3": {
+                "name": "Timer odjazdu 3"
             }
         },
         "button": {
