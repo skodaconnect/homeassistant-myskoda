@@ -286,6 +286,9 @@
             "reduced_current": {
                 "name": "Virran rajoitus"
             },
+            "auto_unlock_plug": {
+                "name": "Avaa lukitus latauksen jälkeen"
+            },
             "window_heating": {
                 "name": "Ikkunoiden lämmitys"
             },
