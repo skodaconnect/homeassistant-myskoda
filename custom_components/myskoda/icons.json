@@ -198,6 +198,12 @@
                     "on": "mdi:turtle"
                 }
             },
+            "auto_unlock_plug": {
+                "default": "mdi:lock",
+                "state": {
+                    "on": "mdi:lock-open"
+                }
+            },
             "window_heating": {
                 "default": "mdi:car-defrost-front",
                 "state": {

@@ -286,6 +286,9 @@
             "reduced_current": {
                 "name": "Corrente reduzida"
             },
+            "auto_unlock_plug": {
+                "name": "Desbloquear plug quando carregado"
+            },
             "window_heating": {
                 "name": "Aquecimento da janela"
             },

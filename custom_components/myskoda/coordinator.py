@@ -234,6 +234,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.UPDATE_CHARGING_CURRENT,
             OperationName.START_CHARGING,
             OperationName.STOP_CHARGING,
+            OperationName.UPDATE_AUTO_UNLOCK_PLUG,
         ]:
             await self.update_charging()
         if event.operation.operation in [
