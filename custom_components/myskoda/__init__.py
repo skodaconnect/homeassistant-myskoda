@@ -98,7 +98,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     try:
         vehicles = await myskoda.list_vehicle_vins()
-        if vehicles != cached_vins:
+        if vehicles and vehicles != cached_vins:
             _LOGGER.info("New vehicles detected. Storing new vehicle list in cache")
             entry_data = {**entry.data}
             entry_data[VINLIST] = vehicles
