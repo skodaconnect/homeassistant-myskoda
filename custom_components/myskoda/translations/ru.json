@@ -286,6 +286,9 @@
             "reduced_current": {
                 "name": "Сниженный ток"
             },
+            "auto_unlock_plug": {
+                "name": "Разблокировать зарядку если заряжен"
+            },
             "window_heating": {
                 "name": "Обогрев окон"
             },
@@ -303,6 +306,15 @@
             },
             "ac_window_heating": {
                 "name": "Обогрев стекла"
+            },
+            "departure_timer_1": {
+                "name": "Таймер отправления 1"
+            },
+            "departure_timer_2": {
+                "name": "Таймер отправления 2"
+            },
+            "departure_timer_3": {
+                "name": "Таймер отправления 3"
             }
         },
         "button": {
