@@ -21,6 +21,7 @@ from myskoda.models.charging import (
     ChargingState,
     ChargingStatus,
     MaxChargeCurrent,
+    PlugUnlockMode,
     Settings,
 )
 from myskoda.models.air_conditioning import (
@@ -62,6 +63,7 @@ async def async_setup_entry(
             DepartureTimer1,
             DepartureTimer2,
             DepartureTimer3,
+            AutoUnlockPlug,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -268,6 +270,49 @@ class EnableCharging(ChargingSwitch):
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
         _LOGGER.info("Charging started.")
+
+
+class AutoUnlockPlug(ChargingSwitch):
+    """Controls unlock plug when charged."""
+
+    entity_description = SwitchEntityDescription(
+        key="auto_unlock_plug",
+        name="Auto Unlock Plug",
+        device_class=SwitchDeviceClass.SWITCH,
+        translation_key="auto_unlock_plug",
+        entity_category=EntityCategory.CONFIG,
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if settings := self._settings():
+            return settings.auto_unlock_plug_when_charged != PlugUnlockMode.OFF
+
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
+    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+        """Internal method to have a central location for the Throttle."""
+        try:
+            if turn_on:
+                await self.coordinator.myskoda.set_auto_unlock_plug(
+                    self.vehicle.info.vin, True
+                )
+            else:
+                await self.coordinator.myskoda.set_auto_unlock_plug(
+                    self.vehicle.info.vin, False
+                )
+        except OperationFailedError as exc:
+            _LOGGER.error("Failed to set auto unlock plug: %s", exc)
+
+    async def async_turn_off(self, **kwargs):  # noqa: D102
+        await self._async_turn_on_off(turn_on=False)
+        _LOGGER.info("Auto unlock plug turned off.")
+
+    async def async_turn_on(self, **kwargs):  # noqa: D102
+        await self._async_turn_on_off(turn_on=True)
+        _LOGGER.info("Auto unlock plug turned on.")
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING, CapabilityId.EXTENDED_CHARGING_SETTINGS]
 
 
 class AcAtUnlock(MySkodaSwitch):
