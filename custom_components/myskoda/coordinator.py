@@ -35,6 +35,7 @@ from myskoda.mqtt import EventCharging, EventType
 from .const import (
     API_COOLDOWN_IN_SECONDS,
     CONF_POLL_INTERVAL,
+    COORDINATORS,
     DEFAULT_FETCH_INTERVAL_IN_MINUTES,
     DOMAIN,
     MAX_STORED_OPERATIONS,
@@ -168,22 +169,29 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 )
                 raise UpdateFailed("Failed to retrieve initial data during setup")
 
-            def _async_finish_startup(self) -> None:
+            def _async_finish_startup(hass, config, vin) -> None:
                 """Tasks to execute when we have finished starting up."""
                 _LOGGER.debug(
-                    "MySkoda has finished starting up. Scheduling post-start tasks."
+                    "MySkoda has finished starting up. Scheduling post-start tasks for vin %s.",
+                    vin,
                 )
-                if not self.myskoda.mqtt and not self._mqtt_connecting:
-                    self.hass.async_create_task(self._mqtt_connect())
+                try:
+                    coord = hass.data[DOMAIN][config.entry_id][COORDINATORS][vin]
+                    if not coord.myskoda.mqtt and not coord._mqtt_connecting:
+                        config.async_create_background_task(
+                            self.hass, coord._mqtt_connect(), "mqtt"
+                        )
+                except KeyError:
+                    _LOGGER.debug("Could not connect to MQTT. Waiting for regular poll")
+                    pass
 
             async_at_started(
-                self.hass, _async_finish_startup
+                hass=self.hass,
+                at_start_cb=_async_finish_startup(self.hass, self.config, self.vin),  # pyright: ignore[reportArgumentType]
             )  # Schedule post-setup tasks
             return State(vehicle, user, config, operations)
 
         # Regular update
-        if not self.myskoda.mqtt and not self._mqtt_connecting:
-            self.hass.async_create_task(self._mqtt_connect())
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
 
