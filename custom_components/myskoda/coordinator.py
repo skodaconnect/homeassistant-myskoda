@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from collections import OrderedDict
+from collections import OrderedDict, deque
 from collections.abc import Coroutine
 from dataclasses import dataclass
 from datetime import timedelta
@@ -73,7 +73,7 @@ Operations = OrderedDict[str, EventOperation]
 
 
 # History of EventType.SERVICE_EVENT events
-ServiceEvents = list[ServiceEvent]
+ServiceEvents = deque[ServiceEvent]
 
 
 @dataclass
@@ -118,8 +118,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.vin: str = vin
         self.myskoda: MySkoda = myskoda
         self.operations: OrderedDict = OrderedDict()
+        self.service_events: deque = deque(maxlen=MAX_STORED_SERVICE_EVENTS)
         self.entry: ConfigEntry = entry
-        self.service_events: list = []
         self.update_driving_range = self._debounce(self._update_driving_range)
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
@@ -197,7 +197,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 hass=self.hass,
                 at_start_cb=_async_finish_startup(self.hass, self.entry, self.vin),  # pyright: ignore[reportArgumentType]
             )  # Schedule post-setup tasks
-            return State(vehicle, user, config, operations)
+            return State(vehicle, user, config, operations, service_events)
 
         # Regular update
 
@@ -243,7 +243,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         if event.type == EventType.OPERATION:
             await self._on_operation_event(event)
         if event.type == EventType.SERVICE_EVENT:
-            self._update_service_event_history(event.event)
+            # Store the event and update data
+            self.service_events.appendleft(event.event)
+            self.async_set_updated_data(self.data)
+
             if event.topic == ServiceEventTopic.CHARGING:
                 await self._on_charging_event(event)
             if event.topic == ServiceEventTopic.ACCESS:
@@ -252,7 +255,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 await self._on_air_conditioning_event(event)
             if event.topic == ServiceEventTopic.DEPARTURE:
                 await self._on_departure_event(event)
-            self.async_set_updated_data(self.data)
 
     async def _on_operation_event(self, event: EventOperation) -> None:
         # Store the last MAX_STORED_OPERATIONS operations
@@ -304,11 +306,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         ]:
             await self.update_departure_info()
 
-    def _update_service_event_history(self, event: ServiceEvent):
-        # Store the last MAX_STORED_SERVICE_EVENTS events
-        self.service_events.append(event)
-        self.service_events = self.service_events[-MAX_STORED_SERVICE_EVENTS:]
-
     async def _on_charging_event(self, event: EventCharging):
         vehicle = self.data.vehicle
         update_charging_request_sent = False
@@ -355,6 +352,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
     def set_updated_vehicle(self, vehicle: Vehicle) -> None:
         self.data.vehicle = vehicle
+        self.async_set_updated_data(self.data)
 
     async def _update_driving_range(self) -> None:
         driving_range = None

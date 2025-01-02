@@ -145,7 +145,7 @@ class ServiceEvent(MySkodaSensor):
     def native_value(self) -> datetime | None:
         """Returns the timestamp of the last seen service event."""
         if self.service_events:
-            last_service_event = self.service_events[-1]
+            last_service_event = self.service_events[0]
             return last_service_event.timestamp
 
     @property
@@ -158,14 +158,13 @@ class ServiceEvent(MySkodaSensor):
         if not self.service_events:
             return attributes
 
-        service_events = self.service_events[::-1]
         filtered = [
             {
                 "name": event.name.value,
                 "timestamp": event.timestamp,
                 "data": event.data,
             }
-            for event in service_events
+            for event in self.service_events
         ]
         attributes = filtered[0]
         attributes["history"] = filtered[1:]
