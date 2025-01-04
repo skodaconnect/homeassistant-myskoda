@@ -247,10 +247,18 @@ class AddBlueRange(MySkodaSensor):
             if range.ad_blue_range is not None:
                 return range.ad_blue_range
 
-    def is_supported(self) -> bool:
+    @property
+    def available(self) -> bool:
+        """Determine whether the sensor is available."""
         if range := self.vehicle.driving_range:
             return range.ad_blue_range is not None
         return False
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.STATE, CapabilityId.FUEL_STATUS]
+
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING]
 
 
 class CombustionRange(MySkodaSensor):
@@ -274,11 +282,18 @@ class CombustionRange(MySkodaSensor):
                 if secondary.engine_type in [EngineType.GASOLINE, EngineType.DIESEL]:
                     return secondary.remaining_range_in_km
 
-    def is_supported(self) -> bool:
+    @property
+    def available(self) -> bool:
         if self.has_all_capabilities([CapabilityId.STATE, CapabilityId.FUEL_STATUS]):
             if range := self.vehicle.driving_range:
                 return range.car_type == EngineType.HYBRID
         return False
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.STATE, CapabilityId.FUEL_STATUS]
+
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_MEB]
 
 
 class ElectricRange(MySkodaSensor):
@@ -319,7 +334,8 @@ class GasRange(MySkodaSensor):
             if range.primary_engine_range is not None:
                 return range.primary_engine_range.remaining_range_in_km
 
-    def is_supported(self) -> bool:
+    @property
+    def available(self) -> bool:
         if self.has_all_capabilities([CapabilityId.STATE, CapabilityId.FUEL_STATUS]):
             if range := self.vehicle.driving_range:
                 return (
@@ -328,6 +344,12 @@ class GasRange(MySkodaSensor):
                     and primary_engine_range.engine_type == EngineType.CNG
                 )
         return False
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.STATE, CapabilityId.FUEL_STATUS]
+
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING]
 
 
 class GasLevel(MySkodaSensor):
@@ -345,7 +367,8 @@ class GasLevel(MySkodaSensor):
         if range := self.vehicle.driving_range:
             return range.primary_engine_range.current_fuel_level_in_percent
 
-    def is_supported(self) -> bool:
+    @property
+    def available(self) -> bool:
         if self.has_all_capabilities([CapabilityId.STATE, CapabilityId.FUEL_STATUS]):
             if range := self.vehicle.driving_range:
                 return (
@@ -354,6 +377,12 @@ class GasLevel(MySkodaSensor):
                     and primary_engine_range.engine_type == EngineType.CNG
                 )
         return False
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.STATE, CapabilityId.FUEL_STATUS]
+
+    def forbidden_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING]
 
 
 class FuelLevel(MySkodaSensor):
@@ -391,7 +420,8 @@ class Range(MySkodaSensor):
         translation_key="range",
     )
 
-    def is_supported(self) -> bool:
+    @property
+    def available(self) -> bool:
         status = self._status()
         driving_range = self.vehicle.driving_range
         return any(
@@ -423,6 +453,9 @@ class Range(MySkodaSensor):
         if status := self._status():
             if status.battery.remaining_cruising_range_in_meters is not None:
                 return status.battery.remaining_cruising_range_in_meters / 1000
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.STATE]
 
 
 class TargetBatteryPercentage(ChargingSensor):
