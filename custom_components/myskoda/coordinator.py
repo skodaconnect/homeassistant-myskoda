@@ -92,7 +92,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     data: State
 
     def __init__(
-        self, hass: HomeAssistant, config: ConfigEntry, myskoda: MySkoda, vin: str
+        self, hass: HomeAssistant, entry: ConfigEntry, myskoda: MySkoda, vin: str
     ) -> None:
         """Create a new coordinator."""
 
@@ -101,7 +101,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             _LOGGER,
             name=DOMAIN,
             update_interval=timedelta(
-                minutes=config.options.get(
+                minutes=entry.options.get(
                     CONF_POLL_INTERVAL, DEFAULT_FETCH_INTERVAL_IN_MINUTES
                 )
             ),
@@ -111,7 +111,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.vin: str = vin
         self.myskoda: MySkoda = myskoda
         self.operations: OrderedDict = OrderedDict()
-        self.config: ConfigEntry = config
+        self.entry: ConfigEntry = entry
         self.update_driving_range = self._debounce(self._update_driving_range)
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
@@ -157,14 +157,14 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         config = self.data.config if self.data and self.data.config else Config()
         operations = self.operations
 
-        if self.config.state == ConfigEntryState.SETUP_IN_PROGRESS:
+        if self.entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
             _LOGGER.debug("Performing initial data fetch for vin %s", self.vin)
             try:
                 user = await self.myskoda.get_user()
                 vehicle = await self._async_get_minimal_data()
             except ClientResponseError as err:
                 handle_aiohttp_error(
-                    "setup user and vehicle", err, self.hass, self.config
+                    "setup user and vehicle", err, self.hass, self.entry
                 )
                 raise UpdateFailed("Failed to retrieve initial data during setup")
 
@@ -186,7 +186,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
             async_at_started(
                 hass=self.hass,
-                at_start_cb=_async_finish_startup(self.hass, self.config, self.vin),  # pyright: ignore[reportArgumentType]
+                at_start_cb=_async_finish_startup(self.hass, self.entry, self.vin),  # pyright: ignore[reportArgumentType]
             )  # Schedule post-setup tasks
             return State(vehicle, user, config, operations)
 
@@ -198,7 +198,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             user = await self.myskoda.get_user()
         except ClientResponseError as err:
-            handle_aiohttp_error("user", err, self.hass, self.config)
+            handle_aiohttp_error("user", err, self.hass, self.entry)
             if self.data.user:
                 user = self.data.user
             else:
@@ -208,7 +208,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             vehicle = await self._async_get_vehicle_data()
         except ClientResponseError as err:
-            handle_aiohttp_error("vehicle", err, self.hass, self.config)
+            handle_aiohttp_error("vehicle", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -348,7 +348,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             driving_range = await self.myskoda.get_driving_range(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("driving range", err, self.hass, self.config)
+            handle_aiohttp_error("driving range", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -364,7 +364,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             charging = await self.myskoda.get_charging(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("charging information", err, self.hass, self.config)
+            handle_aiohttp_error("charging information", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -380,7 +380,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             air_conditioning = await self.myskoda.get_air_conditioning(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("AC update", err, self.hass, self.config)
+            handle_aiohttp_error("AC update", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -401,7 +401,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             auxiliary_heating = await self.myskoda.get_auxiliary_heating(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("Auxiliary update", err, self.hass, self.config)
+            handle_aiohttp_error("Auxiliary update", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -417,7 +417,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             status = await self.myskoda.get_status(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("vehicle status", err, self.hass, self.config)
+            handle_aiohttp_error("vehicle status", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -433,7 +433,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             departure_info = await self.myskoda.get_departure_timers(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("departure info", err, self.hass, self.config)
+            handle_aiohttp_error("departure info", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -449,7 +449,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             vehicle = await self.myskoda.get_vehicle(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("vehicle update", err, self.hass, self.config)
+            handle_aiohttp_error("vehicle update", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -468,7 +468,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             await asyncio.sleep(60)  # GPS is not updated immediately, wait 60 seconds
             positions = await self.myskoda.get_positions(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("positions", err, self.hass, self.config)
+            handle_aiohttp_error("positions", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 

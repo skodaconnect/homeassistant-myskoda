@@ -54,7 +54,7 @@ class MySkodaButton(MySkodaEntity, ButtonEntity):
         all_capabilities_present = all(
             self.vehicle.has_capability(cap) for cap in self.required_capabilities()
         )
-        readonly = self.coordinator.config.options.get(CONF_READONLY)
+        readonly = self.coordinator.entry.options.get(CONF_READONLY)
 
         return all_capabilities_present and not readonly
 
