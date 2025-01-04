@@ -139,7 +139,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                     self.vin,
                     [
                         CapabilityId.AIR_CONDITIONING,
-                        CapabilityId.AUXILIARY_HEATING,
                         CapabilityId.CHARGING,
                         CapabilityId.PARKING_POSITION,
                         CapabilityId.STATE,
