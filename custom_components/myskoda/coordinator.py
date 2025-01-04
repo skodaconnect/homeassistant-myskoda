@@ -157,14 +157,14 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         config = self.data.config if self.data and self.data.config else Config()
         operations = self.operations
 
-        if self.config.state == ConfigEntryState.SETUP_IN_PROGRESS:
+        if self.entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
             _LOGGER.debug("Performing initial data fetch for vin %s", self.vin)
             try:
                 user = await self.myskoda.get_user()
                 vehicle = await self._async_get_minimal_data()
             except ClientResponseError as err:
                 handle_aiohttp_error(
-                    "setup user and vehicle", err, self.hass, self.config
+                    "setup user and vehicle", err, self.hass, self.entry
                 )
                 raise UpdateFailed("Failed to retrieve initial data during setup")
 
@@ -186,7 +186,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
             async_at_started(
                 hass=self.hass,
-                at_start_cb=_async_finish_startup(self.hass, self.config, self.vin),  # pyright: ignore[reportArgumentType]
+                at_start_cb=_async_finish_startup(self.hass, self.entry, self.vin),  # pyright: ignore[reportArgumentType]
             )  # Schedule post-setup tasks
             return State(vehicle, user, config, operations)
 
