@@ -221,7 +221,8 @@ class SunroofOpen(StatusBinarySensor):
                 return
             return status.detail.sunroof == OpenState.OPEN
 
-    def is_supported(self) -> bool:
+    @property
+    def available(self) -> bool:
         if status := self._status():
             return (
                 super().is_supported()
