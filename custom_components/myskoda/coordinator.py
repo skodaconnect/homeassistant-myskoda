@@ -174,6 +174,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                     "MySkoda has finished starting up. Scheduling post-start tasks for vin %s.",
                     vin,
                 )
+                await self._async_update_data()
                 try:
                     coord = hass.data[DOMAIN][config.entry_id][COORDINATORS][vin]
                     if not coord.myskoda.mqtt and not coord._mqtt_connecting:
