@@ -48,13 +48,13 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config: ConfigEntry,
+    entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     add_supported_entities(
         available_entities=[MySkodaClimate, AuxiliaryHeater],
-        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
+        coordinators=hass.data[DOMAIN][entry.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
 
@@ -190,7 +190,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
         all_capabilities_present = all(
             self.vehicle.has_capability(cap) for cap in self.required_capabilities()
         )
-        readonly = self.coordinator.config.options.get(CONF_READONLY)
+        readonly = self.coordinator.entry.options.get(CONF_READONLY)
 
         return all_capabilities_present and not readonly
 
@@ -287,7 +287,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
 
     @property
     def available(self) -> bool:  # noqa: D102
-        if not self.coordinator.config.options.get(CONF_SPIN):
+        if not self.coordinator.entry.options.get(CONF_SPIN):
             return False
         return True
 
@@ -357,7 +357,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                     start_mode=start_mode,
                     **kwargs,
                 )
-                spin = self.coordinator.config.options.get(CONF_SPIN)
+                spin = self.coordinator.entry.options.get(CONF_SPIN)
                 if spin is None:
                     _LOGGER.error("Cannot start %s: No S-PIN set.", desired_state)
                     return

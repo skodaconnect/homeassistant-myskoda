@@ -56,7 +56,7 @@ class DoorLock(MySkodaLock):
 
     @property
     def available(self) -> bool:
-        if not self.coordinator.config.options.get(CONF_SPIN):
+        if not self.coordinator.entry.options.get(CONF_SPIN):
             return False
         return True
 
@@ -77,18 +77,18 @@ class DoorLock(MySkodaLock):
             _LOGGER.error("Failed to unlock vehicle: %s", exc)
 
     async def async_lock(self, **kwargs) -> None:
-        if self.coordinator.config.options.get(CONF_SPIN):
+        if self.coordinator.entry.options.get(CONF_SPIN):
             await self._async_lock_unlock(
-                lock=True, spin=self.coordinator.config.options.get(CONF_SPIN)
+                lock=True, spin=self.coordinator.entry.options.get(CONF_SPIN)
             )
             _LOGGER.info("Sent command to lock the vehicle.")
         else:
             _LOGGER.error("Cannot lock car: No S-PIN set.")
 
     async def async_unlock(self, **kwargs) -> None:
-        if self.coordinator.config.options.get(CONF_SPIN):
+        if self.coordinator.entry.options.get(CONF_SPIN):
             await self._async_lock_unlock(
-                lock=False, spin=self.coordinator.config.options.get(CONF_SPIN)
+                lock=False, spin=self.coordinator.entry.options.get(CONF_SPIN)
             )
             _LOGGER.info("Sent command to unlock the vehicle.")
         else:

@@ -66,7 +66,7 @@
             },
             "window_open_rear_right": {
                 "default": "mdi:car-door"
-            }            
+            }
         },
         "climate": {
             "climate": {
@@ -85,9 +85,9 @@
             "charge_limit": {
                 "default": "mdi:battery-lock"
             },
-			"auxiliary_heater_duration": {
-				"default": "mdi:timer"
-			}
+            "auxiliary_heater_duration": {
+                "default": "mdi:timer"
+            }
         },
         "image": {
             "render_url_main": {
@@ -163,15 +163,18 @@
             "operation": {
                 "default": "mdi:cog-transfer"
             },
+            "service_event": {
+                "default": "mdi:message-cog-outline"
+            },
             "software_version": {
                 "default": "mdi:update"
             },
             "target_battery_percentage": {
                 "default": "mdi:percent"
             },
-	    "outside_temperature": {
-		"default": "mdi:thermometer"
-	    }
+            "outside_temperature": {
+                "default": "mdi:thermometer"
+            }
         },
         "switch": {
             "battery_care_mode": {

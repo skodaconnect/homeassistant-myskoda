@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from collections import OrderedDict
+from collections import OrderedDict, deque
 from collections.abc import Coroutine
 from dataclasses import dataclass
 from datetime import timedelta
@@ -8,9 +8,10 @@ from typing import Callable
 
 from aiohttp import ClientError
 from aiohttp.client_exceptions import ClientResponseError
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.debounce import Debouncer
+from homeassistant.helpers.start import async_at_started
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from myskoda import MySkoda, Vehicle
@@ -20,6 +21,7 @@ from myskoda.event import (
     EventAirConditioning,
     EventDeparture,
     EventOperation,
+    ServiceEvent,
     ServiceEventTopic,
 )
 from myskoda.models.info import CapabilityId
@@ -34,9 +36,11 @@ from myskoda.mqtt import EventCharging, EventType
 from .const import (
     API_COOLDOWN_IN_SECONDS,
     CONF_POLL_INTERVAL,
+    COORDINATORS,
     DEFAULT_FETCH_INTERVAL_IN_MINUTES,
     DOMAIN,
     MAX_STORED_OPERATIONS,
+    MAX_STORED_SERVICE_EVENTS,
 )
 from .error_handlers import handle_aiohttp_error
 
@@ -68,6 +72,10 @@ class MySkodaDebouncer(Debouncer):
 Operations = OrderedDict[str, EventOperation]
 
 
+# History of EventType.SERVICE_EVENT events
+ServiceEvents = deque[ServiceEvent]
+
+
 @dataclass
 class Config:
     auxiliary_heater_duration: float | None = None
@@ -79,6 +87,7 @@ class State:
     user: User
     config: Config
     operations: Operations
+    service_events: ServiceEvents
 
 
 class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
@@ -90,7 +99,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     data: State
 
     def __init__(
-        self, hass: HomeAssistant, config: ConfigEntry, myskoda: MySkoda, vin: str
+        self, hass: HomeAssistant, entry: ConfigEntry, myskoda: MySkoda, vin: str
     ) -> None:
         """Create a new coordinator."""
 
@@ -99,7 +108,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             _LOGGER,
             name=DOMAIN,
             update_interval=timedelta(
-                minutes=config.options.get(
+                minutes=entry.options.get(
                     CONF_POLL_INTERVAL, DEFAULT_FETCH_INTERVAL_IN_MINUTES
                 )
             ),
@@ -109,7 +118,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.vin: str = vin
         self.myskoda: MySkoda = myskoda
         self.operations: OrderedDict = OrderedDict()
-        self.config: ConfigEntry = config
+        self.service_events: deque = deque(maxlen=MAX_STORED_SERVICE_EVENTS)
+        self.entry: ConfigEntry = entry
         self.update_driving_range = self._debounce(self._update_driving_range)
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
@@ -119,14 +129,81 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_departure_info = self._debounce(self._update_departure_info)
         self._mqtt_connecting: bool = False
 
+    async def _async_get_minimal_data(self) -> Vehicle:
+        """Internal method that fetches only basic vehicle info."""
+        return await self.myskoda.get_partial_vehicle(self.vin, [])
+
+    async def _async_get_vehicle_data(self) -> Vehicle:
+        """Internal method that fetches vehicle data."""
+        if self.data:
+            if (
+                self.data.vehicle.info.device_platform == "MBB"
+                and self.data.vehicle.info.specification.model == "CitigoE iV"
+            ):
+                _LOGGER.debug(
+                    "Detected Citigo iV, requesting only partial update without health"
+                )
+                vehicle = await self.myskoda.get_partial_vehicle(
+                    self.vin,
+                    [
+                        CapabilityId.AIR_CONDITIONING,
+                        CapabilityId.CHARGING,
+                        CapabilityId.PARKING_POSITION,
+                        CapabilityId.STATE,
+                        CapabilityId.TRIP_STATISTICS,
+                    ],
+                )
+            else:
+                vehicle = await self.myskoda.get_vehicle(self.vin)
+        else:
+            vehicle = await self.myskoda.get_vehicle(self.vin)
+        return vehicle
+
     async def _async_update_data(self) -> State:
         vehicle = None
         user = None
         config = self.data.config if self.data and self.data.config else Config()
         operations = self.operations
+        service_events = self.service_events
 
-        if not self.myskoda.mqtt and not self._mqtt_connecting:
-            self.hass.async_create_task(self._mqtt_connect())
+        if self.entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
+            if getattr(self, "_startup_called", False):
+                return self.data  # Prevent duplicate execution
+            _LOGGER.debug("Performing initial data fetch for vin %s", self.vin)
+            try:
+                user = await self.myskoda.get_user()
+                vehicle = await self._async_get_minimal_data()
+                self._startup_called = True  # Prevent duplicate execution
+            except ClientResponseError as err:
+                handle_aiohttp_error(
+                    "setup user and vehicle", err, self.hass, self.entry
+                )
+                raise UpdateFailed("Failed to retrieve initial data during setup")
+
+            async def _async_finish_startup(hass: HomeAssistant) -> None:
+                """Tasks to execute when we have finished starting up."""
+                _LOGGER.debug(
+                    "MySkoda has finished starting up. Scheduling post-start tasks for vin %s.",
+                    self.vin,
+                )
+                try:
+                    coord = hass.data[DOMAIN][self.entry.entry_id][COORDINATORS][
+                        self.vin
+                    ]
+                    if not coord.myskoda.mqtt and not coord._mqtt_connecting:
+                        self.entry.async_create_background_task(
+                            self.hass, coord._mqtt_connect(), "mqtt"
+                        )
+                except KeyError:
+                    _LOGGER.debug("Could not connect to MQTT. Waiting for regular poll")
+                    pass
+
+            async_at_started(
+                hass=self.hass, at_start_cb=_async_finish_startup
+            )  # Schedule post-setup tasks
+            return State(vehicle, user, config, operations, service_events)
+
+        # Regular update
 
         _LOGGER.debug("Performing scheduled update of all data for vin %s", self.vin)
 
@@ -134,7 +211,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             user = await self.myskoda.get_user()
         except ClientResponseError as err:
-            handle_aiohttp_error("user", err, self.hass, self.config)
+            handle_aiohttp_error("user", err, self.hass, self.entry)
             if self.data.user:
                 user = self.data.user
             else:
@@ -142,43 +219,25 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         # Obtain vehicle data.
         try:
-            if self.data:
-                if (
-                    self.data.vehicle.info.device_platform == "MBB"
-                    and self.data.vehicle.info.specification.model == "CitigoE iV"
-                ):
-                    _LOGGER.debug(
-                        "Detected CitigoE iV, requesting only partial update without health"
-                    )
-                    vehicle = await self.myskoda.get_partial_vehicle(
-                        self.vin,
-                        [
-                            CapabilityId.AIR_CONDITIONING,
-                            CapabilityId.CHARGING,
-                            CapabilityId.PARKING_POSITION,
-                            CapabilityId.STATE,
-                            CapabilityId.TRIP_STATISTICS,
-                        ],
-                    )
-                else:
-                    vehicle = await self.myskoda.get_vehicle(self.vin)
-            else:
-                vehicle = await self.myskoda.get_vehicle(self.vin)
+            vehicle = await self._async_get_vehicle_data()
         except ClientResponseError as err:
-            handle_aiohttp_error("vehicle", err, self.hass, self.config)
+            handle_aiohttp_error("vehicle", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
         if vehicle and user:
-            return State(vehicle, user, config, operations)
+            return State(vehicle, user, config, operations, service_events)
         raise UpdateFailed("Incomplete update received")
 
     async def _mqtt_connect(self) -> None:
         """Connect to MQTT and handle internals."""
         _LOGGER.debug("Connecting to MQTT.")
         self._mqtt_connecting = True
-        await self.myskoda.enable_mqtt()
-        self.myskoda.subscribe(self._on_mqtt_event)
+        try:
+            await self.myskoda.enable_mqtt()
+            self.myskoda.subscribe(self._on_mqtt_event)
+        except Exception:
+            pass
         self._mqtt_connecting = False
 
     async def _on_mqtt_event(self, event: Event) -> None:
@@ -188,6 +247,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         if event.type == EventType.OPERATION:
             await self._on_operation_event(event)
         if event.type == EventType.SERVICE_EVENT:
+            # Store the event and update data
+            self.service_events.appendleft(event.event)
+            self.async_set_updated_data(self.data)
+
             if event.topic == ServiceEventTopic.CHARGING:
                 await self._on_charging_event(event)
             if event.topic == ServiceEventTopic.ACCESS:
@@ -302,7 +365,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             driving_range = await self.myskoda.get_driving_range(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("driving range", err, self.hass, self.config)
+            handle_aiohttp_error("driving range", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -318,7 +381,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             charging = await self.myskoda.get_charging(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("charging information", err, self.hass, self.config)
+            handle_aiohttp_error("charging information", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -334,7 +397,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             air_conditioning = await self.myskoda.get_air_conditioning(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("AC update", err, self.hass, self.config)
+            handle_aiohttp_error("AC update", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -355,7 +418,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             auxiliary_heating = await self.myskoda.get_auxiliary_heating(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("Auxiliary update", err, self.hass, self.config)
+            handle_aiohttp_error("Auxiliary update", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -371,7 +434,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             status = await self.myskoda.get_status(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("vehicle status", err, self.hass, self.config)
+            handle_aiohttp_error("vehicle status", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -387,7 +450,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             departure_info = await self.myskoda.get_departure_timers(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("departure info", err, self.hass, self.config)
+            handle_aiohttp_error("departure info", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -403,7 +466,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         try:
             vehicle = await self.myskoda.get_vehicle(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("vehicle update", err, self.hass, self.config)
+            handle_aiohttp_error("vehicle update", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
@@ -422,7 +485,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             await asyncio.sleep(60)  # GPS is not updated immediately, wait 60 seconds
             positions = await self.myskoda.get_positions(self.vin)
         except ClientResponseError as err:
-            handle_aiohttp_error("positions", err, self.hass, self.config)
+            handle_aiohttp_error("positions", err, self.hass, self.entry)
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 

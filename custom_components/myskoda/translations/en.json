@@ -165,9 +165,9 @@
             }
         },
         "image": {
-	    "render_light_3x": {
-		"name": "Light Status Render of Vehicle"
-	    },
+            "render_light_3x": {
+                "name": "Light Status Render of Vehicle"
+            },
             "render_vehicle_main": {
                 "name": "Main Render of Vehicle"
             }
@@ -238,12 +238,15 @@
             },
             "operation": {
                 "name": "Last Operation",
-		"state": {
-		    "in_progress": "In Progress", 
-		    "completed_success": "Completed succesfully", 
-		    "completed_warning": "Completed with warning", 
-		    "error": "Error"
-		}
+                "state": {
+                    "in_progress": "In Progress",
+                    "completed_success": "Completed succesfully",
+                    "completed_warning": "Completed with warning",
+                    "error": "Error"
+                }
+            },
+            "service_event": {
+                "name": "Last Service Event"
             },
             "software_version": {
                 "name": "Software Version"
@@ -269,9 +272,9 @@
             "electric_range": {
                 "name": "Electric Range"
             },
-	    "outside_temperature": {
-		"name": "Outside Temperature"
-	    }
+            "outside_temperature": {
+                "name": "Outside Temperature"
+            }
         },
         "switch": {
             "battery_care_mode": {
