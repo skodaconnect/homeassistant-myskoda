@@ -158,26 +158,31 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         operations = self.operations
 
         if self.entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
+            if getattr(self, "_startup_called", False):
+                return self.data  # Prevent duplicate execution
             _LOGGER.debug("Performing initial data fetch for vin %s", self.vin)
             try:
                 user = await self.myskoda.get_user()
                 vehicle = await self._async_get_minimal_data()
+                self._startup_called = True  # Prevent duplicate execution
             except ClientResponseError as err:
                 handle_aiohttp_error(
                     "setup user and vehicle", err, self.hass, self.entry
                 )
                 raise UpdateFailed("Failed to retrieve initial data during setup")
 
-            def _async_finish_startup(hass, config, vin) -> None:
+            async def _async_finish_startup(hass: HomeAssistant) -> None:
                 """Tasks to execute when we have finished starting up."""
                 _LOGGER.debug(
                     "MySkoda has finished starting up. Scheduling post-start tasks for vin %s.",
-                    vin,
+                    self.vin,
                 )
                 try:
-                    coord = hass.data[DOMAIN][config.entry_id][COORDINATORS][vin]
+                    coord = hass.data[DOMAIN][self.entry.entry_id][COORDINATORS][
+                        self.vin
+                    ]
                     if not coord.myskoda.mqtt and not coord._mqtt_connecting:
-                        config.async_create_background_task(
+                        self.entry.async_create_background_task(
                             self.hass, coord._mqtt_connect(), "mqtt"
                         )
                 except KeyError:
@@ -185,8 +190,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                     pass
 
             async_at_started(
-                hass=self.hass,
-                at_start_cb=_async_finish_startup(self.hass, self.entry, self.vin),  # pyright: ignore[reportArgumentType]
+                hass=self.hass, at_start_cb=_async_finish_startup
             )  # Schedule post-setup tasks
             return State(vehicle, user, config, operations)
 
