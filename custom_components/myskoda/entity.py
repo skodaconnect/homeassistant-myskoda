@@ -8,7 +8,10 @@ from myskoda.event import EventOperation
 from myskoda.models.info import CapabilityId
 
 from .const import DOMAIN
-from .coordinator import MySkodaDataUpdateCoordinator
+from .coordinator import (
+    MySkodaDataUpdateCoordinator,
+    ServiceEvents,
+)
 
 
 class MySkodaEntity(CoordinatorEntity):
@@ -35,6 +38,10 @@ class MySkodaEntity(CoordinatorEntity):
     @property
     def operations(self) -> dict[str, EventOperation]:
         return self.coordinator.data.operations
+
+    @property
+    def service_events(self) -> ServiceEvents:
+        return self.coordinator.data.service_events
 
     @property
     def device_info(self) -> DeviceInfo:  # noqa: D102

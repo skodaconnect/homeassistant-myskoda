@@ -63,6 +63,7 @@ async def async_setup_entry(
             OutsideTemperature,
             Range,
             RemainingChargingTime,
+            ServiceEvent,
             SoftwareVersion,
             TargetBatteryPercentage,
         ],
@@ -123,6 +124,47 @@ class Operation(MySkodaSensor):
                 "timestamp": event.timestamp,
             }
             for event in operations
+        ]
+        attributes = filtered[0]
+        attributes["history"] = filtered[1:]
+
+        return attributes
+
+
+class ServiceEvent(MySkodaSensor):
+    """Report the most recent service event."""
+
+    entity_description = SensorEntityDescription(
+        key="service_event",
+        translation_key="service_event",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    )
+
+    @property
+    def native_value(self) -> datetime | None:
+        """Returns the timestamp of the last seen service event."""
+        if self.service_events:
+            last_service_event = self.service_events[0]
+            return last_service_event.timestamp
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Returns additional attributes for the service event sensor.
+
+        - history: a list of dicts with the same fields for the previously seen event.
+        """
+        attributes = {}
+        if not self.service_events:
+            return attributes
+
+        filtered = [
+            {
+                "name": event.name.value,
+                "timestamp": event.timestamp,
+                "data": event.data,
+            }
+            for event in self.service_events
         ]
         attributes = filtered[0]
         attributes["history"] = filtered[1:]

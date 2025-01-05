@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from collections import OrderedDict
+from collections import OrderedDict, deque
 from collections.abc import Coroutine
 from dataclasses import dataclass
 from datetime import timedelta
@@ -21,6 +21,7 @@ from myskoda.event import (
     EventAirConditioning,
     EventDeparture,
     EventOperation,
+    ServiceEvent,
     ServiceEventTopic,
 )
 from myskoda.models.info import CapabilityId
@@ -39,6 +40,7 @@ from .const import (
     DEFAULT_FETCH_INTERVAL_IN_MINUTES,
     DOMAIN,
     MAX_STORED_OPERATIONS,
+    MAX_STORED_SERVICE_EVENTS,
 )
 from .error_handlers import handle_aiohttp_error
 
@@ -70,6 +72,10 @@ class MySkodaDebouncer(Debouncer):
 Operations = OrderedDict[str, EventOperation]
 
 
+# History of EventType.SERVICE_EVENT events
+ServiceEvents = deque[ServiceEvent]
+
+
 @dataclass
 class Config:
     auxiliary_heater_duration: float | None = None
@@ -81,6 +87,7 @@ class State:
     user: User
     config: Config
     operations: Operations
+    service_events: ServiceEvents
 
 
 class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
@@ -111,6 +118,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.vin: str = vin
         self.myskoda: MySkoda = myskoda
         self.operations: OrderedDict = OrderedDict()
+        self.service_events: deque = deque(maxlen=MAX_STORED_SERVICE_EVENTS)
         self.entry: ConfigEntry = entry
         self.update_driving_range = self._debounce(self._update_driving_range)
         self.update_charging = self._debounce(self._update_charging)
@@ -156,6 +164,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         user = None
         config = self.data.config if self.data and self.data.config else Config()
         operations = self.operations
+        service_events = self.service_events
 
         if self.entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
             if getattr(self, "_startup_called", False):
@@ -192,7 +201,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             async_at_started(
                 hass=self.hass, at_start_cb=_async_finish_startup
             )  # Schedule post-setup tasks
-            return State(vehicle, user, config, operations)
+            return State(vehicle, user, config, operations, service_events)
 
         # Regular update
 
@@ -217,7 +226,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
         if vehicle and user:
-            return State(vehicle, user, config, operations)
+            return State(vehicle, user, config, operations, service_events)
         raise UpdateFailed("Incomplete update received")
 
     async def _mqtt_connect(self) -> None:
@@ -238,6 +247,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         if event.type == EventType.OPERATION:
             await self._on_operation_event(event)
         if event.type == EventType.SERVICE_EVENT:
+            # Store the event and update data
+            self.service_events.appendleft(event.event)
+            self.async_set_updated_data(self.data)
+
             if event.topic == ServiceEventTopic.CHARGING:
                 await self._on_charging_event(event)
             if event.topic == ServiceEventTopic.ACCESS:
