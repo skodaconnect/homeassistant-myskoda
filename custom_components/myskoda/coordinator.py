@@ -161,7 +161,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             _LOGGER.debug("Performing initial data fetch for vin %s", self.vin)
             try:
                 user = await self.myskoda.get_user()
-                vehicle = await self._async_get_minimal_data()
+                # - Disabled until we find a way to schedule an update when HA is started
+                # vehicle = await self._async_get_minimal_data()
+                vehicle = await self._async_get_vehicle_data()
             except ClientResponseError as err:
                 handle_aiohttp_error(
                     "setup user and vehicle", err, self.hass, self.entry
