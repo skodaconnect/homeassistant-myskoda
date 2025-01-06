@@ -48,7 +48,7 @@ PLATFORMS: list[Platform] = [
 ]
 
 
-async def async_connect_myskoda(
+def myskoda_instantiate(
     hass: HomeAssistant, entry: ConfigEntry, mqtt_enabled: bool = True
 ) -> MySkoda:
     """Generic connector to MySkoda REST API."""
@@ -60,15 +60,13 @@ async def async_connect_myskoda(
     session = async_create_clientsession(
         hass, trace_configs=trace_configs, auto_cleanup=False
     )
-    myskoda = MySkoda(session, get_default_context(), mqtt_enabled=mqtt_enabled)
-
-    return myskoda
+    return MySkoda(session, get_default_context(), mqtt_enabled=mqtt_enabled)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up MySkoda integration from a config entry."""
 
-    myskoda = await async_connect_myskoda(hass, entry, mqtt_enabled=False)
+    myskoda = myskoda_instantiate(hass, entry, mqtt_enabled=False)
 
     try:
         await myskoda.connect(entry.data["email"], entry.data["password"])
@@ -140,72 +138,81 @@ async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry):
 
 
 async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Handle config entry schema migrations."""
+    """Handle MySkoda config-entry schema migrations."""
+
     _LOGGER.debug(
-        "Migrating configuration entry %s from v%s.%s",
+        "Migrating config entry %s from v%s.%s",
         entry.entry_id,
         entry.version,
         entry.minor_version,
     )
 
+    # Only handle known versions. Bump this if you introduce a new major version.
+    # We use the following version scheme:
+    # - Minor increase: Adding new options
+    # - Major increase: Removing options or rewriting entities/devices
     if entry.version > 2:
-        """We do not support config entry v3 yet."""
         _LOGGER.error(
-            "Configuration for %s is too new. This can happen if you downgraded. Automatic config migration aborted."
+            "Configuration for %s is too new. This can happen if you downgraded your HA install. Automatic configuration migration aborted.",
+            DOMAIN,
         )
         return False
 
+    # We will likely need to contact myskoda, so make a connection and authenticate
+    try:
+        myskoda = myskoda_instantiate(hass, entry, mqtt_enabled=False)
+        await myskoda.connect(entry.data["email"], entry.data["password"])
+    except AuthorizationFailedError as exc:
+        raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
+    except Exception as exc:
+        _LOGGER.exception("Login with %s failed: %s", DOMAIN, exc)
+        return False
+
     if entry.version == 1:
-        # v1 might be missing a unique_id. Migrate to 2.1 that has this.
+        # v1 did not enforce a unique id for the config_entry. Fixing this in v2.1
+
+        new_version = 2
+        new_minor_version = 1
+        _LOGGER.info("Starting migration to config schema v2.1.")
+
         if not entry.unique_id or entry.unique_id == "":
-            _LOGGER.debug("Starting migration to config schema 2.1, adding unique_id")
+            _LOGGER.debug("Unique_id is missing. Adding it.")
 
-            new_version = 2
-            new_minor_version = 1
+            user = await myskoda.get_user()
+            unique_id = user.id
 
-            try:
-                myskoda = await async_connect_myskoda(hass, entry, mqtt_enabled=False)
-                user = await myskoda.get_user()
-                unique_id = user.id
-            except AuthorizationFailedError as exc:
-                raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
-            except Exception as exc:
-                _LOGGER.exception(
-                    "Login with %s failed for unknown reason. Details: %s", DOMAIN, exc
-                )
-                return False
-
-            _LOGGER.debug("Add unique_id %s to entry %s", unique_id, entry.entry_id)
+            _LOGGER.debug("Adding unique_id %s to entry %s", unique_id, entry.entry_id)
             hass.config_entries.async_update_entry(
                 entry,
                 version=new_version,
                 minor_version=new_minor_version,
                 unique_id=unique_id,
             )
+            return True
+        else:
+            _LOGGER.debug(
+                "Detected unique_id. Skipping generation, only updating schema version"
+            )
+            hass.config_entries.async_update_entry(
+                entry, version=new_version, minor_version=new_minor_version
+            )
+
+            return True
 
     if entry.version == 2:
         if entry.minor_version < 2:
             # v2.1 does not have the vinlist. Add it.
-            _LOGGER.debug("Starting migration to config schema 2.2, adding vinlist")
+            _LOGGER.info("Starting migration to config schema 2.2, adding vinlist")
 
             new_version = 2
             new_minor_version = 2
 
             entry_data = {**entry.data}
-            vinlist = []
 
-            try:
-                myskoda = await async_connect_myskoda(hass, entry, mqtt_enabled=False)
-                vinlist = myskoda.list_vehicle_vins()
-                entry_data[VINLIST] = vinlist
-            except AuthorizationFailedError as exc:
-                raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
-            except Exception as exc:
-                _LOGGER.exception(
-                    "Login with %s failed for unknown reason. Details: %s", DOMAIN, exc
-                )
-                return False
+            vinlist = myskoda.list_vehicle_vins()
+            entry_data[VINLIST] = vinlist
             _LOGGER.debug("Add vinlist %s to entry %s", vinlist, entry.entry_id)
+
             hass.config_entries.async_update_entry(
                 entry,
                 version=new_version,
@@ -215,12 +222,4 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Add any more migrations here
 
-    if new_entry := hass.config_entries.async_get_entry(entry_id=entry.entry_id):
-        _LOGGER.debug(
-            "Migration of %s to v%s.%s successful",
-            entry.entry_id,
-            new_entry.version,
-            new_entry.minor_version,
-        )
-
-    return True
+    return False
