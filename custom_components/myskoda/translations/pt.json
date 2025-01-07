@@ -245,6 +245,9 @@
                     "error": "Erro"
                 }
             },
+            "service_event": {
+                "name": "Último evento de serviço"
+            },
             "software_version": {
                 "name": "Versão do software"
             },
