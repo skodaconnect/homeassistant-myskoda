@@ -104,7 +104,7 @@
                 }
             },
             "door_open_rear_left": {
-                "name": "Deur rechtsachter",
+                "name": "Deur linksachter",
                 "state": {
                     "off": "Gesloten",
                     "on": "Open"
@@ -245,6 +245,9 @@
                     "error": "Fout"
                 }
             },
+            "service_event": {
+                "name": "Recente gebeurtenis"
+            },
             "software_version": {
                 "name": "Software versie"
             },
@@ -286,6 +289,9 @@
             "reduced_current": {
                 "name": "Stroombegrenzing"
             },
+            "auto_unlock_plug": {
+                "name": "Ontgrendel stekker wanneer opgeladen"
+            },
             "window_heating": {
                 "name": "Verwarming raam"
             },
@@ -303,6 +309,15 @@
             },
             "ac_window_heating": {
                 "name": "Raam verwarmen bij luchtbehandeling"
+            },
+            "departure_timer_1": {
+                "name": "Vertrek Timer 1"
+            },
+            "departure_timer_2": {
+                "name": "Vertrek Timer 2"
+            },
+            "departure_timer_3": {
+                "name": "Vertrek Timer 3"
             }
         },
         "button": {

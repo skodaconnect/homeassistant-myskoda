@@ -245,6 +245,9 @@
                     "error": "Virhe"
                 }
             },
+            "service_event": {
+                "name": "Viimeisin palvelutapahtuma"
+            },
             "software_version": {
                 "name": "Ohjelmistoversio"
             },
