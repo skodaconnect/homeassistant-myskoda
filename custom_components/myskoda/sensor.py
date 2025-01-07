@@ -507,7 +507,6 @@ class TargetBatteryPercentage(ChargingSensor):
         key="target_battery_percentage",
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=PERCENTAGE,
-        device_class=SensorDeviceClass.BATTERY,
         translation_key="target_battery_percentage",
     )
 
