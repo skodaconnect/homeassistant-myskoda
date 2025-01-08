@@ -48,8 +48,10 @@ PLATFORMS: list[Platform] = [
 ]
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up MySkoda integration from a config entry."""
+def myskoda_instantiate(
+    hass: HomeAssistant, entry: ConfigEntry, mqtt_enabled: bool = True
+) -> MySkoda:
+    """Generic connector to MySkoda REST API."""
 
     trace_configs = []
     if entry.options.get("tracing"):
@@ -58,7 +60,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     session = async_create_clientsession(
         hass, trace_configs=trace_configs, auto_cleanup=False
     )
-    myskoda = MySkoda(session, get_default_context(), mqtt_enabled=False)
+    return MySkoda(session, get_default_context(), mqtt_enabled=mqtt_enabled)
+
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up MySkoda integration from a config entry."""
+
+    myskoda = myskoda_instantiate(hass, entry, mqtt_enabled=False)
 
     try:
         await myskoda.connect(entry.data["email"], entry.data["password"])
@@ -112,3 +120,67 @@ async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry):
     """Handle options update."""
     # Do a lazy reload of integration when configuration changed
     await hass.config_entries.async_reload(entry.entry_id)
+
+
+async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Handle MySkoda config-entry schema migrations."""
+
+    _LOGGER.debug(
+        "Migrating config entry %s from v%s.%s",
+        entry.entry_id,
+        entry.version,
+        entry.minor_version,
+    )
+
+    # Only handle known versions. Bump this if you introduce a new major version.
+    # We use the following version scheme:
+    # - Minor increase: Adding new options
+    # - Major increase: Removing options or rewriting entities/devices
+    if entry.version > 2:
+        _LOGGER.error(
+            "Configuration for %s is too new. This can happen if you downgraded your HA install. Automatic configuration migration aborted.",
+            DOMAIN,
+        )
+        return False
+
+    if entry.version == 1:
+        # v1 did not enforce a unique id for the config_entry. Fixing this in v2.1
+
+        new_version = 2
+        new_minor_version = 1
+        _LOGGER.debug("Starting migration to config schema v2.1.")
+
+        if not entry.unique_id or entry.unique_id == "":
+            _LOGGER.debug("Unique_id is missing. Adding it.")
+
+            try:
+                myskoda = myskoda_instantiate(hass, entry, mqtt_enabled=False)
+                await myskoda.connect(entry.data["email"], entry.data["password"])
+                user = await myskoda.get_user()
+                unique_id = user.id
+            except AuthorizationFailedError as exc:
+                raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
+            except Exception as exc:
+                _LOGGER.exception("Login with %s failed: %s", DOMAIN, exc)
+                return False
+            _LOGGER.debug("Adding unique_id %s to entry %s", unique_id, entry.entry_id)
+            hass.config_entries.async_update_entry(
+                entry,
+                version=new_version,
+                minor_version=new_minor_version,
+                unique_id=unique_id,
+            )
+
+            return True
+
+        else:
+            _LOGGER.debug(
+                "Detected unique_id. Skipping generation, only updating schema version"
+            )
+            hass.config_entries.async_update_entry(
+                entry, version=new_version, minor_version=new_minor_version
+            )
+
+            return True
+
+    return False
