@@ -730,7 +730,7 @@ class ACTimerSwitch(MySkodaSwitch):
         return [CapabilityId.AIR_CONDITIONING_TIMERS]
 
 
-class ACTimer1(DepartureTimerSwitch):
+class ACTimer1(ACTimerSwitch):
     """Enable/disable air-conditioning timer 1."""
 
     entity_description = SwitchEntityDescription(
@@ -745,7 +745,7 @@ class ACTimer1(DepartureTimerSwitch):
         super().__init__(coordinator, vin, timer_id=1, **kwargs)
 
 
-class ACTimer2(DepartureTimerSwitch):
+class ACTimer2(ACTimerSwitch):
     """Enable/disable air-conditioning timer 2."""
 
     entity_description = SwitchEntityDescription(
@@ -760,7 +760,7 @@ class ACTimer2(DepartureTimerSwitch):
         super().__init__(coordinator, vin, timer_id=2, **kwargs)
 
 
-class ACTimer3(DepartureTimerSwitch):
+class ACTimer3(ACTimerSwitch):
     """Enable/disable air-conditioning timer 3."""
 
     entity_description = SwitchEntityDescription(
