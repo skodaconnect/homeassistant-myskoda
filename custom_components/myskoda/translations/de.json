@@ -89,6 +89,62 @@
                     "on": "Geöffnet"
                 }
             }
+            "door_open_front_left": {
+                "name": "Türe vorne links",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Türe vorne rechts",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Türe hinten links",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Türe hinten rechts",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Fenster vorne links",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Fenster vorne rechts",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Fenster hinten links",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Fenster hinten rechts",
+                "state": {
+                    "off": "Geschlossen",
+                    "on": "Geöffnet"
+                }
+            }
         },
         "climate": {
             "climate": {
@@ -109,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Lichtansicht des Fahrzeugs"
+            },
             "render_vehicle_main": {
                 "name": "Hauptansicht des Fahrzeugs"
             }
@@ -186,6 +245,9 @@
                     "error": "Fehler"
                 }
             },
+            "service_event": {
+                "name": "Letztes Service Ereignis"
+            },
             "software_version": {
                 "name": "Software-Version"
             },
@@ -194,6 +256,15 @@
             },
             "fuel_level": {
                 "name": "Füllstand Tank"
+            },
+            "adblue_range": {
+                "name": "AdBlue Reichweite"
+            },
+            "gas_level": {
+                "name": "Füllstand Gas"
+            },
+            "gas_range": {
+                "name": "Gas Reichweite"
             },
             "combustion_range": {
                 "name": "Fossile Reichweite"
@@ -218,6 +289,9 @@
             "reduced_current": {
                 "name": "Ladestrombegrenzung"
             },
+            "auto_unlock_plug": {
+                "name": "Nach Ladevorgang entsperren"
+            },
             "window_heating": {
                 "name": "Scheiben beheizen"
             },
@@ -235,6 +309,15 @@
             },
             "ac_window_heating": {
                 "name": "Fensterheizung mit AC"
+            },
+            "departure_timer_1": {
+                "name": "Departure Timer 1"
+            },
+            "departure_timer_2": {
+                "name": "Departure Timer 2"
+            },
+            "departure_timer_3": {
+                "name": "Departure Timer 3"
             }
         },
         "button": {
