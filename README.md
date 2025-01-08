@@ -71,6 +71,7 @@ If your desired language is not available, please [open an issue](https://github
 - Right Seat Heating with AC
 - Window Heating with AC
 - Departure Timer 1,2 & 3 (timer configuration is stored inside custom attributes)
+- AirConditioning Timer 1,2 & 3 (timer configuration is stored inside custom attributes)
 
 
 ### Buttons
