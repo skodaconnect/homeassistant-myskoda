@@ -189,6 +189,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 unique_id=unique_id,
             )
             return True
+
         else:
             _LOGGER.debug(
                 "Detected unique_id. Skipping generation, only updating schema version"

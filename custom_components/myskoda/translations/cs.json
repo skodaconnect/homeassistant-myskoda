@@ -245,6 +245,9 @@
                     "error": "Chyba"
                 }
             },
+            "service_event": {
+                "name": "Poslední událost služby"
+            },
             "software_version": {
                 "name": "Verze softwaru"
             },
@@ -286,6 +289,9 @@
             "reduced_current": {
                 "name": "Snížený proud"
             },
+            "auto_unlock_plug": {
+                "name": "Odemknout nabíjecí kabel při nabíjení"
+            },
             "window_heating": {
                 "name": "Vytápění okna"
             },
@@ -303,6 +309,15 @@
             },
             "ac_window_heating": {
                 "name": "Vyhřívání oken se střídavým proudem"
+            },
+            "departure_timer_1": {
+                "name": "Časovač odjezdu 1"
+            },
+            "departure_timer_2": {
+                "name": "Časovač odjezdu 2"
+            },
+            "departure_timer_3": {
+                "name": "Časovač odjezdu 3"
             }
         },
         "button": {
