@@ -210,7 +210,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
             entry_data = {**entry.data}
 
-            vinlist = myskoda.list_vehicle_vins()
+            vinlist = await myskoda.list_vehicle_vins()
             entry_data[VINLIST] = vinlist
             _LOGGER.debug("Add vinlist %s to entry %s", vinlist, entry.entry_id)
 
