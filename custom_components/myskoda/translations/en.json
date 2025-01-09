@@ -320,13 +320,13 @@
                 "name": "Departure Timer 3"
             },
             "ac_timer_1": {
-                "name": "AirConditioning Timer 1"
+                "name": "Air-conditioning Timer 1"
             },
             "ac_timer_2": {
-                "name": "AirConditioning Timer 2"
+                "name": "Air-conditioning Timer 2"
             },
             "ac_timer_3": {
-                "name": "AirConditioning Timer 3"
+                "name": "Air-conditioning Timer 3"
             }
         },
         "button": {
