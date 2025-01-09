@@ -90,56 +90,56 @@
                 }
             },
             "door_open_front_left": {
-                "name": "Door Open Front Left",
+                "name": "Door Front Left",
                 "state": {
                     "off": "Closed",
                     "on": "Open"
                 }
             },
             "door_open_front_right": {
-                "name": "Door Open Front Right",
+                "name": "Door Front Right",
                 "state": {
                     "off": "Closed",
                     "on": "Open"
                 }
             },
             "door_open_rear_left": {
-                "name": "Door Open Rear Left",
+                "name": "Door Rear Left",
                 "state": {
                     "off": "Closed",
                     "on": "Open"
                 }
             },
             "door_open_rear_right": {
-                "name": "Door Open Rear Right",
+                "name": "Door Rear Right",
                 "state": {
                     "off": "Closed",
                     "on": "Open"
                 }
             },
             "window_open_front_left": {
-                "name": "Window Open Front Left",
+                "name": "Window Front Left",
                 "state": {
                     "off": "Closed",
                     "on": "Open"
                 }
             },
             "window_open_front_right": {
-                "name": "Window Open Front Right",
+                "name": "Window Front Right",
                 "state": {
                     "off": "Closed",
                     "on": "Open"
                 }
             },
             "window_open_rear_left": {
-                "name": "Window Open Rear Left",
+                "name": "Window Rear Left",
                 "state": {
                     "off": "Closed",
                     "on": "Open"
                 }
             },
             "window_open_rear_right": {
-                "name": "Window Open Rear Right",
+                "name": "Window Rear Right",
                 "state": {
                     "off": "Closed",
                     "on": "Open"
@@ -318,6 +318,15 @@
             },
             "departure_timer_3": {
                 "name": "Departure Timer 3"
+            },
+            "ac_timer_1": {
+                "name": "Air-conditioning Timer 1"
+            },
+            "ac_timer_2": {
+                "name": "Air-conditioning Timer 2"
+            },
+            "ac_timer_3": {
+                "name": "Air-conditioning Timer 3"
             }
         },
         "button": {
