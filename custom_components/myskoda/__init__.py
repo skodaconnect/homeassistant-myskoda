@@ -104,6 +104,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     except Exception:
         if cached_vins:
             vehicles = cached_vins
+            _LOGGER.warning(
+                "Using cached list of VINs. This will work only if there is a temporary issue with MySkoda API"
+            )
             pass
         else:
             raise
