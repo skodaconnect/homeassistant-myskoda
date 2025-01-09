@@ -26,6 +26,7 @@ from myskoda.models.charging import (
 )
 from myskoda.models.air_conditioning import (
     AirConditioningAtUnlock,
+    AirConditioningTimer,
     AirConditioningWithoutExternalPower,
     SeatHeating,
     WindowHeating,
@@ -64,6 +65,9 @@ async def async_setup_entry(
             DepartureTimer2,
             DepartureTimer3,
             AutoUnlockPlug,
+            ACTimer1,
+            ACTimer2,
+            ACTimer3,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -649,6 +653,121 @@ class DepartureTimer3(DepartureTimerSwitch):
         name="Departure Timer 3",
         device_class=SwitchDeviceClass.SWITCH,
         translation_key="departure_timer_3",
+        entity_category=EntityCategory.CONFIG,
+    )
+
+    def __init__(self, coordinator, vin, **kwargs):
+        super().__init__(coordinator, vin, timer_id=3, **kwargs)
+
+
+class ACTimerSwitch(MySkodaSwitch):
+    """Base class for air-conditioning timers, handling common functionality."""
+
+    def __init__(self, coordinator, vin, timer_id: int, **kwargs):
+        """Initialize the departure timer switch."""
+        super().__init__(coordinator, vin)  # Initialize parent class (MySkodaEntity)
+        self.timer_id = timer_id  # Store the specific timer ID for each subclass
+
+    def get_timer(self) -> AirConditioningTimer | None:
+        """Retrieve the specific ac timer by ID."""
+        if air_conditioning := self.vehicle.air_conditioning:
+            if air_conditioning.timers:
+                return next(
+                    (
+                        timer
+                        for timer in air_conditioning.timers
+                        if timer.id == self.timer_id
+                    ),
+                    None,
+                )
+
+    @property
+    def available(self) -> bool:
+        """Determine whether the sensor is available."""
+        return bool(self.get_timer())
+
+    @property
+    def is_on(self) -> bool | None:
+        """Check if the timer is enabled."""
+        if timer := self.get_timer():
+            return timer.enabled
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return custom attributes for the entity."""
+        if timer := self.get_timer():
+            return timer.to_dict()  # Return timer configuration as state attributes
+        return {}
+
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
+    async def _async_turn_on_off(self, turn_on: bool, **kwargs):
+        """Turn the timer on or off."""
+        if timer := self.get_timer():
+            timer.enabled = turn_on
+            try:
+                await self.coordinator.myskoda.set_ac_timer(self.vin, timer)
+            except OperationFailedError as exc:
+                _LOGGER.error(
+                    f"Failed to set AirConditioning timer {self.timer_id}: {exc}"
+                )
+        else:
+            _LOGGER.error(
+                f"Failed to set AirConditioning timer {self.timer_id}: Timer not found"
+            )
+
+    async def async_turn_off(self, **kwargs):
+        """Turn the timer off."""
+        await self._async_turn_on_off(turn_on=False)
+        _LOGGER.info(f"AirConditioning Timer {self.timer_id} deactivated.")
+
+    async def async_turn_on(self, **kwargs):
+        """Turn the timer on."""
+        await self._async_turn_on_off(turn_on=True)
+        _LOGGER.info(f"AirConditioning Timer {self.timer_id} activated.")
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        """Return the capabilities required for the departure timer."""
+        return [CapabilityId.AIR_CONDITIONING_TIMERS]
+
+
+class ACTimer1(ACTimerSwitch):
+    """Enable/disable air-conditioning timer 1."""
+
+    entity_description = SwitchEntityDescription(
+        key="ac_timer_1",
+        name="AirConditioning Timer 1",
+        device_class=SwitchDeviceClass.SWITCH,
+        translation_key="ac_timer_1",
+        entity_category=EntityCategory.CONFIG,
+    )
+
+    def __init__(self, coordinator, vin, **kwargs):
+        super().__init__(coordinator, vin, timer_id=1, **kwargs)
+
+
+class ACTimer2(ACTimerSwitch):
+    """Enable/disable air-conditioning timer 2."""
+
+    entity_description = SwitchEntityDescription(
+        key="ac_timer_2",
+        name="AirConditioning Timer 2",
+        device_class=SwitchDeviceClass.SWITCH,
+        translation_key="ac_timer_2",
+        entity_category=EntityCategory.CONFIG,
+    )
+
+    def __init__(self, coordinator, vin, **kwargs):
+        super().__init__(coordinator, vin, timer_id=2, **kwargs)
+
+
+class ACTimer3(ACTimerSwitch):
+    """Enable/disable air-conditioning timer 3."""
+
+    entity_description = SwitchEntityDescription(
+        key="ac_timer_3",
+        name="AirConditioning Timer 3",
+        device_class=SwitchDeviceClass.SWITCH,
+        translation_key="ac_timer_3",
         entity_category=EntityCategory.CONFIG,
     )
 

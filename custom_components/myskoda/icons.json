@@ -260,6 +260,24 @@
                 "state": {
                     "on": "mdi:timer-check"
                 }
+            },
+            "ac_timer_1": {
+                "default": "mdi:timer-cancel",
+                "state": {
+                    "on": "mdi:timer-check"
+                }
+            },
+            "ac_timer_2": {
+                "default": "mdi:timer-cancel",
+                "state": {
+                    "on": "mdi:timer-check"
+                }
+            },
+            "ac_timer_3": {
+                "default": "mdi:timer-cancel",
+                "state": {
+                    "on": "mdi:timer-check"
+                }
             }
         },
         "button": {
