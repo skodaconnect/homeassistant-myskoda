@@ -318,6 +318,15 @@
             },
             "departure_timer_3": {
                 "name": "Tempo de Partida 3"
+            },
+            "ac_timer_1": {
+                "name": "Temporizador 1 de ar condicionado"
+            },
+            "ac_timer_2": {
+                "name": "Temporizador 2 de ar condicionado"
+            },
+            "ac_timer_3": {
+                "name": "Temporizador 3 de ar condicionado"
             }
         },
         "button": {

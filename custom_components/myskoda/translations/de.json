@@ -318,6 +318,15 @@
             },
             "departure_timer_3": {
                 "name": "Abfahrtszeit 3"
+            },
+            "ac_timer_1": {
+                "name": "Klimaanlagen Timer 1"
+            },
+            "ac_timer_2": {
+                "name": "Klimaanlagen Timer 2"
+            },
+            "ac_timer_3": {
+                "name": "Klimaanlagen Timer 3"
             }
         },
         "button": {
