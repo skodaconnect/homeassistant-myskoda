@@ -85,8 +85,64 @@
             "windows_open": {
                 "name": "Ablakok",
                 "state": {
-                    "off": "Zárva",
-                    "on": "Nyitva"
+                    "off": "Felhúzva",
+                    "on": "Leengedve"
+                }
+            },
+            "door_open_front_left": {
+                "name": "Bal első ajtó",
+                "state": {
+                    "off": "Becsukva",
+                    "on": "Kinyitva"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Jobb első ajtó",
+                "state": {
+                    "off": "Becsukva",
+                    "on": "Kinyitva"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Bal hátsó ajtó",
+                "state": {
+                    "off": "Becsukva",
+                    "on": "Kinyitva"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Jobb hátsó ajtó",
+                "state": {
+                    "off": "Becsukva",
+                    "on": "Kinyitva"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Bal első ablak",
+                "state": {
+                    "off": "Felhúzva",
+                    "on": "Leengedve"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Jobb első ablak",
+                "state": {
+                    "off": "Felhúzva",
+                    "on": "Leengedve"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Bal hátsó ablak",
+                "state": {
+                    "off": "Felhúzva",
+                    "on": "Leengedve"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Jobb hátsó ablak",
+                "state": {
+                    "off": "Felhúzva",
+                    "on": "Leengedve"
                 }
             }
         },
@@ -109,6 +165,9 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Világítás állapotok"
+            },
             "render_vehicle_main": {
                 "name": "A jármű elsődleges megjelenítése"
             }
@@ -186,6 +245,9 @@
                     "error": "Hiba"
                 }
             },
+            "service_event": {
+                "name": "Utolsó szervíz esemény"
+            },
             "software_version": {
                 "name": "Szoftververzió"
             },
@@ -194,6 +256,15 @@
             },
             "fuel_level": {
                 "name": "Üzemanyagszint"
+            },
+            "adblue_range": {
+                "name": "AdBlue hatótáv"
+            },
+            "gas_level": {
+                "name": "Üzemanyag szint"
+            },
+            "gas_range": {
+                "name": "Üzemanyag hatótáv"
             },
             "combustion_range": {
                 "name": "Belsőégésű hatótáv"
@@ -218,6 +289,9 @@
             "reduced_current": {
                 "name": "Csökkentett áramerősség"
             },
+            "auto_unlock_plug": {
+                "name": "Töltőfej kioldása ha feltöltve"
+            },
             "window_heating": {
                 "name": "Szélvédő fűtés"
             },
@@ -235,6 +309,15 @@
             },
             "ac_window_heating": {
                 "name": "Szélvédő fűtés klímával"
+            },
+            "departure_timer_1": {
+                "name": "Indulási időzítő 1"
+            },
+            "departure_timer_2": {
+                "name": "Indulási időzítő 2"
+            },
+            "departure_timer_3": {
+                "name": "Indulási időzítő 3"
             }
         },
         "button": {

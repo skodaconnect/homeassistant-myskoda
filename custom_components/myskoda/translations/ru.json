@@ -245,6 +245,9 @@
                     "error": "Ошибка"
                 }
             },
+            "service_event": {
+                "name": "Последнее сервисное событие"
+            },
             "software_version": {
                 "name": "Версия ПО"
             },

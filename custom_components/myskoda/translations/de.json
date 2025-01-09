@@ -311,13 +311,13 @@
                 "name": "Fensterheizung mit AC"
             },
             "departure_timer_1": {
-                "name": "Departure Timer 1"
+                "name": "Abfahrtszeit 1"
             },
             "departure_timer_2": {
-                "name": "Departure Timer 2"
+                "name": "Abfahrtszeit 2"
             },
             "departure_timer_3": {
-                "name": "Departure Timer 3"
+                "name": "Abfahrtszeit 3"
             }
         },
         "button": {
