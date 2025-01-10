@@ -25,6 +25,8 @@ changelog:
     - title: ✅ Testing
       labels:
         - test
+    - title: 🌐 Language
+        - translations
     - title: 🗒️ Other changes
       labels:
         - '*'
