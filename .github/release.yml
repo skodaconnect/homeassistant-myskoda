@@ -18,6 +18,13 @@ changelog:
     - title: 🛠️ Dependencies
       labels:
         - dependencies
+    - title: 🚧 Code Maintenance
+      labels:
+        - maintenance
+        - chore
+    - title: ✅ Testing
+      labels:
+        - test
     - title: 🗒️ Other changes
       labels:
         - '*'
