@@ -24,7 +24,7 @@ from myskoda.auth.authorization import (
 )
 
 
-from .const import COORDINATORS, DOMAIN
+from .const import COORDINATORS, DOMAIN, VINLIST
 from .coordinator import MySkodaDataUpdateCoordinator
 from .error_handlers import handle_aiohttp_error
 from .issues import (
@@ -92,7 +92,25 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async_delete_spin_issue(hass, entry.entry_id)
 
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
-    vehicles = await myskoda.list_vehicle_vins()
+    cached_vins: list = entry.data[VINLIST]
+
+    try:
+        vehicles = await myskoda.list_vehicle_vins()
+        if vehicles and vehicles != cached_vins:
+            _LOGGER.info("New vehicles detected. Storing new vehicle list in cache")
+            entry_data = {**entry.data}
+            entry_data[VINLIST] = vehicles
+            hass.config_entries.async_update_entry(entry, data=entry_data)
+    except Exception:
+        if cached_vins:
+            vehicles = cached_vins
+            _LOGGER.warning(
+                "Using cached list of VINs. This will work only if there is a temporary issue with MySkoda API"
+            )
+            pass
+        else:
+            raise
+
     for vin in vehicles:
         coordinator = MySkodaDataUpdateCoordinator(hass, entry, myskoda, vin)
         await coordinator.async_config_entry_first_refresh()
@@ -143,26 +161,29 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
         return False
 
+    # We will likely need to contact myskoda, so make a connection and authenticate
+    try:
+        myskoda = myskoda_instantiate(hass, entry, mqtt_enabled=False)
+        await myskoda.connect(entry.data["email"], entry.data["password"])
+    except AuthorizationFailedError as exc:
+        raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
+    except Exception as exc:
+        _LOGGER.exception("Login with %s failed: %s", DOMAIN, exc)
+        return False
+
     if entry.version == 1:
         # v1 did not enforce a unique id for the config_entry. Fixing this in v2.1
 
         new_version = 2
         new_minor_version = 1
-        _LOGGER.debug("Starting migration to config schema v2.1.")
+        _LOGGER.info("Starting migration to config schema v2.1.")
 
         if not entry.unique_id or entry.unique_id == "":
             _LOGGER.debug("Unique_id is missing. Adding it.")
 
-            try:
-                myskoda = myskoda_instantiate(hass, entry, mqtt_enabled=False)
-                await myskoda.connect(entry.data["email"], entry.data["password"])
-                user = await myskoda.get_user()
-                unique_id = user.id
-            except AuthorizationFailedError as exc:
-                raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
-            except Exception as exc:
-                _LOGGER.exception("Login with %s failed: %s", DOMAIN, exc)
-                return False
+            user = await myskoda.get_user()
+            unique_id = user.id
+
             _LOGGER.debug("Adding unique_id %s to entry %s", unique_id, entry.entry_id)
             hass.config_entries.async_update_entry(
                 entry,
@@ -170,7 +191,6 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 minor_version=new_minor_version,
                 unique_id=unique_id,
             )
-
             return True
 
         else:
@@ -182,5 +202,28 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             )
 
             return True
+
+    if entry.version == 2:
+        if entry.minor_version < 2:
+            # v2.1 does not have the vinlist. Add it.
+            _LOGGER.info("Starting migration to config schema 2.2, adding vinlist")
+
+            new_version = 2
+            new_minor_version = 2
+
+            entry_data = {**entry.data}
+
+            vinlist = await myskoda.list_vehicle_vins()
+            entry_data[VINLIST] = vinlist
+            _LOGGER.debug("Add vinlist %s to entry %s", vinlist, entry.entry_id)
+
+            hass.config_entries.async_update_entry(
+                entry,
+                version=new_version,
+                minor_version=new_minor_version,
+                data=entry_data,
+            )
+
+    # Add any more migrations here
 
     return False
