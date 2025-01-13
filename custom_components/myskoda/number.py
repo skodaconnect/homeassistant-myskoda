@@ -7,6 +7,7 @@ from homeassistant.components.number import (
     NumberDeviceClass,
     NumberEntity,
     NumberEntityDescription,
+    NumberMode,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory, PERCENTAGE, UnitOfTime
@@ -100,7 +101,7 @@ class AuxiliaryHeaterDuration(MySkodaNumber, RestoreEntity):
 
     entity_description = NumberEntityDescription(
         key="auxiliary_heater_duration",
-        mode="slider",
+        mode=NumberMode.SLIDER,
         native_max_value=60,
         native_min_value=5,
         native_unit_of_measurement=UnitOfTime.MINUTES,

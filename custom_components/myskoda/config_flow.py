@@ -7,6 +7,8 @@ from typing import Any
 
 import voluptuous as vol
 
+from aiohttp.client_exceptions import ClientResponseError
+
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow as BaseConfigFlow,
@@ -107,7 +109,7 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
 
         try:
             await validate_input(self.hass, user_input)
-        except CannotConnect:
+        except (CannotConnect, ClientResponseError):
             errors["base"] = "cannot_connect"
         except InvalidAuth:
             errors["base"] = "invalid_auth"
