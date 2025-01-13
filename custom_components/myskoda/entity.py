@@ -23,7 +23,7 @@ class MySkodaEntity(CoordinatorEntity):
 
     def __init__(
         self,
-        coordinator: MySkodaDataUpdateCoordinator,
+        coordinator,
         vin: str,
     ) -> None:  # noqa: D107
         super().__init__(coordinator)
