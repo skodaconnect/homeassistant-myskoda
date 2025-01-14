@@ -245,6 +245,9 @@
                     "error": "Fel"
                 }
             },
+            "service_event": {
+                "name": "Senaste Service Händelse"
+            },
             "software_version": {
                 "name": "Programvaruversion"
             },
@@ -286,6 +289,9 @@
             "reduced_current": {
                 "name": "Reducerad ström"
             },
+            "auto_unlock_plug": {
+                "name": "Lås upp kabel när laddad"
+            },
             "window_heating": {
                 "name": "Fönstervärme"
             },
@@ -303,6 +309,24 @@
             },
             "ac_window_heating": {
                 "name": "Fönstervärmning med AC"
+            },
+            "departure_timer_1": {
+                "name": "Avgångstimer 1"
+            },
+            "departure_timer_2": {
+                "name": "Avgångstimer 2"
+            },
+            "departure_timer_3": {
+                "name": "Avgångstimer 3"
+            },
+            "ac_timer_1": {
+                "name": "Luftkonditionering Timer 1"
+            },
+            "ac_timer_2": {
+                "name": "Luftkonditionering Timer 2"
+            },
+            "ac_timer_3": {
+                "name": "Luftkonditionering Timer 3"
             }
         },
         "button": {
