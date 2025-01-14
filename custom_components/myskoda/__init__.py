@@ -92,7 +92,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async_delete_spin_issue(hass, entry.entry_id)
 
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
-    cached_vins: list = entry.data[VINLIST]
+    cached_vins: list = entry.data.get(VINLIST, [])
 
     try:
         vehicles = await myskoda.list_vehicle_vins()
@@ -223,6 +223,8 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 minor_version=new_minor_version,
                 data=entry_data,
             )
+
+            return True
 
     # Add any more migrations here
 
