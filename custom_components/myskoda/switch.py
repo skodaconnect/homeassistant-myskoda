@@ -99,10 +99,8 @@ class WindowHeatingSwitch(MySkodaSwitch):
     @property
     def is_on(self) -> bool | None:  # noqa: D102
         if ac := self.vehicle.air_conditioning:
-            return (
-                ac.window_heating_state.front == OnOffState.ON
-                or ac.window_heating_state.rear == OnOffState.ON
-            )
+            if whs := ac.window_heating_state:
+                return whs.front == OnOffState.ON or whs.rear == OnOffState.ON
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
