@@ -224,6 +224,8 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 data=entry_data,
             )
 
+            return True
+
     # Add any more migrations here
 
     return False
