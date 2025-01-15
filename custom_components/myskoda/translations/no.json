@@ -20,130 +20,58 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Panser",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpent"
-                }
+                "name": "Panser"
             },
             "charger_connected": {
-                "name": "Lader tilkoblet",
-                "state": {
-                    "off": "Frakoblet",
-                    "on": "Tilkoblet"
-                }
+                "name": "Lader tilkoblet"
             },
             "charger_locked": {
-                "name": "Lader Lås",
-                "state": {
-                    "off": "Låst",
-                    "on": "Ulåst"
-                }
+                "name": "Lader Lås"
             },
             "doors_locked": {
-                "name": "Dører låst",
-                "state": {
-                    "off": "Låst",
-                    "on": "Ulåst"
-                }
+                "name": "Dører låst"
             },
             "doors_open": {
-                "name": "Dører åpne",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpne"
-                }
+                "name": "Dører åpne"
             },
             "locked": {
-                "name": "Bil låst",
-                "state": {
-                    "off": "Låst",
-                    "on": "Ulåst"
-                }
+                "name": "Bil låst"
             },
             "parkinglights_on": {
-                "name": "Parkeringslys",
-                "state": {
-                    "off": "Av",
-                    "on": "På"
-                }
+                "name": "Parkeringslys"
             },
             "sunroof_open": {
-                "name": "Soltak",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpent"
-                }
+                "name": "Soltak"
             },
             "trunk_open": {
-                "name": "Bagasjerom",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpent"
-                }
+                "name": "Bagasjerom"
             },
             "windows_open": {
-                "name": "Vinduer",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpne"
-                }
+                "name": "Vinduer"
             },
             "door_open_front_left": {
-                "name": "Fremre venstre dør åpen",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpen"
-                }
+                "name": "Fremre venstre dør åpen"
             },
             "door_open_front_right": {
-                "name": "Fremre høyre dør åpen",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpen"
-                }
+                "name": "Fremre høyre dør åpen"
             },
             "door_open_rear_left": {
-                "name": "Bakre venstre dør åpen",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpen"
-                }
+                "name": "Bakre venstre dør åpen"
             },
             "door_open_rear_right": {
-                "name": "Bakre høyre dør åpen",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpen"
-                }
+                "name": "Bakre høyre dør åpen"
             },
             "window_open_front_left": {
-                "name": "Fremre venstre vindu åpent",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpent"
-                }
+                "name": "Fremre venstre vindu åpent"
             },
             "window_open_front_right": {
-                "name": "Fremre høyre vindu åpent",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpent"
-                }
+                "name": "Fremre høyre vindu åpent"
             },
             "window_open_rear_left": {
-                "name": "Bakre venstre vindu åpent",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpent"
-                }
+                "name": "Bakre venstre vindu åpent"
             },
             "window_open_rear_right": {
-                "name": "Bakre høyre vindu åpent",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åpent"
-                }
+                "name": "Bakre høyre vindu åpent"
             }
         },
         "climate": {
@@ -156,12 +84,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Posisjon",
-                "state": {
-                    "home": "Hjemme",
-                    "not_home": "Borte",
-                    "vehicle_in_motion": "Bevegelse oppdaget"
-                }
+                "name": "Posisjon"
             }
         },
         "image": {
