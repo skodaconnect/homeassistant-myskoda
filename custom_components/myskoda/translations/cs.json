@@ -20,130 +20,58 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Kapota",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Kapota"
             },
             "charger_connected": {
-                "name": "Nabíječka připojena",
-                "state": {
-                    "off": "Odpojeno",
-                    "on": "Připojeno"
-                }
+                "name": "Nabíječka připojena"
             },
             "charger_locked": {
-                "name": "Zámek nabíjení",
-                "state": {
-                    "off": "Uzamčeno",
-                    "on": "Odemčeno"
-                }
+                "name": "Zámek nabíjení"
             },
             "doors_locked": {
-                "name": "Dveře uzamčené",
-                "state": {
-                    "off": "Uzamčeno",
-                    "on": "Odemčeno"
-                }
+                "name": "Dveře uzamčené"
             },
             "doors_open": {
-                "name": "Dveře otevřené",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Dveře otevřené"
             },
             "locked": {
-                "name": "Vozidlo uzamčeno",
-                "state": {
-                    "off": "Uzamčeno",
-                    "on": "Odemčeno"
-                }
+                "name": "Vozidlo uzamčeno"
             },
             "parkinglights_on": {
-                "name": "Parkovací světla",
-                "state": {
-                    "off": "Vyp.",
-                    "on": "Zap."
-                }
+                "name": "Parkovací světla"
             },
             "sunroof_open": {
-                "name": "Střecha",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Střecha"
             },
             "trunk_open": {
-                "name": "Kufr",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Kufr"
             },
             "windows_open": {
-                "name": "Okna",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Okna"
             },
             "door_open_front_left": {
-                "name": "Levé přední dveře otevřeny",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Levé přední dveře otevřeny"
             },
             "door_open_front_right": {
-                "name": "Pravé přední dveře otevřeny",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Pravé přední dveře otevřeny"
             },
             "door_open_rear_left": {
-                "name": "Levé zadní dveře otevřeny",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Levé zadní dveře otevřeny"
             },
             "door_open_rear_right": {
-                "name": "Pravé zadní dveře otevřeny",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Pravé zadní dveře otevřeny"
             },
             "window_open_front_left": {
-                "name": "Levé přední okno otevřeno",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Levé přední okno otevřeno"
             },
             "window_open_front_right": {
-                "name": "Pravé přední okno otevřeno",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Pravé přední okno otevřeno"
             },
             "window_open_rear_left": {
-                "name": "Levé zadní okno otevřeno",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Levé zadní okno otevřeno"
             },
             "window_open_rear_right": {
-                "name": "Pravé zadní okno otevřeno",
-                "state": {
-                    "off": "Zavřeno",
-                    "on": "Otevřeno"
-                }
+                "name": "Pravé zadní okno otevřeno"
             }
         },
         "climate": {
@@ -156,12 +84,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Poloha",
-                "state": {
-                    "home": "Doma",
-                    "not_home": "Pryč",
-                    "vehicle_in_motion": "Zjištěn pohyb"
-                }
+                "name": "Poloha"
             }
         },
         "image": {

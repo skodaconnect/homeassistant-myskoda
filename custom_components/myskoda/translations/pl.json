@@ -20,130 +20,58 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Maska",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Maska"
             },
             "charger_connected": {
-                "name": "Ładowarka podłączona",
-                "state": {
-                    "off": "Niepodłączony",
-                    "on": "Podłączony"
-                }
+                "name": "Ładowarka podłączona"
             },
             "charger_locked": {
-                "name": "Blokada kabla ładującego",
-                "state": {
-                    "off": "Zablokowany",
-                    "on": "Odblokowany"
-                }
+                "name": "Blokada kabla ładującego"
             },
             "doors_locked": {
-                "name": "Drzwi zablokowane",
-                "state": {
-                    "off": "Zablokowane",
-                    "on": "Odblokowane"
-                }
+                "name": "Drzwi zablokowane"
             },
             "doors_open": {
-                "name": "Drzwi otwarte",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Drzwi otwarte"
             },
             "locked": {
-                "name": "Pojazd zablokowany",
-                "state": {
-                    "off": "Zablokowany",
-                    "on": "Odblokowany"
-                }
+                "name": "Pojazd zablokowany"
             },
             "parkinglights_on": {
-                "name": "Światła",
-                "state": {
-                    "off": "Wyłączone",
-                    "on": "Włączone"
-                }
+                "name": "Światła"
             },
             "sunroof_open": {
-                "name": "Okno dachowe",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Okno dachowe"
             },
             "trunk_open": {
-                "name": "Bagażnik",
-                "state": {
-                    "off": "Zamknięty",
-                    "on": "Otwarty"
-                }
+                "name": "Bagażnik"
             },
             "windows_open": {
-                "name": "Okna",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Okna"
             },
             "door_open_front_left": {
-                "name": "Drzwi przednie lewe",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Drzwi przednie lewe"
             },
             "door_open_front_right": {
-                "name": "Drzwi przednie prawe",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Drzwi przednie prawe"
             },
             "door_open_rear_left": {
-                "name": "Drzwi tylne lewe",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Drzwi tylne lewe"
             },
             "door_open_rear_right": {
-                "name": "Drzwi tylne prawe",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Drzwi tylne prawe"
             },
             "window_open_front_left": {
-                "name": "Okno przednie lewe",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Okno przednie lewe"
             },
             "window_open_front_right": {
-                "name": "Okno przednie prawe",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Okno przednie prawe"
             },
             "window_open_rear_left": {
-                "name": "Okno tylne lewe",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Okno tylne lewe"
             },
             "window_open_rear_right": {
-                "name": "Okno tylne prawe",
-                "state": {
-                    "off": "Zamknięte",
-                    "on": "Otwarte"
-                }
+                "name": "Okno tylne prawe"
             }
         },
         "climate": {
@@ -156,12 +84,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Położenie",
-                "state": {
-                    "home": "Dom",
-                    "not_home": "Poza domem",
-                    "vehicle_in_motion": "Wykryto ruch"
-                }
+                "name": "Położenie"
             }
         },
         "image": {

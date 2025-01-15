@@ -20,130 +20,58 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Konepelti",
-                "state": {
-                    "off": "Kiinni",
-                    "on": "Auki"
-                }
+                "name": "Konepelti"
             },
             "charger_connected": {
-                "name": "Latauskaapeli",
-                "state": {
-                    "off": "Irti",
-                    "on": "Kytketty"
-                }
+                "name": "Latauskaapeli"
             },
             "charger_locked": {
-                "name": "Kaapelin lukitus",
-                "state": {
-                    "off": "Auki",
-                    "on": "Lukittu"
-                }
+                "name": "Kaapelin lukitus"
             },
             "doors_locked": {
-                "name": "Ovien lukitus",
-                "state": {
-                    "off": "Lukossa",
-                    "on": "Lukitsematta"
-                }
+                "name": "Ovien lukitus"
             },
             "doors_open": {
-                "name": "Ovet",
-                "state": {
-                    "off": "Kiinni",
-                    "on": "Auki"
-                }
+                "name": "Ovet"
             },
             "locked": {
-                "name": "Ajoneuvon lukitus",
-                "state": {
-                    "off": "Lukossa",
-                    "on": "Lukitsematta"
-                }
+                "name": "Ajoneuvon lukitus"
             },
             "parkinglights_on": {
-                "name": "Pysäköintivalot",
-                "state": {
-                    "off": "Pois",
-                    "on": "Päällä"
-                }
+                "name": "Pysäköintivalot"
             },
             "sunroof_open": {
-                "name": "Kattoikkuna",
-                "state": {
-                    "off": "Kiinni",
-                    "on": "Auki"
-                }
+                "name": "Kattoikkuna"
             },
             "trunk_open": {
-                "name": "Tavaratila",
-                "state": {
-                    "off": "Kiinni",
-                    "on": "Auki"
-                }
+                "name": "Tavaratila"
             },
             "windows_open": {
-                "name": "Ikkunat",
-                "state": {
-                    "off": "Kiinni",
-                    "on": "Auki"
-                }
+                "name": "Ikkunat"
             },
             "door_open_front_left": {
-                "name": "Ovi auki etu vasen",
-                "state": {
-                    "off": "Suljettu",
-                    "on": "Auki"
-                }
+                "name": "Ovi auki etu vasen"
             },
             "door_open_front_right": {
-                "name": "Ovi auki etu oikea",
-                "state": {
-                    "off": "Suljettu",
-                    "on": "Auki"
-                }
+                "name": "Ovi auki etu oikea"
             },
             "door_open_rear_left": {
-                "name": "Ovi auki taka vasen",
-                "state": {
-                    "off": "Suljettu",
-                    "on": "Auki"
-                }
+                "name": "Ovi auki taka vasen"
             },
             "door_open_rear_right": {
-                "name": "Ovi auki taka oikea",
-                "state": {
-                    "off": "Suljettu",
-                    "on": "Auki"
-                }
+                "name": "Ovi auki taka oikea"
             },
             "window_open_front_left": {
-                "name": "Ikkuna auki etu vasen",
-                "state": {
-                    "off": "Suljettu",
-                    "on": "Auki"
-                }
+                "name": "Ikkuna auki etu vasen"
             },
             "window_open_front_right": {
-                "name": "Ikkuna auki etu oikea",
-                "state": {
-                    "off": "Suljettu",
-                    "on": "Auki"
-                }
+                "name": "Ikkuna auki etu oikea"
             },
             "window_open_rear_left": {
-                "name": "Ikkuna auki taka vasen",
-                "state": {
-                    "off": "Suljettu",
-                    "on": "Auki"
-                }
+                "name": "Ikkuna auki taka vasen"
             },
             "window_open_rear_right": {
-                "name": "Ikkuna auki taka oikea",
-                "state": {
-                    "off": "Suljettu",
-                    "on": "Auki"
-                }
+                "name": "Ikkuna auki taka oikea"
             }
         },
         "climate": {
@@ -156,12 +84,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Sijainti",
-                "state": {
-                    "home": "Kotona",
-                    "not_home": "Poissa kotoa",
-                    "vehicle_in_motion": "Liikkeellä"
-                }
+                "name": "Sijainti"
             }
         },
         "image": {

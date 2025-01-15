@@ -20,74 +20,34 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Trappe",
-                "state": {
-                    "off": "Fermée",
-                    "on": "Ouverte"
-                }
+                "name": "Trappe"
             },
             "charger_connected": {
-                "name": "Chargeur connecté",
-                "state": {
-                    "off": "Débranché",
-                    "on": "Branché"
-                }
+                "name": "Chargeur connecté"
             },
             "charger_locked": {
-                "name": "Verrou de charge",
-                "state": {
-                    "off": "Verrouillé",
-                    "on": "Déverrouillé"
-                }
+                "name": "Verrou de charge"
             },
             "doors_locked": {
-                "name": "Portes verrouillées",
-                "state": {
-                    "off": "Verrouillé",
-                    "on": "Déverrouillé"
-                }
+                "name": "Portes verrouillées"
             },
             "doors_open": {
-                "name": "Portes Ouvertes",
-                "state": {
-                    "off": "Portes Fermées",
-                    "on": "Ouverte"
-                }
+                "name": "Portes Ouvertes"
             },
             "locked": {
-                "name": "Véhicule verrouillé",
-                "state": {
-                    "off": "Verrouillé",
-                    "on": "Déverrouillé"
-                }
+                "name": "Véhicule verrouillé"
             },
             "parkinglights_on": {
-                "name": "Feux de stationnement",
-                "state": {
-                    "off": "Éteintes",
-                    "on": "Allumées"
-                }
+                "name": "Feux de stationnement"
             },
             "sunroof_open": {
-                "name": "Toit vitré",
-                "state": {
-                    "off": "Fermé",
-                    "on": "Ouvert"
-                }
+                "name": "Toit vitré"
             },
             "trunk_open": {
-                "name": "Coffre",
-                "state": {
-                    "off": "Fermé",
-                    "on": "Ouvert"
-                }
+                "name": "Coffre"
             },
             "windows_open": {
-                "name": "Fenêtres",
-                "state": {
-                    "off": "Fermées",
-                    "on": "Ouvertes"
-                }
+                "name": "Fenêtres"
             }
         },
         "climate": {
@@ -100,12 +60,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Position",
-                "state": {
-                    "home": "Maison",
-                    "not_home": "Absent",
-                    "vehicle_in_motion": "Mouvement détecté"
-                }
+                "name": "Position"
             }
         },
         "image": {

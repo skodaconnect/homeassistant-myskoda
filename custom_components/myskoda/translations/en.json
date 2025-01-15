@@ -20,130 +20,58 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Bonnet",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Bonnet"
             },
             "charger_connected": {
-                "name": "Charger Connected",
-                "state": {
-                    "off": "Unplugged",
-                    "on": "Plugged in"
-                }
+                "name": "Charger Connected"
             },
             "charger_locked": {
-                "name": "Charge Lock",
-                "state": {
-                    "off": "Locked",
-                    "on": "Unlocked"
-                }
+                "name": "Charge Lock"
             },
             "doors_locked": {
-                "name": "Doors Locked",
-                "state": {
-                    "off": "Locked",
-                    "on": "Unlocked"
-                }
+                "name": "Doors Locked"
             },
             "doors_open": {
-                "name": "Doors Open",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Doors Open"
             },
             "locked": {
-                "name": "Vehicle Locked",
-                "state": {
-                    "off": "Locked",
-                    "on": "Unlocked"
-                }
+                "name": "Vehicle Locked"
             },
             "parkinglights_on": {
-                "name": "Parking Lights",
-                "state": {
-                    "off": "Off",
-                    "on": "On"
-                }
+                "name": "Parking Lights"
             },
             "sunroof_open": {
-                "name": "Sunroof",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Sunroof"
             },
             "trunk_open": {
-                "name": "Trunk",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Trunk"
             },
             "windows_open": {
-                "name": "Windows",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Windows"
             },
             "door_open_front_left": {
-                "name": "Door Front Left",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Door Front Left"
             },
             "door_open_front_right": {
-                "name": "Door Front Right",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Door Front Right"
             },
             "door_open_rear_left": {
-                "name": "Door Rear Left",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Door Rear Left"
             },
             "door_open_rear_right": {
-                "name": "Door Rear Right",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Door Rear Right"
             },
             "window_open_front_left": {
-                "name": "Window Front Left",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Window Front Left"
             },
             "window_open_front_right": {
-                "name": "Window Front Right",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Window Front Right"
             },
             "window_open_rear_left": {
-                "name": "Window Rear Left",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Window Rear Left"
             },
             "window_open_rear_right": {
-                "name": "Window Rear Right",
-                "state": {
-                    "off": "Closed",
-                    "on": "Open"
-                }
+                "name": "Window Rear Right"
             }
         },
         "climate": {
@@ -156,12 +84,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Position",
-                "state": {
-                    "home": "Home",
-                    "not_home": "Away",
-                    "vehicle_in_motion": "Motion detected"
-                }
+                "name": "Position"
             }
         },
         "image": {

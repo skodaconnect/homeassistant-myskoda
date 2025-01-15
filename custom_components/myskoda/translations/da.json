@@ -20,74 +20,34 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Motorhjelm",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åben"
-                }
+                "name": "Motorhjelm"
             },
             "charger_connected": {
-                "name": "Ladekabel",
-                "state": {
-                    "off": "Ikke tilsluttet",
-                    "on": "Tilsluttet"
-                }
+                "name": "Ladekabel"
             },
             "charger_locked": {
-                "name": "Ladekabel låst",
-                "state": {
-                    "off": "Låst",
-                    "on": "Låst op"
-                }
+                "name": "Ladekabel låst"
             },
             "doors_locked": {
-                "name": "Dørlåst",
-                "state": {
-                    "off": "Låst",
-                    "on": "Låst op"
-                }
+                "name": "Dørlåst"
             },
             "doors_open": {
-                "name": "Døre",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åbne"
-                }
+                "name": "Døre"
             },
             "lights_on": {
-                "name": "Lygter",
-                "state": {
-                    "off": "Slukkede",
-                    "on": "Tændte"
-                }
+                "name": "Lygter"
             },
             "locked": {
-                "name": "Køretøjslåst",
-                "state": {
-                    "off": "Låst",
-                    "on": "Låst op"
-                }
+                "name": "Køretøjslåst"
             },
             "sunroof_open": {
-                "name": "Soltag",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åbent"
-                }
+                "name": "Soltag"
             },
             "trunk_open": {
-                "name": "Bagagerum",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åben"
-                }
+                "name": "Bagagerum"
             },
             "windows_open": {
-                "name": "Vinduer",
-                "state": {
-                    "off": "Lukkede",
-                    "on": "Åbne"
-                }
+                "name": "Vinduer"
             }
         },
         "climate": {
@@ -97,12 +57,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Position",
-                "state": {
-                    "home": "Hjemme",
-                    "not_home": "Ikke hjemme",
-                    "vehicle_in_motion": "Bevægelse registreret"
-                }
+                "name": "Position"
             }
         },
         "image": {

@@ -20,130 +20,59 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Motorhuv",
-                "state": {
-                    "off": "Stängd",
-                    "on": "Öppen"
-                }
+                "name": "Motorhuv"
             },
             "charger_connected": {
-                "name": "Laddare ansluten",
-                "state": {
-                    "off": "Ej ansluten",
-                    "on": "Inkopplad"
-                }
+                "name": "Laddare ansluten"
             },
             "charger_locked": {
-                "name": "Laddningslås",
-                "state": {
-                    "off": "Låst",
-                    "on": "Olåst"
+                "name": "Laddningslås"
                 }
             },
             "doors_locked": {
-                "name": "Dörrarna låsta",
-                "state": {
-                    "off": "Låsta",
-                    "on": "Olåsta"
-                }
+                "name": "Dörrarna låsta"
             },
             "doors_open": {
-                "name": "Dörrarna öppna",
-                "state": {
-                    "off": "Stängda",
-                    "on": "Öppna"
-                }
+                "name": "Dörrarna öppna"
             },
             "locked": {
-                "name": "Fordonet låst",
-                "state": {
-                    "off": "Låst",
-                    "on": "Olåst"
-                }
+                "name": "Fordonet låst"
             },
             "parkinglights_on": {
-                "name": "Parkeringsljus",
-                "state": {
-                    "off": "Av",
-                    "on": "På"
-                }
+                "name": "Parkeringsljus"
             },
             "sunroof_open": {
-                "name": "Soltak",
-                "state": {
-                    "off": "Stängt",
-                    "on": "Öppet"
-                }
+                "name": "Soltak"
             },
             "trunk_open": {
-                "name": "Bagageutrymme",
-                "state": {
-                    "off": "Stängt",
-                    "on": "Öppen"
-                }
+                "name": "Bagageutrymme"
             },
             "windows_open": {
-                "name": "Fönster",
-                "state": {
-                    "off": "Stängda",
-                    "on": "Öppna"
-                }
+                "name": "Fönster"
             },
             "door_open_front_left": {
-                "name": "Dörr öppen vänster fram",
-                "state": {
-                    "off": "Stängd",
-                    "on": "Öppen"
-                }
+                "name": "Dörr öppen vänster fram"
             },
             "door_open_front_right": {
-                "name": "Dörr öppen höger fram",
-                "state": {
-                    "off": "Stängd",
-                    "on": "Öppen"
-                }
+                "name": "Dörr öppen höger fram"
             },
             "door_open_rear_left": {
-                "name": "Dörr öppen vänster bak",
-                "state": {
-                    "off": "Stängd",
-                    "on": "Öppen"
-                }
+                "name": "Dörr öppen vänster bak"
             },
             "door_open_rear_right": {
-                "name": "Dörr öppen höger bak",
-                "state": {
-                    "off": "Stängd",
-                    "on": "Öppen"
-                }
+                "name": "Dörr öppen höger bak"
             },
             "window_open_front_left": {
-                "name": "Fönster öppen vänster fram",
-                "state": {
-                    "off": "Stängd",
-                    "on": "Öppen"
-                }
+                "name": "Fönster öppen vänster fram"
             },
             "window_open_front_right": {
-                "name": "Fönster öppen höger fram",
-                "state": {
-                    "off": "Stängd",
-                    "on": "Öppen"
-                }
+                "name": "Fönster öppen höger fram"
             },
             "window_open_rear_left": {
-                "name": "Fönster öppen vänster bak",
-                "state": {
-                    "off": "Stängd",
-                    "on": "Öppen"
-                }
+                "name": "Fönster öppen vänster bak"
             },
             "window_open_rear_right": {
-                "name": "Fönster öppen höger bak",
-                "state": {
-                    "off": "Stängd",
-                    "on": "Öppen"
-                }
+                "name": "Fönster öppen höger bak"
             }
         },
         "climate": {
@@ -156,12 +85,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Position",
-                "state": {
-                    "home": "Hemma",
-                    "not_home": "Borta",
-                    "vehicle_in_motion": "Rörelse upptäckt"
-                }
+                "name": "Position"
             }
         },
         "image": {

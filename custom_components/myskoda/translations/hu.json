@@ -20,130 +20,58 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Motorháztető",
-                "state": {
-                    "off": "Zárva",
-                    "on": "Nyitva"
-                }
+                "name": "Motorháztető"
             },
             "charger_connected": {
-                "name": "Töltő csatlakoztatva",
-                "state": {
-                    "off": "Kihúzva",
-                    "on": "Bedugva"
-                }
+                "name": "Töltő csatlakoztatva"
             },
             "charger_locked": {
-                "name": "Töltő reteszelve",
-                "state": {
-                    "off": "Zárolva",
-                    "on": "Feloldva"
-                }
+                "name": "Töltő reteszelve"
             },
             "doors_locked": {
-                "name": "Ajtók zárva",
-                "state": {
-                    "off": "Zárva",
-                    "on": "Feloldva"
-                }
+                "name": "Ajtók zárva"
             },
             "doors_open": {
-                "name": "Ajtók nyitva",
-                "state": {
-                    "off": "Zárva",
-                    "on": "Nyitva"
-                }
+                "name": "Ajtók nyitva"
             },
             "locked": {
-                "name": "Jármű zárva",
-                "state": {
-                    "off": "Zárva",
-                    "on": "Feloldva"
-                }
+                "name": "Jármű zárva"
             },
             "parkinglights_on": {
-                "name": "Parkoló lámpák",
-                "state": {
-                    "off": "Ki",
-                    "on": "Be"
-                }
+                "name": "Parkoló lámpák"
             },
             "sunroof_open": {
-                "name": "Napfénytető",
-                "state": {
-                    "off": "Zárva",
-                    "on": "Nyitva"
-                }
+                "name": "Napfénytető"
             },
             "trunk_open": {
-                "name": "Csomagtartó",
-                "state": {
-                    "off": "Zárva",
-                    "on": "Nyitva"
-                }
+                "name": "Csomagtartó"
             },
             "windows_open": {
-                "name": "Ablakok",
-                "state": {
-                    "off": "Felhúzva",
-                    "on": "Leengedve"
-                }
+                "name": "Ablakok"
             },
             "door_open_front_left": {
-                "name": "Bal első ajtó",
-                "state": {
-                    "off": "Becsukva",
-                    "on": "Kinyitva"
-                }
+                "name": "Bal első ajtó"
             },
             "door_open_front_right": {
-                "name": "Jobb első ajtó",
-                "state": {
-                    "off": "Becsukva",
-                    "on": "Kinyitva"
-                }
+                "name": "Jobb első ajtó"
             },
             "door_open_rear_left": {
-                "name": "Bal hátsó ajtó",
-                "state": {
-                    "off": "Becsukva",
-                    "on": "Kinyitva"
-                }
+                "name": "Bal hátsó ajtó"
             },
             "door_open_rear_right": {
-                "name": "Jobb hátsó ajtó",
-                "state": {
-                    "off": "Becsukva",
-                    "on": "Kinyitva"
-                }
+                "name": "Jobb hátsó ajtó"
             },
             "window_open_front_left": {
-                "name": "Bal első ablak",
-                "state": {
-                    "off": "Felhúzva",
-                    "on": "Leengedve"
-                }
+                "name": "Bal első ablak"
             },
             "window_open_front_right": {
-                "name": "Jobb első ablak",
-                "state": {
-                    "off": "Felhúzva",
-                    "on": "Leengedve"
-                }
+                "name": "Jobb első ablak"
             },
             "window_open_rear_left": {
-                "name": "Bal hátsó ablak",
-                "state": {
-                    "off": "Felhúzva",
-                    "on": "Leengedve"
-                }
+                "name": "Bal hátsó ablak"
             },
             "window_open_rear_right": {
-                "name": "Jobb hátsó ablak",
-                "state": {
-                    "off": "Felhúzva",
-                    "on": "Leengedve"
-                }
+                "name": "Jobb hátsó ablak"
             }
         },
         "climate": {
@@ -156,12 +84,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Pozíció",
-                "state": {
-                    "home": "Otthon",
-                    "not_home": "Távol",
-                    "vehicle_in_motion": "Mozgás érzékelve"
-                }
+                "name": "Pozíció"
             }
         },
         "image": {
