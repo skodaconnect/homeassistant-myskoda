@@ -318,6 +318,15 @@
             },
             "departure_timer_3": {
                 "name": "Časovač odjezdu 3"
+            },
+            "ac_timer_1": {
+                "name": "Časovač klimatizace 1"
+            },
+            "ac_timer_2": {
+                "name": "Časovač klimatizace 2"
+            },
+            "ac_timer_3": {
+                "name": "Časovač klimatizace 3"
             }
         },
         "button": {
