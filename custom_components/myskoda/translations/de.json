@@ -85,7 +85,6 @@
         "device_tracker": {
             "device_tracker": {
                 "name": "Standort"
-                }
             }
         },
         "image": {
