@@ -41,21 +41,21 @@
                 }
             },
             "doors_locked": {
-                "name": "Zamknutie dverí",
+                "name": "Zámok dverí",
                 "state": {
                     "off": "Zamknuté",
                     "on": "Odomknuté"
                 }
             },
             "doors_open": {
-                "name": "Otvorenie dverí",
+                "name": "Dvere",
                 "state": {
                     "off": "Zatvorené",
                     "on": "Otvorené"
                 }
             },
             "locked": {
-                "name": "Uzamknutie vozdila",
+                "name": "Uzamknutie vozidla",
                 "state": {
                     "off": "Zamknuté",
                     "on": "Odomknuté"
@@ -90,56 +90,56 @@
                 }
             },
             "door_open_front_left": {
-                "name": "Ľavé predné dvere",
+                "name": "Dvere predné ľavé",
                 "state": {
                     "off": "Zatvorené",
                     "on": "Otvorené"
                 }
             },
             "door_open_front_right": {
-                "name": "Pravé predné dvere",
+                "name": "Dvere predné pravé",
                 "state": {
                     "off": "Zatvorené",
                     "on": "Otvorené"
                 }
             },
             "door_open_rear_left": {
-                "name": "Ľavé zadné dvere",
+                "name": "Dvere zadné ľavé",
                 "state": {
                     "off": "Zatvorené",
                     "on": "Otvorené"
                 }
             },
             "door_open_rear_right": {
-                "name": "Pravé zadné dvere",
+                "name": "Dvere zadné pravé",
                 "state": {
                     "off": "Zatvorené",
                     "on": "Otvorené"
                 }
             },
             "window_open_front_left": {
-                "name": "Ľavé predné okno",
+                "name": "Okno predné ľavé",
                 "state": {
                     "off": "Zatvorené",
                     "on": "Otvorené"
                 }
             },
             "window_open_front_right": {
-                "name": "Pravé predné okno",
+                "name": "Okno predné pravé",
                 "state": {
                     "off": "Zatvorené",
                     "on": "Otvorené"
                 }
             },
             "window_open_rear_left": {
-                "name": "Ľavé zadné okno",
+                "name": "Okno zadné ľavé",
                 "state": {
                     "off": "Zatvorené",
                     "on": "Otvorené"
                 }
             },
             "window_open_rear_right": {
-                "name": "Pravé zadné okno",
+                "name": "Okno zadné pravé",
                 "state": {
                     "off": "Zatvorené",
                     "on": "Otvorené"
@@ -166,10 +166,10 @@
         },
         "image": {
             "render_light_3x": {
-                "name": "Znázornenie stavu svetiel vozidla"
+                "name": "Stav vozidla"
             },
             "render_vehicle_main": {
-                "name": "Hlavný nákres vozidla"
+                "name": "Hlavný render"
             }
         },
         "lock": {
@@ -296,19 +296,19 @@
                 "name": "Vyhrievanie okna"
             },
             "ac_at_unlock": {
-                "name": "Striedavý prúd pri odomknutí"
+                "name": "Klimatizácia pri odomknutí"
             },
             "ac_without_external_power": {
-                "name": "Striedavý prúd bez externého napájania"
+                "name": "Klimatizácia bez externého napájania"
             },
             "ac_seat_heating_front_left": {
-                "name": "Vyhrievanie ľavého sedadla striedavým prúdom"
+                "name": "Vyhrievanie ľavého sedadla po spustení klimatizácie"
             },
             "ac_seat_heating_front_right": {
-                "name": "Vyhrievanie pravého sedadla striedavým prúdom"
+                "name": "Vyhrievanie pravého sedadla po spustení klimatizácie"
             },
             "ac_window_heating": {
-                "name": "Vyhrievanie okna striedavým prúdom"
+                "name": "Vyhrievanie okna po spustení klimatizácie"
             },
             "departure_timer_1": {
                 "name": "Časovač odjazdu 1"
@@ -360,13 +360,13 @@
             "init": {
                 "data": {
                     "tracing": "Trasovanie odpovedí API. Vyžaduje povolené ladiace protokolovanie v konfiguračnom súbore configuration.yaml.",
-                    "poll_interval_in_minutes": "Interval dotazovania v minútach, keď je vozidlo nečinné.",
+                    "poll_interval_in_minutes": "Interval aktualizácie v minútach, keď je vozidlo nečinné.",
                     "s-pin": "Bezpečnostný PIN",
                     "readonly": "Iba režim čítania"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Zadejte interval dotazovania medzi 1 a 1440 minútami. (predvolených je 30)",
-                    "s-pin": "Zadajte bezpečnostný PIN kód. UPOZORNENIE: Toto umožňuje diaľkové uzamknutie/odomknutie",
+                    "poll_interval_in_minutes": "Zadajte interval aktualizácie medzi 1 a 1440 minútami. (predvolených je 30)",
+                    "s-pin": "Zadajte bezpečnostný PIN kód. UPOZORNENIE: Toto umožňuje diaľkové uzamknutie/odomknutie a ovládanie nezávislého kúrenia",
                     "readonly": "V aute nemôžete vykonávať žiadne zmeny, iba čítať údaje"
                 }
             }
