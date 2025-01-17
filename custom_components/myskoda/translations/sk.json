@@ -169,7 +169,7 @@
                 "name": "Stav vozidla"
             },
             "render_vehicle_main": {
-                "name": "Hlavný render"
+                "name": "Hlavný render vozidla"
             }
         },
         "lock": {
@@ -210,7 +210,7 @@
                 "name": "Stav nabíjania",
                 "state": {
                     "charging": "Nabíjanie",
-                    "connect_cable": "Žiadny prúd",
+                    "connect_cable": "Pripojte kábel",
                     "conserving": "Udržanie nabitia",
                     "ready_for_charging": "Pripravené na nabíjanie"
                 }
@@ -302,13 +302,13 @@
                 "name": "Klimatizácia bez externého napájania"
             },
             "ac_seat_heating_front_left": {
-                "name": "Vyhrievanie ľavého sedadla po spustení klimatizácie"
+                "name": "Vyhrievanie ľavého sedadla pri spustení klimatizácie"
             },
             "ac_seat_heating_front_right": {
-                "name": "Vyhrievanie pravého sedadla po spustení klimatizácie"
+                "name": "Vyhrievanie pravého sedadla pri spustení klimatizácie"
             },
             "ac_window_heating": {
-                "name": "Vyhrievanie okna po spustení klimatizácie"
+                "name": "Vyhrievanie okna pri spustení klimatizácie"
             },
             "departure_timer_1": {
                 "name": "Časovač odjazdu 1"
