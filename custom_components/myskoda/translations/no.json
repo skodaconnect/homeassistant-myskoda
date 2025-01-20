@@ -245,6 +245,9 @@
                     "error": "Feil"
                 }
             },
+            "service_event": {
+                "name": "Siste tjenestehendelse"
+            },
             "software_version": {
                 "name": "Programvareversjon"
             },
@@ -286,6 +289,9 @@
             "reduced_current": {
                 "name": "Redusert effekt"
             },
+            "auto_unlock_plug": {
+                "name": "Lås opp plugg når lading er ferdig"
+            },
             "window_heating": {
                 "name": "Vindusvarme"
             },
@@ -303,6 +309,24 @@
             },
             "ac_window_heating": {
                 "name": "Vindusvarme med klimaanlegg"
+            },
+            "departure_timer_1": {
+                "name": "Avreisetimer 1"
+            },
+            "departure_timer_2": {
+                "name": "Avreisetimer 2"
+            },
+            "departure_timer_3": {
+                "name": "Avreisetimer 3"
+            },
+            "ac_timer_1": {
+                "name": "Klimaanleggtimer 1"
+            },
+            "ac_timer_2": {
+                "name": "Klimaanleggtimer 2"
+            },
+            "ac_timer_3": {
+                "name": "Klimaanleggtimer 3"
             }
         },
         "button": {

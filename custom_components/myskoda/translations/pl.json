@@ -245,6 +245,9 @@
                     "error": "Błąd"
                 }
             },
+            "service_event": {
+                "name": "Ostatni serwis"
+            },
             "software_version": {
                 "name": "Wersja oprogramowania"
             },
@@ -315,6 +318,15 @@
             },
             "departure_timer_3": {
                 "name": "Timer odjazdu 3"
+            },
+            "ac_timer_1": {
+                "name": "Timer klimatyzacji 1"
+            },
+            "ac_timer_2": {
+                "name": "Timer klimatyzacji 2"
+            },
+            "ac_timer_3": {
+                "name": "Timer klimatyzacji 3"
             }
         },
         "button": {
