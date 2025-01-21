@@ -1,30 +1,72 @@
 name: "Release"
 
 on:
+  workflow_dispatch:
   release:
-    types:
-      - "published"
+    types: [published, edited]
 
 permissions: {}
 
 jobs:
   release:
     if: github.repository_owner == 'skodaconnect'
-    name: "Release"
-    runs-on: "ubuntu-latest"
+    name: Release
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: "Checkout the repository"
-        uses: "actions/checkout@v4"
+      - name: Checkout the repository
+        uses: actions/checkout@v4
 
-      - name: "ZIP the integration directory"
-        shell: "bash"
+      - name: Debug variables
+        run : |
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.event.repository.default_branch: ${{ github.event.repository.default_branch }}"
+          echo "github.event.release.target_commitish: ${{ github.event.release.target_commitish }}"
+          echo "github.event.release.prerelease: ${{ github.event.release.prerelease }}"
+          echo "github.event.release.draft: ${{ github.event.release.draft }}"
+
+      - name: Update version in manifest.json
+        if: ${{ github.event_name == 'release' && github.event.release.draft == false }}
+        run: |
+          sed -i 's/\"version\"\s*\:\s*\".*\"version\":\"${{ github.ref_name }}\"/g' ./custom_components/myskoda/manifest.json
+
+      - name: Update version in const.py
+        if: ${{ github.event_name == 'release' && github.event.release.draft == false && github.event.release.prerelease == false }}
+        run: |
+          sed -i 's/^VERSION \= \".*\"/VERSION \= \"${{ github.ref_name }}\"/' ./custom_components/myskoda/const.py
+
+      - name: Commit & Push version changes
+        if: ${{ github.event_name == 'release' && github.event.release.draft == false && github.event.release.prerelease == false }}
+        uses: actions-js/push@v1.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.event.release.target_commitish }}
+          message: 'Update version to ${{ github.ref_name }}'
+
+      - name: Update release with version changes
+        if: ${{ github.event_name == 'release' && github.event.release.draft == false && github.event.release.prerelease == false }}
+        run: |
+          git tag -f ${{ github.ref_name }}
+          git push -f origin ${{ github.ref_name }}
+
+      - name: ZIP the integration directory
+        shell: bash
         run: |
           cd "${{ github.workspace }}/custom_components/myskoda"
           zip homeassistant-myskoda.zip -r ./
 
-      - name: "Upload the ZIP file to the release"
-        uses: "softprops/action-gh-release@v2.1.0"
+      - name: Upload the ZIP file to the release
+        if: ${{ github.event_name == 'release' && github.event.release.draft == false }}
+        uses: softprops/action-gh-release@v2.1.0
         with:
           files: ${{ github.workspace }}/custom_components/myskoda/homeassistant-myskoda.zip
+
+      - name: Add the ZIP file to the job
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: homeassistant-myskoda
+          path: ./custom_components/myskoda/homeassistant-myskoda.zip
+          if-no-files-found: error
