@@ -32,6 +32,11 @@ jobs:
         run: |
           sed -i 's/\"version\"\s*\:\s*\".*\"version\":\"${{ github.ref_name }}\"/g' ./custom_components/myskoda/manifest.json
 
+      - name: Update version in pyproject.toml
+        if: ${{ github.event_name == 'release' && github.event.release.draft == false && github.event.release.prerelease == false }}
+        run: |
+          sed -i 's/^version \= \".*\"/version \= \"${{ github.ref_name }}\"/' ./custom_components/myskoda/pyproject.toml
+
       - name: Update version in const.py
         if: ${{ github.event_name == 'release' && github.event.release.draft == false && github.event.release.prerelease == false }}
         run: |
