@@ -245,6 +245,9 @@
                     "error": "Napaka"
                 }
             },
+            "service_event": {
+                "name": "Zadnji servis"
+            },
             "software_version": {
                 "name": "Različica programske opreme"
             },
@@ -286,6 +289,9 @@
             "reduced_current": {
                 "name": "Zmanjšan tok"
             },
+            "auto_unlock_plug": {
+                "name": "Odkleni napajalni vtič, ko je vozilo napolnjeno"
+            },
             "window_heating": {
                 "name": "Ogrevanje vetrobrana"
             },
@@ -303,6 +309,24 @@
             },
             "ac_window_heating": {
                 "name": "Ogrevanje vetrobranskega stekla z AC"
+            },
+            "departure_timer_1": {
+                "name": "Odhod – načrt 1"
+            },
+            "departure_timer_2": {
+                "name": "Odhod – načrt 2"
+            },
+            "departure_timer_3": {
+                "name": "Odhod – načrt 3"
+            },
+            "ac_timer_1": {
+                "name": "Časovnik klime – 1"
+            },
+            "ac_timer_2": {
+                "name": "Časovnik klime – 2"
+            },
+            "ac_timer_3": {
+                "name": "Časovnik klime – 3"
             }
         },
         "button": {
