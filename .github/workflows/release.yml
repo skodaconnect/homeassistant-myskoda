@@ -29,7 +29,7 @@ jobs:
       - name: Update version in manifest.json
         if: ${{ github.event_name == 'release' && github.event.release.draft == false }}
         run: |
-          sed -i 's/\"version\"\s*\:\s*\".*\"/\"version\":\"${{ github.ref_name }}\"/g' ./custom_components/myskoda/manifest.json
+          sed -i 's/\"version\"\s*\:\s*\".*\"version\":\"${{ github.ref_name }}\"/g' ./custom_components/myskoda/manifest.json
 
       - name: Update version in pyproject.toml
         if: ${{ github.event_name == 'release' && github.event.release.draft == false && github.event.release.prerelease == false }}
