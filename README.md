@@ -157,6 +157,16 @@ event in "history".
 
 NOTE: not all vehicles report all service events.
 
+#### Car Info (VIN)
+
+Sometimes you might need to access a VIN quickly and it might be convenient to use the [Search](https://www.home-assistant.io/integrations/search/) to obtain this data quickly.
+
+To achieve this, you can create a template sensor that prints this data using any entity identifier assigned to your car.
+
+```
+{{ device_attr(device_id('sensor.skoda_enyaq_mileage'), 'serial_number') }}
+```
+
 ## Sending updates
 
 To make sure updates end up in the car the way intended by the you, we throttle all equal changes to the car for 30s.
