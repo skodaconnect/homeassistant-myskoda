@@ -27,6 +27,13 @@ from homeassistant.helpers.schema_config_entry_flow import (
 )
 from homeassistant.util.ssl import get_default_context
 from myskoda import MySkoda
+from myskoda.auth.authorization import (
+    AuthorizationError,
+    NotAuthorizedError,
+    AuthorizationFailedError,
+    TermsAndConditionsError,
+    MarketingConsentError,
+)
 
 from .const import (
     DOMAIN,
@@ -111,8 +118,15 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
             await validate_input(self.hass, user_input)
         except (CannotConnect, ClientResponseError):
             errors["base"] = "cannot_connect"
-        except InvalidAuth:
+        except (
+            InvalidAuth,
+            AuthorizationError,
+            AuthorizationFailedError,
+            NotAuthorizedError,
+        ):
             errors["base"] = "invalid_auth"
+        except (TermsAndConditionsError, MarketingConsentError):
+            errors["base"] = "relogin_in_app"
         except Exception:  # pylint: disable=broad-except
             _LOGGER.exception("Unexpected exception")
             errors["base"] = "unknown"
