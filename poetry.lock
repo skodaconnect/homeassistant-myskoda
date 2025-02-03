@@ -1754,13 +1754,13 @@ files = [
 
 [[package]]
 name = "myskoda"
-version = "0.18.2"
+version = "0.19.0"
 description = "Library for interaction with the MySkoda APIs."
 optional = false
 python-versions = "<4.0,>=3.12.0"
 files = [
-    {file = "myskoda-0.18.2-py3-none-any.whl", hash = "sha256:3892f1dc4b3bbf962ab28ddfe6fb6431aa4d4951860233dd4229221ecab9ed7b"},
-    {file = "myskoda-0.18.2.tar.gz", hash = "sha256:18fd600ce37754b937462ab43afd4d0696ffeb2fad4cfd062a65a37babb68963"},
+    {file = "myskoda-0.19.0-py3-none-any.whl", hash = "sha256:aa36f41b01983f311951b616c2c4c4abffff17fc2b122e15d648abc8b962dd48"},
+    {file = "myskoda-0.19.0.tar.gz", hash = "sha256:4fa32fdd882102ef9d15056d10a9f593bd373fbb626d4db801adeb4832d18b36"},
 ]
 
 [package.dependencies]
@@ -3239,4 +3239,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.12,<3.14"
-content-hash = "9d77279c92bbbb1b6ec05ae7735df9e19767bdfa7f329e03f59295a6de9c3a3b"
+content-hash = "15d3f18e5137805d25bdbbe95152492d03b001c45ea76de37de6c5ec8741db0a"
