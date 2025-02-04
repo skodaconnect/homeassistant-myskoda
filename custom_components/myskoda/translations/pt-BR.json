@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Falhou ao conectar",
             "invalid_auth": "Autenticação inválida",
+            "relogin_in_app": "Um erro foi detectado durante o registro. Talvez seja necessário registrar-se novamente no MySkoda.",
             "unknown": "Ocorreu um erro inesperado. Verifique os arquivos de registro do HomeAssistant."
         },
         "step": {
