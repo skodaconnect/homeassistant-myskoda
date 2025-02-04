@@ -328,17 +328,19 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                         status.battery.remaining_cruising_range_in_meters = (
                             event_data.charged_range * 1000
                         )
-                    status.battery.state_of_charge_in_percent = event_data.soc
-                    if event_data.time_to_finish is not None:
+                    if event_data.soc:
+                        status.battery.state_of_charge_in_percent = event_data.soc
+                    if event_data.time_to_finish:
                         status.remaining_time_to_fully_charged_in_minutes = (
                             event_data.time_to_finish
                         )
+                    if event_data.state:
                         status.state = event_data.state
                 if vehicle.driving_range:
-                    vehicle.driving_range.primary_engine_range.current_soc_in_percent = event_data.soc
-                    vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
-                        event_data.charged_range
-                    )
+                    if event_data.soc:
+                        vehicle.driving_range.primary_engine_range.current_soc_in_percent = event_data.soc
+                    if event_data.charged_range:
+                        vehicle.driving_range.primary_engine_range.remaining_range_in_km = event_data.charged_range
                 self.set_updated_vehicle(vehicle)
             case ServiceEventData():
                 if not update_charging_request_sent:
