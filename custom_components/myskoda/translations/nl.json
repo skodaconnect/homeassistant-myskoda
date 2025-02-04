@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Kan geen verbinding maken",
             "invalid_auth": "Ongeldige authenticatie",
+            "relogin_in_app": "Er is een fout opgetreden tijdens het inloggen door HomeAssistant. Het kan nodig zijn om opnieuw in te loggen in uw MySkoda app.",
             "unknown": "Er is een onverwachte fout opgetreden. Controleer de HomeAssistant logbestanden."
         },
         "step": {
