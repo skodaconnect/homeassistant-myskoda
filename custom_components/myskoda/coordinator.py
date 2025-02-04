@@ -338,13 +338,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                         status.state = event_data.state
                 if vehicle.driving_range:
                     if event_data.soc:
-                        vehicle.driving_range.primary_engine_range.current_soc_in_percent = (
-                            event_data.soc
-                        )
+                        vehicle.driving_range.primary_engine_range.current_soc_in_percent = event_data.soc
                     if event_data.charged_range:
-                        vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
-                            event_data.charged_range
-                        )
+                        vehicle.driving_range.primary_engine_range.remaining_range_in_km = event_data.charged_range
                 self.set_updated_vehicle(vehicle)
             case ServiceEventData():
                 if not update_charging_request_sent:
