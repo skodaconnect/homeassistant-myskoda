@@ -3,7 +3,7 @@ import logging
 from collections import OrderedDict, deque
 from collections.abc import Coroutine
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Callable
 
 from aiohttp import ClientError
@@ -214,7 +214,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 user = await self.myskoda.get_user()
             else:
                 if (
-                    datetime.now() - timedelta(hours=CACHE_USER_ENDPOINT_IN_HOURS)
+                    datetime.now(UTC) - timedelta(hours=CACHE_USER_ENDPOINT_IN_HOURS)
                     < self.data.user.timestamp
                 ):
                     _LOGGER.debug(
