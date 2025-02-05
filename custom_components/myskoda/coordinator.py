@@ -210,14 +210,16 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         # Obtain user data. This is allowed to fail if we already have this in state.
         try:
-            ts_now = datetime.now()
             if not self.data.user or not self.data.user.timestamp:
                 user = await self.myskoda.get_user()
             else:
                 if (
-                    ts_now - timedelta(hours=CACHE_USER_ENDPOINT_IN_HOURS)
+                    datetime.now() - timedelta(hours=CACHE_USER_ENDPOINT_IN_HOURS)
                     < self.data.user.timestamp
                 ):
+                    _LOGGER.debug(
+                        "Updating user - cache expired at %s", self.data.user.timestamp
+                    )
                     user = await self.myskoda.get_user()
                 else:
                     _LOGGER.debug("Skipping user update - cache is still valid.")
