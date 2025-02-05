@@ -3,7 +3,7 @@ import logging
 from collections import OrderedDict, deque
 from collections.abc import Coroutine
 from dataclasses import dataclass
-from datetime import now, timedelta
+from datetime import datetime, timedelta
 from typing import Callable
 
 from aiohttp import ClientError
@@ -210,7 +210,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         # Obtain user data. This is allowed to fail if we already have this in state.
         try:
-            ts_now = now()
+            ts_now = datetime.now()
             if not self.data.user or not self.data.user.timestamp:
                 user = await self.myskoda.get_user()
             else:
