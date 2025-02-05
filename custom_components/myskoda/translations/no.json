@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Klarte ikke å koble til",
             "invalid_auth": "Ugyldig autentisering",
+            "relogin_in_app": "En feil har blitt oppdaget under innlogging. Det kan være nødvendig å logge inn på nytt i MySkoda appen.",
             "unknown": "En uventet feil oppstod. Vennligst sjekk HomeAssistant loggfiler."
         },
         "step": {
