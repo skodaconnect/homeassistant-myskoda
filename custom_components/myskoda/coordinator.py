@@ -26,10 +26,6 @@ from myskoda.event import (
 )
 from myskoda.models.info import CapabilityId
 from myskoda.models.operation_request import OperationName, OperationStatus
-from myskoda.models.service_event import (
-    ServiceEventChargingData,
-    ServiceEventData,
-)
 from myskoda.models.user import User
 from myskoda.mqtt import EventCharging, EventType
 
@@ -321,30 +317,38 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             await self.update_driving_range()
 
         event_data = event.event.data
-        match event_data:
-            case ServiceEventChargingData():
-                if vehicle.charging and (status := vehicle.charging.status):
-                    if event_data.charged_range:
-                        status.battery.remaining_cruising_range_in_meters = (
-                            event_data.charged_range * 1000
-                        )
-                    if event_data.soc:
-                        status.battery.state_of_charge_in_percent = event_data.soc
-                    if event_data.time_to_finish:
-                        status.remaining_time_to_fully_charged_in_minutes = (
-                            event_data.time_to_finish
-                        )
-                    if event_data.state:
-                        status.state = event_data.state
-                if vehicle.driving_range:
-                    if event_data.soc:
-                        vehicle.driving_range.primary_engine_range.current_soc_in_percent = event_data.soc
-                    if event_data.charged_range:
-                        vehicle.driving_range.primary_engine_range.remaining_range_in_km = event_data.charged_range
-                self.set_updated_vehicle(vehicle)
-            case ServiceEventData():
-                if not update_charging_request_sent:
-                    await self.update_charging()
+        if vehicle.charging and (status := vehicle.charging.status):
+            if event_data.charged_range:
+                status.battery.remaining_cruising_range_in_meters = (
+                    event_data.charged_range * 1000
+                )
+            if event_data.soc:
+                status.battery.state_of_charge_in_percent = event_data.soc
+            if event_data.time_to_finish:
+                status.remaining_time_to_fully_charged_in_minutes = (
+                    event_data.time_to_finish
+                )
+            if event_data.state:
+                status.state = event_data.state
+        if vehicle.driving_range:
+            if event_data.soc:
+                vehicle.driving_range.primary_engine_range.current_soc_in_percent = (
+                    event_data.soc
+                )
+            if event_data.charged_range:
+                vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
+                    event_data.charged_range
+                )
+        some_charging_data_missing = (
+            event_data.charged_range is None
+            or event_data.soc is None
+            or event_data.state is None
+        )
+        if some_charging_data_missing and not update_charging_request_sent:
+            # After update is done, the set_updated_vehicle is called there
+            await self.update_charging()
+        else:
+            self.set_updated_vehicle(vehicle)
 
     async def _on_access_event(self, event: EventAccess):
         await self.update_vehicle()
@@ -392,6 +396,14 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         if charging:
             vehicle = self.data.vehicle
             vehicle.charging = charging
+            # Update driving range similarly to the received charging service event
+            if vehicle.driving_range and charging.status:
+                vehicle.driving_range.primary_engine_range.current_soc_in_percent = (
+                    charging.status.battery.state_of_charge_in_percent
+                )
+                vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
+                    charging.status.battery.remaining_cruising_range_in_meters
+                )
             self.set_updated_vehicle(vehicle)
 
     async def _update_air_conditioning(self) -> None:
