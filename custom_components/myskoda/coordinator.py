@@ -339,12 +339,12 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
                     event_data.charged_range
                 )
-        some_chargind_data_missing = (
+        some_charging_data_missing = (
             event_data.charged_range is None
             or event_data.soc is None
             or event_data.state is None
         )
-        if some_chargind_data_missing and not update_charging_request_sent:
+        if some_charging_data_missing and not update_charging_request_sent:
             # After update is done, the set_updated_vehicle is called there
             await self.update_charging()
         else:
