@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Yhteyden muodostaminen epäonnistui",
             "invalid_auth": "Virheellinen todennus",
+            "relogin_in_app": "Virhe havaittu kirjautumisessa. Voi olla tarpeellista kirjautua uudelleen MySkoda-sovelluksessa.",
             "unknown": "Tapahtui odottamaton virhe. Tarkista Home Assistantin lokit."
         },
         "step": {
@@ -318,6 +319,15 @@
             },
             "departure_timer_3": {
                 "name": "Lähtöajastin 3"
+            },
+            "ac_timer_1": {
+                "name": "Ilmastoinnin ajastin 1"
+            },
+            "ac_timer_2": {
+                "name": "Ilmastoinnin ajastin 2"
+            },
+            "ac_timer_3": {
+                "name": "Ilmastoinnin ajastin 3"
             }
         },
         "button": {
