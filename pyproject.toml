@@ -14,7 +14,7 @@ package-mode = false
 python = "~3.12,<3.14"
 homeassistant = "^2025.1.0"
 voluptuous = "^0.15.2"
-myskoda = "^0.19.0"
+myskoda = "^0.20.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.9.6"
