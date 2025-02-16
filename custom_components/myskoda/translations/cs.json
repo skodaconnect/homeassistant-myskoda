@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Připojení se nezdařilo",
             "invalid_auth": "Neplatné ověření",
+            "relogin_in_app": "Při přihlašování byla zjištěna chyba. Může být nutné se znovu přihlásit do aplikace MySkoda.",
             "unknown": "Došlo k neočekávané chybě. Zkontrolujte logy aplikace HomeAssistant."
         },
         "step": {
