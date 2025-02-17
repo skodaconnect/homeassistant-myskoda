@@ -17,7 +17,7 @@ from homeassistant.config_entries import (
     callback,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import HomeAssistantError, ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.schema_config_entry_flow import (
     SchemaCommonFlowHandler,
@@ -37,10 +37,13 @@ from myskoda.auth.authorization import (
 
 from .const import (
     DOMAIN,
+    CONF_PASSWORD,
     CONF_POLL_INTERVAL,
     CONF_POLL_INTERVAL_MIN,
     CONF_POLL_INTERVAL_MAX,
     CONF_SPIN,
+    CONF_TRACING,
+    CONF_USERNAME,
     CONF_READONLY,
 )
 
@@ -71,19 +74,19 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
         async_get_clientsession(hass), get_default_context(), mqtt_enabled=False
     )
 
-    await hub.connect(data["email"], data["password"])
+    await hub.connect(data[CONF_USERNAME], data[CONF_PASSWORD])
     await hub.disconnect()
 
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
-        vol.Required("email"): str,
-        vol.Required("password"): str,
+        vol.Required(CONF_USERNAME): str,
+        vol.Required(CONF_PASSWORD): str,
     }
 )
 OPTIONS_SCHEMA = vol.Schema(
     {
-        vol.Required("tracing", default=False): bool,
+        vol.Required(CONF_TRACING, default=False): bool,
         vol.Optional(CONF_POLL_INTERVAL): int,
         vol.Optional(CONF_READONLY, default=False): bool,
         vol.Optional(CONF_SPIN): str,
@@ -136,6 +139,58 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
         # Only called if there was an error.
         return self.async_show_form(
             step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
+        )
+
+    async def async_step_reauth(self, entry_data: dict[str, Any]) -> ConfigFlowResult:
+        """Handle initiation of re-authentication with MySkoda."""
+        _LOGGER.debug("Authentication error detected, starting reauth")
+        self.reauth_entry = self._get_reauth_entry()
+        return await self.async_step_reauth_confirm()
+
+    async def async_step_reauth_confirm(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Handle re-authentication with MySkoda."""
+        errors: dict = {}
+
+        if user_input is not None:
+            try:
+                await validate_input(self.hass, user_input)
+            except (CannotConnect, ClientResponseError) as err:
+                errors["base"] = "cannot_connect"
+                raise ConfigEntryNotReady("Error connecting to MySkoda: %s", err)
+            except Exception as err:
+                errors["base"] = "unknown"
+                _LOGGER.error("Failed to log in due to error: %s", str(err))
+                return self.async_abort(reason="unknown")
+
+            data = self.reauth_entry.data.copy()
+            self.hass.config_entries.async_update_entry(
+                self.reauth_entry,
+                data={
+                    **data,
+                    **user_input,
+                },
+            )
+            self.hass.async_create_task(
+                self.hass.config_entries.async_reload(self.reauth_entry.entry_id)
+            )
+
+            return self.async_abort(reason="reauth_successful")
+
+        return self.async_show_form(
+            step_id="reauth_confirm",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_USERNAME, default=self.reauth_entry.data[CONF_USERNAME]
+                    ): str,
+                    vol.Required(
+                        CONF_PASSWORD, default=self.reauth_entry.data[CONF_PASSWORD]
+                    ): str,
+                }
+            ),
+            errors=errors,
         )
 
     @staticmethod
