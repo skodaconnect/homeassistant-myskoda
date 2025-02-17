@@ -141,12 +141,16 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
             step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
         )
 
-    async def async_step_reauth(self, entry: ConfigEntry) -> ConfigFlowResult:
+    async def async_step_reauth(self, entry_data: dict[str, Any]) -> ConfigFlowResult:
         """Handle initiation of re-authentication with MySkoda."""
         _LOGGER.debug("Authentication error detected, starting reauth")
-        self.reauth_entry = self.hass.config_entries.async_get_entry(
+        reauth_entry = self.hass.config_entries.async_get_entry(
             self.context["entry_id"]
         )
+        if reauth_entry:
+            self.reauth_entry = reauth_entry
+        else:
+            return self.async_abort(reason="no_entry")
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
@@ -171,8 +175,7 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
                 self.reauth_entry,
                 data={
                     **data,
-                    CONF_USERNAME: user_input[CONF_USERNAME],
-                    CONF_PASSWORD: user_input[CONF_PASSWORD],
+                    **user_input,
                 },
             )
             self.hass.async_create_task(
@@ -188,7 +191,9 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
                     vol.Required(
                         CONF_USERNAME, default=self.reauth_entry.data[CONF_USERNAME]
                     ): str,
-                    vol.Required(CONF_PASSWORD): str,
+                    vol.Required(
+                        CONF_PASSWORD, default=self.reauth_entry.data[CONF_PASSWORD]
+                    ): str,
                 }
             ),
             errors=errors,
