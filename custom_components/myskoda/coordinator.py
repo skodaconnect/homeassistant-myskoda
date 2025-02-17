@@ -3,7 +3,7 @@ import logging
 from collections import OrderedDict, deque
 from collections.abc import Coroutine
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Callable
 
 from aiohttp import ClientError
@@ -31,6 +31,7 @@ from myskoda.mqtt import EventCharging, EventType
 
 from .const import (
     API_COOLDOWN_IN_SECONDS,
+    CACHE_USER_ENDPOINT_IN_HOURS,
     CONF_POLL_INTERVAL,
     COORDINATORS,
     DEFAULT_FETCH_INTERVAL_IN_MINUTES,
@@ -205,7 +206,21 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         # Obtain user data. This is allowed to fail if we already have this in state.
         try:
-            user = await self.myskoda.get_user()
+            if self.data.user and self.data.user.timestamp:
+                cache_expiry_time = self.data.user.timestamp + timedelta(
+                    hours=CACHE_USER_ENDPOINT_IN_HOURS
+                )
+
+                if datetime.now(UTC) > cache_expiry_time:
+                    _LOGGER.debug(
+                        "Updating user - cache expired at %s", self.data.user.timestamp
+                    )
+                    user = await self.myskoda.get_user()
+                else:
+                    _LOGGER.debug("Skipping user update - cache is still valid.")
+            else:
+                user = await self.myskoda.get_user()
+
         except ClientResponseError as err:
             handle_aiohttp_error("user", err, self.hass, self.entry)
             if self.data.user:
