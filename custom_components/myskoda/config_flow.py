@@ -104,7 +104,7 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
     """Handle a config flow for MySkoda."""
 
     VERSION = 2
-    MINOR_VERSION = 3
+    MINOR_VERSION = 2
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -143,7 +143,10 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
 
     async def async_step_reauth(self, entry: ConfigEntry) -> ConfigFlowResult:
         """Handle initiation of re-authentication with MySkoda."""
-        self.entry = entry
+        _LOGGER.debug("Authentication error detected, starting reauth")
+        self.reauth_entry = self.hass.config_entries.async_get_entry(
+            self.context["entry_id"]
+        )
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
@@ -163,9 +166,9 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
                 _LOGGER.error("Failed to log in due to error: %s", str(err))
                 return self.async_abort(reason="unknown")
 
-            data = self.entry.data.copy()
+            data = self.reauth_entry.data.copy()
             self.hass.config_entries.async_update_entry(
-                self.entry,
+                self.reauth_entry,
                 data={
                     **data,
                     CONF_USERNAME: user_input[CONF_USERNAME],
@@ -173,7 +176,7 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
                 },
             )
             self.hass.async_create_task(
-                self.hass.config_entries.async_reload(self.entry.entry_id)
+                self.hass.config_entries.async_reload(self.reauth_entry.entry_id)
             )
 
             return self.async_abort(reason="reauth_successful")
@@ -183,7 +186,7 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required(
-                        CONF_USERNAME, default=self.entry.data[CONF_USERNAME]
+                        CONF_USERNAME, default=self.reauth_entry.data[CONF_USERNAME]
                     ): str,
                     vol.Required(CONF_PASSWORD): str,
                 }
