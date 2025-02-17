@@ -144,13 +144,7 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
     async def async_step_reauth(self, entry_data: dict[str, Any]) -> ConfigFlowResult:
         """Handle initiation of re-authentication with MySkoda."""
         _LOGGER.debug("Authentication error detected, starting reauth")
-        reauth_entry = self.hass.config_entries.async_get_entry(
-            self.context["entry_id"]
-        )
-        if reauth_entry:
-            self.reauth_entry = reauth_entry
-        else:
-            return self.async_abort(reason="no_entry")
+        self.reauth_entry = self._get_reauth_entry()
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
