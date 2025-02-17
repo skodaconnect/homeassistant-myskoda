@@ -20,6 +20,7 @@ from myskoda.event import (
     EventAccess,
     EventAirConditioning,
     EventDeparture,
+    EventOdometer,
     EventOperation,
     ServiceEvent,
     ServiceEventTopic,
@@ -124,6 +125,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_vehicle = self._debounce(self._update_vehicle)
         self.update_positions = self._debounce(self._update_positions)
         self.update_departure_info = self._debounce(self._update_departure_info)
+        self.update_odometer = self._debounce(self._update_odometer)
         self._mqtt_connecting: bool = False
 
     async def _async_get_minimal_data(self) -> Vehicle:
@@ -270,6 +272,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 await self._on_air_conditioning_event(event)
             if event.topic == ServiceEventTopic.DEPARTURE:
                 await self._on_departure_event(event)
+            if event.topic == ServiceEventTopic.ODOMETER:
+                await self._on_odometer_event(event)
 
     async def _on_operation_event(self, event: EventOperation) -> None:
         # Store the last MAX_STORED_OPERATIONS operations
@@ -374,12 +378,39 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     async def _on_departure_event(self, event: EventDeparture):
         await self.update_positions()
 
+    async def _on_odometer_event(self, event: EventOdometer):
+        await self.update_odometer()
+
     def _unsub_refresh(self):
         return
 
     def set_updated_vehicle(self, vehicle: Vehicle) -> None:
         self.data.vehicle = vehicle
         self.async_set_updated_data(self.data)
+
+    async def _update_odometer(self) -> None:
+        """Update the odometer."""
+
+        _LOGGER.debug("Update odometer information for %s", self.vin)
+        maint_info = health_info = None
+
+        try:
+            maint_info = await self.myskoda.get_maintenance(self.vin)
+
+            if self.data.vehicle.health:
+                health_info = await self.myskoda.get_health(self.vin)
+        except ClientResponseError as err:
+            handle_aiohttp_error("odometer", err, self.hass, self.entry)
+        except ClientError as err:
+            raise UpdateFailed("Error getting update from MySkoda API: %s", err)
+
+        if maint_info or health_info:
+            vehicle = self.data.vehicle
+            if maint_info:
+                vehicle.maintenance = maint_info
+            if health_info:
+                vehicle.health = health_info
+            self.set_updated_vehicle(vehicle)
 
     async def _update_driving_range(self) -> None:
         driving_range = None
