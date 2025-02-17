@@ -124,6 +124,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_vehicle = self._debounce(self._update_vehicle)
         self.update_positions = self._debounce(self._update_positions)
         self.update_departure_info = self._debounce(self._update_departure_info)
+        self.update_odometer = self._debounce(self._update_odometer)
         self._mqtt_connecting: bool = False
 
     async def _async_get_minimal_data(self) -> Vehicle:
@@ -372,10 +373,11 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.data.vehicle = vehicle
         self.async_set_updated_data(self.data)
 
-    async def update_odometer(self) -> None:
-        _LOGGER.debug("Updating odometer information for %s", self.vin)
+    async def _update_odometer(self) -> None:
+        """Update the odometer."""
 
-        maint_info = health_info = vehicle = None
+        _LOGGER.debug("Update odometer information for %s", self.vin)
+        maint_info = health_info = None
 
         try:
             maint_info = await self.myskoda.get_maintenance(self.vin)
