@@ -220,6 +220,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                     user = await self.myskoda.get_user()
                 else:
                     _LOGGER.debug("Skipping user update - cache is still valid.")
+                    user = self.data.user
             else:
                 user = await self.myskoda.get_user()
 
