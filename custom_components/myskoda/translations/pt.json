@@ -1,7 +1,9 @@
 {
     "config": {
         "abort": {
-            "already_configured": "O aparelho já está configurado"
+            "already_configured": "O aparelho já está configurado",
+            "reauth_successful": "Autenticação concluída",
+            "no_entry": "Impossível encontrar configuração MySkoda. Verifique os seus logs e abra um problema no GitHub."
         },
         "error": {
             "cannot_connect": "Falha ao conectar",
@@ -10,11 +12,20 @@
             "unknown": "Um erro inesperado ocorreu. Verifica os ficheiros de log do HomeAssistant."
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "email": "Endereço eletrónico",
+                    "password": "Palavra-passe"
+                },
+                "description": "Falha na Autenticação do MySkoda. Insira novamente os credenciais da aplicação MySkoda.",
+                "title": "Autenticar MySkoda novamente"
+            },
             "user": {
                 "data": {
                     "email": "E-mail",
                     "password": "Palavra passe"
-                }
+                },
+                "description": "Insere os credenciais da aplicação MySkoda."
             }
         }
     },

@@ -1,7 +1,9 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Apparaat is al geconfigureerd"
+            "already_configured": "Apparaat is al geconfigureerd",
+            "reauth_successful": "Herauthenticatie geslaagd.",
+            "no_entry": "Kan de MySkoda configuratie niet vinden. Controleer uw logbestanden en open een probleem op GitHub."
         },
         "error": {
             "cannot_connect": "Kan geen verbinding maken",
@@ -10,11 +12,20 @@
             "unknown": "Er is een onverwachte fout opgetreden. Controleer de HomeAssistant logbestanden."
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "email": "E-mail adres",
+                    "password": "Wachtwoord"
+                },
+                "description": "Authenticatie bij MySkoda is mislukt. Voer de gegevens uit de MySkoda app opnieuw in.",
+                "title": "Authenticeer MySkoda opnieuw"
+            },
             "user": {
                 "data": {
                     "email": "E-mail",
                     "password": "Wachtwoord"
-                }
+                },
+                "description": "Voer de inloggegevens in van uw MySkoda app."
             }
         }
     },
