@@ -33,6 +33,7 @@ from myskoda.mqtt import EventCharging, EventType
 from .const import (
     API_COOLDOWN_IN_SECONDS,
     CACHE_USER_ENDPOINT_IN_HOURS,
+    CACHE_VEHICLE_HEALTH_IN_HOURS,
     CONF_POLL_INTERVAL,
     COORDINATORS,
     DEFAULT_FETCH_INTERVAL_IN_MINUTES,
@@ -133,30 +134,33 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         return await self.myskoda.get_partial_vehicle(self.vin, [])
 
     async def _async_get_vehicle_data(self) -> Vehicle:
-        """Internal method that fetches vehicle data."""
-        if self.data:
-            if (
-                self.data.vehicle.info.device_platform == "MBB"
-                and self.data.vehicle.info.specification.model == "CitigoE iV"
-            ):
+        """Internal method that fetches vehicle data.
+
+        Get health only when missing and every 24h.
+        This avoids triggering battery protection, such as in Citigoe and Karoq.
+        https://github.com/skodaconnect/homeassistant-myskoda/issues/468
+        """
+        excluded_capabilities = []
+        if (
+            self.data.vehicle
+            and self.data.vehicle.health
+            and self.data.vehicle.health.timestamp
+        ):
+            cache_expiry_time = self.data.vehicle.health.timestamp + timedelta(
+                hours=CACHE_VEHICLE_HEALTH_IN_HOURS
+            )
+
+            if datetime.now(UTC) > cache_expiry_time:
                 _LOGGER.debug(
-                    "Detected Citigo iV, requesting only partial update without health"
-                )
-                vehicle = await self.myskoda.get_partial_vehicle(
-                    self.vin,
-                    [
-                        CapabilityId.AIR_CONDITIONING,
-                        CapabilityId.CHARGING,
-                        CapabilityId.PARKING_POSITION,
-                        CapabilityId.STATE,
-                        CapabilityId.TRIP_STATISTICS,
-                    ],
+                    "Updating health - cache expired at %s", cache_expiry_time
                 )
             else:
-                vehicle = await self.myskoda.get_vehicle(self.vin)
-        else:
-            vehicle = await self.myskoda.get_vehicle(self.vin)
-        return vehicle
+                _LOGGER.debug("Skipping health update - cache is still valid.")
+                excluded_capabilities.append(CapabilityId.VEHICLE_HEALTH_INSPECTION)
+
+        return await self.myskoda.get_vehicle(
+            self.vin, excluded_capabilities=excluded_capabilities
+        )
 
     async def _async_update_data(self) -> State:
         vehicle = None
@@ -527,7 +531,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         _LOGGER.debug("Updating full vehicle for %s", self.vin)
         try:
-            vehicle = await self.myskoda.get_vehicle(self.vin)
+            vehicle = await self._async_get_vehicle_data()
         except ClientResponseError as err:
             handle_aiohttp_error("vehicle update", err, self.hass, self.entry)
         except ClientError as err:
