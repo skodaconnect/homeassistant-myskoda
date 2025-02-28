@@ -1,19 +1,31 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Az eszköz már konfigurálva van"
+            "already_configured": "Az eszköz már konfigurálva van",
+            "reauth_successful": "Az újrahitelesítés sikeres.",
+            "no_entry": "Nem találom a MySkoda konfigurációt. Kérem ellenőrizze a logokat és nyisson egy GitHub hibajelentést."
         },
         "error": {
             "cannot_connect": "Nem sikerült csatlakozni",
             "invalid_auth": "Érvénytelen hitelesítés",
+            "relogin_in_app": "A bejelentkezés során hibát észleltem. Szükséges lehet újra bejelnetkezni a MySkoda applikációba.",
             "unknown": "Váratlan hiba történt. Ellenőrizze a HomeAssistant log fájlokat."
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "email": "E-mail cím",
+                    "password": "Jelszó"
+                },
+                "description": "A MySkoda hitelesítés sikertelen. Írja be újra az azonosító adatait a MySkoda telefonos applikációból.",
+                "title": "MySkoda újrahitelesítése"
+            },
             "user": {
                 "data": {
                     "email": "Email",
                     "password": "Jelszó"
-                }
+                },
+                "description": "Írja be újra az azonosító adatait a MySkoda telefonos applikációból."
             }
         }
     },
@@ -318,6 +330,15 @@
             },
             "departure_timer_3": {
                 "name": "Indulási időzítő 3"
+            },
+            "ac_timer_1": {
+                "name": "Légkondícionáló Időzítő 1"
+            },
+            "ac_timer_2": {
+                "name": "Légkondícionáló Időzítő 2"
+            },
+            "ac_timer_3": {
+                "name": "Légkondícionáló Időzítő 3"
             }
         },
         "button": {
