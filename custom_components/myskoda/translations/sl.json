@@ -1,19 +1,31 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Naprava (vozilo) je že konfigurirana(o)"
+            "already_configured": "Naprava (vozilo) je že konfigurirana(o)",
+            "reauth_successful": "Ponovna avtentikacija je uspela.",
+            "no_entry": "Konfiguracije MySkoda ni bilo mogoče najti. Preverite svoje dnevnike in prijavite težavo na GitHubu."
         },
         "error": {
             "cannot_connect": "Povezava ni uspela",
             "invalid_auth": "Neveljavna prijava",
+            "relogin_in_app": "Med prijavo je bila zaznana napaka. Morda se boste morali znova prijaviti v aplikacijo MySkoda.",
             "unknown": "Prišlo je do nepričakovane napake. Preverite dnevnike v HomeAssistant."
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "email": "E-poštni naslov",
+                    "password": "Geslo"
+                },
+                "description": "Avtentikacija v MySkoda ni uspela. Ponovno vnesite prijavne podatke iz aplikacije MySkoda.",
+                "title": "Ponovna prijava v MySKoda"
+            },
             "user": {
                 "data": {
                     "email": "E–poštni naslov",
                     "password": "Geslo"
-                }
+                },
+                "description": "Vnesite prijavne podatke iz aplikacije MySkoda."
             }
         }
     },
