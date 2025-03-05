@@ -207,18 +207,18 @@ zlib-ng = ["zlib_ng (>=0.4.3)"]
 
 [[package]]
 name = "aiomqtt"
-version = "2.0.1"
+version = "2.3.0"
 description = "The idiomatic asyncio MQTT client, wrapped around paho-mqtt"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 groups = ["main"]
 files = [
-    {file = "aiomqtt-2.0.1-py3-none-any.whl", hash = "sha256:7c26a867212366ae0841571e6c2d06cebc00c2de029475b920c2cd7396aeacea"},
-    {file = "aiomqtt-2.0.1.tar.gz", hash = "sha256:60f6451c8ab7235cfb392b1b0cab398e9bc6040f4b140628c0615371abcde15f"},
+    {file = "aiomqtt-2.3.0-py3-none-any.whl", hash = "sha256:127926717bd6b012d1630f9087f24552eb9c4af58205bc2964f09d6e304f7e63"},
+    {file = "aiomqtt-2.3.0.tar.gz", hash = "sha256:312feebe20bc76dc7c20916663011f3bd37aa6f42f9f687a19a1c58308d80d47"},
 ]
 
 [package.dependencies]
-paho-mqtt = ">=1.6.0,<2.0.0"
+paho-mqtt = ">=2.1.0,<3.0.0"
 
 [[package]]
 name = "aiooui"
@@ -1812,22 +1812,21 @@ files = [
 
 [[package]]
 name = "myskoda"
-version = "0.20.0"
+version = "0.21.0b1"
 description = "Library for interaction with the MySkoda APIs."
 optional = false
 python-versions = "<4.0,>=3.12.0"
 groups = ["main"]
 files = [
-    {file = "myskoda-0.20.0-py3-none-any.whl", hash = "sha256:f48b9bcda8145f006ec352ce0e79e37b73723f11e22b58fd883f943d62f791fc"},
-    {file = "myskoda-0.20.0.tar.gz", hash = "sha256:e46b424b157624f925b8c172eec7fdcd05fb3481eaa3366ba5643375e87d82c2"},
+    {file = "myskoda-0.21.0b1-py3-none-any.whl", hash = "sha256:c8901dfa042d5367e9932dafea91bc016eeb030888ce652a6ebf6976c88076b7"},
+    {file = "myskoda-0.21.0b1.tar.gz", hash = "sha256:54f81f6a28022cface4ad2df0b322de0049b9225e87aa048c095631a1fa768e8"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3,<4"
-aiomqtt = ">=2.0,<3.0"
+aiomqtt = ">=2.2,<3.0"
 asyncio = ">=3,<4"
 mashumaro = {version = ">=3.13.1,<4.0.0", extras = ["orjson"]}
-paho-mqtt = ">=1,<2"
 pyjwt = ">=2,<3"
 pyyaml = ">=6,<7"
 
@@ -1946,17 +1945,18 @@ files = [
 
 [[package]]
 name = "paho-mqtt"
-version = "1.6.1"
+version = "2.1.0"
 description = "MQTT version 5.0/3.1.1 client class"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "paho-mqtt-1.6.1.tar.gz", hash = "sha256:2a8291c81623aec00372b5a85558a372c747cbca8e9934dfe218638b8eefc26f"},
+    {file = "paho_mqtt-2.1.0-py3-none-any.whl", hash = "sha256:6db9ba9b34ed5bc6b6e3812718c7e06e2fd7444540df2455d2c51bd58808feee"},
+    {file = "paho_mqtt-2.1.0.tar.gz", hash = "sha256:12d6e7511d4137555a3f6ea167ae846af2c7357b10bc6fa4f7c3968fc1723834"},
 ]
 
 [package.extras]
-proxy = ["PySocks"]
+proxy = ["pysocks"]
 
 [[package]]
 name = "pillow"
@@ -3364,4 +3364,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12,<3.14"
-content-hash = "277edf6a820ae0c5b5f08f95f0d89163fcb60a9ec9d4d2fcd20e504bfb15d096"
+content-hash = "60560b27118a8f95901195f8a2b6b316d242b7b46a7a93afb038939039937b8b"
