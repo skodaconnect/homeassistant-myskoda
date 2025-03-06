@@ -1403,14 +1403,14 @@ habluetooth = ">=3.0"
 
 [[package]]
 name = "homeassistant"
-version = "2025.3.0b7"
+version = "2025.3.0"
 description = "Open-source home automation platform running on Python 3."
 optional = false
 python-versions = ">=3.13.0"
 groups = ["main", "dev"]
 files = [
-    {file = "homeassistant-2025.3.0b7-py3-none-any.whl", hash = "sha256:b691dfd1c3aa9abc57aceb79ee2d810745eb187d8e62a30e8b94993af1c4ba65"},
-    {file = "homeassistant-2025.3.0b7.tar.gz", hash = "sha256:2afec82e3022a6ad3b91bd6fd09fc47c0eb9aee7f25563800514befc5a2ab49e"},
+    {file = "homeassistant-2025.3.0-py3-none-any.whl", hash = "sha256:866a3f6d2f9fd2ecfa0987d6ddf515589a9d35b80e8c92992d9b466eb7578086"},
+    {file = "homeassistant-2025.3.0.tar.gz", hash = "sha256:8ec4484ad3c86d65e3db8aa387d6711f440f37ecd439978fe9e7d1198a2f526b"},
 ]
 
 [package.dependencies]
@@ -1466,18 +1466,18 @@ zeroconf = "0.145.1"
 
 [[package]]
 name = "homeassistant-stubs"
-version = "2025.3.0b7"
+version = "2025.3.0"
 description = "PEP 484 typing stubs for Home Assistant Core"
 optional = false
 python-versions = "<3.14,>=3.13"
 groups = ["dev"]
 files = [
-    {file = "homeassistant_stubs-2025.3.0b7-py3-none-any.whl", hash = "sha256:6c90c429af26b3b8c65ab858a982469b09f1afa913c599903069d0a650f14487"},
-    {file = "homeassistant_stubs-2025.3.0b7.tar.gz", hash = "sha256:ab96eedc0ded4973877ea12e356d227c8fe5c4daa72446a7eb79197911776ca3"},
+    {file = "homeassistant_stubs-2025.3.0-py3-none-any.whl", hash = "sha256:bb2d9d6a679d0cb7668cb46c35bf1f77b4dfd388a1759a1be1ab6ff2d0c9d20a"},
+    {file = "homeassistant_stubs-2025.3.0.tar.gz", hash = "sha256:aae20c26f270b5e8bd5cc7ee2e8cd020bf75110c430e037f85107ed75388b288"},
 ]
 
 [package.dependencies]
-homeassistant = "2025.3.0b7"
+homeassistant = "2025.3.0"
 
 [[package]]
 name = "httpcore"
@@ -1893,14 +1893,14 @@ files = [
 
 [[package]]
 name = "myskoda"
-version = "0.21.0b1"
+version = "0.21.0"
 description = "Library for interaction with the MySkoda APIs."
 optional = false
 python-versions = "<4.0,>=3.12.0"
 groups = ["main"]
 files = [
-    {file = "myskoda-0.21.0b1-py3-none-any.whl", hash = "sha256:c8901dfa042d5367e9932dafea91bc016eeb030888ce652a6ebf6976c88076b7"},
-    {file = "myskoda-0.21.0b1.tar.gz", hash = "sha256:54f81f6a28022cface4ad2df0b322de0049b9225e87aa048c095631a1fa768e8"},
+    {file = "myskoda-0.21.0-py3-none-any.whl", hash = "sha256:6b782b2d6c4e390969a7c527ea624ddf46f82eb9134c1e4a1c50bdb0d7eeb7e0"},
+    {file = "myskoda-0.21.0.tar.gz", hash = "sha256:c8048b98e9825976198d1abbf0d1c94e84f4822b99091f3cd3af56c0c784c85c"},
 ]
 
 [package.dependencies]
@@ -3569,5 +3569,5 @@ ifaddr = ">=0.1.7"
 
 [metadata]
 lock-version = "2.1"
-python-versions = "~3.13,<3.15"
-content-hash = "bfd2483855630326c2ce742d5759a1b6681ce19e59365fa280a11db1270dada7"
+python-versions = ">=3.13,<3.14"
+content-hash = "0da057e6e29671e4c4c86d9a1d059a6415b2d5012f47fe182bb989574df3ee84"
