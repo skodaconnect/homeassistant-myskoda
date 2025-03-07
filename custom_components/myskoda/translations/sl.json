@@ -1,19 +1,31 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Naprava (vozilo) je že konfigurirana(o)"
+            "already_configured": "Naprava (vozilo) je že konfigurirana(o)",
+            "reauth_successful": "Ponovna avtentikacija je uspela.",
+            "no_entry": "Konfiguracije MySkoda ni bilo mogoče najti. Preverite svoje dnevnike in prijavite težavo na GitHubu."
         },
         "error": {
             "cannot_connect": "Povezava ni uspela",
             "invalid_auth": "Neveljavna prijava",
+            "relogin_in_app": "Med prijavo je bila zaznana napaka. Morda se boste morali znova prijaviti v aplikacijo MySkoda.",
             "unknown": "Prišlo je do nepričakovane napake. Preverite dnevnike v HomeAssistant."
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "email": "E-poštni naslov",
+                    "password": "Geslo"
+                },
+                "description": "Avtentikacija v MySkoda ni uspela. Ponovno vnesite prijavne podatke iz aplikacije MySkoda.",
+                "title": "Ponovna prijava v MySKoda"
+            },
             "user": {
                 "data": {
                     "email": "E–poštni naslov",
                     "password": "Geslo"
-                }
+                },
+                "description": "Vnesite prijavne podatke iz aplikacije MySkoda."
             }
         }
     },
@@ -168,6 +180,9 @@
                     "error": "Napaka"
                 }
             },
+            "service_event": {
+                "name": "Zadnji servis"
+            },
             "software_version": {
                 "name": "Različica programske opreme"
             },
@@ -209,6 +224,9 @@
             "reduced_current": {
                 "name": "Zmanjšan tok"
             },
+            "auto_unlock_plug": {
+                "name": "Odkleni napajalni vtič, ko je vozilo napolnjeno"
+            },
             "window_heating": {
                 "name": "Ogrevanje vetrobrana"
             },
@@ -226,6 +244,24 @@
             },
             "ac_window_heating": {
                 "name": "Ogrevanje vetrobranskega stekla z AC"
+            },
+            "departure_timer_1": {
+                "name": "Odhod – načrt 1"
+            },
+            "departure_timer_2": {
+                "name": "Odhod – načrt 2"
+            },
+            "departure_timer_3": {
+                "name": "Odhod – načrt 3"
+            },
+            "ac_timer_1": {
+                "name": "Časovnik klime – 1"
+            },
+            "ac_timer_2": {
+                "name": "Časovnik klime – 2"
+            },
+            "ac_timer_3": {
+                "name": "Časovnik klime – 3"
             }
         },
         "button": {

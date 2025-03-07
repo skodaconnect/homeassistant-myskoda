@@ -1,0 +1,375 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Zariadenie už je nakonfigurované"
+        },
+        "error": {
+            "cannot_connect": "Nepodarilo sa pripojiť",
+            "invalid_auth": "Neplatná autentifikácia",
+            "unknown": "Došlo k neočakávanej chybe. Skontrolujte logy v aplikácii HomeAssistant."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email",
+                    "password": "Heslo"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "bonnet_open": {
+                "name": "Kapota",
+                "state": {
+                    "off": "Zatvorená",
+                    "on": "Otvorená"
+                }
+            },
+            "charger_connected": {
+                "name": "Pripojenie nabíjačky",
+                "state": {
+                    "off": "Odpojená",
+                    "on": "Pripojená"
+                }
+            },
+            "charger_locked": {
+                "name": "Zámka nabíjania",
+                "state": {
+                    "off": "Zamknutá",
+                    "on": "Odomknutá"
+                }
+            },
+            "doors_locked": {
+                "name": "Zámok dverí",
+                "state": {
+                    "off": "Zamknuté",
+                    "on": "Odomknuté"
+                }
+            },
+            "doors_open": {
+                "name": "Dvere",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            },
+            "locked": {
+                "name": "Uzamknutie vozidla",
+                "state": {
+                    "off": "Zamknuté",
+                    "on": "Odomknuté"
+                }
+            },
+            "parkinglights_on": {
+                "name": "Parkovacie svetlá",
+                "state": {
+                    "off": "Vyp.",
+                    "on": "Zap."
+                }
+            },
+            "sunroof_open": {
+                "name": "Strešné okno",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            },
+            "trunk_open": {
+                "name": "Kufor",
+                "state": {
+                    "off": "Zatvorený",
+                    "on": "Otvorený"
+                }
+            },
+            "windows_open": {
+                "name": "Okná",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            },
+            "door_open_front_left": {
+                "name": "Dvere predné ľavé",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            },
+            "door_open_front_right": {
+                "name": "Dvere predné pravé",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            },
+            "door_open_rear_left": {
+                "name": "Dvere zadné ľavé",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            },
+            "door_open_rear_right": {
+                "name": "Dvere zadné pravé",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            },
+            "window_open_front_left": {
+                "name": "Okno predné ľavé",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            },
+            "window_open_front_right": {
+                "name": "Okno predné pravé",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            },
+            "window_open_rear_left": {
+                "name": "Okno zadné ľavé",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            },
+            "window_open_rear_right": {
+                "name": "Okno zadné pravé",
+                "state": {
+                    "off": "Zatvorené",
+                    "on": "Otvorené"
+                }
+            }
+        },
+        "climate": {
+            "climate": {
+                "name": "Klimatizácia"
+            },
+            "auxiliary_heater": {
+                "name": "Nezávislé kúrenie"
+            }
+        },
+        "device_tracker": {
+            "device_tracker": {
+                "name": "Poloha",
+                "state": {
+                    "home": "Doma",
+                    "not_home": "Preč",
+                    "vehicle_in_motion": "Zistený pohyb"
+                }
+            }
+        },
+        "image": {
+            "render_light_3x": {
+                "name": "Stav vozidla"
+            },
+            "render_vehicle_main": {
+                "name": "Hlavný render vozidla"
+            }
+        },
+        "lock": {
+            "door_lock": {
+                "name": "Uzamknutie dverí"
+            }
+        },
+        "number": {
+            "charge_limit": {
+                "name": "Limit nabíjania"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Doba trvania ohrevu"
+            }
+        },
+        "sensor": {
+            "battery_percentage": {
+                "name": "Stav batérie v %"
+            },
+            "car_captured": {
+                "name": "Posledná aktualizácia"
+            },
+            "charge_type": {
+                "name": "Typ nabíjania",
+                "state": {
+                    "ac": "Striedavý prúd",
+                    "dc": "Jednosmerný prúd",
+                    "off": "VYP."
+                }
+            },
+            "charging_power": {
+                "name": "Nabíjací výkon"
+            },
+            "charging_rate": {
+                "name": "Rýchlosť nabíjania"
+            },
+            "charging_state": {
+                "name": "Stav nabíjania",
+                "state": {
+                    "charging": "Nabíjanie",
+                    "connect_cable": "Pripojte kábel",
+                    "conserving": "Udržanie nabitia",
+                    "ready_for_charging": "Pripravené na nabíjanie"
+                }
+            },
+            "inspection": {
+                "name": "Ďalšia kontrola"
+            },
+            "inspection_in_km": {
+                "name": "km zostávajúce do ďalšej kontroly"
+            },
+            "mileage": {
+                "name": "Stav kilometrov"
+            },
+            "oil_service_in_days": {
+                "name": "Výmena oleja"
+            },
+            "oil_service_in_km": {
+                "name": "km zostávajúce do výmeny oleja"
+            },
+            "range": {
+                "name": "Dojazd"
+            },
+            "remaining_charging_time": {
+                "name": "Zostávajúci čas nabíjania"
+            },
+            "operation": {
+                "name": "Posledná operácia",
+                "state": {
+                    "in_progress": "Prebieha",
+                    "completed_success": "Úspešne dokončené",
+                    "completed_warning": "Dokončené s výstrahou",
+                    "error": "Chyba"
+                }
+            },
+            "service_event": {
+                "name": "Posledný servis"
+            },
+            "software_version": {
+                "name": "Verzia softvéru"
+            },
+            "target_battery_percentage": {
+                "name": "Cieľové nabitie batérie v %"
+            },
+            "fuel_level": {
+                "name": "Množstvo paliva"
+            },
+            "adblue_range": {
+                "name": "Dojazd na AdBlue"
+            },
+            "gas_level": {
+                "name": "Množstvo plynu"
+            },
+            "gas_range": {
+                "name": "Dojazd na plyn"
+            },
+            "combustion_range": {
+                "name": "Dojazd"
+            },
+            "electric_range": {
+                "name": "Dojazd na elektrinu"
+            },
+            "outside_temperature": {
+                "name": "Vonkajšia teplota"
+            }
+        },
+        "switch": {
+            "battery_care_mode": {
+                "name": "Starostlivosť o batériu"
+            },
+            "charging": {
+                "name": "Nabíja sa"
+            },
+            "charging_switch": {
+                "name": "Nabíja sa"
+            },
+            "reduced_current": {
+                "name": "Znížený prúd"
+            },
+            "auto_unlock_plug": {
+                "name": "Odomknúť konektor po nabití"
+            },
+            "window_heating": {
+                "name": "Vyhrievanie okna"
+            },
+            "ac_at_unlock": {
+                "name": "Klimatizácia pri odomknutí"
+            },
+            "ac_without_external_power": {
+                "name": "Klimatizácia bez externého napájania"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Vyhrievanie ľavého sedadla pri spustení klimatizácie"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Vyhrievanie pravého sedadla pri spustení klimatizácie"
+            },
+            "ac_window_heating": {
+                "name": "Vyhrievanie okna pri spustení klimatizácie"
+            },
+            "departure_timer_1": {
+                "name": "Časovač odjazdu 1"
+            },
+            "departure_timer_2": {
+                "name": "Časovač odjazdu 2"
+            },
+            "departure_timer_3": {
+                "name": "Časovač odjazdu 3"
+            },
+            "ac_timer_1": {
+                "name": "Časovač klimatizácie 1"
+            },
+            "ac_timer_2": {
+                "name": "Časovač klimatizácie 2"
+            },
+            "ac_timer_3": {
+                "name": "Časovač klimatizácie 3"
+            }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Trúbiť a blikať"
+            },
+            "flash": {
+                "name": "Blikať"
+            },
+            "generate_fixtures": {
+                "name": "Generovať fixácie"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "Skontrolujte nové obchodné podmienky pre MySkoda",
+            "description": "Zistené zlyhanie prihlásenia z dôvodu chýbajúceho prijatia zmluvných podmienok alebo súhlasov.\n\nSpoločnosť Škoda mohla vydať nové Podmienky alebo vyžaduje nové súhlasy.\n\nOdhláste sa, prosím, z aplikácie MySkoda a znovu sa prihláste, aby ste si ich mohli skontrolovať.\nTáto integrácia nemôže pokračovať bez prijatia obchodných podmienok."
+        },
+        "spin_error": {
+            "title": "Bol zistený nesprávny S-PIN",
+            "description": "Zaznamenali sme chybu, ktorá naznačuje, že váš S-PIN je nesprávny.\n\nV nastaveniach integrácie zadajte správny S-PIN."
+        }
+    },
+    "options": {
+        "error": {
+            "invalid_polling_interval": "Zadaný nesprávny interval dotazovania. Vyberte, prosím, medzi 1 a 1440 minútami",
+            "invalid_spin_format": "Neplatný formát pre S-PIN"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "tracing": "Trasovanie odpovedí API. Vyžaduje povolené ladiace protokolovanie v konfiguračnom súbore configuration.yaml.",
+                    "poll_interval_in_minutes": "Interval aktualizácie v minútach, keď je vozidlo nečinné.",
+                    "s-pin": "Bezpečnostný PIN",
+                    "readonly": "Iba režim čítania"
+                },
+                "data_description": {
+                    "poll_interval_in_minutes": "Zadajte interval aktualizácie medzi 1 a 1440 minútami. (predvolených je 30)",
+                    "s-pin": "Zadajte bezpečnostný PIN kód. UPOZORNENIE: Toto umožňuje diaľkové uzamknutie/odomknutie a ovládanie nezávislého kúrenia",
+                    "readonly": "V aute nemôžete vykonávať žiadne zmeny, iba čítať údaje"
+                }
+            }
+        }
+    }
+}

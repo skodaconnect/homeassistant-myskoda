@@ -3,7 +3,7 @@ import logging
 from collections import OrderedDict, deque
 from collections.abc import Coroutine
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta, UTC
 from typing import Callable
 
 from aiohttp import ClientError
@@ -20,21 +20,19 @@ from myskoda.event import (
     EventAccess,
     EventAirConditioning,
     EventDeparture,
+    EventOdometer,
     EventOperation,
     ServiceEvent,
     ServiceEventTopic,
 )
 from myskoda.models.info import CapabilityId
 from myskoda.models.operation_request import OperationName, OperationStatus
-from myskoda.models.service_event import (
-    ServiceEventChargingData,
-    ServiceEventData,
-)
 from myskoda.models.user import User
 from myskoda.mqtt import EventCharging, EventType
 
 from .const import (
     API_COOLDOWN_IN_SECONDS,
+    CACHE_USER_ENDPOINT_IN_HOURS,
     CONF_POLL_INTERVAL,
     COORDINATORS,
     DEFAULT_FETCH_INTERVAL_IN_MINUTES,
@@ -127,6 +125,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.update_vehicle = self._debounce(self._update_vehicle)
         self.update_positions = self._debounce(self._update_positions)
         self.update_departure_info = self._debounce(self._update_departure_info)
+        self.update_odometer = self._debounce(self._update_odometer)
         self._mqtt_connecting: bool = False
 
     async def _async_get_minimal_data(self) -> Vehicle:
@@ -209,7 +208,22 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         # Obtain user data. This is allowed to fail if we already have this in state.
         try:
-            user = await self.myskoda.get_user()
+            if self.data.user and self.data.user.timestamp:
+                cache_expiry_time = self.data.user.timestamp + timedelta(
+                    hours=CACHE_USER_ENDPOINT_IN_HOURS
+                )
+
+                if datetime.now(UTC) > cache_expiry_time:
+                    _LOGGER.debug(
+                        "Updating user - cache expired at %s", self.data.user.timestamp
+                    )
+                    user = await self.myskoda.get_user()
+                else:
+                    _LOGGER.debug("Skipping user update - cache is still valid.")
+                    user = self.data.user
+            else:
+                user = await self.myskoda.get_user()
+
         except ClientResponseError as err:
             handle_aiohttp_error("user", err, self.hass, self.entry)
             if self.data.user:
@@ -259,6 +273,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 await self._on_air_conditioning_event(event)
             if event.topic == ServiceEventTopic.DEPARTURE:
                 await self._on_departure_event(event)
+            if event.topic == ServiceEventTopic.ODOMETER:
+                await self._on_odometer_event(event)
 
     async def _on_operation_event(self, event: EventOperation) -> None:
         # Store the last MAX_STORED_OPERATIONS operations
@@ -321,27 +337,38 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             await self.update_driving_range()
 
         event_data = event.event.data
-        match event_data:
-            case ServiceEventChargingData():
-                if vehicle.charging and (status := vehicle.charging.status):
-                    status.battery.remaining_cruising_range_in_meters = (
-                        event_data.charged_range * 1000
-                    )
-                    status.battery.state_of_charge_in_percent = event_data.soc
-                    if event_data.time_to_finish is not None:
-                        status.remaining_time_to_fully_charged_in_minutes = (
-                            event_data.time_to_finish
-                        )
-                        status.state = event_data.state
-                if vehicle.driving_range:
-                    vehicle.driving_range.primary_engine_range.current_soc_in_percent = event_data.soc
-                    vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
-                        event_data.charged_range
-                    )
-                self.set_updated_vehicle(vehicle)
-            case ServiceEventData():
-                if not update_charging_request_sent:
-                    await self.update_charging()
+        if vehicle.charging and (status := vehicle.charging.status):
+            if event_data.charged_range:
+                status.battery.remaining_cruising_range_in_meters = (
+                    event_data.charged_range * 1000
+                )
+            if event_data.soc:
+                status.battery.state_of_charge_in_percent = event_data.soc
+            if event_data.time_to_finish:
+                status.remaining_time_to_fully_charged_in_minutes = (
+                    event_data.time_to_finish
+                )
+            if event_data.state:
+                status.state = event_data.state
+        if vehicle.driving_range:
+            if event_data.soc:
+                vehicle.driving_range.primary_engine_range.current_soc_in_percent = (
+                    event_data.soc
+                )
+            if event_data.charged_range:
+                vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
+                    event_data.charged_range
+                )
+        some_charging_data_missing = (
+            event_data.charged_range is None
+            or event_data.soc is None
+            or event_data.state is None
+        )
+        if some_charging_data_missing and not update_charging_request_sent:
+            # After update is done, the set_updated_vehicle is called there
+            await self.update_charging()
+        else:
+            self.set_updated_vehicle(vehicle)
 
     async def _on_access_event(self, event: EventAccess):
         await self.update_vehicle()
@@ -352,12 +379,39 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     async def _on_departure_event(self, event: EventDeparture):
         await self.update_positions()
 
+    async def _on_odometer_event(self, event: EventOdometer):
+        await self.update_odometer()
+
     def _unsub_refresh(self):
         return
 
     def set_updated_vehicle(self, vehicle: Vehicle) -> None:
         self.data.vehicle = vehicle
         self.async_set_updated_data(self.data)
+
+    async def _update_odometer(self) -> None:
+        """Update the odometer."""
+
+        _LOGGER.debug("Update odometer information for %s", self.vin)
+        maint_info = health_info = None
+
+        try:
+            maint_info = await self.myskoda.get_maintenance(self.vin)
+
+            if self.data.vehicle.health:
+                health_info = await self.myskoda.get_health(self.vin)
+        except ClientResponseError as err:
+            handle_aiohttp_error("odometer", err, self.hass, self.entry)
+        except ClientError as err:
+            raise UpdateFailed("Error getting update from MySkoda API: %s", err)
+
+        if maint_info or health_info:
+            vehicle = self.data.vehicle
+            if maint_info:
+                vehicle.maintenance = maint_info
+            if health_info:
+                vehicle.health = health_info
+            self.set_updated_vehicle(vehicle)
 
     async def _update_driving_range(self) -> None:
         driving_range = None
@@ -389,6 +443,14 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         if charging:
             vehicle = self.data.vehicle
             vehicle.charging = charging
+            # Update driving range similarly to the received charging service event
+            if vehicle.driving_range and charging.status:
+                vehicle.driving_range.primary_engine_range.current_soc_in_percent = (
+                    charging.status.battery.state_of_charge_in_percent
+                )
+                vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
+                    charging.status.battery.remaining_cruising_range_in_meters
+                )
             self.set_updated_vehicle(vehicle)
 
     async def _update_air_conditioning(self) -> None:

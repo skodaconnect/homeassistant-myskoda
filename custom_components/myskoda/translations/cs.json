@@ -6,6 +6,7 @@
         "error": {
             "cannot_connect": "Připojení se nezdařilo",
             "invalid_auth": "Neplatné ověření",
+            "relogin_in_app": "Při přihlašování byla zjištěna chyba. Může být nutné se znovu přihlásit do aplikace MySkoda.",
             "unknown": "Došlo k neočekávané chybě. Zkontrolujte logy aplikace HomeAssistant."
         },
         "step": {
@@ -50,28 +51,28 @@
                 "name": "Okna"
             },
             "door_open_front_left": {
-                "name": "Levé přední dveře otevřeny"
+                "name": "Levé přední dveře"
             },
             "door_open_front_right": {
-                "name": "Pravé přední dveře otevřeny"
+                "name": "Pravé přední dveře"
             },
             "door_open_rear_left": {
-                "name": "Levé zadní dveře otevřeny"
+                "name": "Levé zadní dveře"
             },
             "door_open_rear_right": {
-                "name": "Pravé zadní dveře otevřeny"
+                "name": "Pravé zadní dveře"
             },
             "window_open_front_left": {
-                "name": "Levé přední okno otevřeno"
+                "name": "Levé přední okno"
             },
             "window_open_front_right": {
-                "name": "Pravé přední okno otevřeno"
+                "name": "Pravé přední okno"
             },
             "window_open_rear_left": {
-                "name": "Levé zadní okno otevřeno"
+                "name": "Levé zadní okno"
             },
             "window_open_rear_right": {
-                "name": "Pravé zadní okno otevřeno"
+                "name": "Pravé zadní okno"
             }
         },
         "climate": {
@@ -89,10 +90,10 @@
         },
         "image": {
             "render_light_3x": {
-                "name": "Znázornění stavu světel vozidla"
+                "name": "Znázornění stavu vozidla"
             },
             "render_vehicle_main": {
-                "name": "Hlavní vykreslení vozidla"
+                "name": "Hlavní render vozidla"
             }
         },
         "lock": {
@@ -133,7 +134,7 @@
                 "name": "Stav nabíjení",
                 "state": {
                     "charging": "Nabíjení",
-                    "connect_cable": "Žádná síla",
+                    "connect_cable": "Připojte kabel",
                     "conserving": "Uchovávání nabití",
                     "ready_for_charging": "Připraveno k nabíjení"
                 }
@@ -213,25 +214,25 @@
                 "name": "Snížený proud"
             },
             "auto_unlock_plug": {
-                "name": "Odemknout nabíjecí kabel při nabíjení"
+                "name": "Odemknout nabíjecí kabel po nabíjení"
             },
             "window_heating": {
-                "name": "Vytápění okna"
+                "name": "Vyhřívání okna"
             },
             "ac_at_unlock": {
-                "name": "Střídavý proud při odemknutí"
+                "name": "Klimatizace při odemknutí"
             },
             "ac_without_external_power": {
-                "name": "Střídavý proud bez externího napájení"
+                "name": "Klimatizace bez externího napájení"
             },
             "ac_seat_heating_front_left": {
-                "name": "Vyhřívání levého sedadla se střídavým proudem"
+                "name": "Vyhřívání levého sedadla pri spuštení klimatizace"
             },
             "ac_seat_heating_front_right": {
-                "name": "Vyhřívání pravého sedadla se střídavým proudem"
+                "name": "Vyhřívání pravého sedadla pri spuštení klimatizace"
             },
             "ac_window_heating": {
-                "name": "Vyhřívání oken se střídavým proudem"
+                "name": "Vyhřívání oken pri spuštení klimatizace"
             },
             "departure_timer_1": {
                 "name": "Časovač odjezdu 1"
@@ -241,6 +242,15 @@
             },
             "departure_timer_3": {
                 "name": "Časovač odjezdu 3"
+            },
+            "ac_timer_1": {
+                "name": "Časovač klimatizace 1"
+            },
+            "ac_timer_2": {
+                "name": "Časovač klimatizace 2"
+            },
+            "ac_timer_3": {
+                "name": "Časovač klimatizace 3"
             }
         },
         "button": {
