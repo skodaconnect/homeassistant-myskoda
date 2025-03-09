@@ -231,7 +231,7 @@
                 "name": "Próxima inspeção"
             },
             "inspection_in_km": {
-                "name": "Nova inspeção em KM"
+                "name": "Próxima inspeção"
             },
             "mileage": {
                 "name": "Quilometragem"
@@ -240,7 +240,7 @@
                 "name": "Serviço de petróleo"
             },
             "oil_service_in_km": {
-                "name": "Serviço de petróleo em KM"
+                "name": "Serviço de petróleo"
             },
             "range": {
                 "name": "Alcance"

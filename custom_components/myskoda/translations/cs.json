@@ -220,7 +220,7 @@
                 "name": "Další prohlídka"
             },
             "inspection_in_km": {
-                "name": "Další prohlídka v KM"
+                "name": "Další prohlídka"
             },
             "mileage": {
                 "name": "Najeto"
@@ -229,7 +229,7 @@
                 "name": "Výměna oleje"
             },
             "oil_service_in_km": {
-                "name": "Výměna oleje v KM"
+                "name": "Výměna oleje"
             },
             "range": {
                 "name": "Dojezd"

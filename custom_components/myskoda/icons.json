@@ -128,7 +128,7 @@
                 "default": "mdi:car-wrench"
             },
             "inspection_in_km": {
-                "default": "mdi:car-wrench"
+                "default": "mdi:counter"
             },
             "mileage": {
                 "default": "mdi:counter"
@@ -137,7 +137,7 @@
                 "default": "mdi:oil"
             },
             "oil_service_in_km": {
-                "default": "mdi:oil"
+                "default": "mdi:counter"
             },
             "adblue_range": {
                 "default": "mdi:gauge"

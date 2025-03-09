@@ -219,7 +219,7 @@
                 "name": "Następna inspekcja"
             },
             "inspection_in_km": {
-                "name": "Serwis za (km)"
+                "name": "Następna inspekcja"
             },
             "mileage": {
                 "name": "Przebieg"
@@ -228,7 +228,7 @@
                 "name": "Serwis olejowy"
             },
             "oil_service_in_km": {
-                "name": "Serwis olejowy (km)"
+                "name": "Serwis olejowy"
             },
             "range": {
                 "name": "Zasięg"
