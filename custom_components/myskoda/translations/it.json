@@ -20,74 +20,34 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Cofano",
-                "state": {
-                    "off": "Chiuso",
-                    "on": "Aperto"
-                }
+                "name": "Cofano"
             },
             "charger_connected": {
-                "name": "Caricabatterie collegato",
-                "state": {
-                    "off": "Scollegato",
-                    "on": "Collegato"
-                }
+                "name": "Caricabatterie collegato"
             },
             "charger_locked": {
-                "name": "Blocco ricarica",
-                "state": {
-                    "off": "Bloccato",
-                    "on": "Sbloccato"
-                }
+                "name": "Blocco ricarica"
             },
             "doors_locked": {
-                "name": "Porte chiuse",
-                "state": {
-                    "off": "Bloccato",
-                    "on": "Sbloccato"
-                }
+                "name": "Porte chiuse"
             },
             "doors_open": {
-                "name": "Porte aperte",
-                "state": {
-                    "off": "Chiuso",
-                    "on": "Aperto"
-                }
+                "name": "Porte aperte"
             },
             "locked": {
-                "name": "Veicolo bloccato",
-                "state": {
-                    "off": "Bloccato",
-                    "on": "Sbloccato"
-                }
+                "name": "Veicolo bloccato"
             },
             "parkinglights_on": {
-                "name": "Luci Di Parcheggio",
-                "state": {
-                    "off": "Non attivo",
-                    "on": "Attivo"
-                }
+                "name": "Luci Di Parcheggio"
             },
             "sunroof_open": {
-                "name": "Tettuccio",
-                "state": {
-                    "off": "Chiuso",
-                    "on": "Aperto"
-                }
+                "name": "Tettuccio"
             },
             "trunk_open": {
-                "name": "Bagagliaio",
-                "state": {
-                    "off": "Chiuso",
-                    "on": "Aperto"
-                }
+                "name": "Bagagliaio"
             },
             "windows_open": {
-                "name": "Finestrini",
-                "state": {
-                    "off": "Chiuso",
-                    "on": "Aperto"
-                }
+                "name": "Finestrini"
             }
         },
         "climate": {
@@ -100,12 +60,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Posizione",
-                "state": {
-                    "home": "Casa",
-                    "not_home": "Assente",
-                    "vehicle_in_motion": "Movimento rilevato"
-                }
+                "name": "Posizione"
             }
         },
         "image": {
