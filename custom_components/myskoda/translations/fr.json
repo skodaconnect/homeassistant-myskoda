@@ -160,7 +160,7 @@
                 "name": "Prochaine révision"
             },
             "inspection_in_km": {
-                "name": "Prochaine révision en Km"
+                "name": "Prochaine révision"
             },
             "mileage": {
                 "name": "Kilométrage"
@@ -169,7 +169,7 @@
                 "name": "Vidange"
             },
             "oil_service_in_km": {
-                "name": "Prochaine vidange en Km"
+                "name": "Vidange"
             },
             "range": {
                 "name": "Autonomie"

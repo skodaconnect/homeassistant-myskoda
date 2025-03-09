@@ -219,7 +219,7 @@
                 "name": "Următoarea inspecție"
             },
             "inspection_in_km": {
-                "name": "Următoarea inspecție în km"
+                "name": "Următoarea inspecție"
             },
             "mileage": {
                 "name": "Kilometraj"
@@ -228,7 +228,7 @@
                 "name": "Revizie ulei"
             },
             "oil_service_in_km": {
-                "name": "Revizie ulei în km"
+                "name": "Revizie ulei"
             },
             "range": {
                 "name": "Autonomie"

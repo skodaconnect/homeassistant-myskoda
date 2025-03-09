@@ -220,7 +220,7 @@
                 "name": "Neste inspeksjon"
             },
             "inspection_in_km": {
-                "name": "Neste inspeksjon i km"
+                "name": "Neste inspeksjon"
             },
             "mileage": {
                 "name": "Kilometerstand"
@@ -229,7 +229,7 @@
                 "name": "Oljeservice"
             },
             "oil_service_in_km": {
-                "name": "Neste oljeservice i km"
+                "name": "Oljeservice"
             },
             "range": {
                 "name": "Rekkevidde"

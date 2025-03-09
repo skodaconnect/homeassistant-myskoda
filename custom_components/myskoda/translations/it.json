@@ -160,7 +160,7 @@
                 "name": "Prossima Ispezione"
             },
             "inspection_in_km": {
-                "name": "Prossimo controllo entro km"
+                "name": "Prossima Ispezione"
             },
             "mileage": {
                 "name": "Chilometraggio"
@@ -169,7 +169,7 @@
                 "name": "Controllo Olio"
             },
             "oil_service_in_km": {
-                "name": "Controllo olio tra Km"
+                "name": "Controllo Olio"
             },
             "range": {
                 "name": "Gamma"

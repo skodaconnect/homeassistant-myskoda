@@ -219,7 +219,7 @@
                 "name": "Ďalšia kontrola"
             },
             "inspection_in_km": {
-                "name": "km zostávajúce do ďalšej kontroly"
+                "name": "Ďalšia kontrola"
             },
             "mileage": {
                 "name": "Stav kilometrov"
@@ -228,7 +228,7 @@
                 "name": "Výmena oleja"
             },
             "oil_service_in_km": {
-                "name": "km zostávajúce do výmeny oleja"
+                "name": "Výmena oleja"
             },
             "range": {
                 "name": "Dojazd"

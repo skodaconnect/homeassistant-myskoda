@@ -231,7 +231,7 @@
                 "name": "Volgend onderhoud"
             },
             "inspection_in_km": {
-                "name": "Volgend onderhoud (km)"
+                "name": "Volgend onderhoud"
             },
             "mileage": {
                 "name": "Kilometerstand"
@@ -240,7 +240,7 @@
                 "name": "Olie onderhoud"
             },
             "oil_service_in_km": {
-                "name": "Olie onderhoud (km)"
+                "name": "Olie onderhoud"
             },
             "range": {
                 "name": "Actieradius"

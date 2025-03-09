@@ -220,7 +220,7 @@
                 "name": "Huoltotarkistus"
             },
             "inspection_in_km": {
-                "name": "Seuraava tarkastus km"
+                "name": "Huoltotarkistus"
             },
             "mileage": {
                 "name": "Kilometrilukema"
@@ -229,7 +229,7 @@
                 "name": "Öljynvaihto"
             },
             "oil_service_in_km": {
-                "name": "Öljynvaihto km"
+                "name": "Öljynvaihto"
             },
             "range": {
                 "name": "Toimintamatka"
