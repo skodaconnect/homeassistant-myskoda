@@ -84,7 +84,6 @@ This is different from [Last Service Event](#last-service-event).
 ### Buttons
 - Honk and Flash
 - Flash
-- Generate Fixtures (deprecated, use Device Diagnostics instead)
 
 ### Climate
 
@@ -286,14 +285,6 @@ The opposite to S-PIN is read-only mode. In this mode, all buttons, switches and
 In order not to accidentally delete data, we do not delete the entities
 
 Also, if you disable read-only mode, the buttons, switches, etc will become available again.
-
-## Fixture generation
-
-The Generate Fixtures button allows users to generate car-related fixtures directly from the Home Assistant UI without requiring the use of myskoda[cli].
-
-When pressed, the button triggers the fixture generation process, and the generated fixtures are logged at the Info level in the Home Assistant Core log. Upon successful completion, a notification is displayed in the UI to inform the user that the fixtures have been successfully generated.
-
-This feature simplifies the process of creating fixtures by providing a user-friendly interface for initiating the operation.
 
 ## Diagnostics
 
