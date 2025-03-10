@@ -3,7 +3,7 @@ rules:
   action-setup: done
   appropriate-polling: done
   brands: done
-  common-modules: todo
+  common-modules: done
   config-flow-test-coverage: todo
   config-flow: todo
   dependency-transparency: done
