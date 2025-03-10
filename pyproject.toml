@@ -17,7 +17,7 @@ voluptuous = "^0.15.2"
 myskoda = "^0.21.2"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.9.9"
+ruff = "^0.9.10"
 homeassistant-stubs = "^2025.3.0"
 pyright = "^1.1.396"
 
