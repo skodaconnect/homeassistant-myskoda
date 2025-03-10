@@ -335,9 +335,6 @@
             },
             "flash": {
                 "name": "Blikať"
-            },
-            "generate_fixtures": {
-                "name": "Generovať fixácie"
             }
         }
     },

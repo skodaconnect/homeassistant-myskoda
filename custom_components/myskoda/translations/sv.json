@@ -335,9 +335,6 @@
             },
             "flash": {
                 "name": "Blinka"
-            },
-            "generate_fixtures": {
-                "name": "Skapa fixturer"
             }
         }
     },

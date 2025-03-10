@@ -243,9 +243,6 @@
             },
             "flash": {
                 "name": "Appels de phares"
-            },
-            "generate_fixtures": {
-                "name": ""
             }
         }
     },

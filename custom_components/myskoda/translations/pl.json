@@ -335,9 +335,6 @@
             },
             "flash": {
                 "name": "Miganie"
-            },
-            "generate_fixtures": {
-                "name": "Generuj Fixtures"
             }
         }
     },

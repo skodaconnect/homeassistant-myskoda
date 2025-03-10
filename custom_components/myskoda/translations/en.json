@@ -347,9 +347,6 @@
             },
             "flash": {
                 "name": "Flash"
-            },
-            "generate_fixtures": {
-                "name": "Generate Fixtures"
             }
         }
     },

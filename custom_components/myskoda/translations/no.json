@@ -336,9 +336,6 @@
             },
             "flash": {
                 "name": "Blink"
-            },
-            "generate_fixtures": {
-                "name": "Generer testdata"
             }
         }
     },

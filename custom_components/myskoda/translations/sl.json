@@ -347,9 +347,6 @@
             },
             "flash": {
                 "name": "Utripanje"
-            },
-            "generate_fixtures": {
-                "name": "Ustvari testne podatke"
             }
         }
     },
