@@ -1555,14 +1555,14 @@ files = [
 
 [[package]]
 name = "jinja2"
-version = "3.1.5"
+version = "3.1.6"
 description = "A very fast and expressive template engine."
 optional = false
 python-versions = ">=3.7"
-groups = ["main", "dev"]
+groups = ["main"]
 files = [
-    {file = "jinja2-3.1.5-py3-none-any.whl", hash = "sha256:aba0f4dc9ed8013c424088f68a5c226f7d6097ed89b246d7749c2ec4175c6adb"},
-    {file = "jinja2-3.1.5.tar.gz", hash = "sha256:8fefff8dc3034e27bb80d67c671eb8a9bc424c0ef4c0826edbff304cceff43bb"},
+    {file = "jinja2-3.1.6-py3-none-any.whl", hash = "sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67"},
+    {file = "jinja2-3.1.6.tar.gz", hash = "sha256:0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d"},
 ]
 
 [package.dependencies]
@@ -1893,14 +1893,14 @@ files = [
 
 [[package]]
 name = "myskoda"
-version = "0.21.1"
+version = "0.21.2"
 description = "Library for interaction with the MySkoda APIs."
 optional = false
 python-versions = "<4.0,>=3.12.0"
 groups = ["main"]
 files = [
-    {file = "myskoda-0.21.1-py3-none-any.whl", hash = "sha256:234e047ab0d6bb20fd6ddd533079c06106b6fe173489db8f80c3f784ea2a0a21"},
-    {file = "myskoda-0.21.1.tar.gz", hash = "sha256:30fd20d93ff4d5896c7d5a095ba5a8b19297c7a08a9219a6ed4e32b28262643b"},
+    {file = "myskoda-0.21.2-py3-none-any.whl", hash = "sha256:20628c976b55c0961e09cab96b5868a279a8dfa5abefc87af053842b2e0e59be"},
+    {file = "myskoda-0.21.2.tar.gz", hash = "sha256:229fe0705b6f3d42dc9e4aad1fa86e9cba0bdd71a0cec17408d15c501b7110da"},
 ]
 
 [package.dependencies]
@@ -3570,4 +3570,4 @@ ifaddr = ">=0.1.7"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.14"
-content-hash = "b1c1036f57e64af9888fb7527a7618e3690672fef551e819684d30b31bec9810"
+content-hash = "2fc751b1724361d6a9b2f7d0e2309d6b74026a65bc8aed088258f1020a1a53ea"
