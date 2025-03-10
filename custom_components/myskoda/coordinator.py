@@ -357,7 +357,10 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 status.state = event_data.state
         if vehicle.driving_range:
             per = vehicle.driving_range.primary_engine_range
-            ser = vehicle.driving_range.secondary_engine_range
+            ser = False
+
+            if vehicle.driving_range.secondary_engine_range:
+                ser = vehicle.driving_range.secondary_engine_range
 
             if event_data.soc:
                 if per.engine_type == EngineType.ELECTRIC:
