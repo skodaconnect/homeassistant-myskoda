@@ -80,7 +80,7 @@ class MySkodaSwitch(MySkodaEntity, SwitchEntity):
 
     def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str):
         super().__init__(coordinator, vin)
-        self._is_enabled = True
+        self._is_enabled: bool = True
 
     def is_supported(self) -> bool:
         all_capabilities_present = all(

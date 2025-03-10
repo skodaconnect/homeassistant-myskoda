@@ -52,7 +52,7 @@ class MySkodaButton(MySkodaEntity, ButtonEntity):
 
     def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str):
         super().__init__(coordinator, vin)
-        self._is_enabled = True
+        self._is_enabled: bool = True
 
     def is_supported(self) -> bool:
         all_capabilities_present = all(
@@ -149,7 +149,7 @@ class GenerateFixtures(MySkodaButton):
         vin: str,
     ):
         super().__init__(coordinator, vin)
-        self._is_enabled = True  # Track whether the button is enabled
+        self._is_enabled: bool = True  # Track whether the button is enabled
 
     @property
     def available(self) -> bool:
