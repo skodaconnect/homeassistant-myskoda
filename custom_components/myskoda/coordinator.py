@@ -25,6 +25,7 @@ from myskoda.event import (
     ServiceEvent,
     ServiceEventTopic,
 )
+from myskoda.models.driving_range import EngineType
 from myskoda.models.info import CapabilityId
 from myskoda.models.operation_request import OperationName, OperationStatus
 from myskoda.models.user import User
@@ -355,14 +356,27 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             if event_data.state:
                 status.state = event_data.state
         if vehicle.driving_range:
+            per = vehicle.driving_range.primary_engine_range
+            ser = False
+
+            if vehicle.driving_range.secondary_engine_range:
+                ser = vehicle.driving_range.secondary_engine_range
+
             if event_data.soc:
-                vehicle.driving_range.primary_engine_range.current_soc_in_percent = (
-                    event_data.soc
-                )
+                if per.engine_type == EngineType.ELECTRIC:
+                    per.current_soc_in_percent = event_data.soc
+                elif ser:
+                    if ser.engine_type == EngineType.ELECTRIC:
+                        ser.current_soc_in_percent = event_data.soc
+
             if event_data.charged_range:
-                vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
-                    event_data.charged_range
-                )
+                range_in_km = int(event_data.charged_range / 1000)
+                if per.engine_type == EngineType.ELECTRIC:
+                    per.remaining_range_in_km = range_in_km
+                elif ser:
+                    if ser.engine_type == EngineType.ELECTRIC:
+                        ser.remaining_range_in_km = range_in_km
+
         some_charging_data_missing = (
             event_data.charged_range is None
             or event_data.soc is None
