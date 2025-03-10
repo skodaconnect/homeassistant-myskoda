@@ -336,9 +336,6 @@
             },
             "flash": {
                 "name": "Vilkuta"
-            },
-            "generate_fixtures": {
-                "name": "Luo kuvaukset"
             }
         }
     },

@@ -243,9 +243,6 @@
             },
             "flash": {
                 "name": "Flash"
-            },
-            "generate_fixtures": {
-                "name": "Genera Correzioni"
             }
         }
     },

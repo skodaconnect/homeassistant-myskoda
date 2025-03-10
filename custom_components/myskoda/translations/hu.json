@@ -347,9 +347,6 @@
             },
             "flash": {
                 "name": "Villogás"
-            },
-            "generate_fixtures": {
-                "name": "Tartozékok generálása"
             }
         }
     },
