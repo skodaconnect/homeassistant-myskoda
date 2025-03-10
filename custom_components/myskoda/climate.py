@@ -79,9 +79,23 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
             vin,
         )
         ClimateEntity.__init__(self)
+        self._is_enabled: bool = True
 
     def _air_conditioning(self) -> AirConditioning | None:
         return self.vehicle.air_conditioning
+
+    def _enable_climate(self):
+        self._is_enabled = True
+        self.async_write_ha_state()
+
+    def _disable_climate(self):
+        self._is_enabled = False
+        self._async_write_ha_state()
+
+    @property
+    def available(self) -> bool:
+        """Indicator to see if the climate entitiy is currently available."""
+        return self._is_enabled
 
     @property
     def hvac_modes(self) -> list[HVACMode]:  # noqa: D102
@@ -126,12 +140,16 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_hvac_mode(self, hvac_mode: HVACMode):  # noqa: D102
+        if not self._is_enabled:
+            return
+
         if ac := self._air_conditioning():
             target_temperature = ac.target_temperature
             if target_temperature is None:
                 return
 
             if hvac_mode == HVACMode.HEAT_COOL:
+                self._disable_climate()
                 if ac.state == AirConditioningState.HEATING_AUXILIARY:
                     _LOGGER.info("Auxiliary heating detected, stopping first.")
                     try:
@@ -142,6 +160,7 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
                         _LOGGER.error(
                             "Failed to stop aux heater, aborting action: %s", exc
                         )
+                        self._enable_climate()
                         return
                 _LOGGER.info("Starting Air conditioning.")
                 try:
@@ -151,6 +170,8 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
                     )
                 except OperationFailedError as exc:
                     _LOGGER.error("Failed to start air conditioning: %s", exc)
+                finally:
+                    self._enable_climate()
             else:
                 _LOGGER.info("Stopping Air conditioning.")
                 try:
@@ -169,12 +190,17 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_temperature(self, **kwargs):  # noqa: D102
+        if not self._is_enabled:
+            return
+
         temp = kwargs[ATTR_TEMPERATURE]
         # Ensure the temperature stays within range
         if temp < self.min_temp:
             temp = self.min_temp
         elif temp > self.max_temp:
             temp = self.max_temp
+
+        self._disable_climate()
         try:
             await self.coordinator.myskoda.set_target_temperature(
                 self.vehicle.info.vin, temp
@@ -182,6 +208,8 @@ class MySkodaClimate(MySkodaEntity, ClimateEntity):
             _LOGGER.info("Target temperature for AC set to %s.", temp)
         except OperationFailedError as exc:
             _LOGGER.error("Failed to set AC target temperature: %s", exc)
+        finally:
+            self._enable_climate()
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AIR_CONDITIONING]
@@ -210,6 +238,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
             vin,
         )
         ClimateEntity.__init__(self)
+        self._is_enabled: bool = bool(self.coordinator.entry.options.get(CONF_SPIN))
 
         self._attr_supported_features = (
             ClimateEntityFeature.TURN_ON | ClimateEntityFeature.TURN_OFF
@@ -228,6 +257,14 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
 
     def _auxiliary_heating(self) -> AuxiliaryHeating | None:
         return self.vehicle.auxiliary_heating
+
+    def _enable_climate(self):
+        self._is_enabled = True
+        self.async_write_ha_state()
+
+    def _disable_climate(self):
+        self._is_enabled = False
+        self.async_write_ha_state()
 
     @property
     def _target_temperature(self) -> TargetTemperature | None:
@@ -286,12 +323,6 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
         return state
 
     @property
-    def available(self) -> bool:  # noqa: D102
-        if not self.coordinator.entry.options.get(CONF_SPIN):
-            return False
-        return True
-
-    @property
     def hvac_modes(self) -> list[HVACMode]:  # noqa: D102
         modes = [HVACMode.HEAT, HVACMode.OFF]
         if self.has_any_capability(
@@ -335,7 +366,11 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_hvac_mode(self, hvac_mode: HVACMode):  # noqa: D102
+        if not self._is_enabled:
+            return
+
         if state := self._state:
+            self._disable_climate()
 
             async def handle_mode(desired_state, start_mode=None, **kwargs):
                 if state == desired_state:
@@ -350,6 +385,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                         )
                     except OperationFailedError as exc:
                         _LOGGER.error("Failed to stop air conditioning: %s", exc)
+                        self._enable_climate()
                         return
 
                 config = AuxiliaryConfig(
@@ -360,6 +396,7 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                 spin = self.coordinator.entry.options.get(CONF_SPIN)
                 if spin is None:
                     _LOGGER.error("Cannot start %s: No S-PIN set.", desired_state)
+                    self._enable_climate()
                     return
 
                 _LOGGER.info("Starting %s [%s]", start_mode or "heating", config)
@@ -371,6 +408,8 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                     )
                 except OperationFailedError as exc:
                     _LOGGER.error("Failed to start aux heating: %s", exc)
+                finally:
+                    self._enable_climate()
 
             if hvac_mode == HVACMode.HEAT:
                 await handle_mode(
@@ -397,6 +436,8 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                         )
                     except OperationFailedError as exc:
                         _LOGGER.error("Failed to stop aux heater: %s", exc)
+                    finally:
+                        self._enable_climate()
 
             _LOGGER.info("Auxiliary HVAC mode set to %s.", hvac_mode)
         else:
@@ -410,6 +451,9 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_temperature(self, **kwargs):  # noqa: D102
+        if not self._is_enabled:
+            return
+
         temp = kwargs[ATTR_TEMPERATURE]
         if temp is not None:
             # Ensure the temperature stays within range
@@ -417,6 +461,8 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
                 temp = self.min_temp
             elif temp > self.max_temp:
                 temp = self.max_temp
+
+        self._disable_climate()
         try:
             await self.coordinator.myskoda.set_target_temperature(
                 self.vehicle.info.vin, temp
@@ -424,6 +470,8 @@ class AuxiliaryHeater(MySkodaEntity, ClimateEntity):
             _LOGGER.info("Target temperature for auxiliary heater set to %s.", temp)
         except OperationFailedError as exc:
             _LOGGER.error("Failed to set aux heater temperature: %s", exc)
+        finally:
+            self._enable_climate()
 
     def is_supported(self) -> bool:
         """Return true if any supported capability is present."""
