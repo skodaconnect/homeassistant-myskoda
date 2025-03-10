@@ -142,7 +142,7 @@
                 "name": "Nächste Inspektion"
             },
             "inspection_in_km": {
-                "name": "Nächste Inspektion in km"
+                "name": "Nächste Inspektion"
             },
             "mileage": {
                 "name": "Kilometerstand"
@@ -151,7 +151,7 @@
                 "name": "Öl-Service"
             },
             "oil_service_in_km": {
-                "name": "Öl-Service in km"
+                "name": "Öl-Service"
             },
             "range": {
                 "name": "Reichweite"

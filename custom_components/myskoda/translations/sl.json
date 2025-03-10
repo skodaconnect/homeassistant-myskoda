@@ -154,7 +154,7 @@
                 "name": "Naslednji servis"
             },
             "inspection_in_km": {
-                "name": "km do servisa"
+                "name": "Naslednji servis"
             },
             "mileage": {
                 "name": "Prevoženi kilometri"
@@ -163,7 +163,7 @@
                 "name": "Menjava olja"
             },
             "oil_service_in_km": {
-                "name": "km do menjave olja"
+                "name": "Menjava olja"
             },
             "range": {
                 "name": "Doseg"

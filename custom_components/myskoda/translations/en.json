@@ -2,8 +2,8 @@
     "config": {
         "abort": {
             "already_configured": "Device is already configured",
-	    "reauth_successful": "Reauthentication has succeeded.",
-	    "no_entry": "Could not find MySkoda configuration. Please check your logs and open an issue on GitHub."
+            "reauth_successful": "Reauthentication has succeeded.",
+            "no_entry": "Could not find MySkoda configuration. Please check your logs and open an issue on GitHub."
         },
         "error": {
             "cannot_connect": "Failed to connect. MySkoda may be down or unreachable.",
@@ -12,20 +12,20 @@
             "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles and report an issue to the developers."
         },
         "step": {
-	    "reauth_confirm": {
-		"data": {
-		    "email": "E-mail address",
-		    "password": "Password"
-		},
-		"description": "Authentication to MySkoda has failed. Please re-enter the credentials from your MySkoda app.",
-		"title": "Re-authenticate MySkoda"
-	    },
+            "reauth_confirm": {
+                "data": {
+                    "email": "E-mail address",
+                    "password": "Password"
+                },
+                "description": "Authentication to MySkoda has failed. Please re-enter the credentials from your MySkoda app.",
+                "title": "Re-authenticate MySkoda"
+            },
             "user": {
                 "data": {
                     "email": "E-mail",
                     "password": "Password"
                 },
-	        "description": "Enter the credentials from your MySkoda app."
+                "description": "Enter the credentials from your MySkoda app."
             }
         }
     },
@@ -154,7 +154,7 @@
                 "name": "Next Inspection"
             },
             "inspection_in_km": {
-                "name": "Next Inspection in KM"
+                "name": "Next Inspection"
             },
             "mileage": {
                 "name": "Mileage"
@@ -163,7 +163,7 @@
                 "name": "Oil Service"
             },
             "oil_service_in_km": {
-                "name": "Oil Service in KM"
+                "name": "Oil Service"
             },
             "range": {
                 "name": "Range"

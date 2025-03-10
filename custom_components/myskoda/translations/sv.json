@@ -142,7 +142,7 @@
                 "name": "Nästa inspektion"
             },
             "inspection_in_km": {
-                "name": "Nästa inspektion i km"
+                "name": "Nästa inspektion"
             },
             "mileage": {
                 "name": "Mätarställning"
@@ -151,7 +151,7 @@
                 "name": "Service oljebyte"
             },
             "oil_service_in_km": {
-                "name": "Service oljebyte i km"
+                "name": "Service oljebyte"
             },
             "range": {
                 "name": "Räckvidd"
