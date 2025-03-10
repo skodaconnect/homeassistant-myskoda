@@ -50,6 +50,10 @@ class MySkodaButton(MySkodaEntity, ButtonEntity):
     Base class for all button entities in the MySkoda integration.
     """
 
+    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str):
+        super().__init__(coordinator, vin)
+        self._is_enabled = True
+
     def is_supported(self) -> bool:
         all_capabilities_present = all(
             self.vehicle.has_capability(cap) for cap in self.required_capabilities()
@@ -57,6 +61,11 @@ class MySkodaButton(MySkodaEntity, ButtonEntity):
         readonly = self.coordinator.entry.options.get(CONF_READONLY)
 
         return all_capabilities_present and not readonly
+
+    @property
+    def available(self) -> bool:
+        """Return whether the button is available to be pressed."""
+        return self._is_enabled
 
 
 class HonkFlash(MySkodaButton):
@@ -70,10 +79,21 @@ class HonkFlash(MySkodaButton):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_press(self) -> None:
+        if not self._is_enabled:
+            return  # Ignore presses when disabled
+
+        # Disable the button while handling the press
+        self._is_enabled = False
+        self.async_write_ha_state()
+
         try:
             await self.coordinator.myskoda.honk_flash(self.vehicle.info.vin)
         except OperationFailedError as exc:
             _LOGGER.error("Failed honk and flash: %s", exc)
+        finally:
+            # Re-enable the button
+            self._is_enabled = True
+            self.async_write_ha_state()
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.HONK_AND_FLASH]
@@ -88,10 +108,21 @@ class Flash(MySkodaButton):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_press(self) -> None:
+        if not self._is_enabled:
+            return  # Ignore presses when disabled
+
+        # Disable the button while handling the press
+        self._is_enabled = False
+        self.async_write_ha_state()
+
         try:
             await self.coordinator.myskoda.flash(self.vehicle.info.vin)
         except OperationFailedError as exc:
             _LOGGER.error("Failed to flash lights: %s", exc)
+        finally:
+            # Re-enable the button
+            self._is_enabled = True
+            self.async_write_ha_state()
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.HONK_AND_FLASH]
