@@ -8,8 +8,8 @@ rules:
   config-flow: todo
   dependency-transparency: done
   docs-actions: done
-  docs-high-level-description: todo
-  docs-installation-instructions: todo
+  docs-high-level-description: done
+  docs-installation-instructions: done
   docs-removal-instructions: todo
   entity-event-setup: todo
   entity-unique-id: todo
