@@ -306,12 +306,12 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.STOP_WINDOW_HEATING,
             OperationName.SET_AIR_CONDITIONING_TIMERS,
         ]:
-            await self.update_air_conditioning()
+            await self._update_air_conditioning()
         if event.operation.operation in [
             OperationName.START_AUXILIARY_HEATING,
             OperationName.STOP_AUXILIARY_HEATING,
         ]:
-            await self.update_auxiliary_heating()
+            await self._update_auxiliary_heating()
         if event.operation.operation in [
             OperationName.UPDATE_CHARGE_LIMIT,
             OperationName.UPDATE_CARE_MODE,
@@ -320,16 +320,16 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.STOP_CHARGING,
             OperationName.UPDATE_AUTO_UNLOCK_PLUG,
         ]:
-            await self.update_charging()
+            await self._update_charging()
         if event.operation.operation in [
             OperationName.LOCK,
             OperationName.UNLOCK,
         ]:
-            await self.update_status(immediate=True)
+            await self._update_status()
         if event.operation.operation in [
             OperationName.UPDATE_DEPARTURE_TIMERS,
         ]:
-            await self.update_departure_info()
+            await self._update_departure_info()
 
     async def _on_charging_event(self, event: EventCharging):
         vehicle = self.data.vehicle
