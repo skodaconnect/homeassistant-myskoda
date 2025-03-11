@@ -43,7 +43,15 @@ async def async_setup_entry(
 class MySkodaLock(MySkodaEntity, LockEntity):
     """Base class for all locks in the MySkoda integration."""
 
-    pass
+    def __init__(self, coordinator, vin):
+        super().__init__(coordinator, vin)
+        self._is_enabled: bool = True
+        if not self.coordinator.entry.options.get(CONF_SPIN):
+            self._is_enabled = False
+
+    @property
+    def available(self) -> bool:
+        return self._is_enabled
 
 
 class DoorLock(MySkodaLock):
@@ -55,12 +63,6 @@ class DoorLock(MySkodaLock):
     )
 
     @property
-    def available(self) -> bool:
-        if not self.coordinator.entry.options.get(CONF_SPIN):
-            return False
-        return True
-
-    @property
     def is_locked(self) -> bool | None:
         if status := self.vehicle.status:
             return status.overall.doors_locked == DoorLockedState.LOCKED
@@ -68,6 +70,13 @@ class DoorLock(MySkodaLock):
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def _async_lock_unlock(self, lock: bool, spin: str, **kwargs):  # noqa: D102
         """Internal method to have a central location for the Throttle."""
+        if not self._is_enabled:
+            return
+
+        # Disable the lock while we handle the change
+        self._is_enabled = False
+        self.async_write_ha_state()
+
         try:
             if lock:
                 await self.coordinator.myskoda.lock(self.vehicle.info.vin, spin)
@@ -75,6 +84,10 @@ class DoorLock(MySkodaLock):
                 await self.coordinator.myskoda.unlock(self.vehicle.info.vin, spin)
         except OperationFailedError as exc:
             _LOGGER.error("Failed to unlock vehicle: %s", exc)
+        finally:
+            # Re-enable the lock
+            self._is_enabled = True
+            self.async_write_ha_state()
 
     async def async_lock(self, **kwargs) -> None:
         if self.coordinator.entry.options.get(CONF_SPIN):
