@@ -104,7 +104,7 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
     """Handle a config flow for MySkoda."""
 
     VERSION = 2
-    MINOR_VERSION = 2
+    MINOR_VERSION = 3
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None

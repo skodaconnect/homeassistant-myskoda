@@ -10,6 +10,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.util.ssl import get_default_context
 from myskoda import (
@@ -216,6 +217,38 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             vinlist = await myskoda.list_vehicle_vins()
             entry_data[VINLIST] = vinlist
             _LOGGER.debug("Add vinlist %s to entry %s", vinlist, entry.entry_id)
+
+            hass.config_entries.async_update_entry(
+                entry,
+                version=new_version,
+                minor_version=new_minor_version,
+                data=entry_data,
+            )
+
+            return True
+        if entry.minor_version < 3:
+            # Remove unneeded generate_fixtures button
+            _LOGGER.info(
+                "Starting migration to config schema 2.3, removing deprecated fixtures button"
+            )
+
+            new_version = 2
+            new_minor_version = 3
+
+            entry_data = {**entry.data}
+            vinlist = entry_data[VINLIST]
+
+            hass_er = er.async_get(hass)
+            entry_entities = er.async_entries_for_config_entry(hass_er, entry.entry_id)
+            vin_set = {f"{vin}_generate_fixtures" for vin in vinlist}
+
+            for entity in entry_entities:
+                if entity.unique_id in vin_set:
+                    _LOGGER.debug(
+                        "Removing entity %s, it is no longer supported",
+                        entity.unique_id,
+                    )
+                    hass_er.async_remove(entity.entity_id)
 
             hass.config_entries.async_update_entry(
                 entry,
