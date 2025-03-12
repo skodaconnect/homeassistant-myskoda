@@ -47,6 +47,7 @@ from .error_handlers import handle_aiohttp_error
 _LOGGER = logging.getLogger(__name__)
 
 type RefreshFunction = Callable[[], Coroutine[None, None, None]]
+type MySkodaConfigEntry = ConfigEntry[MySkodaDataUpdateCoordinator]
 
 
 class MySkodaDebouncer(Debouncer):
@@ -99,7 +100,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     data: State
 
     def __init__(
-        self, hass: HomeAssistant, entry: ConfigEntry, myskoda: MySkoda, vin: str
+        self, hass: HomeAssistant, entry: MySkodaConfigEntry, myskoda: MySkoda, vin: str
     ) -> None:
         """Create a new coordinator."""
 
@@ -119,7 +120,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.myskoda: MySkoda = myskoda
         self.operations: OrderedDict = OrderedDict()
         self.service_events: deque = deque(maxlen=MAX_STORED_SERVICE_EVENTS)
-        self.entry: ConfigEntry = entry
+        self.entry: MySkodaConfigEntry = entry
         self.update_driving_range = self._debounce(self._update_driving_range)
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
