@@ -335,12 +335,16 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
     async def _on_charging_event(self, event: EventCharging):
         vehicle = self.data.vehicle
-        update_charging_request_sent = False
+        _charging_updated = False
+        _range_updated = False
+
+        # See if we have relevant data
         if vehicle.charging is None or vehicle.charging.status is None:
             await self.update_charging()
-            update_charging_request_sent = True
+            _charging_updated = True
         if vehicle.driving_range is None:
             await self.update_driving_range()
+            _range_updated = True
 
         event_data = event.event.data
         if vehicle.charging and (status := vehicle.charging.status):
@@ -378,16 +382,14 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                     if ser.engine_type == EngineType.ELECTRIC:
                         ser.remaining_range_in_km = range_in_km
 
-        some_charging_data_missing = (
-            event_data.charged_range is None
-            or event_data.soc is None
-            or event_data.state is None
-        )
-        if some_charging_data_missing and not update_charging_request_sent:
-            # After update is done, the set_updated_vehicle is called there
+        # Make sure we update relevant data since the event has incomplete data
+        if not _charging_updated:
             await self.update_charging()
-        else:
-            self.set_updated_vehicle(vehicle)
+
+        if not _range_updated:
+            await self.update_driving_range()
+
+        self.set_updated_vehicle(vehicle)
 
     async def _on_access_event(self, event: EventAccess):
         await self.update_vehicle()
