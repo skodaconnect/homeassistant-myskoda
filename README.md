@@ -271,7 +271,7 @@ You can disable polling completely and use automations to update the data from M
 
 1. Disable polling in the integration:
 - Open the integration settings in your HomeAssistant. If you have HomeAssistant Cloud, click the button. 
-[!(https://my.home-assistant.io/badges/integration.svg)](https://my.home-assistant.io/redirect/integration/?domain=myskoda)
+[![Button](https://my.home-assistant.io/badges/integration.svg)](https://my.home-assistant.io/redirect/integration/?domain=myskoda)
 - Select the three dots behind the desired account to edit.
 - Select System Settings
 - Disable Polling (the second option)
