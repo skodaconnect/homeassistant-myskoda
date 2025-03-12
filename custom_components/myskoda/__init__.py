@@ -6,7 +6,6 @@ import logging
 
 from aiohttp import ClientResponseError, InvalidUrlClientError
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
@@ -26,7 +25,7 @@ from myskoda.auth.authorization import (
 
 
 from .const import COORDINATORS, DOMAIN, VINLIST
-from .coordinator import MySkodaDataUpdateCoordinator
+from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .error_handlers import handle_aiohttp_error
 from .issues import (
     async_create_tnc_issue,
@@ -50,7 +49,7 @@ PLATFORMS: list[Platform] = [
 
 
 def myskoda_instantiate(
-    hass: HomeAssistant, entry: ConfigEntry, mqtt_enabled: bool = True
+    hass: HomeAssistant, entry: MySkodaConfigEntry, mqtt_enabled: bool = True
 ) -> MySkoda:
     """Generic connector to MySkoda REST API."""
 
@@ -64,7 +63,7 @@ def myskoda_instantiate(
     return MySkoda(session, get_default_context(), mqtt_enabled=mqtt_enabled)
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> bool:
     """Set up MySkoda integration from a config entry."""
 
     myskoda = myskoda_instantiate(hass, entry, mqtt_enabled=False)
@@ -126,7 +125,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> bool:
     """Unload a config entry."""
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
@@ -135,13 +134,13 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return unload_ok
 
 
-async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry):
+async def _async_update_listener(hass: HomeAssistant, entry: MySkodaConfigEntry):
     """Handle options update."""
     # Do a lazy reload of integration when configuration changed
     await hass.config_entries.async_reload(entry.entry_id)
 
 
-async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> bool:
     """Handle MySkoda config-entry schema migrations."""
 
     _LOGGER.debug(
