@@ -267,12 +267,25 @@ Integrations > MySkoda > Hubs > Select your account > Configure
 
 ## Disabling polling
 
-You can disable polling completely and use automations to update the data from MySkoda. In order to do this, disable polling in the integration, and call the following action:
+You can disable polling completely and use automations to update the data from MySkoda. This is done in two steps:
+
+1. Disable polling in the integration:
+- Open the integration settings in your HomeAssistant. If you have HomeAssistant Cloud, click the button. 
+[![Button](https://my.home-assistant.io/badges/integration.svg)](https://my.home-assistant.io/redirect/integration/?domain=myskoda)
+- Select the three dots behind the desired account to edit.
+- Select System Settings
+- Disable Polling (the second option)
+- Click save
+
+2. Call the following action in an automation, updating the `entity_id` to suit your vehicle(s):
 
 ```yaml
 action: homeassistant.update_entity
 target:
-  entity_id: device_tracker.skoda_4ever
+  entity_id: device_tracker.skoda_enyaq_position
+data:
+  entity_id:
+    - device_tracker.skoda_enyaq_position
 ```
 
 ## S-PIN
@@ -283,7 +296,7 @@ Fill in the required S-PIN in Settings > Integrations > MySkoda > Configuration 
 ## Read-only mode
 
 The opposite to S-PIN is read-only mode. In this mode, all buttons, switches and other functionality that allows you to change settings remotely are disabled.
-In order not to accidentally delete data, we do not delete the entities
+In order not to accidentally delete data, we do not delete the entities.
 
 Also, if you disable read-only mode, the buttons, switches, etc will become available again.
 
