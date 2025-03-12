@@ -10,7 +10,6 @@ from homeassistant.components.climate import (
     HVACAction,
     HVACMode,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -39,7 +38,7 @@ from .const import (
     COORDINATORS,
     DOMAIN,
 )
-from .coordinator import MySkodaDataUpdateCoordinator
+from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
@@ -48,7 +47,7 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: MySkodaConfigEntry,
     async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:

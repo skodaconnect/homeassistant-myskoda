@@ -3,20 +3,19 @@
 import logging
 import json
 from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import DeviceEntry
 from myskoda.models.fixtures import Endpoint
 from typing import Any
 
 
 from .const import DOMAIN, COORDINATORS
-from .coordinator import MySkodaDataUpdateCoordinator
+from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_get_device_diagnostics(
-    hass: HomeAssistant, config_entry: ConfigEntry, device: DeviceEntry
+    hass: HomeAssistant, config_entry: MySkodaConfigEntry, device: DeviceEntry
 ) -> dict[str, Any]:
     """Return diagnostics for selected vehicle."""
     if not (vin := device.serial_number):
@@ -64,7 +63,7 @@ async def async_get_device_diagnostics(
 
 
 async def async_get_config_entry_diagnostics(
-    hass: HomeAssistant, config_entry: ConfigEntry
+    hass: HomeAssistant, config_entry: MySkodaConfigEntry
 ) -> dict[str, Any]:
     """Return diagnostics for all vehicles in the config entry."""
     coordinators = hass.data[DOMAIN][config_entry.entry_id][COORDINATORS]
