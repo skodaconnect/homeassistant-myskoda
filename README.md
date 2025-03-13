@@ -255,6 +255,16 @@ Pick any of the subjects from the example. If you want to enable full debugging,
 
 - **custom_components.myskoda.XYZ** Sets debug level for individual entity types in the custom component.
 
+## Enable tracing
+
+Enabling tracing makes the integration log the complete interactions between the MySkoda servers and HomeAssistant. This will contain personal sensitive information.
+You can enable tracing by going to Integrations > MySkoda > Hubs > Select your account > Configure
+
+Choose "API response tracing"
+
+Alternately, click the button below, select your account, click Configure
+[![Button](https://my.home-assistant.io/badges/integration.svg)](https://my.home-assistant.io/redirect/integration/?domain=myskoda)
+
 ## Customize polling interval
 
 This integration does not poll at a set interval, instead when the last update has been a while, we request new information from MySkoda.
@@ -265,14 +275,30 @@ When the car is quiet for a period we call the **POLLING INTERVAL**, we will req
 By default, this POLLING INTERVAL is set to 30 minutes. You can tune this to anything between 1 and 1440 minutes (1 day) by filling in the desired value in
 Integrations > MySkoda > Hubs > Select your account > Configure
 
+Alternately, click the button below, select your account, click Configure
+[![Button](https://my.home-assistant.io/badges/integration.svg)](https://my.home-assistant.io/redirect/integration/?domain=myskoda)
+
 ## Disabling polling
 
-You can disable polling completely and use automations to update the data from MySkoda. In order to do this, disable polling in the integration, and call the following action:
+You can disable polling completely and use automations to update the data from MySkoda. This is done in two steps:
+
+1. Disable polling in the integration:
+- Open the integration settings in your HomeAssistant. If you have HomeAssistant Cloud, click the button. 
+[![Button](https://my.home-assistant.io/badges/integration.svg)](https://my.home-assistant.io/redirect/integration/?domain=myskoda)
+- Select the three dots behind the desired account to edit.
+- Select System Settings
+- Disable Polling (the second option)
+- Click save
+
+2. Call the following action in an automation, updating the `entity_id` to suit your vehicle(s):
 
 ```yaml
 action: homeassistant.update_entity
 target:
-  entity_id: device_tracker.skoda_4ever
+  entity_id: device_tracker.skoda_enyaq_position
+data:
+  entity_id:
+    - device_tracker.skoda_enyaq_position
 ```
 
 ## S-PIN
@@ -283,7 +309,7 @@ Fill in the required S-PIN in Settings > Integrations > MySkoda > Configuration 
 ## Read-only mode
 
 The opposite to S-PIN is read-only mode. In this mode, all buttons, switches and other functionality that allows you to change settings remotely are disabled.
-In order not to accidentally delete data, we do not delete the entities
+In order not to accidentally delete data, we do not delete the entities.
 
 Also, if you disable read-only mode, the buttons, switches, etc will become available again.
 
@@ -297,7 +323,7 @@ This feature simplifies the process of creating fixtures by providing a user-fri
 
 ## Diagnostics
 
-In addition to **Generate Fixtures feature** which generates the vehicle fixtures into Home Assitant Core log, the **Diagnostics** feature allows you to directly download diagnostic data for sharing in issue reports. Providing diagnostics data when reporting an issue helps developers diagnose and resolve your problem more efficiently.
+The **Diagnostics** feature allows you to directly download diagnostic data for sharing in issue reports. Providing diagnostics data when reporting an issue helps developers diagnose and resolve your problem more efficiently.
 
 You can download the diagnostics data as a text file from the device page or the integrations dashboard.
 

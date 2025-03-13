@@ -25,6 +25,7 @@ from myskoda.event import (
     ServiceEvent,
     ServiceEventTopic,
 )
+from myskoda.models.driving_range import EngineType
 from myskoda.models.info import CapabilityId
 from myskoda.models.operation_request import OperationName, OperationStatus
 from myskoda.models.user import User
@@ -46,6 +47,7 @@ from .error_handlers import handle_aiohttp_error
 _LOGGER = logging.getLogger(__name__)
 
 type RefreshFunction = Callable[[], Coroutine[None, None, None]]
+type MySkodaConfigEntry = ConfigEntry[MySkodaDataUpdateCoordinator]
 
 
 class MySkodaDebouncer(Debouncer):
@@ -98,7 +100,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     data: State
 
     def __init__(
-        self, hass: HomeAssistant, entry: ConfigEntry, myskoda: MySkoda, vin: str
+        self, hass: HomeAssistant, entry: MySkodaConfigEntry, myskoda: MySkoda, vin: str
     ) -> None:
         """Create a new coordinator."""
 
@@ -118,7 +120,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.myskoda: MySkoda = myskoda
         self.operations: OrderedDict = OrderedDict()
         self.service_events: deque = deque(maxlen=MAX_STORED_SERVICE_EVENTS)
-        self.entry: ConfigEntry = entry
+        self.entry: MySkodaConfigEntry = entry
         self.update_driving_range = self._debounce(self._update_driving_range)
         self.update_charging = self._debounce(self._update_charging)
         self.update_air_conditioning = self._debounce(self._update_air_conditioning)
@@ -355,14 +357,27 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             if event_data.state:
                 status.state = event_data.state
         if vehicle.driving_range:
+            per = vehicle.driving_range.primary_engine_range
+            ser = False
+
+            if vehicle.driving_range.secondary_engine_range:
+                ser = vehicle.driving_range.secondary_engine_range
+
             if event_data.soc:
-                vehicle.driving_range.primary_engine_range.current_soc_in_percent = (
-                    event_data.soc
-                )
+                if per.engine_type == EngineType.ELECTRIC:
+                    per.current_soc_in_percent = event_data.soc
+                elif ser:
+                    if ser.engine_type == EngineType.ELECTRIC:
+                        ser.current_soc_in_percent = event_data.soc
+
             if event_data.charged_range:
-                vehicle.driving_range.primary_engine_range.remaining_range_in_km = (
-                    event_data.charged_range
-                )
+                range_in_km = int(event_data.charged_range / 1000)
+                if per.engine_type == EngineType.ELECTRIC:
+                    per.remaining_range_in_km = range_in_km
+                elif ser:
+                    if ser.engine_type == EngineType.ELECTRIC:
+                        ser.remaining_range_in_km = range_in_km
+
         some_charging_data_missing = (
             event_data.charged_range is None
             or event_data.soc is None

@@ -9,7 +9,6 @@ from homeassistant.components.number import (
     NumberEntityDescription,
     NumberMode,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory, PERCENTAGE, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -21,6 +20,7 @@ from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
 
 from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, COORDINATORS, DOMAIN
+from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
@@ -29,7 +29,7 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config: ConfigEntry,
+    config: MySkodaConfigEntry,
     async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
@@ -47,6 +47,10 @@ class MySkodaNumber(MySkodaEntity, NumberEntity):
     Base class for all number entities in the MySkoda integration.
     """
 
+    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str):
+        super().__init__(coordinator, vin)
+        self._is_enabled: bool = True
+
     def is_supported(self) -> bool:
         all_capabilities_present = all(
             self.vehicle.has_capability(cap) for cap in self.required_capabilities()
@@ -54,6 +58,19 @@ class MySkodaNumber(MySkodaEntity, NumberEntity):
         readonly = self.coordinator.entry.options.get(CONF_READONLY)
 
         return all_capabilities_present and not readonly
+
+    def _disable_number(self):
+        self._is_enabled = False
+        self.async_write_ha_state()
+
+    def _enable_number(self):
+        self._is_enabled = True
+        self.async_write_ha_state()
+
+    @property
+    def available(self) -> bool:
+        """Indicates if the number is available."""
+        return self._is_enabled
 
 
 class ChargeLimit(MySkodaNumber):
@@ -82,12 +99,18 @@ class ChargeLimit(MySkodaNumber):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_native_value(self, value: float):  # noqa: D102
+        if not self._is_enabled:
+            return
+
+        self._disable_number()
         try:
             await self.coordinator.myskoda.set_charge_limit(
                 self.vehicle.info.vin, int(value)
             )
         except OperationFailedError as exc:
             _LOGGER.error("Failed to set charging limit: %s", exc)
+        finally:
+            self._enable_number()
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING]
