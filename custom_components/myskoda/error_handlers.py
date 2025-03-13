@@ -3,10 +3,10 @@
 import logging
 
 from aiohttp import ClientResponseError
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import UpdateFailed
 
+from .coordinator import MySkodaConfigEntry
 from .issues import (
     async_create_spin_issue,
 )
@@ -19,7 +19,7 @@ def handle_aiohttp_error(
     poll_type: str,
     e: ClientResponseError,
     hass: HomeAssistant,
-    config: ConfigEntry,
+    config: MySkodaConfigEntry,
 ) -> None:
     _LOGGER.debug("Received error %d with content %s", e.status, e.message)
 

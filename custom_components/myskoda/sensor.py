@@ -8,7 +8,6 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     PERCENTAGE,
     EntityCategory,
@@ -31,13 +30,14 @@ from myskoda.models.info import CapabilityId
 from myskoda.models.operation_request import OperationStatus
 
 from .const import COORDINATORS, DOMAIN, OUTSIDE_TEMP_MIN_BOUND, OUTSIDE_TEMP_MAX_BOUND
+from .coordinator import MySkodaConfigEntry
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config: ConfigEntry,
+    config: MySkodaConfigEntry,
     async_add_entities: AddEntitiesCallback,
     _discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
