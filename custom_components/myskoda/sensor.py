@@ -538,9 +538,6 @@ class Mileage(MySkodaSensor):
         elif maint_report := self.vehicle.maintenance.maintenance_report:
             return maint_report.mileage_in_km
 
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.VEHICLE_HEALTH_INSPECTION]
-
 
 class InspectionInterval(MySkodaSensor):
     """The number of days before next inspection."""
@@ -558,9 +555,6 @@ class InspectionInterval(MySkodaSensor):
         if maintenance_report := self.vehicle.maintenance.maintenance_report:
             return maintenance_report.inspection_due_in_days
 
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.VEHICLE_HEALTH_INSPECTION]
-
 
 class InspectionIntervalKM(MySkodaSensor):
     """The number of kilometers before inspection is due."""
@@ -577,9 +571,6 @@ class InspectionIntervalKM(MySkodaSensor):
     def native_value(self) -> int | None:  # noqa: S102
         if maintenance_report := self.vehicle.maintenance.maintenance_report:
             return maintenance_report.inspection_due_in_km
-
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.VEHICLE_HEALTH_INSPECTION, CapabilityId.FUEL_STATUS]
 
 
 class OilServiceIntervalDays(MySkodaSensor):
@@ -599,7 +590,7 @@ class OilServiceIntervalDays(MySkodaSensor):
             return maintenance_report.oil_service_due_in_days
 
     def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.VEHICLE_HEALTH_INSPECTION, CapabilityId.FUEL_STATUS]
+        return [CapabilityId.FUEL_STATUS]
 
 
 class OilServiceIntervalKM(MySkodaSensor):
@@ -619,7 +610,7 @@ class OilServiceIntervalKM(MySkodaSensor):
             return maintenance_report.oil_service_due_in_km
 
     def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.VEHICLE_HEALTH_INSPECTION, CapabilityId.FUEL_STATUS]
+        return [CapabilityId.FUEL_STATUS]
 
 
 class ChargeType(ChargingSensor):
