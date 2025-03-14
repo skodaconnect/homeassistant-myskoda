@@ -1,7 +1,9 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Zařízení je již nakonfigurováno"
+            "already_configured": "Zařízení je již nakonfigurováno",
+            "reauth_successful": "Opětovné ověření se podařilo.",
+            "no_entry": "Nepodařilo se najít konfiguraci MySkoda. Zkontrolujte prosím logy a otevřete problém na GitHubu."
         },
         "error": {
             "cannot_connect": "Připojení se nezdařilo",
@@ -10,11 +12,20 @@
             "unknown": "Došlo k neočekávané chybě. Zkontrolujte logy aplikace HomeAssistant."
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "email": "E-mailová adresa",
+                    "password": "Heslo"
+                },
+                "description": "Ověření do MySkoda se nezdařilo. Zadejte prosím znovu přihlašovací údaje z aplikace MySkoda.",
+                "title": "Znovu ověřit MySkoda"
+            },
             "user": {
                 "data": {
                     "email": "E-mailová adresa",
                     "password": "Heslo"
-                }
+                },
+                "description": "Zadejte přihlašovací údaje z aplikace MySkoda."
             }
         }
     },
