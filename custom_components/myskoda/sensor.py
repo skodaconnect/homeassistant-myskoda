@@ -532,11 +532,11 @@ class Mileage(MySkodaSensor):
 
     @property
     def native_value(self) -> int | None:  # noqa: D102
-        if health := self.vehicle.health:
-            return health.mileage_in_km
-        # If we have disabled the health endpoint, use this as fallback
-        elif maint_report := self.vehicle.maintenance.maintenance_report:
+        if maint_report := self.vehicle.maintenance.maintenance_report:
             return maint_report.mileage_in_km
+        # If the maint report does not have mileage, use vehicle health as fallback
+        elif health := self.vehicle.health:
+            return health.mileage_in_km
 
 
 class InspectionInterval(MySkodaSensor):
