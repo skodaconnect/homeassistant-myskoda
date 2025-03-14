@@ -13,9 +13,8 @@ from homeassistant.config_entries import (
     ConfigFlow as BaseConfigFlow,
     ConfigFlowResult,
     OptionsFlow,
-    callback,
 )
-from homeassistant.core import HomeAssistant
+from homeassistant.core import callback, HomeAssistant
 from homeassistant.exceptions import HomeAssistantError, ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.schema_config_entry_flow import (

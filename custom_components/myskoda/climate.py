@@ -6,6 +6,8 @@ from datetime import timedelta
 from homeassistant.components.climate import (
     ClimateEntity,
     ClimateEntityDescription,
+)
+from homeassistant.components.climate.const import (
     ClimateEntityFeature,
     HVACAction,
     HVACMode,

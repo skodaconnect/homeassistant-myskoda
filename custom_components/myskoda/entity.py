@@ -1,6 +1,6 @@
 """MySkoda Entity base classes."""
 
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from myskoda import Vehicle
