@@ -347,9 +347,6 @@
             },
             "flash": {
                 "name": "Knipper alarm lichten"
-            },
-            "generate_fixtures": {
-                "name": "Genereer specificaties"
             }
         }
     },

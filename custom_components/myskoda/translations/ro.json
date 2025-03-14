@@ -311,9 +311,6 @@
             },
             "flash": {
                 "name": "Lumini"
-            },
-            "generate_fixtures": {
-                "name": "Generare dispozitive"
             }
         }
     },
