@@ -674,7 +674,8 @@ class RemainingChargingTime(ChargingSensor):
     @property
     def native_value(self) -> int | None:  # noqa: D102
         if status := self._status():
-            return status.remaining_time_to_fully_charged_in_minutes
+            if status.state != charging.ChargingState.CONNECT_CABLE:
+                return status.remaining_time_to_fully_charged_in_minutes
 
 
 class ChargingRate(ChargingSensor):
