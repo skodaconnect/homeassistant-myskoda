@@ -16,7 +16,7 @@ homeassistant = "^2025.3.2"
 myskoda = "^0.21.2"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.9.10"
+ruff = "^0.11.0"
 homeassistant-stubs = "^2025.3.2"
 pyright = "^1.1.396"
 
