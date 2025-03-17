@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions
+    about: Join our Discord to join the discussion with other users.
+    url: https://discord.gg/t7az2hSJXq
+  - name: Search Issues
+    about: Search existing issues before opening a new issue.
+    url: https://github.com/skodaconnect/homeassistant-myskoda/issues?q=is%3Aissue

@@ -1,0 +1,49 @@
+name: 🐛 Bug
+description: Report a bug
+labels: ["triage"]
+type: Bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+        Notes:
+          - This integration only supports the MySkoda API compatible with the MySkoda App.
+          - Features not available in the MySkoda App are also not supported in this integration.
+  - type: checkboxes
+    attributes:
+      label: "Please confirm:"
+      options:
+        - label: I have searched the existing open and closed issues this problem
+          required: true
+        - label: I have updated the integration to the latest available version
+          required: true
+  - type: input
+    attributes:
+      label: Home Assistant installation and version
+      placeholder: "Example: HAOS 2025.3.3"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Car model
+      placeholder: "Example: Enyaq 85"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Latest working release
+      description: If this bug was introduced in a recent release of the integration, specify the last working version.
+      placeholder: "Example: 1.20.0"
+  - type: textarea
+    attributes:
+      label: Bug Description
+      description: Please describe the issue in detail and how to reproduce it.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Debug Logs
+      description: Refer to the README for instructions to enable debug and tracing
+      render: bash

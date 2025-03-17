@@ -1,0 +1,43 @@
+name: ➕ Feature Request
+description: Request a new feature to be added
+labels: ["triage", "no-stale"]
+type: Feature
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!
+
+        Notes:
+          - This integration only supports the MySkoda API compatible with the MySkoda App.
+          - Features not available in the MySkoda App are also not supported in this integration.
+  - type: checkboxes
+    attributes:
+      label: "Please confirm:"
+      options:
+        - label: I have searched the existing open and closed issues this problem
+          required: true
+        - label: I have updated the integration to the latest available version
+          required: true
+  - type: input
+    attributes:
+      label: Home Assistant installation and version
+      placeholder: "Example: HAOS 2025.3.3"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Car model
+      placeholder: "Example: Enyaq 85"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Feature Description
+      description: Please describe the desired feature in detail.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: MySkoda App Behavior
+      description: Describe how this feature works in the MySkoda App. Consider adding screenshots.
