@@ -750,7 +750,6 @@ class ACTimerSwitch(MySkodaSwitch):
         """Initialize the departure timer switch."""
         super().__init__(coordinator, vin)  # Initialize parent class (MySkodaEntity)
         self.timer_id = timer_id  # Store the specific timer ID for each subclass
-        self._is_enabled: bool = bool(self.get_timer())
 
     def get_timer(self) -> AirConditioningTimer | None:
         """Retrieve the specific ac timer by ID."""
@@ -768,7 +767,7 @@ class ACTimerSwitch(MySkodaSwitch):
     @property
     def available(self) -> bool:
         """Determine whether the sensor is available."""
-        return self._is_enabled
+        return self._is_enabled and bool(self.get_timer())
 
     @property
     def is_on(self) -> bool | None:
