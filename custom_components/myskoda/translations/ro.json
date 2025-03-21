@@ -20,130 +20,58 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Capotă",
-                "state": {
-                    "off": "Închisă",
-                    "on": "Deschisă"
-                }
+                "name": "Capotă"
             },
             "charger_connected": {
-                "name": "Încărcător conectat",
-                "state": {
-                    "off": "Deconectat",
-                    "on": "Conectat"
-                }
+                "name": "Încărcător conectat"
             },
             "charger_locked": {
-                "name": "Încărcător încuiat",
-                "state": {
-                    "off": "Blocat",
-                    "on": "Deblocat"
-                }
+                "name": "Încărcător încuiat"
             },
             "doors_locked": {
-                "name": "Uși blocate",
-                "state": {
-                    "off": "Blocate",
-                    "on": "Deblocate"
-                }
+                "name": "Uși blocate"
             },
             "doors_open": {
-                "name": "Uși deschise",
-                "state": {
-                    "off": "Închise",
-                    "on": "Deschise"
-                }
+                "name": "Uși deschise"
             },
             "locked": {
-                "name": "Vehicul încuiat",
-                "state": {
-                    "off": "Încuiat",
-                    "on": "Descuiat"
-                }
+                "name": "Vehicul încuiat"
             },
             "parkinglights_on": {
-                "name": "Lumini de parcare",
-                "state": {
-                    "off": "Oprite",
-                    "on": "Pornite"
-                }
+                "name": "Lumini de parcare"
             },
             "sunroof_open": {
-                "name": "Trapă",
-                "state": {
-                    "off": "Închisă",
-                    "on": "Deschisă"
-                }
+                "name": "Trapă"
             },
             "trunk_open": {
-                "name": "Portbagaj",
-                "state": {
-                    "off": "Închis",
-                    "on": "Deschis"
-                }
+                "name": "Portbagaj"
             },
             "windows_open": {
-                "name": "Geamuri",
-                "state": {
-                    "off": "Închise",
-                    "on": "Deschise"
-                }
+                "name": "Geamuri"
             },
             "door_open_front_left": {
-                "name": "Ușă deschisă stânga față",
-                "state": {
-                    "off": "Închisă",
-                    "on": "Deschisă"
-                }
+                "name": "Ușă deschisă stânga față"
             },
             "door_open_front_right": {
-                "name": "Ușă deschisă dreapta față",
-                "state": {
-                    "off": "Închisă",
-                    "on": "Deschisă"
-                }
+                "name": "Ușă deschisă dreapta față"
             },
             "door_open_rear_left": {
-                "name": "Ușă deschisă stânga spate",
-                "state": {
-                    "off": "Închisă",
-                    "on": "Deschisă"
-                }
+                "name": "Ușă deschisă stânga spate"
             },
             "door_open_rear_right": {
-                "name": "Ușă deschisă dreapta spate",
-                "state": {
-                    "off": "Închisă",
-                    "on": "Deschisă"
-                }
+                "name": "Ușă deschisă dreapta spate"
             },
             "window_open_front_left": {
-                "name": "Geam deschis stânga față",
-                "state": {
-                    "off": "Închis",
-                    "on": "Deschis"
-                }
+                "name": "Geam deschis stânga față"
             },
             "window_open_front_right": {
-                "name": "Geam deschis dreapta față",
-                "state": {
-                    "off": "Închis",
-                    "on": "Deschis"
-                }
+                "name": "Geam deschis dreapta față"
             },
             "window_open_rear_left": {
-                "name": "Geam deschis stânga spate",
-                "state": {
-                    "off": "Închis",
-                    "on": "Deschis"
-                }
+                "name": "Geam deschis stânga spate"
             },
             "window_open_rear_right": {
-                "name": "Geam deschis dreapta spate",
-                "state": {
-                    "off": "Închis",
-                    "on": "Deschis"
-                }
+                "name": "Geam deschis dreapta spate"
             }
         },
         "climate": {
@@ -156,12 +84,7 @@
         },
         "device_tracker": {
             "device_tracker": {
-                "name": "Poziție",
-                "state": {
-                    "home": "Acasă",
-                    "not_home": "Plecat",
-                    "vehicle_in_motion": "Vehicul în mișcare"
-                }
+                "name": "Poziție"
             }
         },
         "image": {
