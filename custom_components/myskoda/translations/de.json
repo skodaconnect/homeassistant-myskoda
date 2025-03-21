@@ -158,7 +158,7 @@
             "device_tracker": {
                 "name": "Standort",
                 "state": {
-                    "home": "Anwesend",
+                    "home": "Zuhause",
                     "not_home": "Abwesend",
                     "vehicle_in_motion": "Bewegung erkannt"
                 }
