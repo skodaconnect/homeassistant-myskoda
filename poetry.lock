@@ -1893,14 +1893,14 @@ files = [
 
 [[package]]
 name = "myskoda"
-version = "0.21.2"
+version = "0.22.0"
 description = "Library for interaction with the MySkoda APIs."
 optional = false
 python-versions = "<4.0,>=3.12.0"
 groups = ["main"]
 files = [
-    {file = "myskoda-0.21.2-py3-none-any.whl", hash = "sha256:20628c976b55c0961e09cab96b5868a279a8dfa5abefc87af053842b2e0e59be"},
-    {file = "myskoda-0.21.2.tar.gz", hash = "sha256:229fe0705b6f3d42dc9e4aad1fa86e9cba0bdd71a0cec17408d15c501b7110da"},
+    {file = "myskoda-0.22.0-py3-none-any.whl", hash = "sha256:faa36bc7b4a44ef2c110f2c4b51382435cd3aaa12473b91da44e5a8aa0f73c6d"},
+    {file = "myskoda-0.22.0.tar.gz", hash = "sha256:dd251252c94996c00d5707d85a7c32be33ae3b0a68cae9cac89bc66064defffb"},
 ]
 
 [package.dependencies]
@@ -1913,7 +1913,7 @@ pyyaml = ">=6,<7"
 
 [package.extras]
 cli = ["asyncclick (>=8.1.7.2,<9.0.0.0)", "coloredlogs (>=15.0.1,<16.0.0)", "pygments (>=2.18.0,<3.0.0)", "termcolor (>=2.4.0,<3.0.0)"]
-docs = ["mkdocs-gen-files (>=0.5.0,<0.6.0)", "mkdocs-literate-nav (>=0.6.1,<0.7.0)", "mkdocs[gen-files] (>=1.6.1,<2.0.0)", "mkdocstrings[python] (>=0.26.1,<0.29.0)"]
+docs = ["mkdocs-gen-files (>=0.5.0,<0.6.0)", "mkdocs-literate-nav (>=0.6.1,<0.7.0)", "mkdocs[gen-files] (>=1.6.1,<2.0.0)", "mkdocstrings[python] (>=0.26.1,<0.30.0)"]
 
 [[package]]
 name = "nodeenv"
@@ -3570,4 +3570,4 @@ ifaddr = ">=0.1.7"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.14"
-content-hash = "7e1c7a3031e43753fd384f1cb46a270961c2384a268ca0d682398e14427be4f9"
+content-hash = "468ccb177d2dddf18929e5c5e08346bee370ce2bd8157f3c553f536802ab0a8a"
