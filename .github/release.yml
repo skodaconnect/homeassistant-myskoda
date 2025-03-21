@@ -15,6 +15,7 @@ changelog:
       labels:
         - bugfix
         - bug
+        - regression
     - title: 🛠️ Dependencies
       labels:
         - dependencies
@@ -27,6 +28,8 @@ changelog:
         - test
     - title: 🌐 Language
         - translations
+    - title: 🖺 Documentation
+        - documentation
     - title: 🗒️ Other changes
       labels:
         - '*'
