@@ -38,6 +38,7 @@ If your desired language is not available, please [open an issue](https://github
 - Fuel Level
 - Combustion range
 - Electric range
+- Estimated Time To Reach Target Temperature
 
 #### Last Updated sensor
 

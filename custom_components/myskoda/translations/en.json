@@ -227,6 +227,9 @@
                     "ready_for_charging": "Ready for Charging"
                 }
             },
+            "estimated_time_left_to_reach_target_temperature": {
+                  "name": "Time to reach target temperature"
+            },
             "inspection": {
                 "name": "Next Inspection"
             },
