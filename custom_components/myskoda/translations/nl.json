@@ -227,6 +227,9 @@
                     "ready_for_charging": "Klaar om op te laden"
                 }
             },
+            "estimated_time_left_to_reach_target_temperature": {
+                "name": "Tijd om de gewenste temperatuur te bereiken"
+            },
             "inspection": {
                 "name": "Volgend onderhoud"
             },
