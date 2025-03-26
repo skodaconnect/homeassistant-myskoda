@@ -1,7 +1,9 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Enheten er allerede konfigurert"
+            "already_configured": "Enheten er allerede konfigurert",
+            "reauth_successful": "Reautentisering har lykkes.",
+            "no_entry": "Kunne ikke finne MySkoda konfigurasjonen. Vennligst sjekk dine logger og åpne et problem på GitHub."
         },
         "error": {
             "cannot_connect": "Klarte ikke å koble til",
@@ -10,11 +12,20 @@
             "unknown": "En uventet feil oppstod. Vennligst sjekk HomeAssistant loggfiler."
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "email": "E-postadresse",
+                    "password": "Passord"
+                },
+                "description": "Autentisering til MySkoda mislyktes. Prøv på nytt fra din MySkoda app.",
+                "title": "Re-autentiser MySkoda"
+            },
             "user": {
                 "data": {
                     "email": "E-post",
                     "password": "Passord"
-                }
+                },
+                "description": "Skriv inn opplysningene fra din MySkoda-app."
             }
         }
     },
@@ -215,6 +226,9 @@
                     "conserving": "Konserverer lading",
                     "ready_for_charging": "Klar for lading"
                 }
+            },
+            "estimated_time_left_to_reach_target_temperature": {
+                "name": "Tid for å nå måltemperaturen"
             },
             "inspection": {
                 "name": "Neste inspeksjon"
