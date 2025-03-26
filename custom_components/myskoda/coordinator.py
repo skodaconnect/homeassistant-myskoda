@@ -4,7 +4,7 @@ from collections import OrderedDict, deque
 from collections.abc import Coroutine
 from dataclasses import dataclass
 from datetime import datetime, timedelta, UTC
-from typing import Callable
+from typing import Any, Awaitable, Callable, Dict, cast
 
 from aiohttp import ClientError
 from aiohttp.client_exceptions import ClientResponseError
@@ -271,16 +271,19 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             self.service_events.appendleft(event.event)
             self.async_set_updated_data(self.data)
 
-            service_event_handlers = {
+            service_event_handlers: Dict[
+                ServiceEventTopic, Callable[[Any], Awaitable[None]]
+            ] = {
                 ServiceEventTopic.CHARGING: self._on_charging_event,
                 ServiceEventTopic.ACCESS: self._on_access_event,
                 ServiceEventTopic.AIR_CONDITIONING: self._on_air_conditioning_event,
-                ServiceEventTopic.DEPTARTURE: self._on_departure_event,
+                ServiceEventTopic.DEPARTURE: self._on_departure_event,
                 ServiceEventTopic.ODOMETER: self._on_odometer_event,
             }
 
-            if handler := service_event_handlers(event.topic):
-                await handler(event)
+            handler = service_event_handlers.get(event.topic)
+            if handler:
+                await handler(cast(Any, event))
 
     async def _on_operation_event(self, event: EventOperation) -> None:
         # Store the last MAX_STORED_OPERATIONS operations
@@ -300,38 +303,34 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             )
             await self.update_vehicle()
             return
-        if event.operation.operation in [
-            OperationName.STOP_AIR_CONDITIONING,
-            OperationName.START_AIR_CONDITIONING,
-            OperationName.SET_AIR_CONDITIONING_TARGET_TEMPERATURE,
-            OperationName.START_WINDOW_HEATING,
-            OperationName.STOP_WINDOW_HEATING,
-            OperationName.SET_AIR_CONDITIONING_TIMERS,
-        ]:
-            await self.update_air_conditioning()
-        if event.operation.operation in [
-            OperationName.START_AUXILIARY_HEATING,
-            OperationName.STOP_AUXILIARY_HEATING,
-        ]:
-            await self.update_auxiliary_heating()
-        if event.operation.operation in [
-            OperationName.UPDATE_CHARGE_LIMIT,
-            OperationName.UPDATE_CARE_MODE,
-            OperationName.UPDATE_CHARGING_CURRENT,
-            OperationName.START_CHARGING,
-            OperationName.STOP_CHARGING,
-            OperationName.UPDATE_AUTO_UNLOCK_PLUG,
-        ]:
-            await self.update_charging()
-        if event.operation.operation in [
-            OperationName.LOCK,
-            OperationName.UNLOCK,
-        ]:
-            await self.update_status(immediate=True)
-        if event.operation.operation in [
-            OperationName.UPDATE_DEPARTURE_TIMERS,
-        ]:
-            await self.update_departure_info()
+
+        operation_event_handlers: Dict[OperationName, Callable[[], Awaitable[None]]] = {
+            OperationName.STOP_AIR_CONDITIONING: self.update_air_conditioning,
+            OperationName.START_AIR_CONDITIONING: self.update_air_conditioning,
+            OperationName.SET_AIR_CONDITIONING_TARGET_TEMPERATURE: self.update_air_conditioning,
+            OperationName.START_WINDOW_HEATING: self.update_air_conditioning,
+            OperationName.STOP_WINDOW_HEATING: self.update_air_conditioning,
+            OperationName.SET_AIR_CONDITIONING_TIMERS: self.update_air_conditioning,
+            OperationName.STOP_AIR_CONDITIONING: self.update_air_conditioning,
+            OperationName.START_AUXILIARY_HEATING: self.update_auxiliary_heating,
+            OperationName.STOP_AUXILIARY_HEATING: self.update_auxiliary_heating,
+            OperationName.UPDATE_CHARGE_LIMIT: self.update_charging,
+            OperationName.UPDATE_CARE_MODE: self.update_charging,
+            OperationName.UPDATE_CHARGING_CURRENT: self.update_charging,
+            OperationName.START_CHARGING: self.update_charging,
+            OperationName.STOP_CHARGING: self.update_charging,
+            OperationName.UPDATE_AUTO_UNLOCK_PLUG: self.update_charging,
+            OperationName.LOCK: lambda: cast(
+                Awaitable[None], self.update_status(immediate=True)
+            ),
+            OperationName.UNLOCK: lambda: cast(
+                Awaitable[None], self.update_status(immediate=True)
+            ),
+            OperationName.UPDATE_DEPARTURE_TIMERS: self.update_departure_info,
+        }
+
+        if operation := operation_event_handlers.get(event.operation.operation):
+            await operation()
 
     async def _on_charging_event(self, event: EventCharging):
         vehicle = self.data.vehicle
