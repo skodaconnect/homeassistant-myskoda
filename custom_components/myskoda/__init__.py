@@ -24,7 +24,7 @@ from myskoda.auth.authorization import (
 )
 
 
-from .const import COORDINATORS, DOMAIN, VINLIST
+from .const import CONF_USERNAME, CONF_PASSWORD, COORDINATORS, DOMAIN, VINLIST
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .error_handlers import handle_aiohttp_error
 from .issues import (
@@ -69,7 +69,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
     myskoda = myskoda_instantiate(hass, entry, mqtt_enabled=False)
 
     try:
-        await myskoda.connect(entry.data["email"], entry.data["password"])
+        await myskoda.connect(entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD])
     except AuthorizationFailedError as exc:
         _LOGGER.debug("Authorization with MySkoda failed.")
         raise ConfigEntryAuthFailed from exc
@@ -127,6 +127,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
 
 async def async_unload_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> bool:
     """Unload a config entry."""
+    for coord in hass.data[DOMAIN][entry.entry_id]:
+        await coord.myskoda.disconnect()
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
