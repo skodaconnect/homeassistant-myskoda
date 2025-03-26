@@ -271,16 +271,16 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             self.service_events.appendleft(event.event)
             self.async_set_updated_data(self.data)
 
-            if event.topic == ServiceEventTopic.CHARGING:
-                await self._on_charging_event(event)
-            if event.topic == ServiceEventTopic.ACCESS:
-                await self._on_access_event(event)
-            if event.topic == ServiceEventTopic.AIR_CONDITIONING:
-                await self._on_air_conditioning_event(event)
-            if event.topic == ServiceEventTopic.DEPARTURE:
-                await self._on_departure_event(event)
-            if event.topic == ServiceEventTopic.ODOMETER:
-                await self._on_odometer_event(event)
+            service_event_handlers = {
+                ServiceEventTopic.CHARGING: self._on_charging_event,
+                ServiceEventTopic.ACCESS: self._on_access_event,
+                ServiceEventTopic.AIR_CONDITIONING: self._on_air_conditioning_event,
+                ServiceEventTopic.DEPTARTURE: self._on_departure_event,
+                ServiceEventTopic.ODOMETER: self._on_odometer_event,
+            }
+
+            if handler := service_event_handlers(event.topic):
+                await handler(event)
 
     async def _on_operation_event(self, event: EventOperation) -> None:
         # Store the last MAX_STORED_OPERATIONS operations
