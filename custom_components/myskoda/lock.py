@@ -8,6 +8,7 @@ from homeassistant.components.lock import (
     LockEntityDescription,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
@@ -97,6 +98,7 @@ class DoorLock(MySkodaLock):
             _LOGGER.info("Sent command to lock the vehicle.")
         else:
             _LOGGER.error("Cannot lock car: No S-PIN set.")
+            raise ServiceValidationError("no_spin")
 
     async def async_unlock(self, **kwargs) -> None:
         if self.coordinator.entry.options.get(CONF_SPIN):
@@ -106,6 +108,7 @@ class DoorLock(MySkodaLock):
             _LOGGER.info("Sent command to unlock the vehicle.")
         else:
             _LOGGER.error("Cannot unlock car: No S-PIN set.")
+            raise ServiceValidationError("no_spin")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.ACCESS]
