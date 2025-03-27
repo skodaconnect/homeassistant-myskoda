@@ -772,8 +772,7 @@ class AuxHeaterTimeLeft(MySkodaSensor):
     @property
     def native_value(self) -> int | None:  # noqa: D102
         if _aux := self.vehicle.auxiliary_heating:
-            if _aux.estimated_date_time_to_reach_target_temperature:
-                target_datetime = _aux.estimated_date_time_to_reach_target_temperature
+            if target_datetime := _aux.estimated_date_time_to_reach_target_temperature:
                 now = datetime.now(UTC)
 
                 duration = target_datetime - now
