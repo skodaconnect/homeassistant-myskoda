@@ -67,6 +67,7 @@ async def async_setup_entry(
             SoftwareVersion,
             TargetBatteryPercentage,
             ClimatisationTimeLeft,
+            AuxHeaterTimeLeft,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -731,7 +732,7 @@ class OutsideTemperature(MySkodaSensor):
 
 
 class ClimatisationTimeLeft(MySkodaSensor):
-    """Estimated time left until climatisation has reached its goal."""
+    """Estimated time left until climatisation via AC has reached its goal."""
 
     entity_description = SensorEntityDescription(
         key="estimated_time_left_to_reach_target_temperature",
@@ -755,3 +756,30 @@ class ClimatisationTimeLeft(MySkodaSensor):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AIR_CONDITIONING]
+
+
+class AuxHeaterTimeLeft(MySkodaSensor):
+    """Estimated time left until climatisation via aux heater has reached its goal."""
+
+    entity_description = SensorEntityDescription(
+        key="aux_estimated_time_left_to_reach_target_temperature",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        suggested_unit_of_measurement=UnitOfTime.MINUTES,
+        translation_key="aux_estimated_time_left_to_reach_target_temperature",
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: D102
+        if _aux := self.vehicle.auxiliary_heating:
+            if _aux.estimated_date_time_to_reach_target_temperature:
+                target_datetime = _aux.estimated_date_time_to_reach_target_temperature
+                now = datetime.now(UTC)
+
+                duration = target_datetime - now
+
+                # If we reached it already, return 0
+                return max(0, int(duration.total_seconds()))
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.AUXILIARY_HEATING]
