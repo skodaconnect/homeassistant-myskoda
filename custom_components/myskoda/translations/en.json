@@ -199,7 +199,7 @@
         },
         "sensor": {
             "aux_estimated_time_left_to_reach_target_temperature": {
-                  "name": "Heater: Time to reach target temperature "
+                  "name": "Heater Time to reach target temperature"
             },
             "inspection": {
             "battery_percentage": {
@@ -232,7 +232,7 @@
                 }
             },
             "estimated_time_left_to_reach_target_temperature": {
-                  "name": "AC: Time to reach target temperature"
+                  "name": "AC Time to reach target temperature"
             },
             "inspection": {
                 "name": "Next Inspection"
