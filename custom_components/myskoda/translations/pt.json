@@ -9,7 +9,8 @@
             "cannot_connect": "Falha ao conectar",
             "invalid_auth": "Autenticação inválida",
             "relogin_in_app": "Um erro foi detetado ao conectar. Talvez deve reconectar na aplicação MySkoda.",
-            "unknown": "Um erro inesperado ocorreu. Verifica os ficheiros de log do HomeAssistant."
+            "unknown": "Um erro inesperado ocorreu. Verifica os ficheiros de log do HomeAssistant.",
+            "no_spin": "O S-PIN está em falta para a configuração. Reconfigure a integração e tenta novamente."
         },
         "step": {
             "reauth_confirm": {
@@ -198,6 +199,9 @@
             }
         },
         "sensor": {
+            "aux_estimated_time_left_to_reach_target_temperature": {
+                "name": "Tempo de Aquecimento para alcançar a temperatura"
+            },
             "battery_percentage": {
                 "name": "Percentagem da bateria"
             },
@@ -226,6 +230,9 @@
                     "conserving": "Conservando carga",
                     "ready_for_charging": "Preparado para carregar"
                 }
+            },
+            "estimated_time_left_to_reach_target_temperature": {
+                "name": "Tempo de Corrente Alternada para alcançar a temperatura"
             },
             "inspection": {
                 "name": "Próxima inspeção"
