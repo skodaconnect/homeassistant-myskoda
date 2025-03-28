@@ -33,6 +33,11 @@ body:
       required: true
   - type: input
     attributes:
+       label: Integration version
+       description: What version of the integration is this problem occuring?
+       placeholder: "Example: 1.20.0"
+  - type: input
+    attributes:
       label: Latest working release
       description: If this bug was introduced in a recent release of the integration, specify the last working version.
       placeholder: "Example: 1.20.0"
