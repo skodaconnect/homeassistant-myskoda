@@ -9,7 +9,8 @@
             "cannot_connect": "Připojení se nezdařilo",
             "invalid_auth": "Neplatné ověření",
             "relogin_in_app": "Při přihlašování byla zjištěna chyba. Může být nutné se znovu přihlásit do aplikace MySkoda.",
-            "unknown": "Došlo k neočekávané chybě. Zkontrolujte logy aplikace HomeAssistant."
+            "unknown": "Došlo k neočekávané chybě. Zkontrolujte logy aplikace HomeAssistant.",
+            "no_spin": "V konfiguraci chybí S-PIN. Změňte prosím konfiguraci integrace a zkuste to znovu."
         },
         "step": {
             "reauth_confirm": {
@@ -198,6 +199,9 @@
             }
         },
         "sensor": {
+            "aux_estimated_time_left_to_reach_target_temperature": {
+                "name": "Doba topení pro dosažení cílové teploty"
+            },
             "battery_percentage": {
                 "name": "Stav baterie v %"
             },
@@ -226,6 +230,9 @@
                     "conserving": "Uchovávání nabití",
                     "ready_for_charging": "Připraveno k nabíjení"
                 }
+            },
+            "estimated_time_left_to_reach_target_temperature": {
+                "name": "Doba klimatizace pro dosažení cílové teploty"
             },
             "inspection": {
                 "name": "Další prohlídka"
