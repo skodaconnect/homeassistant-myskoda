@@ -3,7 +3,7 @@ import logging
 from collections import OrderedDict, deque
 from collections.abc import Coroutine
 from dataclasses import dataclass
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 from typing import Callable
 
 from aiohttp import ClientError
@@ -17,19 +17,14 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from myskoda import MySkoda, Vehicle
 from myskoda.event import (
     Event,
-    EventAccess,
-    EventAirConditioning,
-    EventDeparture,
-    EventOdometer,
     EventOperation,
     ServiceEvent,
     ServiceEventTopic,
 )
-from myskoda.models.driving_range import EngineType
 from myskoda.models.info import CapabilityId
 from myskoda.models.operation_request import OperationName, OperationStatus
 from myskoda.models.user import User
-from myskoda.mqtt import EventCharging, EventType
+from myskoda.mqtt import EventType
 
 from .const import (
     API_COOLDOWN_IN_SECONDS,
@@ -272,15 +267,15 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             self.async_set_updated_data(self.data)
 
             if event.topic == ServiceEventTopic.CHARGING:
-                await self._on_charging_event(event)
+                self.set_updated_vehicle(self.myskoda.vehicle(self.vin))
             if event.topic == ServiceEventTopic.ACCESS:
-                await self._on_access_event(event)
+                await self.update_vehicle()
             if event.topic == ServiceEventTopic.AIR_CONDITIONING:
-                await self._on_air_conditioning_event(event)
+                await self.update_air_conditioning()
             if event.topic == ServiceEventTopic.DEPARTURE:
-                await self._on_departure_event(event)
+                await self.update_positions()
             if event.topic == ServiceEventTopic.ODOMETER:
-                await self._on_odometer_event(event)
+                await self.update_odometer()
 
     async def _on_operation_event(self, event: EventOperation) -> None:
         # Store the last MAX_STORED_OPERATIONS operations
@@ -332,76 +327,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             OperationName.UPDATE_DEPARTURE_TIMERS,
         ]:
             await self.update_departure_info()
-
-    async def _on_charging_event(self, event: EventCharging):
-        vehicle = self.data.vehicle
-        _charging_updated = False
-        _range_updated = False
-
-        # See if we have relevant data
-        if vehicle.charging is None or vehicle.charging.status is None:
-            await self.update_charging()
-            _charging_updated = True
-        if vehicle.driving_range is None:
-            await self.update_driving_range()
-            _range_updated = True
-
-        event_data = event.event.data
-        if vehicle.charging and (status := vehicle.charging.status):
-            if event_data.charged_range:
-                status.battery.remaining_cruising_range_in_meters = (
-                    event_data.charged_range * 1000
-                )
-            if event_data.soc:
-                status.battery.state_of_charge_in_percent = event_data.soc
-            if event_data.time_to_finish:
-                status.remaining_time_to_fully_charged_in_minutes = (
-                    event_data.time_to_finish
-                )
-            if event_data.state:
-                status.state = event_data.state
-        if vehicle.driving_range:
-            per = vehicle.driving_range.primary_engine_range
-            ser = False
-
-            if vehicle.driving_range.secondary_engine_range:
-                ser = vehicle.driving_range.secondary_engine_range
-
-            if event_data.soc:
-                if per.engine_type == EngineType.ELECTRIC:
-                    per.current_soc_in_percent = event_data.soc
-                elif ser:
-                    if ser.engine_type == EngineType.ELECTRIC:
-                        ser.current_soc_in_percent = event_data.soc
-
-            if event_data.charged_range:
-                range_in_km = int(event_data.charged_range / 1000)
-                if per.engine_type == EngineType.ELECTRIC:
-                    per.remaining_range_in_km = range_in_km
-                elif ser:
-                    if ser.engine_type == EngineType.ELECTRIC:
-                        ser.remaining_range_in_km = range_in_km
-
-        # Make sure we update relevant data since the event has incomplete data
-        if not _charging_updated:
-            await self.update_charging()
-
-        if not _range_updated:
-            await self.update_driving_range()
-
-        self.set_updated_vehicle(vehicle)
-
-    async def _on_access_event(self, event: EventAccess):
-        await self.update_vehicle()
-
-    async def _on_air_conditioning_event(self, event: EventAirConditioning):
-        await self.update_air_conditioning()
-
-    async def _on_departure_event(self, event: EventDeparture):
-        await self.update_positions()
-
-    async def _on_odometer_event(self, event: EventOdometer):
-        await self.update_odometer()
 
     def _unsub_refresh(self):
         return
