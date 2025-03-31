@@ -18,7 +18,7 @@ myskoda = "^0.22.1"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.11.2"
 homeassistant-stubs = "^2025.3.2"
-pyright = "^1.1.397"
+pyright = "^1.1.398"
 
 [build-system]
 requires = ["poetry-core"]
