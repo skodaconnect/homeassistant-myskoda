@@ -127,8 +127,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
 
 async def async_unload_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> bool:
     """Unload a config entry."""
-    for coord in hass.data[DOMAIN][entry.entry_id]:
-        await coord.myskoda.disconnect()
+    for active_coordinators in hass.data[DOMAIN][entry.entry_id].get(COORDINATORS, []):
+        coord = next(iter(active_coordinators.values()), None)
+        if coord:
+            await coord.myskoda.disconnect()
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
