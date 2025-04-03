@@ -164,6 +164,13 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             self.vin, excluded_capabilities=excluded_capabilities
         )
 
+    def _is_more_recent(self, obj1, obj2) -> bool:
+        """Determines if an obj1 is newer than obj2. If timestamps are missing, obj1 wins."""
+        if not obj2.car_captured_timestamp or not obj1.car_captured_timestamp:
+            return True
+        else:
+            return obj2.car_captured_timestamp < obj1.car_captured_timestamp
+
     async def _async_update_data(self) -> State:
         vehicle = None
         user = None
@@ -335,10 +342,14 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
     async def _on_charging_event(self, event: EventCharging):
         vehicle = self.data.vehicle
-        _charging_updated = False
-        _range_updated = False
+        _charging_updated = _range_updated = _update_from_event = False
 
-        # See if we have relevant data
+        # Logic here is:
+        # 1. See if the event needs processing by comparing timestamps
+        # 2. Refresh car data if we want to update, since event has incomplete data
+        # 3. Merge new car state and event data
+
+        # See if we have all the relevant data. Fetch if not.
         if vehicle.charging is None or vehicle.charging.status is None:
             await self.update_charging()
             _charging_updated = True
@@ -347,49 +358,77 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             _range_updated = True
 
         event_data = event.event.data
-        if vehicle.charging and (status := vehicle.charging.status):
-            if event_data.charged_range:
-                status.battery.remaining_cruising_range_in_meters = (
-                    event_data.charged_range * 1000
-                )
-            if event_data.soc:
-                status.battery.state_of_charge_in_percent = event_data.soc
-            if event_data.time_to_finish:
-                status.remaining_time_to_fully_charged_in_minutes = (
-                    event_data.time_to_finish
-                )
-            if event_data.state:
-                status.state = event_data.state
-        if vehicle.driving_range:
-            per = vehicle.driving_range.primary_engine_range
-            ser = False
 
-            if vehicle.driving_range.secondary_engine_range:
-                ser = vehicle.driving_range.secondary_engine_range
+        # See if we should process the event based on timestamp
+        if (charging := vehicle.charging) and event.timestamp:
+            if stamp := charging.car_captured_timestamp:
+                if stamp < event.timestamp:
+                    _update_from_event = True
 
-            if event_data.soc:
-                if per.engine_type == EngineType.ELECTRIC:
-                    per.current_soc_in_percent = event_data.soc
-                elif ser:
-                    if ser.engine_type == EngineType.ELECTRIC:
-                        ser.current_soc_in_percent = event_data.soc
+        if (driving_range := vehicle.driving_range) and event.timestamp:
+            if stamp := driving_range.car_captured_timestamp:
+                if stamp < event.timestamp:
+                    _update_from_event = True
 
-            if event_data.charged_range:
-                range_in_km = int(event_data.charged_range / 1000)
-                if per.engine_type == EngineType.ELECTRIC:
-                    per.remaining_range_in_km = range_in_km
-                elif ser:
-                    if ser.engine_type == EngineType.ELECTRIC:
-                        ser.remaining_range_in_km = range_in_km
+        # Event does not have a timestamp. Take a guess it is newer.
+        _update_from_event |= not event.timestamp
 
-        # Make sure we update relevant data since the event has incomplete data
-        if not _charging_updated:
-            await self.update_charging()
+        if _update_from_event:
+            _LOGGER.debug(
+                "Processing charging event for %s newer than stored data", self.vin
+            )
+            # Make sure we update relevant data since the event has incomplete data
+            if not _charging_updated:
+                await self.update_charging()
+            if not _range_updated:
+                await self.update_driving_range()
 
-        if not _range_updated:
-            await self.update_driving_range()
+            if (charging := vehicle.charging) and (
+                driving_range := vehicle.driving_range
+            ):
+                # Update timestamps to match the event
+                update_time = event.timestamp or datetime.now(UTC)
+                charging.car_captured_timestamp = update_time
+                driving_range.car_captured_timestamp = update_time
 
-        self.set_updated_vehicle(vehicle)
+                # Update fields from event
+                if status := charging.status:
+                    if event_data.charged_range:
+                        status.battery.remaining_cruising_range_in_meters = (
+                            event_data.charged_range * 1000
+                        )
+                    if event_data.soc:
+                        status.battery.state_of_charge_in_percent = event_data.soc
+                    if event_data.time_to_finish:
+                        status.remaining_time_to_fully_charged_in_minutes = (
+                            event_data.time_to_finish
+                        )
+                    if event_data.state:
+                        status.state = event_data.state
+
+                # Update driving range
+                per = driving_range.primary_engine_range
+                ser = None
+
+                if driving_range.secondary_engine_range:
+                    ser = driving_range.secondary_engine_range
+
+                if event_data.soc:
+                    if per.engine_type == EngineType.ELECTRIC:
+                        per.current_soc_in_percent = event_data.soc
+                    elif ser:
+                        if ser.engine_type == EngineType.ELECTRIC:
+                            ser.current_soc_in_percent = event_data.soc
+
+                if event_data.charged_range:
+                    range_in_km = int(event_data.charged_range / 1000)
+                    if per.engine_type == EngineType.ELECTRIC:
+                        per.remaining_range_in_km = range_in_km
+                    elif ser:
+                        if ser.engine_type == EngineType.ELECTRIC:
+                            ser.remaining_range_in_km = range_in_km
+
+            self.set_updated_vehicle(vehicle)
 
     async def _on_access_event(self, event: EventAccess):
         await self.update_vehicle()
@@ -428,9 +467,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
         if maint_info or health_info:
             vehicle = self.data.vehicle
-            if maint_info:
+            if maint_info and self._is_more_recent(maint_info, vehicle.maintenance):
                 vehicle.maintenance = maint_info
-            if health_info:
+            if health_info and self._is_more_recent(health_info, vehicle.health):
                 vehicle.health = health_info
             self.set_updated_vehicle(vehicle)
 
@@ -445,7 +484,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        if driving_range:
+        if driving_range and self._is_more_recent(
+            driving_range, self.data.vehicle.driving_range
+        ):
             vehicle = self.data.vehicle
             vehicle.driving_range = driving_range
             self.set_updated_vehicle(vehicle)
@@ -461,7 +502,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        if charging:
+        if charging and self._is_more_recent(charging, self.data.vehicle.charging):
             vehicle = self.data.vehicle
             vehicle.charging = charging
             # Update driving range similarly to the received charging service event
@@ -485,7 +526,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        if air_conditioning:
+        if air_conditioning and self._is_more_recent(
+            air_conditioning, self.data.vehicle.air_conditioning
+        ):
             vehicle = self.data.vehicle
             vehicle.air_conditioning = air_conditioning
             self.set_updated_vehicle(vehicle)
@@ -522,7 +565,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        if status:
+        if status and self._is_more_recent(status, self.data.vehicle.status):
             vehicle = self.data.vehicle
             vehicle.status = status
             self.set_updated_vehicle(vehicle)
@@ -538,7 +581,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        if departure_info:
+        if departure_info and self._is_more_recent(
+            departure_info, self.data.vehicle.departure_info
+        ):
             vehicle = self.data.vehicle
             vehicle.departure_info = departure_info
             self.set_updated_vehicle(vehicle)
@@ -573,7 +618,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         except ClientError as err:
             raise UpdateFailed("Error getting update from MySkoda API: %s", err)
 
-        if positions:
+        if positions and self._is_more_recent(positions, self.data.vehicle.positions):
             vehicle = self.data.vehicle
             vehicle.positions = positions
             self.set_updated_vehicle(vehicle)
