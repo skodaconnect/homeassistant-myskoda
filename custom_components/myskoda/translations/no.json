@@ -9,7 +9,8 @@
             "cannot_connect": "Klarte ikke å koble til",
             "invalid_auth": "Ugyldig autentisering",
             "relogin_in_app": "En feil har blitt oppdaget under innlogging. Det kan være nødvendig å logge inn på nytt i MySkoda appen.",
-            "unknown": "En uventet feil oppstod. Vennligst sjekk HomeAssistant loggfiler."
+            "unknown": "En uventet feil oppstod. Vennligst sjekk HomeAssistant loggfiler.",
+            "no_spin": "S-PIN-koden mangler i konfigurasjonen. Vennligst rekonfigurer integrasjonen og prøv på nytt."
         },
         "step": {
             "reauth_confirm": {
@@ -198,6 +199,9 @@
             }
         },
         "sensor": {
+            "aux_estimated_time_left_to_reach_target_temperature": {
+                "name": "Kupévarmers tid for å nå måltemperaturen"
+            },
             "battery_percentage": {
                 "name": "Batteriprosent"
             },
