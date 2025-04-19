@@ -2,7 +2,7 @@
 
 import logging
 from datetime import timedelta
-from typing import Any
+from typing import Any, Coroutine
 
 from homeassistant.components.switch import (
     SwitchDeviceClass,
@@ -91,7 +91,7 @@ class MySkodaSwitch(MySkodaEntity, SwitchEntity):
 
     @property
     def available(self) -> bool:
-        """Return wherther the switch is available to operate."""
+        """Return whether the switch is available to operate."""
         return self._is_enabled
 
     def _disable_switch(self):
@@ -103,6 +103,17 @@ class MySkodaSwitch(MySkodaEntity, SwitchEntity):
         """Turn switch availability on."""
         self._is_enabled = True
         self.async_write_ha_state()
+
+    async def _flip_switch(self, to_call: Coroutine):
+        """Flip the switch by executing to_call."""
+        if not self._is_enabled:
+            return
+
+        self._disable_switch()
+        try:
+            await to_call
+        finally:
+            self._enable_switch()
 
 
 class WindowHeatingSwitch(MySkodaSwitch):
@@ -122,33 +133,24 @@ class WindowHeatingSwitch(MySkodaSwitch):
                 return whs.front == OnOffState.ON or whs.rear == OnOffState.ON
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+    async def _async_turn_on_off(self, turn_on: bool):
         """Internal method to have a central location for the Throttle."""
-        if not self._is_enabled:
-            return
-
-        self._disable_switch()
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
+        action = "on" if turn_on else "off"
         try:
             if turn_on:
-                await self.coordinator.myskoda.start_window_heating(
-                    self.vehicle.info.vin
-                )
+                await self._flip_switch(myskoda.start_window_heating(vin))
             else:
-                await self.coordinator.myskoda.stop_window_heating(
-                    self.vehicle.info.vin
-                )
+                await self._flip_switch(myskoda.stop_window_heating(vin))
         except OperationFailedError as exc:
-            _LOGGER.error("Failed to stop window heating: %s", exc)
-        finally:
-            self._enable_switch()
+            _LOGGER.error("Failed to turn window heating %s: %s", action, exc)
+        _LOGGER.info("Window heating successfully turned %s", action)
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.debug("Window heating disabled.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.debug("Window heating enabled.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.WINDOW_HEATING]
@@ -198,33 +200,24 @@ class BatteryCareMode(ChargingSwitch):
             return settings.charging_care_mode == ActiveState.ACTIVATED
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+    async def _async_turn_on_off(self, turn_on: bool):
         """Internal method to have a central location for the Throttle."""
-        if not self._is_enabled:
-            return
-
-        self._disable_switch()
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
+        action = "on" if turn_on else "off"
         try:
             if turn_on:
-                await self.coordinator.myskoda.set_battery_care_mode(
-                    self.vehicle.info.vin, True
-                )
+                await self._flip_switch(myskoda.set_battery_care_mode(vin, True))
             else:
-                await self.coordinator.myskoda.set_battery_care_mode(
-                    self.vehicle.info.vin, False
-                )
+                await self._flip_switch(myskoda.set_battery_care_mode(vin, False))
         except OperationFailedError as exc:
-            _LOGGER.error("Failed to set battery care: %s", exc)
-        finally:
-            self._enable_switch()
+            _LOGGER.error("Failed to turn battery care mode %s: %s", action, exc)
+        _LOGGER.info("Battery care mode successfully turned %s", action)
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info("Battery care mode disabled.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info("Battery care mode enabled.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.BATTERY_CHARGING_CARE]
@@ -247,33 +240,21 @@ class ReducedCurrent(ChargingSwitch):
             return settings.max_charge_current_ac == MaxChargeCurrent.REDUCED
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+    async def _async_turn_on_off(self, turn_on: bool):
         """Internal method to have a central location for the Throttle."""
-        if not self._is_enabled:
-            return
-
-        self._disable_switch()
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
+        action = "on" if turn_on else "off"
         try:
-            if turn_on:
-                await self.coordinator.myskoda.set_reduced_current_limit(
-                    self.vehicle.info.vin, True
-                )
-            else:
-                await self.coordinator.myskoda.set_reduced_current_limit(
-                    self.vehicle.info.vin, False
-                )
+            await self._flip_switch(myskoda.set_reduced_current_limit(vin, turn_on))
         except OperationFailedError as exc:
-            _LOGGER.error("Failed to set current limit: %s", exc)
-        finally:
-            self._enable_switch()
+            _LOGGER.error("Failed to turn reduced current limit %s: %s", action, exc)
+        _LOGGER.info("Reduced current limit successfully turned %s", action)
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info("Reduced current limit disabled.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info("Reduced current limit enabled.")
 
 
 class EnableCharging(ChargingSwitch):
@@ -292,29 +273,24 @@ class EnableCharging(ChargingSwitch):
             return status.state == ChargingState.CHARGING
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+    async def _async_turn_on_off(self, turn_on: bool):
         """Internal method to have a central location for the Throttle."""
-        if not self._is_enabled:
-            return
-
-        self._disable_switch()
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
+        action = "on" if turn_on else "off"
         try:
             if turn_on:
-                await self.coordinator.myskoda.start_charging(self.vehicle.info.vin)
+                await self._flip_switch(myskoda.start_charging(vin))
             else:
-                await self.coordinator.myskoda.stop_charging(self.vehicle.info.vin)
+                await self._flip_switch(myskoda.stop_charging(vin))
         except OperationFailedError as exc:
-            _LOGGER.error("Failed to switch charging: %s", exc)
-        finally:
-            self._enable_switch()
+            _LOGGER.error("Failed to turn charging heating %s: %s", action, exc)
+        _LOGGER.info("Charging successfully turned %s", action)
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info("Charging stopped.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info("Charging started.")
 
 
 class AutoUnlockPlug(ChargingSwitch):
@@ -334,33 +310,21 @@ class AutoUnlockPlug(ChargingSwitch):
             return settings.auto_unlock_plug_when_charged != PlugUnlockMode.OFF
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+    async def _async_turn_on_off(self, turn_on: bool):
         """Internal method to have a central location for the Throttle."""
-        if not self._is_enabled:
-            return
-
-        self._disable_switch()
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
+        action = "on" if turn_on else "off"
         try:
-            if turn_on:
-                await self.coordinator.myskoda.set_auto_unlock_plug(
-                    self.vehicle.info.vin, True
-                )
-            else:
-                await self.coordinator.myskoda.set_auto_unlock_plug(
-                    self.vehicle.info.vin, False
-                )
+            await self._flip_switch(myskoda.set_auto_unlock_plug(vin, turn_on))
         except OperationFailedError as exc:
-            _LOGGER.error("Failed to set auto unlock plug: %s", exc)
-        finally:
-            self._enable_switch()
+            _LOGGER.error("Failed to turn auto unlock plug %s: %s", action, exc)
+        _LOGGER.info("Auto unlock plug successfully turned %s", action)
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info("Auto unlock plug turned off.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info("Auto unlock plug turned on.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING, CapabilityId.EXTENDED_CHARGING_SETTINGS]
@@ -384,34 +348,22 @@ class AcAtUnlock(MySkodaSwitch):
                 return ac.air_conditioning_at_unlock
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+    async def _async_turn_on_off(self, turn_on: bool):
         """Internal method to have a central location for the Throttle."""
-        if not self._is_enabled:
-            return
-
-        self._disable_switch()
         settings = AirConditioningAtUnlock(air_conditioning_at_unlock_enabled=turn_on)
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
+        action = "on" if turn_on else "off"
         try:
-            if turn_on:
-                await self.coordinator.myskoda.set_ac_at_unlock(
-                    self.vehicle.info.vin, settings
-                )
-            else:
-                await self.coordinator.myskoda.set_ac_at_unlock(
-                    self.vehicle.info.vin, settings
-                )
+            await self._flip_switch(myskoda.set_ac_at_unlock(vin, settings))
         except OperationFailedError as exc:
-            _LOGGER.error("Failed to set AC unlock setting: %s", exc)
-        finally:
-            self._enable_switch()
+            _LOGGER.error("Failed to turn AC at Unlock %s: %s", action, exc)
+        _LOGGER.info("AC at Unlock successfully turned %s", action)
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info("AC at Unlock deactivated.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info("AC at Unlock activated.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AIR_CONDITIONING_SMART_SETTINGS]
@@ -435,36 +387,28 @@ class AcWithoutExternalPower(MySkodaSwitch):
                 return ac.air_conditioning_without_external_power
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+    async def _async_turn_on_off(self, turn_on: bool):
         """Internal method to have a central location for the Throttle."""
-        if not self._is_enabled:
-            return
-
-        self._disable_switch()
         settings = AirConditioningWithoutExternalPower(
             air_conditioning_without_external_power_enabled=turn_on
         )
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
+        action = "on" if turn_on else "off"
         try:
-            if turn_on:
-                await self.coordinator.myskoda.set_ac_without_external_power(
-                    self.vehicle.info.vin, settings
-                )
-            else:
-                await self.coordinator.myskoda.set_ac_without_external_power(
-                    self.vehicle.info.vin, settings
-                )
+            await self._flip_switch(
+                myskoda.set_ac_without_external_power(vin, settings)
+            )
         except OperationFailedError as exc:
-            _LOGGER.error("Failed to change AC without external power: %s", exc)
-        finally:
-            self._enable_switch()
+            _LOGGER.error(
+                "Failed to turn AC without external power %s: %s", action, exc
+            )
+        _LOGGER.info("AC without external power successfully turned %s", action)
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info("AC without external power deactivated.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info("AC without external power activated.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_ELECTRIC]
@@ -491,34 +435,24 @@ class AcSeatHeatingFrontLeft(MySkodaSwitch):
             return ac.seat_heating_activated.front_left
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+    async def _async_turn_on_off(self, turn_on: bool):
         """Internal method to have a central location for the Throttle."""
-        if not self._is_enabled:
-            return
-
-        self._disable_switch()
         settings = SeatHeating(front_left=turn_on)
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
+        action = "on" if turn_on else "off"
         try:
-            if turn_on:
-                await self.coordinator.myskoda.set_seats_heating(
-                    self.vehicle.info.vin, settings
-                )
-            else:
-                await self.coordinator.myskoda.set_seats_heating(
-                    self.vehicle.info.vin, settings
-                )
+            await self._flip_switch(myskoda.set_seats_heating(vin, settings))
         except OperationFailedError as exc:
-            _LOGGER.error("Failed to change seat heating: %s", exc)
-        finally:
-            self._enable_switch()
+            _LOGGER.error(
+                "Failed to turn frontLeft seat heating with AC %s: %s", action, exc
+            )
+        _LOGGER.info("FrontLeft seat heating with AC successfully turned %s", action)
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info("FrontLeft seat heating with AC deactivated.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info("FrontLeft seat heating with AC activated.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AIR_CONDITIONING_SMART_SETTINGS]
@@ -545,34 +479,24 @@ class AcSeatHeatingFrontRight(MySkodaSwitch):
             return ac.seat_heating_activated.front_right
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+    async def _async_turn_on_off(self, turn_on: bool):
         """Internal method to have a central location for the Throttle."""
-        if not self._is_enabled:
-            return
-
-        self._disable_switch()
         settings = SeatHeating(front_right=turn_on)
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
+        action = "on" if turn_on else "off"
         try:
-            if turn_on:
-                await self.coordinator.myskoda.set_seats_heating(
-                    self.vehicle.info.vin, settings
-                )
-            else:
-                await self.coordinator.myskoda.set_seats_heating(
-                    self.vehicle.info.vin, settings
-                )
+            await self._flip_switch(myskoda.set_seats_heating(vin, settings))
         except OperationFailedError as exc:
-            _LOGGER.error("Failed to change seat heating: %s", exc)
-        finally:
-            self._enable_switch()
+            _LOGGER.error(
+                "Failed to turn frontright seat heating with AC %s: %s", action, exc
+            )
+        _LOGGER.info("Frontright seat heating with AC successfully turned %s", action)
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info("FrontLeft seat heating with AC deactivated.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info("FrontLeft seat heating with AC activated.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AIR_CONDITIONING_SMART_SETTINGS]
@@ -596,34 +520,22 @@ class AcWindowHeating(MySkodaSwitch):
                 return ac.window_heating_enabled
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):  # noqa: D102
+    async def _async_turn_on_off(self, turn_on: bool):
         """Internal method to have a central location for the Throttle."""
-        if not self._is_enabled:
-            return
-
-        self._disable_switch()
         settings = WindowHeating(window_heating_enabled=turn_on)
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
+        action = "on" if turn_on else "off"
         try:
-            if turn_on:
-                await self.coordinator.myskoda.set_windows_heating(
-                    self.vehicle.info.vin, settings
-                )
-            else:
-                await self.coordinator.myskoda.set_windows_heating(
-                    self.vehicle.info.vin, settings
-                )
+            await self._flip_switch(myskoda.set_windows_heating(vin, settings))
         except OperationFailedError as exc:
-            _LOGGER.error("Failed to set window heating: %s", exc)
-        finally:
-            self._enable_switch()
+            _LOGGER.error("Failed to turn window heating with AC %s: %s", action, exc)
+        _LOGGER.info("Window heating with AC successfully turned %s", action)
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info("Window heating with AC deactivated.")
 
     async def async_turn_on(self, **kwargs):  # noqa: D102
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info("Window heating with AC activated.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AIR_CONDITIONING_SMART_SETTINGS]
@@ -664,34 +576,34 @@ class DepartureTimerSwitch(MySkodaSwitch):
         return {}
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):
+    async def _async_turn_on_off(self, turn_on: bool):
         """Turn the timer on or off."""
-        if not self._is_enabled:
-            return
-
+        myskoda = self.coordinator.myskoda
+        action = "on" if turn_on else "off"
         if timer := self.get_timer():
-            self._disable_switch()
             timer.enabled = turn_on
             try:
-                await self.coordinator.myskoda.set_departure_timer(self.vin, timer)
+                await self._flip_switch(myskoda.set_departure_timer(self.vin, timer))
             except OperationFailedError as exc:
-                _LOGGER.error(f"Failed to set departure timer {self.timer_id}: {exc}")
-            finally:
-                self._enable_switch()
+                _LOGGER.error(
+                    "Failed to turn Departure Timer %s %s: %s",
+                    self.timer_id,
+                    action,
+                    exc,
+                )
         else:
             _LOGGER.error(
-                f"Failed to set departure timer {self.timer_id}: Timer not found"
+                "Failed to turn Departure Timer %s %s: Timer not found",
+                self.timer_id,
+                action,
             )
+        _LOGGER.info("Departure Timer %s successfully turned %s", self.timer_id, action)
 
     async def async_turn_off(self, **kwargs):
-        """Turn the timer off."""
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info(f"Departure Timer {self.timer_id} deactivated.")
 
     async def async_turn_on(self, **kwargs):
-        """Turn the timer on."""
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info(f"Departure Timer {self.timer_id} activated.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         """Return the capabilities required for the departure timer."""
@@ -783,36 +695,36 @@ class ACTimerSwitch(MySkodaSwitch):
         return {}
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool, **kwargs):
+    async def _async_turn_on_off(self, turn_on: bool):
         """Turn the timer on or off."""
-        if not self._is_enabled:
-            return
-
+        myskoda = self.coordinator.myskoda
+        action = "on" if turn_on else "off"
         if timer := self.get_timer():
-            self._disable_switch()
             timer.enabled = turn_on
             try:
-                await self.coordinator.myskoda.set_ac_timer(self.vin, timer)
+                await self._flip_switch(myskoda.set_ac_timer(self.vin, timer))
             except OperationFailedError as exc:
                 _LOGGER.error(
-                    f"Failed to set AirConditioning timer {self.timer_id}: {exc}"
+                    "Failed to turn AirConditioning timer %s %s: %s",
+                    self.timer_id,
+                    action,
+                    exc,
                 )
-            finally:
-                self._enable_switch()
         else:
             _LOGGER.error(
-                f"Failed to set AirConditioning timer {self.timer_id}: Timer not found"
+                "Failed to turn AirConditioning timer %s %s: Timer not found",
+                self.timer_id,
+                action,
             )
+        _LOGGER.info(
+            "AirConditioning timer %s successfully turned %s", self.timer_id, action
+        )
 
     async def async_turn_off(self, **kwargs):
-        """Turn the timer off."""
         await self._async_turn_on_off(turn_on=False)
-        _LOGGER.info(f"AirConditioning Timer {self.timer_id} deactivated.")
 
     async def async_turn_on(self, **kwargs):
-        """Turn the timer on."""
         await self._async_turn_on_off(turn_on=True)
-        _LOGGER.info(f"AirConditioning Timer {self.timer_id} activated.")
 
     def required_capabilities(self) -> list[CapabilityId]:
         """Return the capabilities required for the departure timer."""
