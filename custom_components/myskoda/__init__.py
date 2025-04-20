@@ -75,7 +75,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
         raise ConfigEntryAuthFailed from exc
     except (TermsAndConditionsError, MarketingConsentError) as exc:
         _LOGGER.error(
-            "Change to terms and conditions or consents detected while logging in. Please log into the MySkoda app (may require a logout first) to access the new Terms and Conditions. This HomeAssistant integration currently can not continue."
+            "Terms or marketing consent missing. Log out and back in with official MySkoda app, "
+            "or https://skodaid.vwgroup.io, to accept the new conditions. Error: %s",
+            exc,
         )
         async_create_tnc_issue(hass, entry.entry_id)
         raise ConfigEntryNotReady from exc

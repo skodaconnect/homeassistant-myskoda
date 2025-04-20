@@ -8,7 +8,7 @@
         "error": {
             "cannot_connect": "Failed to connect. MySkoda may be down or unreachable.",
             "invalid_auth": "Invalid authentication. Please check your credentials.",
-            "relogin_in_app": "An error has been detected during login. It may be necessary to re-login in your MySkoda app.",
+            "relogin_in_app": "Terms or marketing consent missing. Log out and back in with official MySkoda app, or https://skodaid.vwgroup.io, to accept the new conditions.",
             "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles and report an issue to the developers.",
             "no_spin": "The S-PIN is missing from configuration. Please reconfigure the integration and try again."
         },
@@ -200,7 +200,7 @@
         },
         "sensor": {
             "aux_estimated_time_left_to_reach_target_temperature": {
-                  "name": "Heater Time to reach target temperature"
+                "name": "Heater Time to reach target temperature"
             },
             "battery_percentage": {
                 "name": "Battery Percentage"
@@ -232,7 +232,7 @@
                 }
             },
             "estimated_time_left_to_reach_target_temperature": {
-                  "name": "AC Time to reach target temperature"
+                "name": "AC Time to reach target temperature"
             },
             "inspection": {
                 "name": "Next Inspection"
