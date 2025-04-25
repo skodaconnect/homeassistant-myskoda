@@ -9,7 +9,8 @@
             "cannot_connect": "Nem sikerült csatlakozni",
             "invalid_auth": "Érvénytelen hitelesítés",
             "relogin_in_app": "A bejelentkezés során hibát észleltem. Szükséges lehet újra bejelnetkezni a MySkoda applikációba.",
-            "unknown": "Váratlan hiba történt. Ellenőrizze a HomeAssistant log fájlokat."
+            "unknown": "Váratlan hiba történt. Ellenőrizze a HomeAssistant log fájlokat.",
+            "no_spin": "Az S-PIN hiányzik a beállításokból. Kérem konfigurálja újra az integrációt és próbálja ismét."
         },
         "step": {
             "reauth_confirm": {
@@ -198,6 +199,9 @@
             }
         },
         "sensor": {
+            "aux_estimated_time_left_to_reach_target_temperature": {
+                "name": "Felfűtési idő a célhőmérséklet eléréséig"
+            },
             "battery_percentage": {
                 "name": "Akkumulátor százalék"
             },
@@ -226,6 +230,9 @@
                     "conserving": "Szintentartó töltés",
                     "ready_for_charging": "Kész a töltésre"
                 }
+            },
+            "estimated_time_left_to_reach_target_temperature": {
+                "name": "AC idő a célhőmérséklet eléréséig"
             },
             "inspection": {
                 "name": "Következő inspekció"
