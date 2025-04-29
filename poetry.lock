@@ -1932,14 +1932,14 @@ files = [
 
 [[package]]
 name = "myskoda"
-version = "1.0.0"
+version = "1.0.1"
 description = "Library for interaction with the MySkoda APIs."
 optional = false
 python-versions = ">=3.12.0"
 groups = ["main"]
 files = [
-    {file = "myskoda-1.0.0-py3-none-any.whl", hash = "sha256:3d6aa0cd240590387e3f8b203d57f7e1c4d4abe2ef711583a821376fd52c22ae"},
-    {file = "myskoda-1.0.0.tar.gz", hash = "sha256:268e63218a28f53fd4b3fd7a8f735e1158a6af7a6ac666e2a2d592e1d06029e4"},
+    {file = "myskoda-1.0.1-py3-none-any.whl", hash = "sha256:0692979a50ea8b2ec3262610377e88ac54a782fbd0df0310b1856e7cdebe11da"},
+    {file = "myskoda-1.0.1.tar.gz", hash = "sha256:e303374d91d9bc31e6cf985473e7ccaf2f1822666aa6374a32f1dd737a392563"},
 ]
 
 [package.dependencies]
@@ -1951,7 +1951,7 @@ pyjwt = ">=2.10,<3.0"
 pyyaml = ">=6.0,<7.0"
 
 [package.extras]
-cli = ["asyncclick (>=8.1,<9.0)", "coloredlogs (>=15.0,<16.0)", "pygments (>=2.18,<3.0)", "termcolor (>=2.4,<3.0)"]
+cli = ["asyncclick (>=8.1,<9.0)", "coloredlogs (>=15.0,<16.0)", "pygments (>=2.18,<3.0)", "termcolor (>=3.0,<4.0)"]
 docs = ["mkdocs (>=1.6,<2.0)", "mkdocs-gen-files (>=0.5,<1.0)", "mkdocs-literate-nav (>=0.6,<1.0)", "mkdocstrings[python] (>=0.26.1,<0.30.0)"]
 
 [[package]]
@@ -3623,4 +3623,4 @@ ifaddr = ">=0.1.7"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.14"
-content-hash = "73ed1c0c9a0da5b3cd05ee64c3de403713cafc169147029de890f5d6046650ee"
+content-hash = "4bd5f5d0d410e4a8f2ea47e42ed9a23a000e614276b1c1e3d6f0cde9b57b1deb"
