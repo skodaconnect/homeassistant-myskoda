@@ -11,22 +11,17 @@ jobs:
       - name: Clone the repository
         uses: actions/checkout@v4
 
-      - name: Install dev dependencies
-        run: sudo snap install just --classic
-
-      - name: Install Poetry
-        run: pipx install poetry
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version-file: pyproject.toml
-          cache: "poetry"
+          version: "0.6.17"
+          enable-cache: true
 
       - name: Install Python dependencies
         run: |
-          poetry install --no-root
+          uv sync --all-extras
+          uv pip install pre-commit
 
-      - name: Lint
+      - name: Pre-commit
         run: |
-          just lint
+          uv run pre-commit run --hook-stage manual --all-files
