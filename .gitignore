@@ -12,6 +12,7 @@ coverage.xml
 .ruff_cache
 *.code-workspace
 venv
+.venv
 
 # Home Assistant configuration
 config/*

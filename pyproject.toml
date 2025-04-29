@@ -1,27 +1,20 @@
-[tool.poetry]
+[project]
 name = "homeassistant-myskoda"
+version = "0.0.0"
 description = "HomeAssistant integration for MySkoda."
 authors = [
-    "Frederick Gnodtke <frederick@gnodtke.net>",
-    "WebSpider <bacardicoke@gmail.com>",
-    "Fabrice Devaux <fabrice.devaux@gmail.com>",
+    { name = "Frederick Gnodtke", email = "frederick@gnodtke.net" },
+    { name = "WebSpider", email = "bacardicoke@gmail.com" },
+    { name = "Fabrice Devaux", email = "fabrice.devaux@gmail.com" },
 ]
 readme = "README.md"
-package-mode = false
+requires-python = ">=3.13.0"
+dependencies = ["homeassistant>=2025.3.2", "myskoda ~=1.0.1"]
 
-[tool.poetry.dependencies]
-python = ">=3.13,<3.14"
-homeassistant = "^2025.3.2"
-myskoda = "^1.0.1"
-
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.11.4"
-homeassistant-stubs = "^2025.3.2"
-pyright = "^1.1.398"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = ["homeassistant-stubs>=2025.3.2", "ruff ~=0.11.7", "pyright ~=1.1.400"]
 
 [tool.pyright]
 reportIncompatibleVariableOverride = "none"
+venvPath = "."
+venv = ".venv"
