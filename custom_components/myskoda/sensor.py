@@ -534,11 +534,26 @@ class Mileage(MySkodaSensor):
 
     @property
     def native_value(self) -> int | None:  # noqa: D102
+        """Calculate the mileage_in_km.
+
+        The API sometimes erroneously returns an old, lower value. Mileage should never go down.
+        To work around this we inspect the last state, if there is one, and return that if it is
+        larger than the value from the API.
+        """
+        last_value = 0
+        last_state = self.hass.states.get(self.entity_id)
+        if last_state and last_state.state:
+            last_value = int(last_state.state)
+
+        mileage_in_km = None
         if maint_report := self.vehicle.maintenance.maintenance_report:
-            return maint_report.mileage_in_km
+            mileage_in_km = maint_report.mileage_in_km
         # If the maint report does not have mileage, use vehicle health as fallback
         elif health := self.vehicle.health:
-            return health.mileage_in_km
+            mileage_in_km = health.mileage_in_km
+
+        if mileage_in_km:
+            return max(mileage_in_km, last_value)
 
 
 class InspectionInterval(MySkodaSensor):
