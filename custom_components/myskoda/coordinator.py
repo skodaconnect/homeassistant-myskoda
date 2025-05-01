@@ -124,8 +124,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     async def _async_update_data(self) -> State:
         """Called by parent class during setup and scheduled refresh."""
         config = self.data.config if self.data and self.data.config else Config()
-        operations = self.operations
-        service_events = self.service_events
 
         if self.entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
             if getattr(self, "_startup_called", False):
@@ -161,7 +159,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             async_at_started(
                 hass=self.hass, at_start_cb=_async_finish_startup
             )  # Schedule post-setup tasks
-            return State(vehicle, user, config, operations, service_events)
+            return State(vehicle, user, config, self.operations, self.service_events)
 
         # Regular update
         _LOGGER.debug("Performing scheduled refresh of all data for vin %s", self.vin)
@@ -188,7 +186,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             self.data.vehicle,
             self.data.user,
             self.data.config,
-            self.data.operations,
+            self.operations,
             self.service_events,
         )
 
@@ -225,6 +223,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                     self.operations.popitem(last=False)
         if event.type == EventType.SERVICE_EVENT:
             self.service_events.appendleft(event.event)
+        self.async_set_updated_data(self.data)
 
     def _unsub_refresh(self):
         return
