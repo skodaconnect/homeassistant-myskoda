@@ -287,15 +287,15 @@ class AddBlueRange(MySkodaSensor):
 
     @property
     def native_value(self) -> int | None:  # noqa: D102
-        if range := self.vehicle.driving_range:
-            if range.ad_blue_range is not None:
-                return range.ad_blue_range
+        if driving_range := self.vehicle.driving_range:
+            if driving_range.ad_blue_range is not None:
+                return driving_range.ad_blue_range
 
     @property
     def available(self) -> bool:
         """Determine whether the sensor is available."""
-        if range := self.vehicle.driving_range:
-            return range.ad_blue_range is not None
+        if driving_range := self.vehicle.driving_range:
+            return driving_range.ad_blue_range is not None
         return False
 
     def required_capabilities(self) -> list[CapabilityId]:
@@ -318,19 +318,18 @@ class CombustionRange(MySkodaSensor):
 
     @property
     def native_value(self) -> int | None:  # noqa: D102
-        if range := self.vehicle.driving_range:
-            if primary := range.primary_engine_range:
+        if driving_range := self.vehicle.driving_range:
+            if primary := driving_range.primary_engine_range:
                 if primary.engine_type in [EngineType.GASOLINE, EngineType.DIESEL]:
                     return primary.remaining_range_in_km
-            if secondary := range.secondary_engine_range:
+            if secondary := driving_range.secondary_engine_range:
                 if secondary.engine_type in [EngineType.GASOLINE, EngineType.DIESEL]:
                     return secondary.remaining_range_in_km
 
     @property
     def available(self) -> bool:
-        if self.has_all_capabilities([CapabilityId.STATE, CapabilityId.FUEL_STATUS]):
-            if range := self.vehicle.driving_range:
-                return range.car_type == EngineType.HYBRID
+        if driving_range := self.vehicle.driving_range:
+            return driving_range.car_type == EngineType.HYBRID
         return False
 
     def required_capabilities(self) -> list[CapabilityId]:
@@ -353,9 +352,9 @@ class ElectricRange(MySkodaSensor):
 
     @property
     def native_value(self) -> int | None:  # noqa: D102
-        if range := self.vehicle.driving_range:
-            if range.secondary_engine_range is not None:
-                return range.secondary_engine_range.remaining_range_in_km
+        if driving_range := self.vehicle.driving_range:
+            if driving_range.secondary_engine_range is not None:
+                return driving_range.secondary_engine_range.remaining_range_in_km
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE, CapabilityId.FUEL_STATUS, CapabilityId.CHARGING_MQB]
@@ -374,19 +373,18 @@ class GasRange(MySkodaSensor):
 
     @property
     def native_value(self) -> int | None:  # noqa: D102
-        if range := self.vehicle.driving_range:
-            if range.primary_engine_range is not None:
-                return range.primary_engine_range.remaining_range_in_km
+        if driving_range := self.vehicle.driving_range:
+            if driving_range.primary_engine_range is not None:
+                return driving_range.primary_engine_range.remaining_range_in_km
 
     @property
     def available(self) -> bool:
-        if self.has_all_capabilities([CapabilityId.STATE, CapabilityId.FUEL_STATUS]):
-            if range := self.vehicle.driving_range:
-                return (
-                    range.car_type == EngineType.HYBRID
-                    and (primary_engine_range := range.primary_engine_range)
-                    and primary_engine_range.engine_type == EngineType.CNG
-                )
+        if driving_range := self.vehicle.driving_range:
+            return (
+                driving_range.car_type in (EngineType.HYBRID, EngineType.CNG)
+                and (primary_engine_range := driving_range.primary_engine_range)
+                and primary_engine_range.engine_type == EngineType.CNG
+            )
         return False
 
     def required_capabilities(self) -> list[CapabilityId]:
@@ -408,18 +406,17 @@ class GasLevel(MySkodaSensor):
 
     @property
     def native_value(self) -> int | None:  # noqa: D102
-        if range := self.vehicle.driving_range:
-            return range.primary_engine_range.current_fuel_level_in_percent
+        if driving_range := self.vehicle.driving_range:
+            return driving_range.primary_engine_range.current_fuel_level_in_percent
 
     @property
     def available(self) -> bool:
-        if self.has_all_capabilities([CapabilityId.STATE, CapabilityId.FUEL_STATUS]):
-            if range := self.vehicle.driving_range:
-                return (
-                    range.car_type == EngineType.HYBRID
-                    and (primary_engine_range := range.primary_engine_range)
-                    and primary_engine_range.engine_type == EngineType.CNG
-                )
+        if driving_range := self.vehicle.driving_range:
+            return (
+                driving_range.car_type in (EngineType.HYBRID, EngineType.CNG)
+                and (primary_engine_range := driving_range.primary_engine_range)
+                and primary_engine_range.engine_type == EngineType.CNG
+            )
         return False
 
     def required_capabilities(self) -> list[CapabilityId]:
@@ -441,11 +438,11 @@ class FuelLevel(MySkodaSensor):
 
     @property
     def native_value(self) -> int | None:  # noqa: D102
-        if range := self.vehicle.driving_range:
-            if primary := range.primary_engine_range:
+        if driving_range := self.vehicle.driving_range:
+            if primary := driving_range.primary_engine_range:
                 if primary.engine_type in [EngineType.GASOLINE, EngineType.DIESEL]:
                     return primary.current_fuel_level_in_percent
-            if secondary := range.secondary_engine_range:
+            if secondary := driving_range.secondary_engine_range:
                 if secondary.engine_type in [EngineType.GASOLINE, EngineType.DIESEL]:
                     return secondary.current_fuel_level_in_percent
 
@@ -490,8 +487,8 @@ class Range(MySkodaSensor):
 
     @property
     def native_value(self) -> int | float | None:  # noqa: D102
-        if range := self.vehicle.driving_range:
-            return range.total_range_in_km
+        if driving_range := self.vehicle.driving_range:
+            return driving_range.total_range_in_km
 
         # Fall back to getting range from battery
         if status := self._status():
