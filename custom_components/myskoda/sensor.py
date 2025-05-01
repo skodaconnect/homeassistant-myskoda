@@ -540,7 +540,10 @@ class Mileage(MySkodaSensor):
         last_value = 0
         last_state = self.hass.states.get(self.entity_id)
         if last_state and last_state.state:
-            last_value = int(last_state.state)
+            try:
+                last_value = int(last_state.state)
+            except (ValueError, TypeError):
+                pass  # value may initially be 'unavailable' or 'None'
 
         mileage_in_km = None
         if maint_report := self.vehicle.maintenance.maintenance_report:
