@@ -7,29 +7,28 @@
 
 A [Home Assistant](https://www.home-assistant.io/) integration for Skoda vehicles based on the official MySkoda App.
 
-- [Home Assistant MySkoda Integration :house\_with\_garden: :satellite: :car:](#home-assistant-myskoda-integration-house_with_garden-satellite-car)
-  - [Getting Starting](#getting-starting)
-    - [Installation](#installation)
-    - [Configuration](#configuration)
-  - [Documentation](#documentation)
-    - [Limitations](#limitations)
-    - [Additional Configuration](#additional-configuration)
-    - [Available Entities](#available-entities)
-    - [Operations (Switches, Buttons and Numbers)](#operations-switches-buttons-and-numbers)
-    - [New Vehicles](#new-vehicles)
-    - [Configuration](#configuration-1)
-    - [Debugging](#debugging)
-    - [Customize polling interval](#customize-polling-interval)
-    - [Disabling polling](#disabling-polling)
-    - [S-PIN](#s-pin)
-    - [Read-only mode](#read-only-mode)
-    - [Inner workings](#inner-workings)
-  - [FAQ](#faq)
-  - [Contributing](#contributing)
-    - [Translations](#translations)
-  - [Disclaimer](#disclaimer)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- [Documentation](#documentation)
+  - [Limitations](#limitations)
+  - [Additional Configuration](#additional-configuration)
+  - [Available Entities](#available-entities)
+  - [Operations (Switches, Buttons and Numbers)](#operations-switches-buttons-and-numbers)
+  - [New Vehicles](#new-vehicles)
+  - [Configuration](#configuration-1)
+  - [Debugging](#debugging)
+  - [Customize polling interval](#customize-polling-interval)
+  - [Disabling polling](#disabling-polling)
+  - [S-PIN](#s-pin)
+  - [Read-only mode](#read-only-mode)
+  - [Inner workings](#inner-workings)
+- [FAQ](#faq)
+- [Contributing](#contributing)
+  - [Translations](#translations)
+- [Disclaimer](#disclaimer)
 
-## Getting Starting
+## Getting Started
 
 ### Installation
 You can manually install this integration as an custom_component under Home Assistant or install it using [HACS](https://hacs.xyz/) (recommended).
