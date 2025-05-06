@@ -32,7 +32,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up the button platform."""
     add_supported_entities(
-        available_entities=[HonkFlash, Flash],
+        available_entities=[HonkFlash, Flash, WakeUp],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
@@ -86,7 +86,7 @@ class HonkFlash(MySkodaButton):
 
         self._disable_button()
         try:
-            await self.coordinator.myskoda.honk_flash(self.vehicle.info.vin)
+            await self.coordinator.myskoda.honk_flash(self.vin)
         except OperationFailedError as exc:
             _LOGGER.error("Failed honk and flash: %s", exc)
         finally:
@@ -110,7 +110,7 @@ class Flash(MySkodaButton):
 
         self._disable_button()
         try:
-            await self.coordinator.myskoda.flash(self.vehicle.info.vin)
+            await self.coordinator.myskoda.flash(self.vin)
         except OperationFailedError as exc:
             _LOGGER.error("Failed to flash lights: %s", exc)
         finally:
@@ -118,3 +118,38 @@ class Flash(MySkodaButton):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.HONK_AND_FLASH]
+
+
+class WakeUp(MySkodaButton):
+    """Explicitly wake up the vehicle.
+
+    Disabled by default to limit accidental use.
+    """
+
+    entity_description = ButtonEntityDescription(
+        key="wakeup",
+        translation_key="wakeup",
+        device_class=ButtonDeviceClass.RESTART,
+        entity_registry_enabled_default=False,
+    )
+
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
+    async def async_press(self) -> None:
+        if not self._is_enabled:
+            return
+
+        self._disable_button()
+        try:
+            await self.coordinator.myskoda.wakeup(self.vin)
+        except OperationFailedError as exc:
+            _LOGGER.error("Failed to wake up vehicle: %s", exc)
+        finally:
+            self._enable_button()
+
+    def is_supported(self) -> bool:
+        """Some models have VEHICLE_WAKE_UP while others have VEHICLE_WAKE_UP_TRIGGER."""
+        capabilities = [
+            CapabilityId.VEHICLE_WAKE_UP,
+            CapabilityId.VEHICLE_WAKE_UP_TRIGGER,
+        ]
+        return any(self.vehicle.has_capability(cap) for cap in capabilities)

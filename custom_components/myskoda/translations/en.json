@@ -354,6 +354,9 @@
             },
             "flash": {
                 "name": "Flash"
+            },
+            "wakeup": {
+                "name": "Wake Up Car"
             }
         }
     },
