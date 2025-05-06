@@ -109,10 +109,15 @@ NOTE: not all vehicles report all service events.
 
 ## Buttons
 
-| Key          | Name           | Notes |
-|--------------|----------------|-------|
-| `honk_flash` | Honk and Flash |       |
-| `flash`      | Flash          |       |
+| Key          | Name           | Notes                         |
+|--------------|----------------|-------------------------------|
+| `honk_flash` | Honk and Flash |                               |
+| `flash`      | Flash          |                               |
+| `wakeup`     | Wake Up Car    | :warning: Disabled by default |
+
+### Wake Up Car
+
+This button will result in a wake-up request being sent directly to the car. In order to protect the 12V battery most models have a strict limit on the number of times this can occur before requiring the car to be started. **USE WITH CARE!**
 
 ## Climate
 
@@ -130,9 +135,9 @@ NOTE: not all vehicles report all service events.
 
 ## Device Tracker
 
-| Key                         | Name            | Notes                           |
-|-----------------------------|-----------------|---------------------------------|
-| `<VIN>_device_tracker`              | Charge Limit    | In % [50-100] in steps of 10    |
+| Key                    | Name         | Notes                        |
+|------------------------|--------------|------------------------------|
+| `<VIN>_device_tracker` | Charge Limit | In % [50-100] in steps of 10 |
 
 Location of vehicles are exposed as device trackers. While the vehicle is moving the Skoda API does not return GPS coordinates and the device tracker will report the location `vehicle_in_motion`.
 

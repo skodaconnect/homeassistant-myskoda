@@ -292,6 +292,9 @@
             },
             "flash": {
                 "default": "mdi:car-parking-lights"
+            },
+            "wakeup": {
+                "default": "mdi:car-connected"
             }
         }
     }
