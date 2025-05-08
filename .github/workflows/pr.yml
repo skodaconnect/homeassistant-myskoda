@@ -17,4 +17,4 @@ jobs:
         uses:  ytanikin/pr-conventional-commits@1.4.0
         with:
          task_types: '["feat","fix","docs","test","ci","refactor","chore","revert"]'
-         custom_labels: '{"feat": "enhancement", "fix": "fix", "docs": "documentation", "test": "test", "ci": "test", "refactor": "chore", "chore": "chore", "revert": "revert"}'
+         custom_labels: '{"feat": "enhancement", "fix": "bugfix", "docs": "documentation", "test": "test", "ci": "test", "refactor": "chore", "chore": "chore", "revert": "revert"}'
