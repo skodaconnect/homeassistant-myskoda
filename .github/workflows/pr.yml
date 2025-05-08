@@ -1,0 +1,20 @@
+name: PR labeler
+
+on:
+  pull_request:
+    types: 
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+jobs:
+  validate-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conventional Commit Validation
+        uses:  ytanikin/pr-conventional-commits@1.4.0
+        with:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+         custom_labels: '{"feat": "enhancement", "fix": "fix", "docs": "documentation", "test": "test", "ci": "test", "refactor": "chore", "chore": "chore", "revert": "revert"}'
