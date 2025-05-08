@@ -354,6 +354,9 @@
             },
             "flash": {
                 "name": "Knipper alarm lichten"
+            },
+            "wakeup": {
+                "name": "Activeer auto"
             }
         }
     },
