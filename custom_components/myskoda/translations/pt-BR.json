@@ -354,6 +354,9 @@
             },
             "flash": {
                 "name": "Piscar"
+            },
+            "wakeup": {
+                "name": "Ligar Carro"
             }
         }
     },
