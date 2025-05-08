@@ -10,6 +10,9 @@ on:
 
 jobs:
   validate-pr-title:
+    permissions:
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Conventional Commit Validation
