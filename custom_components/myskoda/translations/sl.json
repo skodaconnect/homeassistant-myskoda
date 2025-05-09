@@ -9,7 +9,8 @@
             "cannot_connect": "Povezava ni uspela",
             "invalid_auth": "Neveljavna prijava",
             "relogin_in_app": "Med prijavo je bila zaznana napaka. Morda se boste morali znova prijaviti v aplikacijo MySkoda.",
-            "unknown": "Prišlo je do nepričakovane napake. Preverite dnevnike v HomeAssistant."
+            "unknown": "Prišlo je do nepričakovane napake. Preverite dnevnike v HomeAssistant.",
+            "no_spin": "V konfiguraciji manjka S-PIN. Ponovno nastavite integracijo in poskusite znova."
         },
         "step": {
             "reauth_confirm": {
@@ -198,6 +199,9 @@
             }
         },
         "sensor": {
+            "aux_estimated_time_left_to_reach_target_temperature": {
+                "name": "Potreben čas ogrevanje za doseg nastavljene temperature"
+            },
             "battery_percentage": {
                 "name": "Baterija – odstotek"
             },
@@ -226,6 +230,9 @@
                     "conserving": "Ohranjanje",
                     "ready_for_charging": "Pripravljen na polnjenje"
                 }
+            },
+            "estimated_time_left_to_reach_target_temperature": {
+                "name": "Potreben čas hlajenja za doseg nastavljene temperature"
             },
             "inspection": {
                 "name": "Naslednji servis"
@@ -347,6 +354,9 @@
             },
             "flash": {
                 "name": "Utripanje"
+            },
+            "wakeup": {
+                "name": "Zbudi vozilo"
             }
         }
     },
