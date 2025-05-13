@@ -354,6 +354,9 @@
             },
             "flash": {
                 "name": "Blikat"
+            },
+            "wakeup": {
+                "name": "Probudit auto"
             }
         }
     },
