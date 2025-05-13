@@ -130,6 +130,15 @@
                     "on": "Open"
                 }
             },
+            "vehicle_battery_protection": {
+                "name": "Battery Protection (beta)"
+            },
+            "vehicle_reachable": {
+                "name": "Connected (beta)"
+            },
+            "vehicle_in_motion": {
+                "name": "In motion (beta)"
+            },
             "window_open_front_left": {
                 "name": "Window Front Left",
                 "state": {
