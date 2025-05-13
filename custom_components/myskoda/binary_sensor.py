@@ -5,6 +5,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
@@ -19,6 +20,7 @@ from myskoda.models.common import (
 )
 from myskoda.models.info import CapabilityId
 from myskoda.models.status import DoorWindowState, Status
+from myskoda.models.vehicle_connection_status import VehicleConnectionStatus
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaConfigEntry
@@ -53,6 +55,9 @@ async def async_setup_entry(
             WindowOpenFrontRight,
             WindowOpenRearLeft,
             WindowOpenRearRight,
+            VehicleBatteryProtection,
+            VehicleInMotion,
+            VehicleReachable,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -74,6 +79,14 @@ class AirConditioningBinarySensor(MySkodaBinarySensor):
 class StatusBinarySensor(MySkodaBinarySensor):
     def _status(self) -> Status | None:
         return self.vehicle.status
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.STATE]
+
+
+class VehicleConnectionBinarySensor(MySkodaBinarySensor):
+    def _connection_status(self) -> VehicleConnectionStatus | None:
+        return self.vehicle.connection_status
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.STATE]
@@ -394,3 +407,49 @@ class WindowOpenRearRight(StatusBinarySensor):
                 DoorWindowState.WINDOW_OPEN,
                 DoorWindowState.ALL_OPEN,
             }
+
+
+class VehicleReachable(VehicleConnectionBinarySensor):
+    """Vehicle reachable status."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="vehicle_reachable",
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        translation_key="vehicle_reachable",
+        entity_category=EntityCategory.DIAGNOSTIC,
+    )
+
+    @property
+    def is_on(self) -> bool | None:
+        if cs := self._connection_status():
+            return not cs.unreachable
+
+
+class VehicleInMotion(VehicleConnectionBinarySensor):
+    """Vehicle in motion status."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="vehicle_in_motion",
+        device_class=BinarySensorDeviceClass.MOTION,
+        translation_key="vehicle_in_motion",
+    )
+
+    @property
+    def is_on(self) -> bool | None:
+        if cs := self._connection_status():
+            return cs.in_motion
+
+
+class VehicleBatteryProtection(VehicleConnectionBinarySensor):
+    """Vehicle is in battery protection state."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="vehicle_battery_protection",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        translation_key="vehicle_battery_protection",
+    )
+
+    @property
+    def is_on(self) -> bool | None:
+        if cs := self._connection_status():
+            return cs.battery_protection_limit_on
