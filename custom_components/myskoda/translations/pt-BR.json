@@ -130,6 +130,15 @@
                     "on": "Aberta"
                 }
             },
+            "vehicle_battery_protection": {
+                "name": "Proteção de bateria (beta)"
+            },
+            "vehicle_reachable": {
+                "name": "Conectado (beta)"
+            },
+            "vehicle_in_motion": {
+                "name": "Moção (beta)"
+            },
             "window_open_front_left": {
                 "name": "Janela frontal esquerda: ",
                 "state": {
