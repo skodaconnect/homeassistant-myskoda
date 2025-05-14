@@ -130,6 +130,15 @@
                     "on": "Open"
                 }
             },
+            "vehicle_battery_protection": {
+                "name": "Batterijbescherming (bèta)"
+            },
+            "vehicle_reachable": {
+                "name": "Verbonden (bèta)"
+            },
+            "vehicle_in_motion": {
+                "name": "In beweging (bèta)"
+            },
             "window_open_front_left": {
                 "name": "Raam linksvoor",
                 "state": {
