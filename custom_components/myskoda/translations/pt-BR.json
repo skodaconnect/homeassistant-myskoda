@@ -33,102 +33,46 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Capota",
-                "state": {
-                    "off": "Fechado",
-                    "on": "Aberto"
-                }
+                "name": "Capota"
             },
             "charger_connected": {
-                "name": "Carregador conectado",
-                "state": {
-                    "off": "Desconectado",
-                    "on": "Conectado"
-                }
+                "name": "Carregador conectado"
             },
             "charger_locked": {
-                "name": "Bloqueio de carga",
-                "state": {
-                    "off": "Bloqueado",
-                    "on": "Desbloqueado"
-                }
+                "name": "Bloqueio de carga"
             },
             "doors_locked": {
-                "name": "Portas trancadas",
-                "state": {
-                    "off": "Bloqueado",
-                    "on": "Desbloqueado"
-                }
+                "name": "Portas trancadas"
             },
             "doors_open": {
-                "name": "Portas abertas",
-                "state": {
-                    "off": "Fechado",
-                    "on": "Aberto"
-                }
+                "name": "Portas abertas"
             },
             "locked": {
-                "name": "Veículo trancado",
-                "state": {
-                    "off": "Bloqueado",
-                    "on": "Desbloqueado"
-                }
+                "name": "Veículo trancado"
             },
             "parkinglights_on": {
-                "name": "Luzes do estacionamento",
-                "state": {
-                    "off": "Desativadas",
-                    "on": "Ativadas"
-                }
+                "name": "Luzes do estacionamento"
             },
             "sunroof_open": {
-                "name": "Teto solar",
-                "state": {
-                    "off": "Fechado",
-                    "on": "Aberto"
-                }
+                "name": "Teto solar"
             },
             "trunk_open": {
-                "name": "Porta-malas",
-                "state": {
-                    "off": "Fechado",
-                    "on": "Aberto"
-                }
+                "name": "Porta-malas"
             },
             "windows_open": {
-                "name": "Janelas",
-                "state": {
-                    "off": "Fechado",
-                    "on": "Aberto"
-                }
+                "name": "Janelas"
             },
             "door_open_front_left": {
-                "name": "Porta frontal esquerda: ",
-                "state": {
-                    "off": "Fechada",
-                    "on": "Aberta"
-                }
+                "name": "Porta frontal esquerda: "
             },
             "door_open_front_right": {
-                "name": "Porta frontal direita: ",
-                "state": {
-                    "off": "Fechada",
-                    "on": "Aberta"
-                }
+                "name": "Porta frontal direita: "
             },
             "door_open_rear_left": {
-                "name": "Porta traseira esquerda: ",
-                "state": {
-                    "off": "Fechada",
-                    "on": "Aberta"
-                }
+                "name": "Porta traseira esquerda: "
             },
             "door_open_rear_right": {
-                "name": "Porta traseira direita: ",
-                "state": {
-                    "off": "Fechada",
-                    "on": "Aberta"
-                }
+                "name": "Porta traseira direita: "
             },
             "vehicle_battery_protection": {
                 "name": "Proteção de bateria (beta)"
@@ -140,32 +84,16 @@
                 "name": "Moção (beta)"
             },
             "window_open_front_left": {
-                "name": "Janela frontal esquerda: ",
-                "state": {
-                    "off": "Fechada",
-                    "on": "Aberta"
-                }
+                "name": "Janela frontal esquerda: "
             },
             "window_open_front_right": {
-                "name": "Janela frontal direita: ",
-                "state": {
-                    "off": "Fechada",
-                    "on": "Aberta"
-                }
+                "name": "Janela frontal direita: "
             },
             "window_open_rear_left": {
-                "name": "Janela traseira esquerda:",
-                "state": {
-                    "off": "Fechada",
-                    "on": "Aberta"
-                }
+                "name": "Janela traseira esquerda:"
             },
             "window_open_rear_right": {
-                "name": "Janela traseira direita: ",
-                "state": {
-                    "off": "Fechada",
-                    "on": "Aberta"
-                }
+                "name": "Janela traseira direita: "
             }
         },
         "climate": {
