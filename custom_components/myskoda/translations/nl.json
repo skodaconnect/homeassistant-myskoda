@@ -33,102 +33,46 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Motorkap",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Motorkap"
             },
             "charger_connected": {
-                "name": "Laadkabel",
-                "state": {
-                    "off": "Losgekoppeld",
-                    "on": "Aangesloten"
-                }
+                "name": "Laadkabel"
             },
             "charger_locked": {
-                "name": "Laadkabelvergrendeling",
-                "state": {
-                    "off": "Vergrendeld",
-                    "on": "Ontgrendeld"
-                }
+                "name": "Laadkabelvergrendeling"
             },
             "doors_locked": {
-                "name": "Deurvergrendeling",
-                "state": {
-                    "off": "Vergrendeld",
-                    "on": "Ontgrendeld"
-                }
+                "name": "Deurvergrendeling"
             },
             "doors_open": {
-                "name": "Deuren",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Deuren"
             },
             "locked": {
-                "name": "Voertuigvergrendeling",
-                "state": {
-                    "off": "Vergrendeld",
-                    "on": "Ontgrendeld"
-                }
+                "name": "Voertuigvergrendeling"
             },
             "parkinglights_on": {
-                "name": "Parkeerlichten",
-                "state": {
-                    "off": "Uit",
-                    "on": "Aan"
-                }
+                "name": "Parkeerlichten"
             },
             "sunroof_open": {
-                "name": "Zonnedak Open",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Zonnedak Open"
             },
             "trunk_open": {
-                "name": "Kofferbak",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Kofferbak"
             },
             "windows_open": {
-                "name": "Ramen",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Ramen"
             },
             "door_open_front_left": {
-                "name": "Deur linksvoor",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Deur linksvoor"
             },
             "door_open_front_right": {
-                "name": "Deur rechtsvoor",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Deur rechtsvoor"
             },
             "door_open_rear_left": {
-                "name": "Deur linksachter",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Deur linksachter"
             },
             "door_open_rear_right": {
-                "name": "Deur rechtsachter",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Deur rechtsachter"
             },
             "vehicle_battery_protection": {
                 "name": "Batterijbescherming (bèta)"
@@ -140,32 +84,16 @@
                 "name": "In beweging (bèta)"
             },
             "window_open_front_left": {
-                "name": "Raam linksvoor",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Raam linksvoor"
             },
             "window_open_front_right": {
-                "name": "Raam rechtsvoor",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Raam rechtsvoor"
             },
             "window_open_rear_left": {
-                "name": "Raam linksachter",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Raam linksachter"
             },
             "window_open_rear_right": {
-                "name": "Raam rechtsachter",
-                "state": {
-                    "off": "Gesloten",
-                    "on": "Open"
-                }
+                "name": "Raam rechtsachter"
             }
         },
         "climate": {
