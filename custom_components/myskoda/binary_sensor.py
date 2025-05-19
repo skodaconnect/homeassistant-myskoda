@@ -89,7 +89,7 @@ class VehicleConnectionBinarySensor(MySkodaBinarySensor):
         return self.vehicle.connection_status
 
     def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.STATE]
+        return [CapabilityId.READINESS]
 
 
 class ChargerConnected(AirConditioningBinarySensor):
