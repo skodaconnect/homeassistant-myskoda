@@ -65,7 +65,7 @@
                 "default": "mdi:car-connected"
             },
             "vehicle_in_motion": {
-                "default": "motion"
+                "default": "mdi:motion"
             },
             "window_open_front_left": {
                 "default": "mdi:car-door"
