@@ -38,12 +38,10 @@ After installation you will need to restart your HomeAssistant before you can ad
 #### HACS installation
 New to HACS? Start with the [HACS documentation](https://hacs.xyz/docs/use/) first.
 
-1. **Add the `myskoda` Repository** to HACS:
-   - In Home Assistant, go to **HACS** > **Settings** tab.
-   - Select **Custom Repositories** and add the repository URL `https://github.com/skodaconnect/homeassistant-myskoda`.
-2. **Install `myskoda`** from HACS:
-   - After adding the repository, find and install `myskoda` under the HACS integrations.
-3. **Restart** Home Assistant.
+1. Go to **HACS > Integrations**
+2. Click the **"+"** button in the bottom right
+3. Search for **"MySkoda"**
+4. Click **Download** and **restart** Home Assistant
 
 #### Manual installation
 1. **Download** the `myskoda` repository or folder.
