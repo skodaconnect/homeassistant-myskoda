@@ -55,6 +55,18 @@
             "door_open_rear_right": {
                 "default": "mdi:car-door"
             },
+            "vehicle_battery_protection": {
+                "default": "mdi:battery-heart",
+                "state": {
+                    "on": "mdi:battery-alert-variant"
+                }
+            },
+            "vehicle_reachable": {
+                "default": "mdi:car-connected"
+            },
+            "vehicle_in_motion": {
+                "default": "motion"
+            },
             "window_open_front_left": {
                 "default": "mdi:car-door"
             },
