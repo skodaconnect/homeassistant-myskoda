@@ -75,13 +75,13 @@
                 "name": "Porta traseira direita: "
             },
             "vehicle_battery_protection": {
-                "name": "Proteção de bateria (beta)"
+                "name": "Proteção de bateria"
             },
             "vehicle_reachable": {
-                "name": "Conectado (beta)"
+                "name": "Conectado"
             },
             "vehicle_in_motion": {
-                "name": "Em moção (beta)"
+                "name": "Em moção"
             },
             "window_open_front_left": {
                 "name": "Janela frontal esquerda: "

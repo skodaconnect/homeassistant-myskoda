@@ -1,4 +1,4 @@
-{
+
     "config": {
         "abort": {
             "already_configured": "O dispositivo já está ajustado",
@@ -75,13 +75,13 @@
                 "name": "Porta traseira direita: "
             },
             "vehicle_battery_protection": {
-                "name": "Proteção de bateria (beta)"
+                "name": "Proteção de bateria"
             },
             "vehicle_reachable": {
-                "name": "Conectado (beta)"
+                "name": "Conectado"
             },
             "vehicle_in_motion": {
-                "name": "Moção (beta)"
+                "name": "Moção"
             },
             "window_open_front_left": {
                 "name": "Janela frontal esquerda: "

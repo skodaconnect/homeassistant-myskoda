@@ -75,13 +75,13 @@
                 "name": "Door Rear Right"
             },
             "vehicle_battery_protection": {
-                "name": "Battery Protection (beta)"
+                "name": "Battery Protection"
             },
             "vehicle_reachable": {
-                "name": "Connected (beta)"
+                "name": "Connected"
             },
             "vehicle_in_motion": {
-                "name": "In motion (beta)"
+                "name": "In motion"
             },
             "window_open_front_left": {
                 "name": "Window Front Left"
