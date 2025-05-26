@@ -75,13 +75,13 @@
                 "name": "Deur rechtsachter"
             },
             "vehicle_battery_protection": {
-                "name": "Batterijbescherming (bèta)"
+                "name": "Batterijbescherming"
             },
             "vehicle_reachable": {
-                "name": "Verbonden (bèta)"
+                "name": "Verbonden"
             },
             "vehicle_in_motion": {
-                "name": "In beweging (bèta)"
+                "name": "In beweging"
             },
             "window_open_front_left": {
                 "name": "Raam linksvoor"
