@@ -1,6 +1,6 @@
 """Sensors for the MySkoda integration."""
 
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -29,7 +29,7 @@ from myskoda.models.driving_range import EngineType
 from myskoda.models.info import CapabilityId
 from myskoda.models.operation_request import OperationStatus
 
-from .const import COORDINATORS, DOMAIN, OUTSIDE_TEMP_MIN_BOUND, OUTSIDE_TEMP_MAX_BOUND
+from .const import COORDINATORS, DOMAIN, OUTSIDE_TEMP_MAX_BOUND, OUTSIDE_TEMP_MIN_BOUND
 from .coordinator import MySkodaConfigEntry
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
@@ -53,6 +53,7 @@ async def async_setup_entry(
             CombustionRange,
             ElectricRange,
             FuelLevel,
+            GasRange,
             InspectionInterval,
             InspectionIntervalKM,
             LastUpdated,
