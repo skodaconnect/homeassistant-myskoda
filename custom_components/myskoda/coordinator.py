@@ -17,13 +17,8 @@ from homeassistant.helpers.start import async_at_started
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from myskoda import MySkoda, Vehicle
-from myskoda.event import (
-    Event,
-    EventOperation,
-    ServiceEvent,
-)
+from myskoda.models.event import BaseEvent, OperationEvent, ServiceEvent
 from myskoda.models.user import User
-from myskoda.mqtt import EventType
 
 from .const import (
     API_COOLDOWN_IN_SECONDS,
@@ -62,7 +57,7 @@ class MySkodaDebouncer(Debouncer):
 
 
 # History of EventType.OPERATION events, keyed by request_id
-Operations = OrderedDict[str, EventOperation]
+Operations = OrderedDict[str, OperationEvent]
 
 
 # History of EventType.SERVICE_EVENT events
@@ -212,17 +207,17 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             pass
         self._mqtt_connecting = False
 
-    async def _on_mqtt_event(self, event: Event) -> None:
+    async def _on_mqtt_event(self, event: BaseEvent) -> None:
         if event.vin != self.vin:
             return
-        if event.type == EventType.OPERATION:
+        if isinstance(event, OperationEvent):
             # Store the last MAX_STORED_OPERATIONS operations
-            if request_id := event.operation.request_id:
+            if request_id := event.request_id:
                 self.operations[request_id] = event
                 while len(self.operations) > MAX_STORED_OPERATIONS:
                     self.operations.popitem(last=False)
-        if event.type == EventType.SERVICE_EVENT:
-            self.service_events.appendleft(event.event)
+        if isinstance(event, ServiceEvent):
+            self.service_events.appendleft(event)
         self.async_set_updated_data(self.data)
 
     def _unsub_refresh(self):

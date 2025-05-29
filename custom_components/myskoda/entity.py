@@ -4,7 +4,7 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from myskoda import Vehicle
-from myskoda.event import EventOperation
+from myskoda.models.event import OperationEvent
 from myskoda.models.info import CapabilityId
 
 from .const import DOMAIN
@@ -36,7 +36,7 @@ class MySkodaEntity(CoordinatorEntity):
         return self.coordinator.data.vehicle
 
     @property
-    def operations(self) -> dict[str, EventOperation]:
+    def operations(self) -> dict[str, OperationEvent]:
         return self.coordinator.data.operations
 
     @property
