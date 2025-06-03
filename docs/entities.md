@@ -87,6 +87,8 @@ NOTE: not all vehicles report all service events.
 
 ## Switches
 
+Switches become temporarily disabled when toggled, until the API operation completes.
+
 | Key                           | Name                       | Notes                                       |
 |-------------------------------|----------------------------|---------------------------------------------|
 | `window_heating`              | Window Heating             |                                             |
@@ -109,6 +111,8 @@ NOTE: not all vehicles report all service events.
 
 ## Buttons
 
+Buttons become temporarily disabled when pressed, until the API operation completes.
+
 | Key          | Name           | Notes                         |
 |--------------|----------------|-------------------------------|
 | `honk_flash` | Honk and Flash |                               |
@@ -121,12 +125,16 @@ This button will result in a wake-up request being sent directly to the car. In 
 
 ## Climate
 
+Climates use assumed state when modified.
+
 | Key                | Name             | Notes |
 |--------------------|------------------|-------|
 | `climate`          | Air Conditioning |       |
 | `auxiliary_heater` | Auxiliary Heater |       |
 
 ## Numbers
+
+Numbers become temporarily disabled when modified, until the API operation completes.
 
 | Key                         | Name            | Notes                           |
 |-----------------------------|-----------------|---------------------------------|

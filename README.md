@@ -14,7 +14,7 @@ A [Home Assistant](https://www.home-assistant.io/) integration for Skoda vehicle
   - [Limitations](#limitations)
   - [Additional Configuration](#additional-configuration)
   - [Available Entities](#available-entities)
-  - [Operations (Switches, Buttons and Numbers)](#operations-switches-buttons-and-numbers)
+  - [Operations](#operations)
   - [New Vehicles](#new-vehicles)
   - [Configuration](#configuration-1)
   - [Debugging](#debugging)
@@ -71,12 +71,17 @@ This integration interacts with the Skoda API in the same way the official MySko
 
 Refer to [docs/entities.md](docs/entities.md) for the full list of all entities created by the integration.
 
-### Operations (Switches, Buttons and Numbers)
+### Operations
+
+#### Entities becoming temporarily unavailable (Switches, Buttons and Numbers)
 When making a change which results in an operation being sent to the car (via the Skoda API), for example when toggling a switch, **the entity will become unavailable until the request completes**.
 
 This prevents overlapping requests from being sent and provides a visual indication that there is an ongoing operation for a given entity.
 
 This happens independently for each entity.
+
+#### Entities using assumed state (Climate)
+When making a change in these entities (e.g. changing the target temperature) the entity will remain available and show the new value immediately **even if the value isn't applied in the API and car yet**. This uses the [assumed state](https://www.home-assistant.io/blog/2016/02/12/classifying-the-internet-of-things/#classifiers) entity classifier.
 
 ### New Vehicles
 If you become the owner of an additional vehicle and that gets added to the same MySkoda account: Congrats!
