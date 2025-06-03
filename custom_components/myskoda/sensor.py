@@ -537,6 +537,9 @@ class Mileage(MySkodaSensor):
         The API sometimes erroneously returns an old, lower value. Mileage should never go down.
         To work around this we inspect the last state, if there is one, and return that if it is
         larger than the value from the API.
+
+        The API also sometimes erroneously returns the value 429_496_729. Values over 400_000_000
+        are ignored and the last value is returned instead, if there is one.
         """
         last_value = 0
         last_state = self.hass.states.get(self.entity_id)
@@ -553,8 +556,9 @@ class Mileage(MySkodaSensor):
         elif health := self.vehicle.health:
             mileage_in_km = health.mileage_in_km
 
-        if mileage_in_km:
+        if mileage_in_km and mileage_in_km < 400_000_000:
             return max(mileage_in_km, last_value)
+        return last_value if last_value else None
 
 
 class InspectionInterval(MySkodaSensor):
