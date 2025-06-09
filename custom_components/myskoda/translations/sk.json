@@ -1,149 +1,99 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Zariadenie už je nakonfigurované"
+            "already_configured": "Zariadenie už je nakonfigurované",
+            "reauth_successful": "Opätovné overenie bolo úspešné.",
+            "no_entry": "Nepodarilo sa nájsť konfiguráciu MySkoda. Skontrolujte vaše logy, prosím, a otvorte problém na GitHube."
         },
         "error": {
             "cannot_connect": "Nepodarilo sa pripojiť",
             "invalid_auth": "Neplatná autentifikácia",
-            "unknown": "Došlo k neočakávanej chybe. Skontrolujte logy v aplikácii HomeAssistant."
+            "relogin_in_app": "Chýba súhlas s podmienkami alebo marketingom. Odhláste sa a znovu sa prihláste pomocou oficiálnej aplikácie MySkoda alebo na stránke https://skodaid.vwgroup.io, aby ste prijali nové podmienky.",
+            "unknown": "Došlo k neočakávanej chybe. Skontrolujte logy v aplikácii HomeAssistant.",
+            "no_spin": "V konfigurácii chýba S-PIN. Zmeňte konfiguráciu integrácie a skúste to znova, prosím."
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "email": "Emailová adresa",
+                    "password": "Heslo"
+                },
+                "description": "Overenie do služby MySkoda zlyhalo. Znova zadajte poverenia z aplikácie MySkoda, prosím.",
+                "title": "Znova overiť MySkoda"
+            },
             "user": {
                 "data": {
                     "email": "Email",
                     "password": "Heslo"
-                }
+                },
+                "description": "Zadajte prihlasovacie údaje z aplikácie MySkoda."
             }
         }
     },
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Kapota",
-                "state": {
-                    "off": "Zatvorená",
-                    "on": "Otvorená"
-                }
+                "name": "Kapota"
             },
             "charger_connected": {
-                "name": "Pripojenie nabíjačky",
-                "state": {
-                    "off": "Odpojená",
-                    "on": "Pripojená"
-                }
+                "name": "Pripojenie nabíjačky"
             },
             "charger_locked": {
-                "name": "Zámka nabíjania",
-                "state": {
-                    "off": "Zamknutá",
-                    "on": "Odomknutá"
-                }
+                "name": "Zámka nabíjania"
             },
             "doors_locked": {
-                "name": "Zámok dverí",
-                "state": {
-                    "off": "Zamknuté",
-                    "on": "Odomknuté"
-                }
+                "name": "Zámok dverí"
             },
             "doors_open": {
-                "name": "Dvere",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Dvere"
             },
             "locked": {
-                "name": "Uzamknutie vozidla",
-                "state": {
-                    "off": "Zamknuté",
-                    "on": "Odomknuté"
-                }
+                "name": "Uzamknutie vozidla"
             },
             "parkinglights_on": {
-                "name": "Parkovacie svetlá",
-                "state": {
-                    "off": "Vyp.",
-                    "on": "Zap."
-                }
+                "name": "Parkovacie svetlá"
             },
             "sunroof_open": {
-                "name": "Strešné okno",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Strešné okno"
             },
             "trunk_open": {
-                "name": "Kufor",
-                "state": {
-                    "off": "Zatvorený",
-                    "on": "Otvorený"
-                }
+                "name": "Kufor"
             },
             "windows_open": {
-                "name": "Okná",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Okná"
             },
             "door_open_front_left": {
-                "name": "Dvere predné ľavé",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Dvere predné ľavé"
             },
             "door_open_front_right": {
-                "name": "Dvere predné pravé",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Dvere predné pravé"
             },
             "door_open_rear_left": {
-                "name": "Dvere zadné ľavé",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Dvere zadné ľavé"
             },
             "door_open_rear_right": {
-                "name": "Dvere zadné pravé",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Dvere zadné pravé"
+            },
+            "vehicle_battery_protection": {
+                "name": "Ochrana batérie"
+            },
+            "vehicle_reachable": {
+                "name": "Pripojené"
+            },
+            "vehicle_in_motion": {
+                "name": "V pohybe"
             },
             "window_open_front_left": {
-                "name": "Okno predné ľavé",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Okno predné ľavé"
             },
             "window_open_front_right": {
-                "name": "Okno predné pravé",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Okno predné pravé"
             },
             "window_open_rear_left": {
-                "name": "Okno zadné ľavé",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Okno zadné ľavé"
             },
             "window_open_rear_right": {
-                "name": "Okno zadné pravé",
-                "state": {
-                    "off": "Zatvorené",
-                    "on": "Otvorené"
-                }
+                "name": "Okno zadné pravé"
             }
         },
         "climate": {
@@ -186,6 +136,9 @@
             }
         },
         "sensor": {
+            "aux_estimated_time_left_to_reach_target_temperature": {
+                "name": "Čas ohrevu do dosiahnutia cieľovej teploty"
+            },
             "battery_percentage": {
                 "name": "Stav batérie v %"
             },
@@ -214,6 +167,9 @@
                     "conserving": "Udržanie nabitia",
                     "ready_for_charging": "Pripravené na nabíjanie"
                 }
+            },
+            "estimated_time_left_to_reach_target_temperature": {
+                "name": "Čas klímvania do dosiahnutia cieľovej teploty"
             },
             "inspection": {
                 "name": "Ďalšia kontrola"
@@ -335,6 +291,9 @@
             },
             "flash": {
                 "name": "Blikať"
+            },
+            "wakeup": {
+                "name": "Zobudiť auto"
             }
         }
     },
