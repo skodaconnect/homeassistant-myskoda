@@ -6,16 +6,16 @@ import logging
 from typing import Any
 
 import voluptuous as vol
-
 from aiohttp.client_exceptions import ClientResponseError
-
 from homeassistant.config_entries import (
     ConfigFlow as BaseConfigFlow,
+)
+from homeassistant.config_entries import (
     ConfigFlowResult,
     OptionsFlow,
 )
-from homeassistant.core import callback, HomeAssistant
-from homeassistant.exceptions import HomeAssistantError, ConfigEntryNotReady
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.schema_config_entry_flow import (
     SchemaCommonFlowHandler,
@@ -23,26 +23,26 @@ from homeassistant.helpers.schema_config_entry_flow import (
     SchemaFlowFormStep,
     SchemaOptionsFlowHandler,
 )
-from homeassistant.util.ssl import get_default_context
+
 from myskoda import MySkoda
 from myskoda.auth.authorization import (
     AuthorizationError,
-    NotAuthorizedError,
     AuthorizationFailedError,
-    TermsAndConditionsError,
     MarketingConsentError,
+    NotAuthorizedError,
+    TermsAndConditionsError,
 )
 
 from .const import (
-    DOMAIN,
     CONF_PASSWORD,
     CONF_POLL_INTERVAL,
-    CONF_POLL_INTERVAL_MIN,
     CONF_POLL_INTERVAL_MAX,
+    CONF_POLL_INTERVAL_MIN,
+    CONF_READONLY,
     CONF_SPIN,
     CONF_TRACING,
     CONF_USERNAME,
-    CONF_READONLY,
+    DOMAIN,
 )
 from .coordinator import MySkodaConfigEntry
 
@@ -69,9 +69,7 @@ async def validate_options_input(
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
     """Check that the inputs are valid."""
-    hub = MySkoda(
-        async_get_clientsession(hass), get_default_context(), mqtt_enabled=False
-    )
+    hub = MySkoda(async_get_clientsession(hass), mqtt_enabled=False)
 
     await hub.connect(data[CONF_USERNAME], data[CONF_PASSWORD])
     await hub.disconnect()

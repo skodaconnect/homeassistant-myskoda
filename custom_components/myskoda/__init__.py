@@ -5,32 +5,30 @@ from __future__ import annotations
 import logging
 
 from aiohttp import ClientResponseError, InvalidUrlClientError
-
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
-from homeassistant.util.ssl import get_default_context
+
 from myskoda import (
-    MySkoda,
     AuthorizationFailedError,
+    MySkoda,
 )
-from myskoda.myskoda import TRACE_CONFIG
 from myskoda.auth.authorization import (
     CSRFError,
-    TermsAndConditionsError,
     MarketingConsentError,
+    TermsAndConditionsError,
 )
+from myskoda.myskoda import TRACE_CONFIG
 
-
-from .const import CONF_USERNAME, CONF_PASSWORD, COORDINATORS, DOMAIN, VINLIST
+from .const import CONF_PASSWORD, CONF_USERNAME, COORDINATORS, DOMAIN, VINLIST
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .error_handlers import handle_aiohttp_error
 from .issues import (
     async_create_tnc_issue,
-    async_delete_tnc_issue,
     async_delete_spin_issue,
+    async_delete_tnc_issue,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -60,7 +58,7 @@ def myskoda_instantiate(
     session = async_create_clientsession(
         hass, trace_configs=trace_configs, auto_cleanup=False
     )
-    return MySkoda(session, get_default_context(), mqtt_enabled=mqtt_enabled)
+    return MySkoda(session=session, mqtt_enabled=mqtt_enabled)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> bool:
