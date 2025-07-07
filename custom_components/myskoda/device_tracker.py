@@ -11,8 +11,17 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 
+from myskoda.models.charging import Charging, ChargingStatus
 from myskoda.models.info import CapabilityId
-from myskoda.models.position import Error, ErrorType, Position, Positions, PositionType
+from myskoda.models.position import (
+    Error,
+    ErrorType,
+    ParkingCoordinates,
+    ParkingPositionV3,
+    Position,
+    Positions,
+    PositionType,
+)
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
@@ -30,7 +39,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up the sensor platform."""
     add_supported_entities(
-        available_entities=[DeviceTracker],
+        available_entities=[DeviceTracker, ParkingPositionTracker],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
@@ -108,7 +117,6 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
                     if isinstance(render, dict) and "exterior_side" in render:
                         attributes["entity_picture"] = render["exterior_side"]
                         break
-
         return attributes
 
     @property
@@ -116,6 +124,68 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         if err := self._pos_error():
             if err.type == ErrorType.VEHICLE_IN_MOTION:
                 return "vehicle_in_motion"
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.PARKING_POSITION]
+
+
+class ParkingPositionTracker(MySkodaEntity, TrackerEntity):
+    """Tracker for the last known parking position."""
+
+    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:
+        self.entity_description = TrackerEntityDescription(
+            name="Parking",
+            key=f"{vin}_parking_position",
+            translation_key="parking_position",
+        )
+        super().__init__(coordinator, vin)
+
+    def _charging(self) -> Charging | None:
+        if charging := self.vehicle.charging:
+            return charging
+
+    def _status(self) -> ChargingStatus | None:
+        if charging := self._charging():
+            if status := charging.status:
+                return status
+
+    def _vehicle_parking_position(self) -> ParkingPositionV3 | None:
+        return self.vehicle.parking_position
+
+    def _parking_position(self) -> ParkingCoordinates | None:
+        if pp := self._vehicle_parking_position():
+            return pp.parking_position
+
+    @property
+    def source_type(self) -> SourceType:
+        return SourceType.GPS
+
+    @property
+    def latitude(self) -> float | None:
+        if pp := self._parking_position():
+            return pp.gps_coordinates.latitude
+
+    @property
+    def longitude(self) -> float | None:
+        if pp := self._parking_position():
+            return pp.gps_coordinates.longitude
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Return the extra attributes."""
+        attributes: dict = {}
+
+        if pp := self._parking_position():
+            attributes["parking_address"] = pp.formatted_address
+
+        return attributes
+
+    @property
+    def battery_level(self) -> int | None:
+        if self.has_all_capabilities([CapabilityId.CHARGING]):
+            if status := self._status():
+                if status.battery.state_of_charge_in_percent:
+                    return status.battery.state_of_charge_in_percent
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.PARKING_POSITION]
