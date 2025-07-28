@@ -135,7 +135,7 @@ class ParkingPositionTracker(MySkodaEntity, TrackerEntity):
     def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:
         self.entity_description = TrackerEntityDescription(
             name="Parking",
-            key=f"{vin}_parking_position",
+            key="parking_position",
             translation_key="parking_position",
         )
         super().__init__(coordinator, vin)
