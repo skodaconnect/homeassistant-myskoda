@@ -33,14 +33,14 @@
                     "on": "Branché"
                 }
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Verrou de charge",
                 "state": {
                     "off": "Verrouillé",
                     "on": "Déverrouillé"
                 }
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Portes verrouillées",
                 "state": {
                     "off": "Verrouillé",
@@ -54,7 +54,7 @@
                     "on": "Ouverte"
                 }
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Véhicule verrouillé",
                 "state": {
                     "off": "Verrouillé",

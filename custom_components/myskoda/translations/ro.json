@@ -33,14 +33,14 @@
                     "on": "Conectat"
                 }
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Încărcător încuiat",
                 "state": {
                     "off": "Blocat",
                     "on": "Deblocat"
                 }
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Uși blocate",
                 "state": {
                     "off": "Blocate",
@@ -54,7 +54,7 @@
                     "on": "Deschise"
                 }
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Vehicul încuiat",
                 "state": {
                     "off": "Încuiat",

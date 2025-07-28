@@ -38,16 +38,16 @@
             "charger_connected": {
                 "name": "Lader tilkoblet"
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Lader Lås"
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Dører låst"
             },
             "doors_open": {
                 "name": "Dører åpne"
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Bil låst"
             },
             "parkinglights_on": {

@@ -46,14 +46,14 @@
                     "on": "Bedugva"
                 }
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Töltő reteszelve",
                 "state": {
                     "off": "Zárolva",
                     "on": "Feloldva"
                 }
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Ajtók zárva",
                 "state": {
                     "off": "Zárva",
@@ -67,7 +67,7 @@
                     "on": "Nyitva"
                 }
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Jármű zárva",
                 "state": {
                     "off": "Zárva",

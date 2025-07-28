@@ -38,16 +38,16 @@
             "charger_connected": {
                 "name": "Nabíječka připojena"
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Zámek nabíjení"
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Dveře uzamčené"
             },
             "doors_open": {
                 "name": "Dveře otevřené"
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Vozidlo uzamčeno"
             },
             "parkinglights_on": {

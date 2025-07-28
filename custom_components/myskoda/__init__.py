@@ -265,6 +265,45 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
 
             return True
 
+        if entry.minor_version < 4:
+            # Rename "locked" binary sensor to "lock" to prevent confusion
+            _LOGGER.info(
+                "Starting migration to config schema 2.4, renaming _locked to _lock"
+            )
+
+            new_version = 2
+            new_minor_version = 4
+
+            entry_data = {**entry.data}
+            vinlist = entry_data[VINLIST]
+
+            hass_er = er.async_get(hass)
+            entry_entities = er.async_entries_for_config_entry(hass_er, entry.entry_id)
+
+            old_entities = []
+            old_entities.append(f"{vin}_charger_locked" for vin in vinlist)
+            old_entities.append(f"{vin}_doors_locked" for vin in vinlist)
+            old_entities.append(f"{vin}_locked" for vin in vinlist)
+
+            for entity in entry_entities:
+                if entity.unique_id in old_entities:
+                    new_unique_id = entity.unique_id.replace("locked", "lock")
+                    _LOGGER.debug(
+                        "Renaming entity %s to %s", entity.unique_id, new_unique_id
+                    )
+                    hass_er.async_update_entity(
+                        entity.entity_id, new_unique_id=new_unique_id
+                    )
+
+            hass.config_entries.async_update_entry(
+                entry,
+                version=new_version,
+                minor_version=new_minor_version,
+                data=entry_data,
+            )
+
+            return True
+
     # Add any more migrations here
 
     return False
