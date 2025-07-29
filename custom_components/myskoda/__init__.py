@@ -287,7 +287,12 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
 
             for entity in entry_entities:
                 if entity.unique_id in old_entities:
-                    new_unique_id = entity.unique_id.replace("locked", "lock")
+                    if entity.unique_id.endswith(("charger_locked", "doors_locked")):
+                        new_unique_id = entity.unique_id.replace("locked", "lock")
+                    else:
+                        new_unique_id = entity.unique_id.replace(
+                            "locked", "vehicle_lock"
+                        )
                     _LOGGER.debug(
                         "Renaming entity %s to %s", entity.unique_id, new_unique_id
                     )
