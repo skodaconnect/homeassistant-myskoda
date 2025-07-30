@@ -46,14 +46,14 @@
                     "on": "Priklopljen"
                 }
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Zaklep polnjenja",
                 "state": {
                     "off": "Zaklenjeno",
                     "on": "Odklenjeno"
                 }
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Vrata zaklep",
                 "state": {
                     "off": "Zaklenjeno",
@@ -67,7 +67,7 @@
                     "on": "Odprto"
                 }
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Vozilo zaklep",
                 "state": {
                     "off": "Zaklenjeno",

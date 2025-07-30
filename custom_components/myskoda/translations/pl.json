@@ -33,14 +33,14 @@
                     "on": "Podłączony"
                 }
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Blokada kabla ładującego",
                 "state": {
                     "off": "Zablokowany",
                     "on": "Odblokowany"
                 }
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Drzwi zablokowane",
                 "state": {
                     "off": "Zablokowane",
@@ -54,7 +54,7 @@
                     "on": "Otwarte"
                 }
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Pojazd zablokowany",
                 "state": {
                     "off": "Zablokowany",

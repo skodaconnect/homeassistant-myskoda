@@ -33,14 +33,14 @@
                     "on": "Inkopplad"
                 }
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Laddningslås",
                 "state": {
                     "off": "Låst",
                     "on": "Olåst"
                 }
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Dörrarna låsta",
                 "state": {
                     "off": "Låsta",
@@ -54,7 +54,7 @@
                     "on": "Öppna"
                 }
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Fordonet låst",
                 "state": {
                     "off": "Låst",

@@ -38,16 +38,16 @@
             "charger_connected": {
                 "name": "Зарядное устройство подключено"
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Блокировка зарядки"
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Двери заблокированы"
             },
             "doors_open": {
                 "name": "Двери"
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Автомобиль заблокирован"
             },
             "parkinglights_on": {

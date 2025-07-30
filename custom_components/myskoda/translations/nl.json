@@ -38,16 +38,16 @@
             "charger_connected": {
                 "name": "Laadkabel"
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Laadkabelvergrendeling"
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Deurvergrendeling"
             },
             "doors_open": {
                 "name": "Deuren"
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Voertuigvergrendeling"
             },
             "parkinglights_on": {

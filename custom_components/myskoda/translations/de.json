@@ -33,14 +33,14 @@
                     "on": "Eingesteckt"
                 }
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Ladekabelverriegelung",
                 "state": {
                     "off": "Verriegelt",
                     "on": "Entriegelt"
                 }
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Türen geschlossen",
                 "state": {
                     "off": "Verriegelt",
@@ -54,7 +54,7 @@
                     "on": "Geöffnet"
                 }
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Fahrzeug verriegelt",
                 "state": {
                     "off": "Verriegelt",

@@ -38,16 +38,16 @@
             "charger_connected": {
                 "name": "Carregador conectado"
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Bloqueio de carga"
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Portas trancadas"
             },
             "doors_open": {
                 "name": "Portas abertas"
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Veículo trancado"
             },
             "parkinglights_on": {

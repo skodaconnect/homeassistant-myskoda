@@ -111,9 +111,9 @@ class ChargerLocked(AirConditioningBinarySensor):
     """Detect if the charger is locked on the car, or whether it can be unplugged."""
 
     entity_description = BinarySensorEntityDescription(
-        key="charger_locked",
+        key="charger_lock",
         device_class=BinarySensorDeviceClass.LOCK,
-        translation_key="charger_locked",
+        translation_key="charger_lock",
     )
 
     @property
@@ -129,9 +129,9 @@ class Locked(StatusBinarySensor):
     # Keep in mind, a lock that is open, is "ON" for HomeAssistant
 
     entity_description = BinarySensorEntityDescription(
-        key="locked",
+        key="vehicle_lock",
         device_class=BinarySensorDeviceClass.LOCK,
-        translation_key="locked",
+        translation_key="vehicle_lock",
     )
 
     @property
@@ -144,9 +144,9 @@ class DoorsLocked(StatusBinarySensor):
     """Detect whether the doors are locked."""
 
     entity_description = BinarySensorEntityDescription(
-        key="doors_locked",
+        key="doors_lock",
         device_class=BinarySensorDeviceClass.LOCK,
-        translation_key="doors_locked",
+        translation_key="doors_lock",
     )
 
     @property

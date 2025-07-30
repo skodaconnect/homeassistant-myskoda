@@ -33,14 +33,14 @@
                     "on": "Collegato"
                 }
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Blocco ricarica",
                 "state": {
                     "off": "Bloccato",
                     "on": "Sbloccato"
                 }
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Porte chiuse",
                 "state": {
                     "off": "Bloccato",
@@ -54,7 +54,7 @@
                     "on": "Aperto"
                 }
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Veicolo bloccato",
                 "state": {
                     "off": "Bloccato",
