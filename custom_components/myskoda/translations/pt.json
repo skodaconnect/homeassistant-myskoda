@@ -112,6 +112,9 @@
                     "not_home": "Fora",
                     "vehicle_in_motion": "Moção detetada"
                 }
+            },
+            "parking_position": {
+                "name": "Posição do Estacionamento (beta)"
             }
         },
         "image": {
