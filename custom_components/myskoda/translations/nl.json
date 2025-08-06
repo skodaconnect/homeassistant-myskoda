@@ -112,6 +112,9 @@
                     "not_home": "Afwezig",
                     "vehicle_in_motion": "In beweging"
                 }
+            },
+            "parking_position": {
+                "name": "Parkeerplaats (bèta)"
             }
         },
         "image": {
