@@ -78,7 +78,7 @@
                 "name": "Battery Protection"
             },
             "vehicle_reachable": {
-                "name": "Connected"
+                "name": "Connection"
             },
             "vehicle_in_motion": {
                 "name": "In motion"
