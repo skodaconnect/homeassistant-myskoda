@@ -33,14 +33,14 @@
                     "on": "Tilsluttet"
                 }
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Ladekabel låst",
                 "state": {
                     "off": "Låst",
                     "on": "Låst op"
                 }
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Dørlåst",
                 "state": {
                     "off": "Låst",

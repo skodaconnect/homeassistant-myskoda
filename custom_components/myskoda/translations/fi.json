@@ -34,14 +34,14 @@
                     "on": "Kytketty"
                 }
             },
-            "charger_locked": {
+            "charger_lock": {
                 "name": "Kaapelin lukitus",
                 "state": {
                     "off": "Auki",
                     "on": "Lukittu"
                 }
             },
-            "doors_locked": {
+            "doors_lock": {
                 "name": "Ovien lukitus",
                 "state": {
                     "off": "Lukossa",
@@ -55,7 +55,7 @@
                     "on": "Auki"
                 }
             },
-            "locked": {
+            "vehicle_lock": {
                 "name": "Ajoneuvon lukitus",
                 "state": {
                     "off": "Lukossa",
