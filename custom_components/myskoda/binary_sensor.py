@@ -445,7 +445,7 @@ class VehicleBatteryProtection(VehicleConnectionBinarySensor):
 
     entity_description = BinarySensorEntityDescription(
         key="vehicle_battery_protection",
-        device_class=BinarySensorDeviceClass.PROBLEM,
+        device_class=BinarySensorDeviceClass.RUNNING,
         translation_key="vehicle_battery_protection",
     )
 
