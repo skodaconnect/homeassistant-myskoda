@@ -113,10 +113,7 @@ class ChargeLimit(MySkodaNumber):
             self._enable_number()
 
     def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.CHARGING]
-
-    def forbidden_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.CHARGING_MQB]
+        return [CapabilityId.CHARGING, CapabilityId.EXTENDED_CHARGING_SETTINGS]
 
 
 class AuxiliaryHeaterDuration(MySkodaNumber, RestoreEntity):
