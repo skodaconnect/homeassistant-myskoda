@@ -2,6 +2,7 @@
 
 import logging
 from datetime import timedelta
+from typing import Coroutine
 
 from homeassistant.components.number import (
     NumberDeviceClass,
@@ -67,6 +68,17 @@ class MySkodaNumber(MySkodaEntity, NumberEntity):
         self._is_enabled = True
         self.async_write_ha_state()
 
+    async def _change_number(self, to_call: Coroutine):
+        """Change the number by executing to_call."""
+        if not self._is_enabled:
+            return
+
+        self._disable_number()
+        try:
+            await to_call
+        finally:
+            self._enable_number()
+
     @property
     def available(self) -> bool:
         """Indicates if the number is available."""
@@ -103,14 +115,12 @@ class ChargeLimit(MySkodaNumber):
             return
 
         self._disable_number()
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
         try:
-            await self.coordinator.myskoda.set_charge_limit(
-                self.vehicle.info.vin, int(value)
-            )
+            await self._change_number(myskoda.set_charge_limit(vin, int(value)))
         except OperationFailedError as exc:
             _LOGGER.error("Failed to set charging limit: %s", exc)
-        finally:
-            self._enable_number()
+        _LOGGER.info("Set charging limit to %s", int(value))
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING]
