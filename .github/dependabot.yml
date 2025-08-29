@@ -5,6 +5,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    labels: 
+      - dependencies
+      - ignore-for-release
+      - github_actions
 
   - package-ecosystem: "uv"
     directory: "/"
@@ -13,3 +17,7 @@ updates:
     ignore:
       # Dependabot should not update Home Assistant as that should match the homeassistant key in hacs.json
       - dependency-name: "homeassistant"
+    labels:
+      - dependencies
+      - ignore-for-release
+      - python:uv
