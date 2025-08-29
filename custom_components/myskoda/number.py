@@ -114,7 +114,6 @@ class ChargeLimit(MySkodaNumber):
         if not self._is_enabled:
             return
 
-        self._disable_number()
         myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
         try:
             await self._change_number(myskoda.set_charge_limit(vin, int(value)))
