@@ -2,6 +2,7 @@
 
 import logging
 from datetime import timedelta
+from typing import Coroutine
 
 from homeassistant.components.button import (
     ButtonDeviceClass,
@@ -64,6 +65,18 @@ class MySkodaButton(MySkodaEntity, ButtonEntity):
         self._is_enabled = True
         self.async_write_ha_state()
 
+    async def _press_button(self, to_call: Coroutine):
+        """Press a button by executing to_call."""
+
+        if not self._is_enabled:
+            return
+
+        self._disable_button()
+        try:
+            await to_call
+        finally:
+            self._enable_button()
+
     @property
     def available(self) -> bool:
         """Return whether the button is available to be pressed."""
@@ -84,13 +97,12 @@ class HonkFlash(MySkodaButton):
         if not self._is_enabled:
             return  # Ignore presses when disabled
 
-        self._disable_button()
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
         try:
-            await self.coordinator.myskoda.honk_flash(self.vin)
+            await self._press_button(myskoda.honk_flash(vin))
         except OperationFailedError as exc:
             _LOGGER.error("Failed honk and flash: %s", exc)
-        finally:
-            self._enable_button()
+        _LOGGER.info("Sent honk and flash")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.HONK_AND_FLASH]
@@ -108,13 +120,12 @@ class Flash(MySkodaButton):
         if not self._is_enabled:
             return  # Ignore presses when disabled
 
-        self._disable_button()
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
         try:
-            await self.coordinator.myskoda.flash(self.vin)
+            await self._press_button(myskoda.flash(vin))
         except OperationFailedError as exc:
             _LOGGER.error("Failed to flash lights: %s", exc)
-        finally:
-            self._enable_button()
+        _LOGGER.info("Sent light flash")
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.HONK_AND_FLASH]
@@ -138,13 +149,12 @@ class WakeUp(MySkodaButton):
         if not self._is_enabled:
             return
 
-        self._disable_button()
+        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
         try:
-            await self.coordinator.myskoda.wakeup(self.vin)
+            await self._press_button(myskoda.wakeup(vin))
         except OperationFailedError as exc:
             _LOGGER.error("Failed to wake up vehicle: %s", exc)
-        finally:
-            self._enable_button()
+        _LOGGER.info("Signaled vehicle to wake up")
 
     def is_supported(self) -> bool:
         """Some models have VEHICLE_WAKE_UP while others have VEHICLE_WAKE_UP_TRIGGER."""
