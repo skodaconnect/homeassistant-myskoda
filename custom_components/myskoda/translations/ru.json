@@ -112,6 +112,9 @@
                     "not_home": "Не дома",
                     "vehicle_in_motion": "Обнаружено движение"
                 }
+            },
+            "parking_position": {
+                "name": "Позиция парковки (бета)"
             }
         },
         "image": {
