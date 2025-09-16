@@ -1,149 +1,99 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Das Gerät ist bereits konfiguriert"
+            "already_configured": "Das Gerät ist bereits konfiguriert",
+            "reauth_successful": "Die Neuauthentifizierung war erfolgreich.",
+            "no_entry": "Konnte die MySkoda-Konfiguration nicht finden. Bitte überprüfen Sie Ihre Logs und öffnen Sie ein Problem auf GitHub."
         },
         "error": {
             "cannot_connect": "Fehler beim Verbinden",
             "invalid_auth": "Ungültige Anmeldung",
-            "unknown": "Ein unerwarteter Fehler ist aufgetreten. Bitte überprüfe die Logdateien von HomeAssistant."
+            "relogin_in_app": "Nutzungsbedingungen oder Marketing-Einwilligung fehlt. Melden Sie sich in der offiziellen MySkoda-App aus und wieder ein, oder besuchen Sie https://skodaid.vwgroup.io, um die neuen Bedingungen zu akzeptieren.",
+            "unknown": "Ein unerwarteter Fehler ist aufgetreten. Bitte überprüfe die Logdateien von HomeAssistant.",
+            "no_spin": "Die S-PIN fehlt in der Konfiguration. Bitte konfigurieren Sie die Integration neu und versuchen es erneut."
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "email": "E-Mail-Adresse",
+                    "password": "Passwort"
+                },
+                "description": "Die Authentifizierung bei MySkoda ist fehlgeschlagen. Bitte geben Sie die Anmeldedaten aus Ihrer MySkoda-App erneut ein.",
+                "title": "MySkoda neu authentifizieren"
+            },
             "user": {
                 "data": {
                     "email": "E-Mail",
                     "password": "Passwort"
-                }
+                },
+                "description": "Gib die Anmeldedaten aus deiner MySkoda-App ein."
             }
         }
     },
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Motorhaube",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Motorhaube"
             },
             "charger_connected": {
-                "name": "Ladekabel",
-                "state": {
-                    "off": "Ausgesteckt",
-                    "on": "Eingesteckt"
-                }
+                "name": "Ladekabel"
             },
             "charger_lock": {
-                "name": "Ladekabelverriegelung",
-                "state": {
-                    "off": "Verriegelt",
-                    "on": "Entriegelt"
-                }
+                "name": "Ladekabelverriegelung"
             },
             "doors_lock": {
-                "name": "Türen geschlossen",
-                "state": {
-                    "off": "Verriegelt",
-                    "on": "Entriegelt"
-                }
+                "name": "Türen geschlossen"
             },
             "doors_open": {
-                "name": "Türen offen",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Türen offen"
             },
             "vehicle_lock": {
-                "name": "Fahrzeug verriegelt",
-                "state": {
-                    "off": "Verriegelt",
-                    "on": "Entriegelt"
-                }
+                "name": "Fahrzeug verriegelt"
             },
             "parkinglights_on": {
-                "name": "Parklicht",
-                "state": {
-                    "off": "Aus",
-                    "on": "An"
-                }
+                "name": "Parklicht"
             },
             "sunroof_open": {
-                "name": "Schiebedach",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Schiebedach"
             },
             "trunk_open": {
-                "name": "Kofferraum",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Kofferraum"
             },
             "windows_open": {
-                "name": "Fenster",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Fenster"
             },
             "door_open_front_left": {
-                "name": "Türe vorne links",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Türe vorne links"
             },
             "door_open_front_right": {
-                "name": "Türe vorne rechts",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Türe vorne rechts"
             },
             "door_open_rear_left": {
-                "name": "Türe hinten links",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Türe hinten links"
             },
             "door_open_rear_right": {
-                "name": "Türe hinten rechts",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Türe hinten rechts"
+            },
+            "vehicle_battery_protection": {
+                "name": "Batterieschutz"
+            },
+            "vehicle_reachable": {
+                "name": "Erreichbar"
+            },
+            "vehicle_in_motion": {
+                "name": "In Bewegung"
             },
             "window_open_front_left": {
-                "name": "Fenster vorne links",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Fenster vorne links"
             },
             "window_open_front_right": {
-                "name": "Fenster vorne rechts",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Fenster vorne rechts"
             },
             "window_open_rear_left": {
-                "name": "Fenster hinten links",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Fenster hinten links"
             },
             "window_open_rear_right": {
-                "name": "Fenster hinten rechts",
-                "state": {
-                    "off": "Geschlossen",
-                    "on": "Geöffnet"
-                }
+                "name": "Fenster hinten rechts"
             }
         },
         "climate": {
@@ -162,6 +112,9 @@
                     "not_home": "Abwesend",
                     "vehicle_in_motion": "Bewegung erkannt"
                 }
+            },
+            "parking_position": {
+                "name": "Parkposition (beta)"
             }
         },
         "image": {
@@ -186,6 +139,9 @@
             }
         },
         "sensor": {
+            "aux_estimated_time_left_to_reach_target_temperature": {
+                "name": "Heizzeit zum Erreichen der Zieltemperatur"
+            },
             "battery_percentage": {
                 "name": "Batteriestand"
             },
@@ -214,6 +170,9 @@
                     "conserving": "Ladestand halten",
                     "ready_for_charging": "Bereit zum Laden"
                 }
+            },
+            "estimated_time_left_to_reach_target_temperature": {
+                "name": "AC-Zeit zum Erreichen der Zieltemperatur"
             },
             "inspection": {
                 "name": "Nächste Inspektion"
@@ -335,6 +294,9 @@
             },
             "flash": {
                 "name": "Blinken"
+            },
+            "wakeup": {
+                "name": "Fahrzeug aufwecken"
             }
         }
     },
