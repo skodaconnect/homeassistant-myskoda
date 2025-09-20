@@ -112,6 +112,9 @@
                     "not_home": "Pryč",
                     "vehicle_in_motion": "Zjištěn pohyb"
                 }
+            },
+            "parking_position": {
+                "name": "Parkovací poloha (beta)"
             }
         },
         "image": {
