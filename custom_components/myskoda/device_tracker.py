@@ -184,7 +184,7 @@ class ParkingPositionTracker(MySkodaEntity, TrackerEntity):
     def battery_level(self) -> int | None:
         if self.has_all_capabilities([CapabilityId.CHARGING]):
             if status := self._status():
-                if status.battery.state_of_charge_in_percent:
+                if status.battery.state_of_charge_in_percent is not None:
                     return min(status.battery.state_of_charge_in_percent, 100)
 
     def required_capabilities(self) -> list[CapabilityId]:
