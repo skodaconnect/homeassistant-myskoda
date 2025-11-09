@@ -215,7 +215,7 @@ class BatteryPercentage(ChargingSensor):
     @property
     def native_value(self) -> int | None:  # noqa: D102
         if status := self._status():
-            if status.battery.state_of_charge_in_percent:
+            if status.battery.state_of_charge_in_percent is not None:
                 return min(status.battery.state_of_charge_in_percent, 100)
 
     @property
