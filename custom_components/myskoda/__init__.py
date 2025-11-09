@@ -151,7 +151,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
     """Handle MySkoda config-entry schema migrations."""
 
     _LOGGER.debug(
-        "Migrating config entry %s from v%s.%s",
+        "Starting migration for config entry %s current version: v%s.%s",
         entry.entry_id,
         entry.version,
         entry.minor_version,
@@ -163,7 +163,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
     # - Major increase: Removing options or rewriting entities/devices
     if entry.version > 2:
         _LOGGER.error(
-            "Configuration for %s is too new. This can happen if you downgraded your HA install. Automatic configuration migration aborted.",
+            "Configuration for %s is too new. This can happen if you downgraded your HA install or integration. Automatic configuration migration aborted.",
             DOMAIN,
         )
         return False
@@ -318,6 +318,15 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
 
             return True
 
-    # Add any more migrations here
+        # Add any more v2 migrations here. Don't forget to update the counter below if you do.
+
+        if entry.minor_version > 4:
+            _LOGGER.error(
+                "Configuration for %s is too new. This can happen if you downgraded your HA install or integration. Automatic configuration migration aborted.",
+                DOMAIN,
+            )
+            return False
+
+    # Add any more breaking migrations here
 
     return False
