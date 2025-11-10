@@ -114,7 +114,7 @@
                 }
             },
             "parking_position": {
-                "name": "Parking position (beta)"
+                "name": "Parking position"
             }
         },
         "image": {
