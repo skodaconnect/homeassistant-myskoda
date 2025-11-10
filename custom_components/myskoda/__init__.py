@@ -161,10 +161,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
 
 async def async_unload_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> bool:
     """Unload a config entry."""
+
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = hass.data[DOMAIN][
         entry.entry_id
     ].get(COORDINATORS, {})
     for coord in coordinators.values():
+        if entry.data[CONF_REFRESH_TOKEN]:
+            current_refresh_token = await coord.myskoda.get_refresh_token()
+            if current_refresh_token != entry.data[CONF_REFRESH_TOKEN]:
+                _LOGGER.info("Saving authorization refresh token before shutdown")
+                entry_data = {**entry.data}
+                entry_data[CONF_REFRESH_TOKEN] = current_refresh_token
+                hass.config_entries.async_update_entry(entry, data=entry_data)
         await coord.myskoda.disconnect()
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
