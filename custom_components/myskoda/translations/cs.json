@@ -114,7 +114,7 @@
                 }
             },
             "parking_position": {
-                "name": "Parkovací poloha (beta)"
+                "name": "Parkovací poloha"
             }
         },
         "image": {
