@@ -71,7 +71,7 @@ def myskoda_instantiate(
     return MySkoda(session, get_default_context(), mqtt_enabled=mqtt_enabled)
 
 
-def auto_connect(myskoda: MySkoda, entry: MySkodaConfigEntry) -> None:
+async def auto_connect(myskoda: MySkoda, entry: MySkodaConfigEntry) -> None:
     """Figure out if we can use the refresh token or if we should fall back to username/password. Then attempt to authenticate."""
     if entry.data[CONF_REFRESH_TOKEN]:
         try:
@@ -90,7 +90,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
     myskoda = myskoda_instantiate(hass, entry, mqtt_enabled=False)
 
     try:
-        auto_connect(myskoda, entry)
+        await auto_connect(myskoda, entry)
     except AuthorizationFailedError as exc:
         _LOGGER.debug("Authorization with MySkoda failed.")
         raise ConfigEntryAuthFailed from exc
@@ -213,7 +213,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
     # We will likely need to contact myskoda, so make a connection and authenticate
     try:
         myskoda = myskoda_instantiate(hass, entry, mqtt_enabled=False)
-        auto_connect(myskoda, entry)
+        await auto_connect(myskoda, entry)
     except AuthorizationFailedError as exc:
         raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
     except Exception as exc:
