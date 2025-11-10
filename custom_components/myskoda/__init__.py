@@ -73,7 +73,7 @@ def myskoda_instantiate(
 
 async def auto_connect(myskoda: MySkoda, entry: MySkodaConfigEntry) -> None:
     """Figure out if we can use the refresh token or if we should fall back to username/password. Then attempt to authenticate."""
-    if entry.data[CONF_REFRESH_TOKEN]:
+    if entry.data.get(CONF_REFRESH_TOKEN):
         try:
             _LOGGER.debug("Authorizing with refresh token")
             await myskoda.connect_with_refresh_token(entry.data[CONF_REFRESH_TOKEN])
@@ -166,7 +166,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> 
         entry.entry_id
     ].get(COORDINATORS, {})
     for coord in coordinators.values():
-        if entry.data[CONF_REFRESH_TOKEN]:
+        if entry.data.get(CONF_REFRESH_TOKEN):
             current_refresh_token = await coord.myskoda.get_refresh_token()
             if current_refresh_token != entry.data[CONF_REFRESH_TOKEN]:
                 _LOGGER.info("Saving authorization refresh token before shutdown")

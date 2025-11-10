@@ -75,7 +75,7 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
         async_get_clientsession(hass), get_default_context(), mqtt_enabled=False
     )
 
-    if data[CONF_REFRESH_TOKEN]:
+    if data.get(CONF_REFRESH_TOKEN):
         try:
             await hub.connect_with_refresh_token(refresh_token=data[CONF_REFRESH_TOKEN])
         except TokenExpiredError:
