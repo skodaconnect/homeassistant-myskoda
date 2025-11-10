@@ -360,8 +360,12 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
                 )
                 return False
             else:
-                current_refresh_token = myskoda.get_refresh_token()
+                current_refresh_token = await myskoda.get_refresh_token()
                 entry_data[CONF_REFRESH_TOKEN] = current_refresh_token
+                _LOGGER.debug(
+                    "Saving current refresh token as initial token: %s",
+                    current_refresh_token,
+                )
                 hass.config_entries.async_update_entry(
                     entry,
                     version=new_version,
@@ -374,7 +378,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
     # Add any more major migrations here
 
     _LOGGER.info(
-        "Config migration finished. Now at shema version v%s.%s",
+        "Config migration finished. Now at schema version v%s.%s",
         entry.version,
         entry.minor_version,
     )
