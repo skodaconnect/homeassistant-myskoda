@@ -1,6 +1,7 @@
 """Sensors for the MySkoda integration."""
 
 from datetime import UTC, datetime
+from math import isnan
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -549,11 +550,22 @@ class Mileage(MySkodaSensor):
             except (ValueError, TypeError):
                 pass  # value may initially be 'unavailable' or 'None'
 
+        def _valid_km(value):
+            return isinstance(value, int) and not isnan(value)
+
         mileage_in_km = None
-        if maint_report := self.vehicle.maintenance.maintenance_report:
-            mileage_in_km = maint_report.mileage_in_km
+        if (maintenance := self.vehicle.maintenance) and (
+            report := maintenance.maintenance_report
+        ):
+            if _valid_km(report.mileage_in_km):
+                mileage_in_km = report.mileage_in_km
+
         # If the maint report does not have mileage, use vehicle health as fallback
-        elif health := self.vehicle.health:
+        if (
+            mileage_in_km is None
+            and (health := self.vehicle.health)
+            and _valid_km(health.mileage_in_km)
+        ):
             mileage_in_km = health.mileage_in_km
 
         if mileage_in_km and mileage_in_km < 400_000_000:
