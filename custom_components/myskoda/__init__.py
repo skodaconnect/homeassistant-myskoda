@@ -24,7 +24,7 @@ from myskoda.auth.authorization import (
 )
 
 
-from .const import CONF_USERNAME, CONF_PASSWORD, COORDINATORS, DOMAIN, CONF_VINLIST
+from .const import CONF_USERNAME, CONF_PASSWORD, CONF_VINLIST, COORDINATORS, DOMAIN
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .error_handlers import handle_aiohttp_error
 from .issues import (
