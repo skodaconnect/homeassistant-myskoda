@@ -24,7 +24,7 @@ from myskoda.auth.authorization import (
 )
 
 
-from .const import CONF_USERNAME, CONF_PASSWORD, COORDINATORS, DOMAIN, VINLIST
+from .const import CONF_USERNAME, CONF_PASSWORD, CONF_VINLIST, COORDINATORS, DOMAIN
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .error_handlers import handle_aiohttp_error
 from .issues import (
@@ -94,14 +94,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
     async_delete_spin_issue(hass, entry.entry_id)
 
     coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
-    cached_vins: list = entry.data.get(VINLIST, [])
+    cached_vins: list = entry.data.get(CONF_VINLIST, [])
 
     try:
         vehicles = await myskoda.list_vehicle_vins()
         if vehicles and vehicles != cached_vins:
             _LOGGER.info("New vehicles detected. Storing new vehicle list in cache")
             entry_data = {**entry.data}
-            entry_data[VINLIST] = vehicles
+            entry_data[CONF_VINLIST] = vehicles
             hass.config_entries.async_update_entry(entry, data=entry_data)
     except Exception:
         if cached_vins:
@@ -221,7 +221,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
             entry_data = {**entry.data}
 
             vinlist = await myskoda.list_vehicle_vins()
-            entry_data[VINLIST] = vinlist
+            entry_data[CONF_VINLIST] = vinlist
             _LOGGER.debug("Add vinlist %s to entry %s", vinlist, entry.entry_id)
 
             hass.config_entries.async_update_entry(
@@ -242,7 +242,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
             new_minor_version = 3
 
             entry_data = {**entry.data}
-            vinlist = entry_data[VINLIST]
+            vinlist = entry_data[CONF_VINLIST]
 
             hass_er = er.async_get(hass)
             entry_entities = er.async_entries_for_config_entry(hass_er, entry.entry_id)
@@ -275,7 +275,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
             new_minor_version = 4
 
             entry_data = {**entry.data}
-            vinlist = entry_data[VINLIST]
+            vinlist = entry_data[CONF_VINLIST]
 
             hass_er = er.async_get(hass)
             entry_entities = er.async_entries_for_config_entry(hass_er, entry.entry_id)
