@@ -6,6 +6,7 @@ COORDINATORS = "coordinators"
 # Timing information
 DEFAULT_FETCH_INTERVAL_IN_MINUTES = 30
 API_COOLDOWN_IN_SECONDS = 30.0
+MQTT_RECONNECT_INTERVAL_IN_SECONDS = 300
 
 # Configuration information
 CONF_USERNAME = "email"
