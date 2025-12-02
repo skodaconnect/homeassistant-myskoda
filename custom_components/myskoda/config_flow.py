@@ -30,6 +30,7 @@ from myskoda.auth.authorization import (
     NotAuthorizedError,
     AuthorizationFailedError,
     TermsAndConditionsError,
+    TokenExpiredError,
     MarketingConsentError,
 )
 
@@ -43,6 +44,7 @@ from .const import (
     CONF_TRACING,
     CONF_USERNAME,
     CONF_READONLY,
+    CONF_REFRESH_TOKEN,
 )
 from .coordinator import MySkodaConfigEntry
 
@@ -73,7 +75,13 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
         async_get_clientsession(hass), get_default_context(), mqtt_enabled=False
     )
 
-    await hub.connect(data[CONF_USERNAME], data[CONF_PASSWORD])
+    if data.get(CONF_REFRESH_TOKEN):
+        try:
+            await hub.connect_with_refresh_token(refresh_token=data[CONF_REFRESH_TOKEN])
+        except TokenExpiredError:
+            await hub.connect(data[CONF_USERNAME], data[CONF_PASSWORD])
+    else:
+        await hub.connect(data[CONF_USERNAME], data[CONF_PASSWORD])
     await hub.disconnect()
 
 
@@ -103,7 +111,7 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
     """Handle a config flow for MySkoda."""
 
     VERSION = 2
-    MINOR_VERSION = 4
+    MINOR_VERSION = 5
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
