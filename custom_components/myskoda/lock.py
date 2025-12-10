@@ -65,6 +65,13 @@ class MySkodaLock(MySkodaEntity, LockEntity):
         self._is_enabled = True
         self.async_write_ha_state()
 
+    def _ensure_not_readonly(self):
+        if self.coordinator.entry.options.get(CONF_READONLY):
+            _LOGGER.warning("Lock command blocked: integration is in read-only mode.")
+            raise ServiceValidationError(
+                "Lock command blocked: Integration is in read-only mode."
+            )
+
     async def _operate_lock(self, to_call: Coroutine):
         """Operate lock by executing to_call."""
         if not self._is_enabled:
@@ -78,8 +85,7 @@ class MySkodaLock(MySkodaEntity, LockEntity):
 
     @property
     def available(self) -> bool:
-        readonly = self.coordinator.entry.options.get(CONF_READONLY)
-        return self._is_enabled and not readonly
+        return self._is_enabled
 
 
 class DoorLock(MySkodaLock):
@@ -112,6 +118,7 @@ class DoorLock(MySkodaLock):
 
     async def async_lock(self, **kwargs) -> None:
         entry_options = self.coordinator.entry.options
+        self._ensure_not_readonly()
         if entry_options.get(CONF_SPIN):
             await self._async_lock_unlock(lock=True, spin=entry_options.get(CONF_SPIN))
             _LOGGER.info("Sent command to lock the vehicle.")
@@ -121,6 +128,7 @@ class DoorLock(MySkodaLock):
 
     async def async_unlock(self, **kwargs) -> None:
         entry_options = self.coordinator.entry.options
+        self._ensure_not_readonly()
         if entry_options.get(CONF_SPIN):
             await self._async_lock_unlock(lock=False, spin=entry_options.get(CONF_SPIN))
             _LOGGER.info("Sent command to unlock the vehicle.")

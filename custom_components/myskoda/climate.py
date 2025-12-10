@@ -20,6 +20,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import (
     DiscoveryInfoType,  # pyright: ignore [reportAttributeAccessIssue]
 )
+from homeassistant.exceptions import ServiceValidationError
 from homeassistant.util import Throttle
 
 from myskoda.models.air_conditioning import (
@@ -112,6 +113,15 @@ class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
         self._optimistic_data.pop(attr, None)
         self.async_write_ha_state()
 
+    def _ensure_not_readonly(self):
+        if self.coordinator.entry.options.get(CONF_READONLY):
+            _LOGGER.warning(
+                "Climate command blocked: integration is in read-only mode."
+            )
+            raise ServiceValidationError(
+                "Climate command blocked: Integration is in read-only mode."
+            )
+
     @callback
     def _handle_coordinator_update(self) -> None:
         """Clear optimistic values when fresh data arrives and no operation in progress."""
@@ -120,6 +130,7 @@ class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
         super()._handle_coordinator_update()
 
     async def _stop_auxiliary_heating(self) -> None:
+        self._ensure_not_readonly()
         self._operation_in_progress = True
         try:
             await self.coordinator.myskoda.stop_auxiliary_heating(self.vehicle.info.vin)
@@ -129,6 +140,7 @@ class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
     async def _start_auxiliary_heating(
         self, spin: str, config: AuxiliaryConfig
     ) -> None:
+        self._ensure_not_readonly()
         self._operation_in_progress = True
         try:
             await self.coordinator.myskoda.start_auxiliary_heating(
@@ -140,6 +152,7 @@ class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
             self._operation_in_progress = False
 
     async def _stop_air_conditioning(self) -> None:
+        self._ensure_not_readonly()
         self._operation_in_progress = True
         try:
             await self.coordinator.myskoda.stop_air_conditioning(self.vehicle.info.vin)
@@ -147,6 +160,7 @@ class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
             self._operation_in_progress = False
 
     async def _start_air_conditioning(self, temperature: float) -> None:
+        self._ensure_not_readonly()
         self._operation_in_progress = True
         try:
             await self.coordinator.myskoda.start_air_conditioning(
@@ -156,6 +170,7 @@ class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
             self._operation_in_progress = False
 
     async def _set_target_temperature(self, temperature: float) -> None:
+        self._ensure_not_readonly()
         self._operation_in_progress = True
         try:
             await self.coordinator.myskoda.set_target_temperature(
@@ -284,9 +299,8 @@ class MySkodaClimate(MySkodaClimateEntity):
         all_capabilities_present = all(
             self.vehicle.has_capability(cap) for cap in self.required_capabilities()
         )
-        readonly = self.coordinator.entry.options.get(CONF_READONLY)
 
-        return all_capabilities_present and not readonly
+        return all_capabilities_present
 
 
 class AuxiliaryHeater(MySkodaClimateEntity):
@@ -490,13 +504,9 @@ class AuxiliaryHeater(MySkodaClimateEntity):
 
     def is_supported(self) -> bool:
         """Return true if any supported capability is present."""
-        readonly = self.coordinator.entry.options.get(CONF_READONLY)
-        return (
-            self.has_any_capability(
-                [
-                    CapabilityId.AUXILIARY_HEATING,
-                    CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,
-                ]
-            )
-            and not readonly
+        return self.has_any_capability(
+            [
+                CapabilityId.AUXILIARY_HEATING,
+                CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,
+            ]
         )

@@ -16,6 +16,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
+from homeassistant.exceptions import ServiceValidationError
 
 from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
@@ -56,9 +57,14 @@ class MySkodaNumber(MySkodaEntity, NumberEntity):
         all_capabilities_present = all(
             self.vehicle.has_capability(cap) for cap in self.required_capabilities()
         )
-        readonly = self.coordinator.entry.options.get(CONF_READONLY)
+        return all_capabilities_present
 
-        return all_capabilities_present and not readonly
+    def _ensure_not_readonly(self):
+        if self.coordinator.entry.options.get(CONF_READONLY):
+            _LOGGER.warning("Command blocked: integration is in read-only mode.")
+            raise ServiceValidationError(
+                "Command blocked: Integration is in read-only mode."
+            )
 
     def _disable_number(self):
         self._is_enabled = False
@@ -70,6 +76,7 @@ class MySkodaNumber(MySkodaEntity, NumberEntity):
 
     async def _change_number(self, to_call: Coroutine):
         """Change the number by executing to_call."""
+        self._ensure_not_readonly()
         if not self._is_enabled:
             return
 

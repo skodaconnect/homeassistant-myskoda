@@ -14,6 +14,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
+from homeassistant.exceptions import ServiceValidationError
 
 from myskoda.models.charging import (
     Charging,
@@ -85,14 +86,20 @@ class MySkodaSwitch(MySkodaEntity, SwitchEntity):
         all_capabilities_present = all(
             self.vehicle.has_capability(cap) for cap in self.required_capabilities()
         )
-        readonly = self.coordinator.entry.options.get(CONF_READONLY)
 
-        return all_capabilities_present and not readonly
+        return all_capabilities_present
 
     @property
     def available(self) -> bool:
         """Return whether the switch is available to operate."""
         return self._is_enabled
+
+    def _ensure_not_readonly(self):
+        if self.coordinator.entry.options.get(CONF_READONLY):
+            _LOGGER.warning("Command blocked: integration is in read-only mode.")
+            raise ServiceValidationError(
+                "Command blocked: Integration is in read-only mode."
+            )
 
     def _disable_switch(self):
         """Turn switch availability off."""
@@ -106,6 +113,7 @@ class MySkodaSwitch(MySkodaEntity, SwitchEntity):
 
     async def _flip_switch(self, to_call: Coroutine):
         """Flip the switch by executing to_call."""
+        self._ensure_not_readonly()
         if not self._is_enabled:
             return
 

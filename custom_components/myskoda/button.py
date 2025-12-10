@@ -13,6 +13,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
+from homeassistant.exceptions import ServiceValidationError
 
 from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
@@ -49,13 +50,19 @@ class MySkodaButton(MySkodaEntity, ButtonEntity):
         super().__init__(coordinator, vin)
         self._is_enabled: bool = True
 
+    def _ensure_not_readonly(self):
+        if self.coordinator.entry.options.get(CONF_READONLY):
+            _LOGGER.warning("Command blocked: integration is in read-only mode.")
+            raise ServiceValidationError(
+                "Command blocked: Integration is in read-only mode."
+            )
+
     def is_supported(self) -> bool:
         all_capabilities_present = all(
             self.vehicle.has_capability(cap) for cap in self.required_capabilities()
         )
-        readonly = self.coordinator.entry.options.get(CONF_READONLY)
 
-        return all_capabilities_present and not readonly
+        return all_capabilities_present
 
     def _disable_button(self):
         self._is_enabled = False
@@ -67,7 +74,7 @@ class MySkodaButton(MySkodaEntity, ButtonEntity):
 
     async def _press_button(self, to_call: Coroutine):
         """Press a button by executing to_call."""
-
+        self._ensure_not_readonly()
         if not self._is_enabled:
             return
 
