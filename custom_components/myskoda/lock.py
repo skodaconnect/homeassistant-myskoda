@@ -18,7 +18,13 @@ from myskoda.models.common import DoorLockedState
 from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
 
-from .const import API_COOLDOWN_IN_SECONDS, COORDINATORS, CONF_SPIN, DOMAIN
+from .const import (
+    API_COOLDOWN_IN_SECONDS,
+    COORDINATORS,
+    CONF_SPIN,
+    DOMAIN,
+    CONF_READONLY,
+)
 from .coordinator import MySkodaConfigEntry
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
@@ -72,7 +78,8 @@ class MySkodaLock(MySkodaEntity, LockEntity):
 
     @property
     def available(self) -> bool:
-        return self._is_enabled
+        readonly = self.coordinator.entry.options.get(CONF_READONLY)
+        return self._is_enabled and not readonly
 
 
 class DoorLock(MySkodaLock):

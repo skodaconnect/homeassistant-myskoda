@@ -490,9 +490,13 @@ class AuxiliaryHeater(MySkodaClimateEntity):
 
     def is_supported(self) -> bool:
         """Return true if any supported capability is present."""
-        return self.has_any_capability(
-            [
-                CapabilityId.AUXILIARY_HEATING,
-                CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,
-            ]
+        readonly = self.coordinator.entry.options.get(CONF_READONLY)
+        return (
+            self.has_any_capability(
+                [
+                    CapabilityId.AUXILIARY_HEATING,
+                    CapabilityId.AIR_CONDITIONING_HEATING_SOURCE_AUXILIARY,
+                ]
+            )
+            and not readonly
         )
