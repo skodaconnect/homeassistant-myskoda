@@ -115,11 +115,9 @@ class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
 
     def _ensure_not_readonly(self):
         if self.coordinator.entry.options.get(CONF_READONLY):
-            _LOGGER.warning(
-                "Climate command blocked: integration is in read-only mode."
-            )
             raise ServiceValidationError(
-                "Climate command blocked: Integration is in read-only mode."
+                translation_domain=DOMAIN,
+                translation_key="readonly_mode",
             )
 
     @callback

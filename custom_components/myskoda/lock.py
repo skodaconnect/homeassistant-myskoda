@@ -67,9 +67,9 @@ class MySkodaLock(MySkodaEntity, LockEntity):
 
     def _ensure_not_readonly(self):
         if self.coordinator.entry.options.get(CONF_READONLY):
-            _LOGGER.warning("Lock command blocked: integration is in read-only mode.")
             raise ServiceValidationError(
-                "Lock command blocked: Integration is in read-only mode."
+                translation_domain=DOMAIN,
+                translation_key="readonly_mode",
             )
 
     async def _operate_lock(self, to_call: Coroutine):

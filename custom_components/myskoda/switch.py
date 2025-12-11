@@ -96,9 +96,9 @@ class MySkodaSwitch(MySkodaEntity, SwitchEntity):
 
     def _ensure_not_readonly(self):
         if self.coordinator.entry.options.get(CONF_READONLY):
-            _LOGGER.warning("Command blocked: integration is in read-only mode.")
             raise ServiceValidationError(
-                "Command blocked: Integration is in read-only mode."
+                translation_domain=DOMAIN,
+                translation_key="readonly_mode",
             )
 
     def _disable_switch(self):
