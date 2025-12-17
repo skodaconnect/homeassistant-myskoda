@@ -39,7 +39,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up the sensor platform."""
     add_supported_entities(
-        available_entities=[DeviceTracker, ParkingPositionTracker],
+        available_entities=[DeviceTracker],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
@@ -74,6 +74,22 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
                     err for err in pos.errors if err.type == ErrorType.VEHICLE_IN_MOTION
                 )
 
+    def _charging(self) -> Charging | None:
+        if charging := self.vehicle.charging:
+            return charging
+
+    def _status(self) -> ChargingStatus | None:
+        if charging := self._charging():
+            if status := charging.status:
+                return status
+
+    def _vehicle_parking_position(self) -> ParkingPositionV3 | None:
+        return self.vehicle.parking_position
+
+    def _parking_position(self) -> ParkingCoordinates | None:
+        if pp := self._vehicle_parking_position():
+            return pp.parking_position
+
     @property
     def source_type(self) -> SourceType:  # noqa: D102
         return SourceType.GPS
@@ -82,6 +98,8 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
     def latitude(self) -> float | None:  # noqa: D102
         position = self._vehicle_position()
         if position is None:
+            if pp := self._parking_position():
+                return pp.gps_coordinates.latitude
             return None
         return position.gps_coordinates.latitude
 
@@ -89,6 +107,8 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
     def longitude(self) -> float | None:  # noqa: D102
         position = self._vehicle_position()
         if position is None:
+            if pp := self._parking_position():
+                return pp.gps_coordinates.longitude
             return None
         return position.gps_coordinates.longitude
 
@@ -96,6 +116,11 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
     def extra_state_attributes(self) -> dict:
         """Return extra state attributes."""
         attributes = {}
+
+        if pp := self._parking_position():
+            attributes["parking_address"] = pp.formatted_address
+
+        return attributes
 
         if render := self.get_renders().get("main"):
             attributes["entity_picture"] = render
@@ -124,61 +149,6 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         if err := self._pos_error():
             if err.type == ErrorType.VEHICLE_IN_MOTION:
                 return "vehicle_in_motion"
-
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.PARKING_POSITION]
-
-
-class ParkingPositionTracker(MySkodaEntity, TrackerEntity):
-    """Tracker for the last known parking position."""
-
-    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:
-        self.entity_description = TrackerEntityDescription(
-            name="Parking",
-            key="parking_position",
-            translation_key="parking_position",
-        )
-        super().__init__(coordinator, vin)
-
-    def _charging(self) -> Charging | None:
-        if charging := self.vehicle.charging:
-            return charging
-
-    def _status(self) -> ChargingStatus | None:
-        if charging := self._charging():
-            if status := charging.status:
-                return status
-
-    def _vehicle_parking_position(self) -> ParkingPositionV3 | None:
-        return self.vehicle.parking_position
-
-    def _parking_position(self) -> ParkingCoordinates | None:
-        if pp := self._vehicle_parking_position():
-            return pp.parking_position
-
-    @property
-    def source_type(self) -> SourceType:
-        return SourceType.GPS
-
-    @property
-    def latitude(self) -> float | None:
-        if pp := self._parking_position():
-            return pp.gps_coordinates.latitude
-
-    @property
-    def longitude(self) -> float | None:
-        if pp := self._parking_position():
-            return pp.gps_coordinates.longitude
-
-    @property
-    def extra_state_attributes(self) -> dict:
-        """Return the extra attributes."""
-        attributes: dict = {}
-
-        if pp := self._parking_position():
-            attributes["parking_address"] = pp.formatted_address
-
-        return attributes
 
     @property
     def battery_level(self) -> int | None:

@@ -112,9 +112,6 @@
                     "not_home": "Ausente",
                     "vehicle_in_motion": "Moção detectada"
                 }
-            },
-            "parking_position": {
-                "name": "Posição do Estacionamento"
             }
         },
         "image": {

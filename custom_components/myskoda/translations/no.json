@@ -112,9 +112,6 @@
                     "not_home": "Borte",
                     "vehicle_in_motion": "Bevegelse oppdaget"
                 }
-            },
-            "parking_position": {
-                "name": "Parkeringsposisjon"
             }
         },
         "image": {
