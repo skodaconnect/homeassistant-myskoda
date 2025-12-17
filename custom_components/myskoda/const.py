@@ -6,6 +6,7 @@ COORDINATORS = "coordinators"
 # Timing information
 DEFAULT_FETCH_INTERVAL_IN_MINUTES = 30
 API_COOLDOWN_IN_SECONDS = 30.0
+MQTT_RECONNECT_INTERVAL_IN_SECONDS = 300
 
 # Configuration information
 CONF_USERNAME = "email"
@@ -15,6 +16,7 @@ CONF_POLL_INTERVAL_MIN = 1
 CONF_POLL_INTERVAL_MAX = 1440
 CONF_SPIN = "s-pin"
 CONF_READONLY = "readonly"
+CONF_REFRESH_TOKEN = "refresh_token"
 CONF_TRACING = "tracing"
 CONF_VINLIST = "vins"
 
