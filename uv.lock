@@ -895,7 +895,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "homeassistant", specifier = ">=2025.3.2" },
-    { name = "myskoda", specifier = "~=2.4.4" },
+    { name = "myskoda", specifier = "~=2.5.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -1102,7 +1102,7 @@ wheels = [
 
 [[package]]
 name = "myskoda"
-version = "2.4.4"
+version = "2.5.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -1112,9 +1112,9 @@ dependencies = [
     { name = "pyjwt" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/36/2d/da699aa2c7ce489ed13782878f1322e7d42368ecf4feed4baa8dce793c28/myskoda-2.4.4.tar.gz", hash = "sha256:1a9fa77e6b50b223b20a6f50d02ac1e3f607db97ff5d4dac7ef904ae40cefb7a", size = 334552, upload-time = "2025-11-09T15:27:12.226Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ac/32/0b36dac45aebdb17894af98bf601b9bcc75fb5f704861bf71ec0dbd3ffc9/myskoda-2.5.1.tar.gz", hash = "sha256:0f536a4affae8d3568d1e5255622f19d4ab0ebe4d385f2f89214d533785b44fc", size = 335251, upload-time = "2025-12-17T10:57:16.484Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/99/2f/0c34799a2dec17edbe041a7416612bb6ace11623c7b1f619606a120195b9/myskoda-2.4.4-py3-none-any.whl", hash = "sha256:5db873aa1b05768e721cfa7d7b6f7994204d27479447a36c89fc6862753b1e02", size = 69224, upload-time = "2025-11-09T15:27:10.997Z" },
+    { url = "https://files.pythonhosted.org/packages/2e/c1/ff331edab4a408f6ba9412a8836de2490699a1bcb8d3eb7d31bc1c8f39d3/myskoda-2.5.1-py3-none-any.whl", hash = "sha256:e479c27844375ecf3fa0a8b773b5611d330c7689bf191f37f21cf9ce5e1444c6", size = 69954, upload-time = "2025-12-17T10:57:15.237Z" },
 ]
 
 [[package]]
