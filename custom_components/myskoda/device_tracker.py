@@ -120,8 +120,6 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         if pp := self._parking_position():
             attributes["parking_address"] = pp.formatted_address
 
-        return attributes
-
         if render := self.get_renders().get("main"):
             attributes["entity_picture"] = render
         elif render := self.get_composite_renders().get("unmodified_exterior_front"):
