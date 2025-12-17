@@ -112,9 +112,6 @@
                     "not_home": "Away",
                     "vehicle_in_motion": "Motion detected"
                 }
-            },
-            "parking_position": {
-                "name": "Parking position"
             }
         },
         "image": {
