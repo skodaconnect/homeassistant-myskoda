@@ -136,13 +136,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
             raise
 
     current_refresh_token = await myskoda.get_refresh_token()
-    if current_refresh_token != entry.data[CONF_REFRESH_TOKEN]:
-        _LOGGER.debug(
-            "Refresh token updated during initialization. Storing new token in configuration."
-        )
-        new_data = {**entry.data}
-        new_data[CONF_REFRESH_TOKEN] = current_refresh_token
-        hass.config_entries.async_update_entry(entry, data=new_data)
+    if entry.data.get(CONF_REFRESH_TOKEN):
+        if current_refresh_token != entry.data[CONF_REFRESH_TOKEN]:
+            _LOGGER.debug(
+                "Refresh token updated during initialization. Storing new token in configuration."
+            )
+            new_data = {**entry.data}
+            new_data[CONF_REFRESH_TOKEN] = current_refresh_token
+            hass.config_entries.async_update_entry(entry, data=new_data)
 
     for vin in vehicles:
         coordinator = MySkodaDataUpdateCoordinator(hass, entry, myskoda, vin)
