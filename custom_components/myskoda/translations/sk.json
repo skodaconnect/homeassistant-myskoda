@@ -112,9 +112,6 @@
                     "not_home": "Preč",
                     "vehicle_in_motion": "Zistený pohyb"
                 }
-            },
-            "parking_position": {
-                "name": "Parkovacia poloha"
             }
         },
         "image": {
