@@ -216,6 +216,14 @@ async def async_migrate_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) ->
         await auto_connect(myskoda, entry)
     except AuthorizationFailedError as exc:
         raise ConfigEntryAuthFailed("Log in failed for %s: %s", DOMAIN, exc)
+    except (TermsAndConditionsError, MarketingConsentError) as exc:
+        _LOGGER.error(
+            "Terms or marketing consent missing. Log out and back in with official MySkoda app, "
+            "or https://skodaid.vwgroup.io, to accept the new conditions. Error: %s",
+            exc,
+        )
+        async_create_tnc_issue(hass, entry.entry_id)
+        raise ConfigEntryNotReady from exc
     except Exception as exc:
         _LOGGER.exception("Login with %s failed: %s", DOMAIN, exc)
         return False
