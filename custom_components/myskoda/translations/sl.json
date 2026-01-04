@@ -33,130 +33,67 @@
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Pokrov motorja",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Pokrov motorja"
             },
             "charger_connected": {
-                "name": "Polnilnik",
-                "state": {
-                    "off": "Odklopljen",
-                    "on": "Priklopljen"
-                }
+                "name": "Polnilnik"
             },
             "charger_lock": {
-                "name": "Zaklep polnjenja",
-                "state": {
-                    "off": "Zaklenjeno",
-                    "on": "Odklenjeno"
-                }
+                "name": "Zaklep polnjenja"
             },
             "doors_lock": {
-                "name": "Vrata zaklep",
-                "state": {
-                    "off": "Zaklenjeno",
-                    "on": "Odklenjeno"
-                }
+                "name": "Vrata zaklep"
             },
             "doors_open": {
-                "name": "Vrata",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Vrata"
             },
             "vehicle_lock": {
-                "name": "Vozilo zaklep",
-                "state": {
-                    "off": "Zaklenjeno",
-                    "on": "Odklenjeno"
-                }
+                "name": "Vozilo zaklep"
             },
             "parkinglights_on": {
-                "name": "Parkirne luči",
-                "state": {
-                    "off": "Vklopljeno",
-                    "on": "Izklopljeno"
-                }
+                "name": "Parkirne luči"
             },
             "sunroof_open": {
-                "name": "Strešno okno",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Strešno okno"
             },
             "trunk_open": {
-                "name": "Prtljažnik",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Prtljažnik"
             },
             "windows_open": {
-                "name": "Okno",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Okno"
             },
             "door_open_front_left": {
-                "name": "Vrata spredaj levo",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Vrata spredaj levo"
             },
             "door_open_front_right": {
-                "name": "Vrata spredaj desno",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Vrata spredaj desno"
             },
             "door_open_rear_left": {
-                "name": "Vrata zadaj levo",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Vrata zadaj levo"
             },
             "door_open_rear_right": {
-                "name": "Vrata zadaj desno",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Vrata zadaj desno"
+            },
+            "vehicle_battery_protection": {
+                "name": "Zaščita baterije"
+            },
+            "vehicle_reachable": {
+                "name": "Dosegljiv"
+            },
+            "vehicle_in_motion": {
+                "name": "V gibanju"
             },
             "window_open_front_left": {
-                "name": "Okno spredaj levo",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Okno spredaj levo"
             },
             "window_open_front_right": {
-                "name": "Okno spredaj desno",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Okno spredaj desno"
             },
             "window_open_rear_left": {
-                "name": "Okno zadaj levo",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Okno zadaj levo"
             },
             "window_open_rear_right": {
-                "name": "Okno zadaj desno",
-                "state": {
-                    "off": "Zaprto",
-                    "on": "Odprto"
-                }
+                "name": "Okno zadaj desno"
             }
         },
         "climate": {
