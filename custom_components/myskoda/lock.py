@@ -18,7 +18,13 @@ from myskoda.models.common import DoorLockedState
 from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
 
-from .const import API_COOLDOWN_IN_SECONDS, COORDINATORS, CONF_SPIN, DOMAIN
+from .const import (
+    API_COOLDOWN_IN_SECONDS,
+    COORDINATORS,
+    CONF_SPIN,
+    DOMAIN,
+    CONF_READONLY,
+)
 from .coordinator import MySkodaConfigEntry
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
@@ -58,6 +64,13 @@ class MySkodaLock(MySkodaEntity, LockEntity):
     def _enable_lock(self):
         self._is_enabled = True
         self.async_write_ha_state()
+
+    def _ensure_not_readonly(self):
+        if self.coordinator.entry.options.get(CONF_READONLY):
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="readonly_mode",
+            )
 
     async def _operate_lock(self, to_call: Coroutine):
         """Operate lock by executing to_call."""
@@ -105,6 +118,7 @@ class DoorLock(MySkodaLock):
 
     async def async_lock(self, **kwargs) -> None:
         entry_options = self.coordinator.entry.options
+        self._ensure_not_readonly()
         if entry_options.get(CONF_SPIN):
             await self._async_lock_unlock(lock=True, spin=entry_options.get(CONF_SPIN))
             _LOGGER.info("Sent command to lock the vehicle.")
@@ -114,6 +128,7 @@ class DoorLock(MySkodaLock):
 
     async def async_unlock(self, **kwargs) -> None:
         entry_options = self.coordinator.entry.options
+        self._ensure_not_readonly()
         if entry_options.get(CONF_SPIN):
             await self._async_lock_unlock(lock=False, spin=entry_options.get(CONF_SPIN))
             _LOGGER.info("Sent command to unlock the vehicle.")
