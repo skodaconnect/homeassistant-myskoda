@@ -10,7 +10,8 @@
             "invalid_auth": "Neplatná autentifikácia",
             "relogin_in_app": "Chýba súhlas s podmienkami alebo marketingom. Odhláste sa a znovu sa prihláste pomocou oficiálnej aplikácie MySkoda alebo na stránke https://skodaid.vwgroup.io, aby ste prijali nové podmienky.",
             "unknown": "Došlo k neočakávanej chybe. Skontrolujte logy v aplikácii HomeAssistant.",
-            "no_spin": "V konfigurácii chýba S-PIN. Zmeňte konfiguráciu integrácie a skúste to znova, prosím."
+            "no_spin": "V konfigurácii chýba S-PIN. Zmeňte konfiguráciu integrácie a skúste to znova, prosím.",
+            "readonly_mode": "Režim len na čítanie je povolený. Operácie príkazov sú zakázané."
         },
         "step": {
             "reauth_confirm": {
@@ -326,6 +327,11 @@
                     "readonly": "V aute nemôžete vykonávať žiadne zmeny, iba čítať údaje"
                 }
             }
+        }
+    },
+    "exceptions": {
+        "readonly_mode": {
+            "message": "Režim len na čítanie je povolený. Operácie príkazov sú zakázané."
         }
     }
 }
