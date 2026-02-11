@@ -123,6 +123,9 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
             )
 
         errors = {}
+        placeholders = {
+            "login_url": "https://skodaid.vwgroup.io",
+        }
 
         try:
             await validate_input(self.hass, user_input)
@@ -145,7 +148,10 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
 
         # Only called if there was an error.
         return self.async_show_form(
-            step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
+            step_id="user",
+            data_schema=STEP_USER_DATA_SCHEMA,
+            errors=errors,
+            description_placeholders=placeholders,
         )
 
     async def async_step_reauth(self, entry_data: dict[str, Any]) -> ConfigFlowResult:
