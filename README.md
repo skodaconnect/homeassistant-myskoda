@@ -223,6 +223,10 @@ Yes. The Skoda API reports all values in metric and this is also how the data is
 
 Home Assistant can convert the values by configurating the _Unit system_ in the [General Settings](https://www.home-assistant.io/docs/configuration/basic/).
 
+#### What do I do when I changed my MySkoda login / username?
+
+You can add your new account, while keeping your old account. That way, the data will be retained in HomeAssistant. After your new account is working, you can remove the account with your old username.
+
 ## Contributing
 This integration and the associated [Python library](https://github.com/skodaconnect/myskoda) is maintained by a small number of people. Maintainers also tend to come and go when they no longer own a Skoda car :sweat_smile:.
 
