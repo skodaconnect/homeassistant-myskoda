@@ -10,7 +10,9 @@
             "invalid_auth": "Invalid authentication. Please check your credentials.",
             "relogin_in_app": "Terms or marketing consent missing. Log out and back in with official MySkoda app, or {login_url}, to accept the new conditions.",
             "unknown": "An unexpected error occurred. Please check the HomeAssistant logfiles and report an issue to the developers.",
-            "no_spin": "The S-PIN is missing from configuration. Please reconfigure the integration and try again."
+            "no_spin": "The S-PIN is missing from configuration. Please reconfigure the integration and try again.",
+            "readonly_mode": "Read-only mode enabled. Command operations are disabled."
+
         },
         "step": {
             "reauth_confirm": {
@@ -326,6 +328,11 @@
                     "readonly": "You cannot make any changes to the car, only read data"
                 }
             }
+        }
+    },
+    "exceptions": {
+        "readonly_mode": {
+            "message": "Read-only mode enabled. Command operations are disabled."
         }
     }
 }
