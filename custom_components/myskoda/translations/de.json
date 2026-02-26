@@ -8,7 +8,7 @@
         "error": {
             "cannot_connect": "Fehler beim Verbinden",
             "invalid_auth": "Ungültige Anmeldung",
-            "relogin_in_app": "Nutzungsbedingungen oder Marketing-Einwilligung fehlt. Melden Sie sich in der offiziellen MySkoda-App aus und wieder ein, oder besuchen Sie https://skodaid.vwgroup.io, um die neuen Bedingungen zu akzeptieren.",
+            "relogin_in_app": "Nutzungsbedingungen oder Marketing-Einwilligung fehlt. Melden Sie sich in der offiziellen MySkoda-App aus und wieder ein, oder besuchen Sie {login_url}, um die neuen Bedingungen zu akzeptieren.",
             "unknown": "Ein unerwarteter Fehler ist aufgetreten. Bitte überprüfe die Logdateien von HomeAssistant.",
             "no_spin": "Die S-PIN fehlt in der Konfiguration. Bitte konfigurieren Sie die Integration neu und versuchen es erneut."
         },
