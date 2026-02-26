@@ -8,7 +8,7 @@
         "error": {
             "cannot_connect": "Povezava ni uspela",
             "invalid_auth": "Neveljavna prijava",
-            "relogin_in_app": "Med prijavo je bila zaznana napaka. Morda se boste morali znova prijaviti v aplikacijo MySkoda.",
+            "relogin_in_app": "Med prijavo je bila zaznana napaka. Morda se boste morali znova prijaviti v aplikacijo MySkoda. {login_url}",
             "unknown": "Prišlo je do nepričakovane napake. Preverite dnevnike v HomeAssistant.",
             "no_spin": "V konfiguraciji manjka S-PIN. Ponovno nastavite integracijo in poskusite znova."
         },
