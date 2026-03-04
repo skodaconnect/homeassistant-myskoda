@@ -5,7 +5,7 @@ from collections import OrderedDict, deque
 from collections.abc import Coroutine
 from copy import deepcopy
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Callable
 
 from aiohttp import ClientError
@@ -216,12 +216,31 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
     async def _on_myskoda_update(self) -> None:
         """Trigger an update of all HA entities when User or Vehicle change.
 
-        Always pass in a copy of the object to force an update.
+        Always pass in a copy of the object to force an update after comparing car_captured_timestamp
         """
         _LOGGER.debug("Received update notification for %s", self.vin)
         if user := deepcopy(self.myskoda.user):
             self.data.user = user
-        self.data.vehicle = deepcopy(self.myskoda.vehicle(self.vin))
+
+        # Compare new data with old data by car_captured_timestamp
+        new_data = deepcopy(self.myskoda.vehicle(self.vin))
+        current_vehicle = self.data.vehicle
+
+        for attr, old_value in vars(current_vehicle).items():
+            new_value = getattr(new_data, attr, None)
+            if new_value is None:
+                continue
+
+            if old_value is None:
+                # No timestamp? Maybe we just initialized.
+                setattr(current_vehicle, attr, new_value)
+
+            old_ts = getattr(old_value, "car_captured_timestamp", None)
+            new_ts = getattr(new_value, "car_captured_timestamp", None)
+
+            if old_ts and new_ts and new_ts > old_ts:
+                setattr(current_vehicle, attr, new_value)
+
         self.async_set_updated_data(self.data)
 
     async def _mqtt_connect(self) -> None:
@@ -235,9 +254,30 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             pass
         self._mqtt_connecting = False
 
+    def _latest_vehicle_ts(self) -> datetime | None:
+        """Retrieve newest car_updated_timestamp."""
+        timestamps = (
+            getattr(v, "car_captured_timestamp", None)
+            for v in vars(self.data.vehicle).values()
+            if v is not None
+        )
+        timestamps = (ts for ts in timestamps if ts is not None)
+        return max(timestamps, default=None)
+
     async def _on_mqtt_event(self, event: BaseEvent) -> None:
         if event.vin != self.vin:
             return
+
+        # Only process if this is the most recent message
+        if (recent_ts := self._latest_vehicle_ts()) and event.timestamp <= recent_ts:
+            _LOGGER.debug(
+                "Dropping old message: %s has timestamp %s, car is more recent: %s",
+                event.event_type,
+                event.timestamp,
+                self._latest_vehicle_ts(),
+            )
+            return
+
         if isinstance(event, OperationEvent):
             # Store the last MAX_STORED_OPERATIONS operations
             if request_id := event.request_id:
