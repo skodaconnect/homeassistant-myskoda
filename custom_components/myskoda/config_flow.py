@@ -80,6 +80,8 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
             await hub.connect_with_refresh_token(refresh_token=data[CONF_REFRESH_TOKEN])
         except TokenExpiredError:
             await hub.connect(data[CONF_USERNAME], data[CONF_PASSWORD])
+        except AuthorizationFailedError:
+            await hub.connect(data[CONF_USERNAME], data[CONF_PASSWORD])
     else:
         await hub.connect(data[CONF_USERNAME], data[CONF_PASSWORD])
     await hub.disconnect()
