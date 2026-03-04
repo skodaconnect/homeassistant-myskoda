@@ -8,7 +8,7 @@
         "error": {
             "cannot_connect": "Falha ao conectar",
             "invalid_auth": "Autenticação inválida",
-            "relogin_in_app": "Um erro foi detetado ao conectar. Talvez deve reconectar na aplicação MySkoda.",
+            "relogin_in_app": "Um erro foi detetado ao conectar. Talvez deve reconectar na aplicação MySkoda. {login_url}",
             "unknown": "Um erro inesperado ocorreu. Verifica os ficheiros de log do HomeAssistant.",
             "no_spin": "O S-PIN está em falta para a configuração. Reconfigure a integração e tenta novamente."
         },
