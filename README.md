@@ -227,6 +227,11 @@ Home Assistant can convert the values by configurating the _Unit system_ in the 
 
 You can add your new account, while keeping your old account. That way, the data will be retained in HomeAssistant. After your new account is working, you can remove the account with your old username.
 
+#### I get an initialization or a migration error in the integration after restarting HomeAssistant
+
+Over time MySkoda changes it's terms and conditions or marketing policies. Unfortunately, we cannot blindly accept this, and it is blocking us from accessing your account.
+Please open up your MySkoda app > Profile > Consents or log in to the URL in your logs or at [MySkoda](https://skodaid.vwgroup.io) to review the changed terms and/or consents
+
 ## Contributing
 This integration and the associated [Python library](https://github.com/skodaconnect/myskoda) is maintained by a small number of people. Maintainers also tend to come and go when they no longer own a Skoda car :sweat_smile:.
 
