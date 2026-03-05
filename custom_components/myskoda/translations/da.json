@@ -1,98 +1,108 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Enheden er allerede konfigureret"
+            "already_configured": "Enheden er allerede konfigureret",
+            "reauth_successful": "Gengodkendelse er lykkedes.",
+            "no_entry": "Kunne ikke finde MySkoda-konfigurationen. Tjek dine logfiler og åbn et problem på GitHub."
         },
         "error": {
             "cannot_connect": "Kunne ikke forbinde",
             "invalid_auth": "Ugyldig autentificering",
-            "unknown": "Der opstod en uventet fejl. Tjek venligst HomeAssistant logfilerne."
+            "relogin_in_app": "Samtykke til vilkår eller markedsføring mangler. Log ud og ind igen med den officielle MySkoda app eller {login_url} for at acceptere de nye betingelser.",
+            "unknown": "Der opstod en uventet fejl. Tjek venligst HomeAssistant logfilerne.",
+            "no_spin": "S-PIN-koden mangler i konfigurationen. Genopsæt integrationen og prøv igen.",
+            "readonly_mode": "Skrivebeskyttet tilstand er aktiveret. Kommandohandlinger er deaktiveret."
         },
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "email": "E-mail adresse",
+                    "password": "Adgangskode"
+                },
+                "description": "Godkendelse til MySkoda mislykkedes. Indtast venligst legitimationsoplysningerne igen fra din MySkoda-app.",
+                "title": "Gengodkend MySkoda"
+            },
             "user": {
                 "data": {
                     "email": "E-mail",
                     "password": "Adgangskode"
-                }
+                },
+                "description": "Indtast legitimationsoplysningerne fra din MySkoda-app."
             }
         }
     },
     "entity": {
         "binary_sensor": {
             "bonnet_open": {
-                "name": "Motorhjelm",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åben"
-                }
+                "name": "Motorhjelm"
             },
             "charger_connected": {
-                "name": "Ladekabel",
-                "state": {
-                    "off": "Ikke tilsluttet",
-                    "on": "Tilsluttet"
-                }
+                "name": "Ladekabel"
             },
             "charger_lock": {
-                "name": "Ladekabel låst",
-                "state": {
-                    "off": "Låst",
-                    "on": "Låst op"
-                }
+                "name": "Ladekabel låst"
             },
             "doors_lock": {
-                "name": "Dørlåst",
-                "state": {
-                    "off": "Låst",
-                    "on": "Låst op"
-                }
+                "name": "Dørlåst"
             },
             "doors_open": {
-                "name": "Døre",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åbne"
-                }
+                "name": "Døre"
             },
-            "lights_on": {
-                "name": "Lygter",
-                "state": {
-                    "off": "Slukkede",
-                    "on": "Tændte"
-                }
+            "vehicle_lock": {
+                "name": "Låst køretøj"
             },
-            "locked": {
-                "name": "Køretøjslåst",
-                "state": {
-                    "off": "Låst",
-                    "on": "Låst op"
-                }
+            "parkinglights_on": {
+                "name": "Parkeringslys"
             },
             "sunroof_open": {
-                "name": "Soltag",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åbent"
-                }
+                "name": "Soltag"
             },
             "trunk_open": {
-                "name": "Bagagerum",
-                "state": {
-                    "off": "Lukket",
-                    "on": "Åben"
-                }
+                "name": "Bagagerum"
             },
             "windows_open": {
-                "name": "Vinduer",
-                "state": {
-                    "off": "Lukkede",
-                    "on": "Åbne"
-                }
+                "name": "Vinduer"
+            },
+            "door_open_front_left": {
+                "name": "Fordør - førerside"
+            },
+            "door_open_front_right": {
+                "name": "Fordør - Passagerside"
+            },
+            "door_open_rear_left": {
+                "name": "Bagdør - Førerside"
+            },
+            "door_open_rear_right": {
+                "name": "Bagdør - Passagerside"
+            },
+            "vehicle_battery_protection": {
+                "name": "Batteribeskyttelse"
+            },
+            "vehicle_reachable": {
+                "name": "Tilgængelig"
+            },
+            "vehicle_in_motion": {
+                "name": "I bevægelse"
+            },
+            "window_open_front_left": {
+                "name": "Vindue - Forrest i førersiden"
+            },
+            "window_open_front_right": {
+                "name": "Vindue - Forrest i passagersiden"
+            },
+            "window_open_rear_left": {
+                "name": "Vindue - Bagerst i førersiden"
+            },
+            "window_open_rear_right": {
+                "name": "Vindue - Bagerst i passagersiden"
             }
         },
         "climate": {
             "climate": {
                 "name": "Klimaanlæg"
+            },
+            "auxiliary_heater": {
+                "name": "Varmeapparat"
             }
         },
         "device_tracker": {
@@ -106,16 +116,30 @@
             }
         },
         "image": {
+            "render_light_3x": {
+                "name": "Visning af lys status for køretøjet"
+            },
             "render_vehicle_main": {
                 "name": "Repræsentation af køretøjet"
+            }
+        },
+        "lock": {
+            "door_lock": {
+                "name": "Dørlås"
             }
         },
         "number": {
             "charge_limit": {
                 "name": "Ladegrænse"
+            },
+            "auxiliary_heater_duration": {
+                "name": "Varighed af opvarmning"
             }
         },
         "sensor": {
+            "aux_estimated_time_left_to_reach_target_temperature": {
+                "name": "Opvarmningstid til at nå måltemperaturen"
+            },
             "battery_percentage": {
                 "name": "Batteriprocent"
             },
@@ -145,11 +169,23 @@
                     "ready_for_charging": "Klar til opladning"
                 }
             },
+            "estimated_time_left_to_reach_target_temperature": {
+                "name": "AC‑tid til at nå måltemperaturen"
+            },
             "inspection": {
                 "name": "Næste eftersyn"
             },
+            "inspection_in_km": {
+                "name": "Næste service"
+            },
             "mileage": {
                 "name": "Kilometerstand"
+            },
+            "oil_service_in_days": {
+                "name": "Olieskift"
+            },
+            "oil_service_in_km": {
+                "name": "Olieskift"
             },
             "range": {
                 "name": "Rækkevidde"
@@ -157,11 +193,44 @@
             "remaining_charging_time": {
                 "name": "Restopladningstid"
             },
+            "operation": {
+                "name": "Seneste handling",
+                "state": {
+                    "in_progress": "I gang",
+                    "completed_success": "Fuldført succesfuldt",
+                    "completed_warning": "Udført med advarsel",
+                    "error": "Fejl"
+                }
+            },
+            "service_event": {
+                "name": "Seneste Service Begivenhed"
+            },
             "software_version": {
                 "name": "Softwareversion"
             },
             "target_battery_percentage": {
                 "name": "Ladegrænse i procent"
+            },
+            "fuel_level": {
+                "name": "Brændstofniveau"
+            },
+            "adblue_range": {
+                "name": "AdBlue Rækkevidde"
+            },
+            "gas_level": {
+                "name": "Brændstof niveau"
+            },
+            "gas_range": {
+                "name": "Brændstof rækkevidde"
+            },
+            "combustion_range": {
+                "name": "Forbrændings rækkevidde"
+            },
+            "electric_range": {
+                "name": "Elektrisk rækkevidde"
+            },
+            "outside_temperature": {
+                "name": "Udendørs temperatur"
             }
         },
         "switch": {
@@ -177,25 +246,92 @@
             "reduced_current": {
                 "name": "Reduceret strømstyrke"
             },
+            "auto_unlock_plug": {
+                "name": "Lås op for kabel, når opladningen er færdig"
+            },
             "window_heating": {
                 "name": "Opvarming af ruder"
+            },
+            "ac_at_unlock": {
+                "name": "Start klimaregulering, når bilen låses op"
+            },
+            "ac_without_external_power": {
+                "name": "Klimaregulering uden ladekabel tilsluttet"
+            },
+            "ac_seat_heating_front_left": {
+                "name": "Klimaregulering - førersæde"
+            },
+            "ac_seat_heating_front_right": {
+                "name": "Klimaregulering - passagersæde"
+            },
+            "ac_window_heating": {
+                "name": "Vindue opvarmning ved klimaregulering"
+            },
+            "departure_timer_1": {
+                "name": "Planlagt afgangstid 1"
+            },
+            "departure_timer_2": {
+                "name": "Planlagt afgangstid 2"
+            },
+            "departure_timer_3": {
+                "name": "Planlagt afgangstid 3"
+            },
+            "ac_timer_1": {
+                "name": "Planlagt start af klimaregulering 1"
+            },
+            "ac_timer_2": {
+                "name": "Planlagt start af klimaregulering 2"
+            },
+            "ac_timer_3": {
+                "name": "Planlagt start af klimaregulering 3"
             }
+        },
+        "button": {
+            "honk_flash": {
+                "name": "Aktiver Horn og lygter"
+            },
+            "flash": {
+                "name": "Blitz"
+            },
+            "wakeup": {
+                "name": "Væk bilen"
+            }
+        }
+    },
+    "issues": {
+        "new_tandc": {
+            "title": "Gennemgå nye samtykker og brugervilkår for MySkoda",
+            "description": "Registreret login fejl på grund af manglende accept af Vilkår og betingelser eller samtykker.\n\nSkoda kan have udstedt nye vilkår og betingelser eller kræver nyt samtykke.\n\nLog venligst ud og tilbage i MySkoda-appen for at gennemgå dem.\nDenne integration kan ikke fortsætte lige nu."
+        },
+        "spin_error": {
+            "title": "Forkert S-PIN registreret",
+            "description": "Vi modtog en fejl, der angiver, at din S‑PIN er forkert. \n\nIndtast den korrekte S‑PIN i integrationsindstillingerne."
         }
     },
     "options": {
         "error": {
-            "invalid_polling_interval": "Ugyldigt forespørgselsinterval angivet. Vælg mellem 1 og 1440 minutter"
+            "invalid_polling_interval": "Ugyldigt forespørgselsinterval angivet. Vælg mellem 1 og 1440 minutter",
+            "invalid_spin_format": "Ugyldigt format for S‑PIN"
         },
         "step": {
             "init": {
                 "data": {
                     "tracing": "API-svarsporing. Kræver fejlsøgningslogning aktiveret i configuration.yaml.",
-                    "poll_interval_in_minutes": "Forespørgselsinterval i minutter, når bilen er inaktiv."
+                    "poll_interval_in_minutes": "Forespørgselsinterval i minutter, når bilen er inaktiv.",
+                    "s-pin": "Sikkerhedskode (PIN)",
+                    "readonly": "Skrivebeskyttet tilstand"
                 },
                 "data_description": {
-                    "poll_interval_in_minutes": "Angiv et forespørgselsinterval mellem 1 og 1440 minutter. (standard 30)"
+                    "poll_interval_in_minutes": "Angiv et forespørgselsinterval mellem 1 og 1440 minutter. (standard 30)",
+                    "s-pin": "Angiv sikkerheds‑PIN. ADVARSEL: Dette aktiverer fjernlåsning og ‑oplåsning",
+                    "readonly": "Du kan ikke foretage ændringer på bilen, kun læse data"
                 }
             }
+        }
+    },
+    "exceptions": {
+        "readonly_mode": {
+            "message": "Skrivebeskyttet tilstand er aktiveret. Kommandofunktioner er deaktiveret."
         }
     }
 }
