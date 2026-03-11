@@ -19,11 +19,20 @@
 | `gas_range`                                           | Gas Range                               | For CNG hybrids                  |
 | `inspection_in_km`                                    | Next Inspection                         |                                  |
 | `inspection`                                          | Next Inspection                         |                                  |
+| `last_trip_average_fuel_consumption`                  | Last Trip Average Fuel Consumption      |                                  |
+| `last_trip_average_speed`                             | Last Trip Average Speed                 |                                  |
+| `last_trip_mileage`                                   | Last Trip Mileage                       |                                  |
+| `last_trip_travel_time`                               | Last Trip Travel Time                   |                                  |
 | `milage`                                              | Mileage                                 |                                  |
 | `oil_service_in_days`                                 | Oil Service                             |                                  |
 | `oil_service_in_km`                                   | Oil Service                             |                                  |
 | `operation`                                           | Last Operation                          | See (#last-operation)            |
 | `outside_temperature`                                 | Outside Temperature                     |                                  |
+| `overall_average_electric_consumption`                | Overall Average Electric Consumption    |                                  |
+| `overall_average_fuel_consumption`                    | Overall Average Fuel Consumption        |                                  |
+| `overall_average_speed`                               | Overall Average Speed                   |                                  |
+| `overall_mileage`                                     | Overall Mileage                         |                                  |
+| `overall_travel_time`                                 | Overall Travel Time                     |                                  |
 | `range`                                               | Range                                   |                                  |
 | `remaining_charging_time`                             | Remaining Charging Time                 |                                  |
 | `service_event`                                       | Last Service Event                      | See (#last-service-event)        |
