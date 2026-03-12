@@ -166,7 +166,8 @@
                     "charging": "Nabíjanie",
                     "connect_cable": "Pripojte kábel",
                     "conserving": "Udržanie nabitia",
-                    "ready_for_charging": "Pripravené na nabíjanie"
+                    "ready_for_charging": "Pripravené na nabíjanie",
+                    "charging_interrupted": "Nabíjanie prerušené."
                 }
             },
             "estimated_time_left_to_reach_target_temperature": {

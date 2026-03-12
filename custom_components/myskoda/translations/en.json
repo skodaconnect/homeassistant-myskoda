@@ -167,7 +167,8 @@
                     "charging": "Charging",
                     "connect_cable": "No Power",
                     "conserving": "Conserving Charge",
-                    "ready_for_charging": "Ready for Charging"
+                    "ready_for_charging": "Ready for Charging",
+                    "charging_interrupted": "Charging Interrupted"
                 }
             },
             "estimated_time_left_to_reach_target_temperature": {
