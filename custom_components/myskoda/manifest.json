@@ -17,7 +17,7 @@
     "myskoda"
   ],
   "requirements": [
-    "myskoda @ git+https://github.com/thetoaster/myskoda.git@feature/trip-statistics"
+    "myskoda@git+https://github.com/thetoaster/myskoda.git@feature/trip-statistics"
   ],
   "version": "1.30.0"
 }
