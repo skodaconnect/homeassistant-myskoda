@@ -70,6 +70,7 @@ async def async_setup_entry(
             TargetBatteryPercentage,
             ClimatisationTimeLeft,
             AuxHeaterTimeLeft,
+            MySkodaVehicleHealthSensor,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
@@ -815,3 +816,31 @@ class AuxHeaterTimeLeft(MySkodaSensor):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AUXILIARY_HEATING]
+
+from homeassistant.components.sensor import SensorEntity
+
+class MySkodaVehicleHealthSensor(SensorEntity):
+    """Sensor for full vehicle health status (get_health)."""
+
+    _attr_device_class = None
+    _attr_unit_of_measurement = None
+
+    def __init__(self, coordinator, vehicle):
+        self.coordinator = coordinator
+        self.vehicle = vehicle
+        self._attr_unique_id = f"{vehicle.vin}_health"
+        self._attr_name = f"{vehicle.name} Health"
+
+    @property
+    def state(self):
+        try:
+            return self.vehicle.get_health()
+        except Exception:
+            return "error"
+
+    @property
+    def extra_state_attributes(self):
+        try:
+            return self.vehicle.get_health()
+        except Exception:
+            return {}
