@@ -29,6 +29,7 @@ from myskoda.models.charging import Charging, ChargingStatus
 from myskoda.models.driving_range import EngineType
 from myskoda.models.event import OperationStatus
 from myskoda.models.info import CapabilityId
+from myskoda.models.health import WarningLightCategory
 
 from .const import COORDINATORS, DOMAIN, OUTSIDE_TEMP_MAX_BOUND, OUTSIDE_TEMP_MIN_BOUND
 from .coordinator import MySkodaConfigEntry
@@ -43,6 +44,7 @@ async def async_setup_entry(
     _discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Set up the sensor platform."""
+
     add_supported_entities(
         available_entities=[
             AddBlueRange,
@@ -70,12 +72,20 @@ async def async_setup_entry(
             TargetBatteryPercentage,
             ClimatisationTimeLeft,
             AuxHeaterTimeLeft,
-            MySkodaVehicleHealthSensor,
         ],
         coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
         async_add_entities=async_add_entities,
     )
 
+    # --- création dynamique des WarningLight sensors ---
+    sensors = []
+    coordinators = hass.data[DOMAIN][config.entry_id][COORDINATORS]
+
+    for vin, coordinator in coordinators.items():
+        for category in WarningLightCategory:
+            sensors.append(WarningLightSensor(coordinator, vin, category))
+
+    async_add_entities(sensors)
 
 class MySkodaSensor(MySkodaEntity, SensorEntity):
     def _charging(self) -> Charging | None:
@@ -817,28 +827,39 @@ class AuxHeaterTimeLeft(MySkodaSensor):
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AUXILIARY_HEATING]
 
-class MySkodaVehicleHealthSensor(MySkodaSensor):
-    """Sensor reporting the full vehicle health using get_health()"""
 
-    _attr_name = "Vehicle Health"
-    _attr_icon = "mdi:car-heart"
+CATEGORY_ICONS = {
+    "ASSISTANCE": "mdi:car-wrench",
+    "COMFORT": "mdi:seat-recline-normal",
+    "BRAKE": "mdi:car-brake-alert",
+    "ENGINE": "mdi:engine",
+    "LIGHTING": "mdi:car-light-high",
+    "TIRE": "mdi:tire",
+    "OTHER": "mdi:alert-circle",
+}
+
+class WarningLightSensor(MySkodaSensor):
+    """Sensor for a specific warning light category."""
+
+    def __init__(self, coordinator, vin, category: WarningLightCategory):
+        self._category = category
+
+        self.entity_description = SensorEntityDescription(
+            key=f"{category.value.lower()}_warning",
+            translation_key=f"{category.value.lower()}_warning",
+            icon=CATEGORY_ICONS.get(category.value, "mdi:alert-circle"),
+            entity_category=EntityCategory.DIAGNOSTIC,
+        )
+
+        super().__init__(coordinator, vin)
 
     @property
-    def native_value(self) -> str | dict:
-        """Return the health of the vehicle."""
-        try:
-            # get_health() existe sur l'objet vehicle de myskoda
-            return self.vehicle.get_health()
-        except Exception:
-            return "error"
-
-    @property
-    def extra_state_attributes(self) -> dict:
-        """Return full health details as attributes."""
-        try:
-            health = self.vehicle.get_health()
-            if isinstance(health, dict):
-                return health
-            return {}
-        except Exception:
-            return {}
+    def native_value(self) -> str | None:
+        """Return defects for this warning category."""
+        if health := self.vehicle.health:
+            for warning in health.warning_lights:
+                if warning.category == self._category:
+                    if warning.defects:
+                        return ", ".join(warning.defects)
+                    return "OK"
+        return None
