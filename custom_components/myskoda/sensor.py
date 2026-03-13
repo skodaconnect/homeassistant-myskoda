@@ -825,22 +825,29 @@ class MySkodaVehicleHealthSensor(SensorEntity):
     _attr_device_class = None
     _attr_unit_of_measurement = None
 
-    def __init__(self, coordinator, vehicle):
+    def __init__(self, coordinator, vehicle_id):
+        """Initialize the sensor."""
         self.coordinator = coordinator
-        self.vehicle = vehicle
-        self._attr_unique_id = f"{vehicle.vin}_health"
-        self._attr_name = f"{vehicle.name} Health"
+        self.vehicle_id = vehicle_id
+        self._attr_unique_id = f"{vehicle_id}_health"
+        # Utilise le nom depuis les données du coordinator
+        self._attr_name = f"{self.coordinator.data[vehicle_id]['name']} Health"
 
     @property
     def state(self):
+        """Return the result of get_health()."""
         try:
-            return self.vehicle.get_health()
+            vehicle_data = self.coordinator.data[self.vehicle_id]
+            # get_health est disponible dans le dict sous 'health' ou via API
+            return vehicle_data.get("health", "unknown")
         except Exception:
             return "error"
 
     @property
     def extra_state_attributes(self):
+        """Expose full health dict as attributes."""
         try:
-            return self.vehicle.get_health()
+            vehicle_data = self.coordinator.data[self.vehicle_id]
+            return vehicle_data.get("health", {})
         except Exception:
             return {}
