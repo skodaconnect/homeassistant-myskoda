@@ -817,37 +817,28 @@ class AuxHeaterTimeLeft(MySkodaSensor):
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.AUXILIARY_HEATING]
 
-from homeassistant.components.sensor import SensorEntity
+class MySkodaVehicleHealthSensor(MySkodaSensor):
+    """Sensor reporting the full vehicle health using get_health()"""
 
-class MySkodaVehicleHealthSensor(SensorEntity):
-    """Sensor for full vehicle health status (get_health)."""
-
-    _attr_device_class = None
-    _attr_unit_of_measurement = None
-
-    def __init__(self, coordinator, vehicle_id):
-        """Initialize the sensor."""
-        self.coordinator = coordinator
-        self.vehicle_id = vehicle_id
-        self._attr_unique_id = f"{vehicle_id}_health"
-        # Utilise le nom depuis les données du coordinator
-        self._attr_name = f"{self.coordinator.data[vehicle_id]['name']} Health"
+    _attr_name = "Vehicle Health"
+    _attr_icon = "mdi:car-heart"
 
     @property
-    def state(self):
-        """Return the result of get_health()."""
+    def native_value(self) -> str | dict:
+        """Return the health of the vehicle."""
         try:
-            vehicle_data = self.coordinator.data[self.vehicle_id]
-            # get_health est disponible dans le dict sous 'health' ou via API
-            return vehicle_data.get("health", "unknown")
+            # get_health() existe sur l'objet vehicle de myskoda
+            return self.vehicle.get_health()
         except Exception:
             return "error"
 
     @property
-    def extra_state_attributes(self):
-        """Expose full health dict as attributes."""
+    def extra_state_attributes(self) -> dict:
+        """Return full health details as attributes."""
         try:
-            vehicle_data = self.coordinator.data[self.vehicle_id]
-            return vehicle_data.get("health", {})
+            health = self.vehicle.get_health()
+            if isinstance(health, dict):
+                return health
+            return {}
         except Exception:
             return {}
