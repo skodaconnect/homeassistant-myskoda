@@ -77,7 +77,7 @@ async def async_setup_entry(
         async_add_entities=async_add_entities,
     )
 
-    # --- création dynamique des WarningLight sensors ---
+    # --- Dynamic creation of Warning Light sensors ---
     sensors = []
     coordinators = hass.data[DOMAIN][config.entry_id][COORDINATORS]
 
@@ -833,6 +833,7 @@ CATEGORY_ICONS = {
     "COMFORT": "mdi:seat-recline-normal",
     "BRAKE": "mdi:car-brake-alert",
     "ENGINE": "mdi:engine",
+    "ELECTRIC_ENGINE": "mdi:car-electric",
     "LIGHTING": "mdi:car-light-high",
     "TIRE": "mdi:tire",
     "OTHER": "mdi:alert-circle",
