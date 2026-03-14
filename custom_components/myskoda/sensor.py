@@ -847,6 +847,7 @@ class WarningLightSensor(MySkodaSensor):
 
         self.entity_description = SensorEntityDescription(
             key=f"{category.value.lower()}_warning",
+            name=f"{category.value.title()} Warning",
             translation_key=f"{category.value.lower()}_warning",
             icon=CATEGORY_ICONS.get(category.value, "mdi:alert-circle"),
             entity_category=EntityCategory.DIAGNOSTIC,
