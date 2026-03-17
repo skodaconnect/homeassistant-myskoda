@@ -18,6 +18,8 @@ from homeassistant.exceptions import ServiceValidationError
 from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
 
+from aiohttp import ClientResponseError
+
 from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, COORDINATORS, DOMAIN
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
@@ -107,7 +109,7 @@ class HonkFlash(MySkodaButton):
         myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
         try:
             await self._press_button(myskoda.honk_flash(vin))
-        except OperationFailedError as exc:
+        except (ClientResponseError, OperationFailedError) as exc:
             _LOGGER.error("Failed honk and flash: %s", exc)
         _LOGGER.info("Sent honk and flash")
 
@@ -130,7 +132,7 @@ class Flash(MySkodaButton):
         myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
         try:
             await self._press_button(myskoda.flash(vin))
-        except OperationFailedError as exc:
+        except (ClientResponseError, OperationFailedError) as exc:
             _LOGGER.error("Failed to flash lights: %s", exc)
         _LOGGER.info("Sent light flash")
 
@@ -159,7 +161,7 @@ class WakeUp(MySkodaButton):
         myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
         try:
             await self._press_button(myskoda.wakeup(vin))
-        except OperationFailedError as exc:
+        except (ClientResponseError, OperationFailedError) as exc:
             _LOGGER.error("Failed to wake up vehicle: %s", exc)
         _LOGGER.info("Signaled vehicle to wake up")
 
