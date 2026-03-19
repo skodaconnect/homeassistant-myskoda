@@ -18,6 +18,8 @@ from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [r
 from homeassistant.util import Throttle
 from homeassistant.exceptions import ServiceValidationError
 
+from aiohttp import ClientResponseError
+
 from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
 
@@ -124,7 +126,7 @@ class ChargeLimit(MySkodaNumber):
         myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
         try:
             await self._change_number(myskoda.set_charge_limit(vin, int(value)))
-        except OperationFailedError as exc:
+        except (ClientResponseError, OperationFailedError) as exc:
             _LOGGER.error("Failed to set charging limit: %s", exc)
         _LOGGER.info("Set charging limit to %s", int(value))
 

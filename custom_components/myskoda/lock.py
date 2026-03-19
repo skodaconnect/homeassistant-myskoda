@@ -14,6 +14,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
 from homeassistant.util import Throttle
 
+from aiohttp import ClientResponseError
+
 from myskoda.models.common import DoorLockedState
 from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
@@ -113,7 +115,7 @@ class DoorLock(MySkodaLock):
                 await self._operate_lock(myskoda.lock(vin, spin))
             else:
                 await self._operate_lock(myskoda.unlock(vin, spin))
-        except OperationFailedError as exc:
+        except (ClientResponseError, OperationFailedError) as exc:
             _LOGGER.error("Failed to unlock vehicle: %s", exc)
 
     async def async_lock(self, **kwargs) -> None:

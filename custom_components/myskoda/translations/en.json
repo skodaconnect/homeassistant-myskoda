@@ -233,6 +233,33 @@
             },
             "outside_temperature": {
                 "name": "Outside Temperature"
+            },
+            "overall_mileage": {
+                "name": "Overall Mileage"
+            },
+            "overall_travel_time": {
+                "name": "Overall Travel Time"
+            },
+            "overall_average_speed": {
+                "name": "Overall Average Speed"
+            },
+            "overall_average_electric_consumption": {
+                "name": "Overall Average Electric Consumption"
+            },
+            "overall_average_fuel_consumption": {
+                "name": "Overall Average Fuel Consumption"
+            },
+            "last_trip_mileage": {
+                "name": "Last Trip Mileage"
+            },
+            "last_trip_travel_time": {
+                "name": "Last Trip Travel Time"
+            },
+            "last_trip_average_speed": {
+                "name": "Last Trip Average Speed"
+            },
+            "last_trip_average_fuel_consumption": {
+                "name": "Last Trip Average Fuel Consumption"
             }
         },
         "switch": {
