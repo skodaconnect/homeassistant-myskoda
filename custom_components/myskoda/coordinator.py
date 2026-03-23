@@ -213,7 +213,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             self.service_events,
         )
 
-    async def _on_myskoda_update(self) -> None:
+    async def _on_myskoda_update(self, vin: str) -> None:
         """Trigger an update of all HA entities when User or Vehicle change.
 
         Always pass in a copy of the object to force an update.
