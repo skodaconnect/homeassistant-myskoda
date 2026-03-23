@@ -73,6 +73,7 @@ class MySkodaNumber(MySkodaEntity, NumberEntity):
         """Change the number by executing to_call."""
         self._ensure_not_readonly()
         self._assumed_value = value
+        self._attr_native_value = value
 
         await to_call
 
