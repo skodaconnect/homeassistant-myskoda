@@ -55,6 +55,7 @@ async def async_setup_entry(
             ElectricRange,
             FuelLevel,
             GasRange,
+            GasLevel,
             InspectionInterval,
             InspectionIntervalKM,
             LastUpdated,
