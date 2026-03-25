@@ -206,6 +206,60 @@ class ConfigFlow(BaseConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Handle reconfiguration of MySkoda credentials."""
+        errors: dict = {}
+
+        reconfigure_entry = self._get_reconfigure_entry()
+
+        if user_input is not None:
+            try:
+                await validate_input(self.hass, user_input)
+            except (CannotConnect, ClientResponseError):
+                errors["base"] = "cannot_connect"
+            except (
+                InvalidAuth,
+                AuthorizationError,
+                AuthorizationFailedError,
+                NotAuthorizedError,
+            ):
+                errors["base"] = "invalid_auth"
+            except (TermsAndConditionsError, MarketingConsentError):
+                errors["base"] = "relogin_in_app"
+            except Exception:
+                _LOGGER.exception("Unexpected exception during reconfigure")
+                errors["base"] = "unknown"
+            else:
+                # Credentials work. Store them.
+                reconfigure_data = reconfigure_entry.data.copy()
+                reconfigure_data[CONF_USERNAME] = user_input[CONF_USERNAME]
+                reconfigure_data[CONF_PASSWORD] = user_input[CONF_PASSWORD]
+                reconfigure_data[CONF_REFRESH_TOKEN] = None
+
+                self.hass.config_entries.async_update_entry(
+                    reconfigure_entry,
+                    data=reconfigure_data,
+                )
+                self.hass.async_create_task(
+                    self.hass.config_entries.async_reload(reconfigure_entry.entry_id)
+                )
+                return self.async_abort(reason="reconfigure_successful")
+
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_USERNAME, default=reconfigure_entry.data[CONF_USERNAME]
+                    ): str,
+                    vol.Required(CONF_PASSWORD): str,
+                }
+            ),
+            errors=errors,
+        )
+
     @staticmethod
     @callback
     def async_get_options_flow(
