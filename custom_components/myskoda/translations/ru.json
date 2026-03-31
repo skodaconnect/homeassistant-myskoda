@@ -166,7 +166,8 @@
                     "charging": "Заряжается",
                     "connect_cable": "Нет питания",
                     "conserving": "Сохранение заряда",
-                    "ready_for_charging": "Готово к зарядке"
+                    "ready_for_charging": "Готово к зарядке",
+                    "charging_interrupted": "Зарядка прервана"
                 }
             },
             "estimated_time_left_to_reach_target_temperature": {
@@ -231,6 +232,33 @@
             },
             "outside_temperature": {
                 "name": "Наружная температура"
+            },
+            "overall_mileage": {
+                "name": "Пробег"
+            },
+            "overall_travel_time": {
+                "name": "Время поездки"
+            },
+            "overall_average_speed": {
+                "name": "Средняя скорость"
+            },
+            "overall_average_electric_consumption": {
+                "name": "Средний расход электроэнергии"
+            },
+            "overall_average_fuel_consumption": {
+                "name": "Средний расход топлива"
+            },
+            "last_trip_mileage": {
+                "name": "Пробег последней поездки"
+            },
+            "last_trip_travel_time": {
+                "name": "Время последней поездки"
+            },
+            "last_trip_average_speed": {
+                "name": "Средняя скорость последней поездки"
+            },
+            "last_trip_average_fuel_consumption": {
+                "name": "Средний расход топлива последней поездки"
             }
         },
         "switch": {
