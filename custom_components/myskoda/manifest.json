@@ -17,7 +17,7 @@
     "myskoda"
   ],
   "requirements": [
-    "myskoda==2.8.0"
+    "myskoda==2.9.1"
   ],
   "version": "1.31.1"
 }
