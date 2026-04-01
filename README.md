@@ -21,6 +21,7 @@ A [Home Assistant](https://www.home-assistant.io/) integration for Skoda vehicle
   - [Customize polling interval](#customize-polling-interval)
   - [Disabling polling](#disabling-polling)
   - [S-PIN](#s-pin)
+  - [Reconfiguring credentials](#reconfiguring-credentials)
   - [Read-only mode](#read-only-mode)
   - [Inner workings](#inner-workings)
 - [FAQ](#faq)
@@ -97,6 +98,8 @@ The configuration includes:
 The configuration parameters (except login and password) are available for modification after initialization
 from Integrations > MySkoda > Hubs > Select your account > Configure. The change of configuration will trigger
 the reload of the integration.
+
+To update your login credentials after initial setup, see [Reconfiguring credentials](#reconfiguring-credentials).
 
 ### Debugging
 
@@ -194,6 +197,20 @@ data:
 For some operations, such as locking and unlocking doors, it is required to fill in the S-PIN that you have set for privileged access to your car via the App. This integration does not support setting the S-PIN yet.
 Fill in the required S-PIN in Settings > Integrations > MySkoda > Configuration > S-PIN and after a few seconds you will have the options available in HomeAssistant.
 
+### Reconfiguring credentials
+If your MySkoda password changes or you want to update the credentials used by the integration, you can reconfigure without removing and re-adding the integration — preserving all your entity history and automations.
+
+1. Go to **Settings > Integrations > MySkoda**
+2. Click the three-dot menu next to your account
+3. Select **Reconfigure**
+4. Enter your updated e-mail address and password
+5. Click **Submit**
+
+The integration will validate the new credentials and reload automatically on success.
+
+Alternately, click the button below and select **Reconfigure**:
+[![Button](https://my.home-assistant.io/badges/integration.svg)](https://my.home-assistant.io/redirect/integration/?domain=myskoda)
+
 ### Read-only mode
 The opposite to S-PIN is read-only mode. In this mode, all buttons, switches and other functionality that allows you to change settings remotely are disabled.
 In order not to accidentally delete data, we do not delete the entities.
@@ -223,9 +240,11 @@ Yes. The Skoda API reports all values in metric and this is also how the data is
 
 Home Assistant can convert the values by configurating the _Unit system_ in the [General Settings](https://www.home-assistant.io/docs/configuration/basic/).
 
-#### What do I do when I changed my MySkoda login / username?
+#### What do I do when I changed my MySkoda password or username?
 
-You can add your new account, while keeping your old account. That way, the data will be retained in HomeAssistant. After your new account is working, you can remove the account with your old username.
+If only your **password** changed, use the built-in reconfigure flow to update it without losing entity history — see [Reconfiguring credentials](#reconfiguring-credentials).
+
+If your **username (e-mail address)** changed, you can add your new account while keeping the old one so that entity history is retained. Once the new account is working, remove the old one.
 
 #### I get an initialization or a migration error in the integration after restarting HomeAssistant
 
