@@ -115,8 +115,7 @@ class ChargeLimit(MySkodaNumber):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_native_value(self, value: float):  # noqa: D102
-        if not self._ensure_not_readonly():
-            return
+        self._ensure_not_readonly()
 
         myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
         try:
