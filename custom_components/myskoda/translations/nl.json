@@ -3,7 +3,8 @@
         "abort": {
             "already_configured": "Apparaat is al geconfigureerd",
             "reauth_successful": "Herauthenticatie geslaagd.",
-            "no_entry": "Kan de MySkoda configuratie niet vinden. Controleer uw logbestanden en open een probleem op GitHub."
+            "no_entry": "Kan de MySkoda configuratie niet vinden. Controleer uw logbestanden en open een probleem op GitHub.",
+            "reconfigure_successful": "Opnieuw configureren gelukt."
         },
         "error": {
             "cannot_connect": "Kan geen verbinding maken",
@@ -28,6 +29,14 @@
                     "password": "Wachtwoord"
                 },
                 "description": "Voer de inloggegevens in van uw MySkoda app."
+            },
+            "reconfigure": {
+                "data": {
+                    "email": "E-mail adres",
+                    "password": "Wachtwoord"
+                },
+                "description": "Uw MySkoda inloggegevens bijwerken.",
+                "title": "MySkoda opnieuw configureren"
             }
         }
     },
