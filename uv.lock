@@ -35,6 +35,15 @@ wheels = [
 ]
 
 [[package]]
+name = "aiofiles"
+version = "25.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/41/c3/534eac40372d8ee36ef40df62ec129bee4fdb5ad9706e58a29be53b2c970/aiofiles-25.1.0.tar.gz", hash = "sha256:a8d728f0a29de45dc521f18f07297428d56992a742f0cd2701ba86e44d23d5b2", size = 46354, upload-time = "2025-10-09T20:51:04.358Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bc/8a/340a1555ae33d7354dbca4faa54948d76d89a27ceef032c8c3bc661d003e/aiofiles-25.1.0-py3-none-any.whl", hash = "sha256:abe311e527c862958650f9438e859c1fa7568a141b22abcd015e120e86a85695", size = 14668, upload-time = "2025-10-09T20:51:03.174Z" },
+]
+
+[[package]]
 name = "aiohappyeyeballs"
 version = "2.6.1"
 source = { registry = "https://pypi.org/simple" }
@@ -736,6 +745,21 @@ wheels = [
 ]
 
 [[package]]
+name = "firebase-messaging"
+version = "0.4.5"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "aiohttp" },
+    { name = "cryptography" },
+    { name = "http-ece" },
+    { name = "protobuf" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/52/a0/20dc16682beff1b382ec10a9fba156f9bd5c33bfbbf227be5af437daff94/firebase_messaging-0.4.5.tar.gz", hash = "sha256:11f19509ea839e53f995d93d25d63a4a1385572a37fc2cff2c1b389534cb80f1", size = 36088, upload-time = "2025-05-10T09:16:26.553Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1d/10/f4e266f9e0aa025d23077c733e5a7f646fc9ced3c8b2711168e93d12742a/firebase_messaging-0.4.5-py3-none-any.whl", hash = "sha256:b566b5dedb15463fa35540d42acfda41040a2ae19c562b33b52f226e90212168", size = 33836, upload-time = "2025-05-10T09:16:24.843Z" },
+]
+
+[[package]]
 name = "fnv-hash-fast"
 version = "1.6.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1035,7 +1059,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "homeassistant", specifier = ">=2025.10.2" },
-    { name = "myskoda", specifier = ">=2.9.1" },
+    { name = "myskoda", specifier = ">=2.10.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -1056,6 +1080,15 @@ sdist = { url = "https://files.pythonhosted.org/packages/8f/bb/abe391c97ad68b7ed
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ce/62/0f0e2bf8e2e8d69295c8e5ff18a06f472a12c97cebcd95431bad3e022c01/homeassistant_stubs-2026.2.2-py3-none-any.whl", hash = "sha256:5cb40c3f07c1d102edbf2e8452f6ef279524482fc6efd6cbd716d01c47c83113", size = 3486560, upload-time = "2026-02-14T03:11:41.872Z" },
 ]
+
+[[package]]
+name = "http-ece"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2b/1a/60ccc29fccd4789b7cada188b114185e8a5d63aba0d93262adbbe776cfe5/http_ece-1.1.0.tar.gz", hash = "sha256:932ebc2fa7c216954c320a188ae9c1f04d01e67bec9cdce1bfbc912813b0b4f8", size = 4902, upload-time = "2019-02-11T21:52:37.411Z" }
 
 [[package]]
 name = "httpcore"
@@ -1241,18 +1274,20 @@ wheels = [
 
 [[package]]
 name = "myskoda"
-version = "2.9.1"
+version = "2.10.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
+    { name = "aiofiles" },
     { name = "aiohttp" },
     { name = "aiomqtt" },
+    { name = "firebase-messaging" },
     { name = "mashumaro", extra = ["orjson"] },
     { name = "pyjwt" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/bb/38/2226f5238900c722384cd45f2768649ca157d7d29654cdc39fb4f838bd37/myskoda-2.9.1.tar.gz", hash = "sha256:98ac1e1a611ecd8342a8c793b2f8fd99a4682db1d9d885b9b21565778801dc57", size = 352908, upload-time = "2026-03-30T14:02:26.051Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/90/54/3f8f2322b2156e0be69ee61a0440a953894b20e053a577b4a023322ea59a/myskoda-2.10.0.tar.gz", hash = "sha256:94a5f4698f0f8a0daae31b92b4d9d15a6a6ed77a89d13aff56068b325bafb7d6", size = 383409, upload-time = "2026-04-26T09:27:16.391Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/93/cc/8f16d06bda6df573146f462fa169213d324bfc025bc8319dffd47ca52919/myskoda-2.9.1-py3-none-any.whl", hash = "sha256:d8989f69eb0e3b02931ae133c4e483ed29f489c62fca9280157dfb6dfbf448b8", size = 73033, upload-time = "2026-03-30T14:02:24.85Z" },
+    { url = "https://files.pythonhosted.org/packages/ff/17/e0418d872e48e3f44d6bf501ddbb662d13508177af93a47731ccafd1533c/myskoda-2.10.0-py3-none-any.whl", hash = "sha256:3f87eeb4ea2f50402ba4e2fff21248c9495fb099b7005428eee9498cbca896a2", size = 79333, upload-time = "2026-04-26T09:27:15.121Z" },
 ]
 
 [[package]]
@@ -1445,6 +1480,21 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/cb/ef/3c6ecf8b317aa982f309835e8f96987466123c6e596646d4e6a1dfcd080f/propcache-0.4.1-cp314-cp314t-win_amd64.whl", hash = "sha256:990f6b3e2a27d683cb7602ed6c86f15ee6b43b1194736f9baaeb93d0016633b1", size = 46259, upload-time = "2025-10-08T19:48:34.226Z" },
     { url = "https://files.pythonhosted.org/packages/c4/2d/346e946d4951f37eca1e4f55be0f0174c52cd70720f84029b02f296f4a38/propcache-0.4.1-cp314-cp314t-win_arm64.whl", hash = "sha256:ecef2343af4cc68e05131e45024ba34f6095821988a9d0a02aa7c73fcc448aa9", size = 40428, upload-time = "2025-10-08T19:48:35.441Z" },
     { url = "https://files.pythonhosted.org/packages/5b/5a/bc7b4a4ef808fa59a816c17b20c4bef6884daebbdf627ff2a161da67da19/propcache-0.4.1-py3-none-any.whl", hash = "sha256:af2a6052aeb6cf17d3e46ee169099044fd8224cbaf75c76a2ef596e8163e2237", size = 13305, upload-time = "2025-10-08T19:49:00.792Z" },
+]
+
+[[package]]
+name = "protobuf"
+version = "7.34.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/6b/6b/a0e95cad1ad7cc3f2c6821fcab91671bd5b78bd42afb357bb4765f29bc41/protobuf-7.34.1.tar.gz", hash = "sha256:9ce42245e704cc5027be797c1db1eb93184d44d1cdd71811fb2d9b25ad541280", size = 454708, upload-time = "2026-03-20T17:34:47.036Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ec/11/3325d41e6ee15bf1125654301211247b042563bcc898784351252549a8ad/protobuf-7.34.1-cp310-abi3-macosx_10_9_universal2.whl", hash = "sha256:d8b2cc79c4d8f62b293ad9b11ec3aebce9af481fa73e64556969f7345ebf9fc7", size = 429247, upload-time = "2026-03-20T17:34:37.024Z" },
+    { url = "https://files.pythonhosted.org/packages/eb/9d/aa69df2724ff63efa6f72307b483ce0827f4347cc6d6df24b59e26659fef/protobuf-7.34.1-cp310-abi3-manylinux2014_aarch64.whl", hash = "sha256:5185e0e948d07abe94bb76ec9b8416b604cfe5da6f871d67aad30cbf24c3110b", size = 325753, upload-time = "2026-03-20T17:34:38.751Z" },
+    { url = "https://files.pythonhosted.org/packages/92/e8/d174c91fd48e50101943f042b09af9029064810b734e4160bbe282fa1caa/protobuf-7.34.1-cp310-abi3-manylinux2014_s390x.whl", hash = "sha256:403b093a6e28a960372b44e5eb081775c9b056e816a8029c61231743d63f881a", size = 340198, upload-time = "2026-03-20T17:34:39.871Z" },
+    { url = "https://files.pythonhosted.org/packages/53/1b/3b431694a4dc6d37b9f653f0c64b0a0d9ec074ee810710c0c3da21d67ba7/protobuf-7.34.1-cp310-abi3-manylinux2014_x86_64.whl", hash = "sha256:8ff40ce8cd688f7265326b38d5a1bed9bfdf5e6723d49961432f83e21d5713e4", size = 324267, upload-time = "2026-03-20T17:34:41.1Z" },
+    { url = "https://files.pythonhosted.org/packages/85/29/64de04a0ac142fb685fd09999bc3d337943fb386f3a0ec57f92fd8203f97/protobuf-7.34.1-cp310-abi3-win32.whl", hash = "sha256:34b84ce27680df7cca9f231043ada0daa55d0c44a2ddfaa58ec1d0d89d8bf60a", size = 426628, upload-time = "2026-03-20T17:34:42.536Z" },
+    { url = "https://files.pythonhosted.org/packages/4d/87/cb5e585192a22b8bd457df5a2c16a75ea0db9674c3a0a39fc9347d84e075/protobuf-7.34.1-cp310-abi3-win_amd64.whl", hash = "sha256:e97b55646e6ce5cbb0954a8c28cd39a5869b59090dfaa7df4598a7fba869468c", size = 437901, upload-time = "2026-03-20T17:34:44.112Z" },
+    { url = "https://files.pythonhosted.org/packages/88/95/608f665226bca68b736b79e457fded9a2a38c4f4379a4a7614303d9db3bc/protobuf-7.34.1-py3-none-any.whl", hash = "sha256:bb3812cd53aefea2b028ef42bd780f5b96407247f20c6ef7c679807e9d188f11", size = 170715, upload-time = "2026-03-20T17:34:45.384Z" },
 ]
 
 [[package]]
