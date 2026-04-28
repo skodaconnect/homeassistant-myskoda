@@ -5,29 +5,30 @@ from __future__ import annotations
 import logging
 
 from aiohttp import ClientResponseError, InvalidUrlClientError
-
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.util.ssl import get_default_context
+
 from myskoda import (
-    MySkoda,
     AuthorizationFailedError,
+    MySkoda,
 )
-from myskoda.myskoda import TRACE_CONFIG
 from myskoda.auth.authorization import (
     CSRFError,
+    MarketingConsentError,
     TermsAndConditionsError,
     TokenExpiredError,
-    MarketingConsentError,
 )
+from myskoda.myskoda import TRACE_CONFIG
 
 from .const import (
-    CONF_USERNAME,
+    CONF_FCM_TOKEN,
     CONF_PASSWORD,
     CONF_REFRESH_TOKEN,
+    CONF_USERNAME,
     CONF_VINLIST,
     COORDINATORS,
     DOMAIN,
@@ -36,8 +37,8 @@ from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .error_handlers import handle_aiohttp_error
 from .issues import (
     async_create_tnc_issue,
-    async_delete_tnc_issue,
     async_delete_spin_issue,
+    async_delete_tnc_issue,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -72,15 +73,23 @@ def myskoda_instantiate(
 
 async def auto_connect(myskoda: MySkoda, entry: MySkodaConfigEntry) -> None:
     """Figure out if we can use the refresh token or if we should fall back to username/password. Then attempt to authenticate."""
-    if entry.data.get(CONF_REFRESH_TOKEN):
-        try:
-            _LOGGER.debug("Authorizing with refresh token")
-            await myskoda.connect_with_refresh_token(entry.data[CONF_REFRESH_TOKEN])
-        except TokenExpiredError:
-            _LOGGER.debug("Refresh token is expired. Falling back to username/password")
-            await myskoda.connect(entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD])
-    else:
-        await myskoda.connect(entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD])
+
+    connect_kwargs = {
+        "email": entry.data[CONF_USERNAME],
+        "password": entry.data[CONF_PASSWORD],
+        "refresh_token": entry.data.get(CONF_REFRESH_TOKEN),
+        "fcm_token": entry.data.get(CONF_FCM_TOKEN),
+    }
+    _LOGGER.debug(
+        "Authorizing with %s",
+        "refresh token'" if connect_kwargs["refresh_token"] else "username/password",
+    )
+    try:
+        await myskoda.connect(**connect_kwargs)
+    except TokenExpiredError:
+        _LOGGER.debug("Refresh token is expired. Falling back to username/password")
+        connect_kwargs.pop("refresh_token")
+        await myskoda.connect(**connect_kwargs)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> bool:
@@ -135,8 +144,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
         else:
             raise
 
-    current_refresh_token = await myskoda.get_refresh_token()
     if entry.data.get(CONF_REFRESH_TOKEN):
+        current_refresh_token = await myskoda.get_refresh_token()
         if current_refresh_token != entry.data[CONF_REFRESH_TOKEN]:
             _LOGGER.debug(
                 "Refresh token updated during initialization. Storing new token in configuration."
@@ -173,6 +182,13 @@ async def async_unload_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> 
                 entry_data = {**entry.data}
                 entry_data[CONF_REFRESH_TOKEN] = current_refresh_token
                 hass.config_entries.async_update_entry(entry, data=entry_data)
+        if coord.myskoda.fcm_token and coord.myskoda.fcm_token != entry.data.get(
+            CONF_FCM_TOKEN
+        ):
+            _LOGGER.info("Saving FCM token before shutdown")
+            entry_data = {**entry.data}
+            entry_data[CONF_FCM_TOKEN] = coord.myskoda.fcm_token
+            hass.config_entries.async_update_entry(entry, data=entry_data)
         await coord.myskoda.disconnect()
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
