@@ -149,8 +149,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             return
 
         _LOGGER.warning(
-            "Could not connect to MQTT. Retry in %s seconds",
-            MQTT_RECONNECT_INTERVAL_IN_SECONDS,
+            "Retrying MQTT connection in %s seconds", MQTT_RECONNECT_INTERVAL_IN_SECONDS
         )
         async_call_later(
             self.hass,
@@ -176,7 +175,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             )
             try:
                 self.myskoda.fcm_token = await self.myskoda.get_and_register_fcm_token()
-            except Exception:
+            except Exception as exc:
+                _LOGGER.debug("Failed to register FCM Token: %s", exc)
                 self._schedule_mqtt_retry()
                 return
 
