@@ -5,7 +5,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from myskoda import Vehicle
 from myskoda.models.event import OperationEvent
-from myskoda.models.info import CapabilityId
+from myskoda.models.info import CapabilityId, ViewPoint, ViewType
 
 from .const import DOMAIN
 from .coordinator import (
@@ -79,7 +79,7 @@ class MySkodaEntity(CoordinatorEntity):
         """Check if all capabilities in the list are supported."""
         return all(self.vehicle.has_capability(capability) for capability in cap)
 
-    def get_renders(self) -> dict[str, str]:
+    def get_renders(self) -> dict[ViewPoint, str]:
         """Return a dict of all vehicle image render URLs, keyed by view_point.
 
         E.g.
@@ -87,18 +87,16 @@ class MySkodaEntity(CoordinatorEntity):
         """
         return {render.view_point: render.url for render in self.vehicle.info.renders}
 
-    def get_composite_renders(self) -> dict[str, list[dict[str, str]]]:
-        """Return a dict of all vehicle composite render URLs, keyed by view_type, lower cased.
-        Value contains a list of available renders, keyed by view_point.
+    def get_composite_renders(self) -> dict[ViewType, dict[ViewPoint, str]]:
+        """Return a dict of all vehicle composite render URLs, keyed by view_type.
+        Value contains a dict of available renders, keyed by view_point.
 
         E.g.
-        {"home": [ {"exterior_side": "https://ip-modcwp.azureedge.net/path/render.png"} ] }
+        {"home": {"exterior_side": "https://ip-modcwp.azureedge.net/path/render.png"}}
         """
         composite_renders = {}
         for cr in self.vehicle.info.composite_renders:
-            composite_renders[cr.view_type.lower()] = []
-            for render in cr.layers:
-                composite_renders[cr.view_type.lower()].append(
-                    {render.view_point: render.url}
-                )
+            composite_renders[cr.view_type] = {
+                render.view_point: render.url for render in cr.layers
+            }
         return composite_renders
