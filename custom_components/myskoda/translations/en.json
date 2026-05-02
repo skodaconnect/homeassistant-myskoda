@@ -272,6 +272,9 @@
             }
         },
         "switch": {
+            "active_ventilation": {
+                "name": "Active Ventilation"
+            },
             "battery_care_mode": {
                 "name": "Battery Care"
             },

@@ -271,6 +271,9 @@
             }
         },
         "switch": {
+            "active_ventilation": {
+                "name": "Actieve ventilatie"
+            },
             "battery_care_mode": {
                 "name": "Accu onderhoudsmodus"
             },
