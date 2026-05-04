@@ -2,6 +2,7 @@
 
 from datetime import UTC, datetime
 from math import isnan
+from typing import Any
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -117,7 +118,7 @@ class Operation(MySkodaSensor):
             return last_operation.status.lower()
 
     @property
-    def extra_state_attributes(self) -> dict:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Returns additional attributes for the operation sensor.
 
         - request_id, operation name, error_code and timestamp of the last seen operation.
@@ -163,7 +164,7 @@ class ServiceEvent(MySkodaSensor):
             return last_service_event.timestamp
 
     @property
-    def extra_state_attributes(self) -> dict:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Returns additional attributes for the service event sensor.
 
         - history: a list of dicts with the same fields for the previously seen event.
@@ -176,7 +177,7 @@ class ServiceEvent(MySkodaSensor):
             {
                 "name": event.name.value,
                 "timestamp": event.timestamp,
-                "data": event.data,
+                "data": event.data.to_dict(),
             }
             for event in self.service_events
         ]
