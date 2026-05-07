@@ -28,7 +28,6 @@ from myskoda.models.charging import (
 )
 from myskoda.models.air_conditioning import (
     AirConditioningAtUnlock,
-    AirConditioningState,
     AirConditioningTimer,
     AirConditioningWithoutExternalPower,
     SeatHeating,
@@ -56,7 +55,6 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     add_supported_entities(
         available_entities=[
-            ActiveVentilationSwitch,
             WindowHeatingSwitch,
             EnableCharging,
             ReducedCurrent,
@@ -166,45 +164,6 @@ class WindowHeatingSwitch(MySkodaSwitch):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.WINDOW_HEATING]
-
-
-class ActiveVentilationSwitch(MySkodaSwitch):
-    """Controls active ventilation for vehicles without auxiliary heating or electric AC."""
-
-    entity_description = SwitchEntityDescription(
-        key="active_ventilation",
-        name="Active Ventilation",
-        device_class=SwitchDeviceClass.SWITCH,
-        translation_key="active_ventilation",
-    )
-
-    @property
-    def is_on(self) -> bool | None:  # noqa: D102
-        if ac := self.vehicle.air_conditioning:
-            return ac.state == AirConditioningState.VENTILATION
-
-    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
-    async def _async_turn_on_off(self, turn_on: bool):
-        """Internal method to have a central location for the Throttle."""
-        myskoda, vin = self.coordinator.myskoda, self.vehicle.info.vin
-        action = "on" if turn_on else "off"
-        try:
-            if turn_on:
-                await self._flip_switch(myskoda.start_ventilation(vin))
-            else:
-                await self._flip_switch(myskoda.stop_ventilation(vin))
-        except (ClientResponseError, OperationFailedError) as exc:
-            _LOGGER.error("Failed to turn active ventilation %s: %s", action, exc)
-        _LOGGER.info("Active ventilation successfully turned %s", action)
-
-    async def async_turn_off(self, **kwargs):  # noqa: D102
-        await self._async_turn_on_off(turn_on=False)
-
-    async def async_turn_on(self, **kwargs):  # noqa: D102
-        await self._async_turn_on_off(turn_on=True)
-
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.ACTIVE_VENTILATION]
 
 
 class ChargingSwitch(MySkodaSwitch):
