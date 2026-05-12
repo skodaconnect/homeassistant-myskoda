@@ -3,14 +3,16 @@
         "abort": {
             "already_configured": "Zařízení je již nakonfigurováno",
             "reauth_successful": "Opětovné ověření se podařilo.",
-            "no_entry": "Nepodařilo se najít konfiguraci MySkoda. Zkontrolujte prosím logy a otevřete problém na GitHubu."
+            "no_entry": "Nepodařilo se najít konfiguraci MySkoda. Zkontrolujte prosím logy a otevřete problém na GitHubu.",
+            "reconfigure_successful": "Rekonfigurace byla úspěšná."
         },
         "error": {
             "cannot_connect": "Připojení se nezdařilo",
             "invalid_auth": "Neplatné ověření",
             "relogin_in_app": "Při přihlašování byla zjištěna chyba. Může být nutné se znovu přihlásit do aplikace MySkoda {login_url}.",
             "unknown": "Došlo k neočekávané chybě. Zkontrolujte logy aplikace HomeAssistant.",
-            "no_spin": "V konfiguraci chybí S-PIN. Změňte prosím konfiguraci integrace a zkuste to znovu."
+            "no_spin": "V konfiguraci chybí S-PIN. Změňte prosím konfiguraci integrace a zkuste to znovu.",
+            "readonly_mode": "Režim pouze pro čtení aktivován. Příkazové operace jsou zakázány."
         },
         "step": {
             "reauth_confirm": {
@@ -27,6 +29,14 @@
                     "password": "Heslo"
                 },
                 "description": "Zadejte přihlašovací údaje z aplikace MySkoda."
+            },
+            "reconfigure": {
+                "data": {
+                    "email": "E-mailová adresa",
+                    "password": "Heslo"
+                },
+                "description": "Aktualizujte vaše přihlašovací údaje do MySkoda.",
+                "title": "Rekonfigurovat MySkoda"
             }
         }
     },
@@ -231,6 +241,33 @@
             },
             "outside_temperature": {
                 "name": "Venkovní teplota"
+            },
+            "overall_mileage": {
+                "name": "Celkem najeto"
+            },
+            "overall_travel_time": {
+                "name": "Celková doba cesty"
+            },
+            "overall_average_speed": {
+                "name": "Celková průměrná rychlost"
+            },
+            "overall_average_electric_consumption": {
+                "name": "Celková průměrná spotřeba elektřiny"
+            },
+            "overall_average_fuel_consumption": {
+                "name": "Celková průměrná spotřeba paliva"
+            },
+            "last_trip_mileage": {
+                "name": "Naposledy najeto"
+            },
+            "last_trip_travel_time": {
+                "name": "Poslední doba cesty"
+            },
+            "last_trip_average_speed": {
+                "name": "Poslední průměrná rychlost"
+            },
+            "last_trip_average_fuel_consumption": {
+                "name": "Poslední průměrná spotřeba paliva"
             }
         },
         "switch": {
@@ -327,6 +364,11 @@
                     "readonly": "Ve vozidle nelze provádět žádné změny, pouze číst data"
                 }
             }
+        }
+    },
+    "exceptions": {
+        "readonly_mode": {
+            "message": "Režim pouze pro čtení aktivován. Příkazové operace jsou zakázány."
         }
     }
 }
