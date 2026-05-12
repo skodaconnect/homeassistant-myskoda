@@ -24,7 +24,6 @@ from myskoda.auth.authorization import (
     TermsAndConditionsError,
     TokenExpiredError,
 )
-from myskoda.myskoda import TRACE_CONFIG
 
 from .const import (
     CONF_FCM_TOKEN,
