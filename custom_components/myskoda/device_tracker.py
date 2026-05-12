@@ -98,21 +98,29 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
 
     @property
     def latitude(self) -> float | None:  # noqa: D102
-        position = self._vehicle_position()
-        if position is None:
-            if pp := self._parking_position():
-                return pp.gps_coordinates.latitude
-            return None
-        return position.gps_coordinates.latitude
+        if err := self._pos_error():
+            if err.type == ErrorType.VEHICLE_IN_MOTION:
+                return None
+        else:
+            position = self._vehicle_position()
+            if position is None:
+                if pp := self._parking_position():
+                    return pp.gps_coordinates.latitude
+                return None
+            return position.gps_coordinates.latitude
 
     @property
     def longitude(self) -> float | None:  # noqa: D102
-        position = self._vehicle_position()
-        if position is None:
-            if pp := self._parking_position():
-                return pp.gps_coordinates.longitude
-            return None
-        return position.gps_coordinates.longitude
+        if err := self._pos_error():
+            if err.type == ErrorType.VEHICLE_IN_MOTION:
+                return None
+        else:
+            position = self._vehicle_position()
+            if position is None:
+                if pp := self._parking_position():
+                    return pp.gps_coordinates.longitude
+                return None
+            return position.gps_coordinates.longitude
 
     @property
     def extra_state_attributes(self) -> dict:
@@ -136,13 +144,14 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
                 "'unmodified_exterior_front' not found, falling back to 'unmodified_exterior_side'."
             )
             attributes["entity_picture"] = renders.get(ViewPoint.EXTERIOR_SIDE)
-        return attributes
-
-    @property
-    def location_name(self) -> str | None:
         if err := self._pos_error():
             if err.type == ErrorType.VEHICLE_IN_MOTION:
-                return "vehicle_in_motion"
+                attributes["motion_detected"] = True
+            else:
+                attributes["motion_detected"] = False
+        else:
+            attributes["motion_detected"] = False
+        return attributes
 
     @property
     def battery_level(self) -> int | None:
