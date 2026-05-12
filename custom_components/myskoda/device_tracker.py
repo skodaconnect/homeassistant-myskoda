@@ -9,10 +9,12 @@ from homeassistant.components.device_tracker.config_entry import (
 from homeassistant.components.device_tracker.const import SourceType
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
+from homeassistant.helpers.typing import (
+    DiscoveryInfoType,  # pyright: ignore [reportAttributeAccessIssue]
+)
 
 from myskoda.models.charging import Charging, ChargingStatus
-from myskoda.models.info import CapabilityId
+from myskoda.models.info import CapabilityId, ViewPoint, ViewType
 from myskoda.models.position import (
     Error,
     ErrorType,
@@ -120,26 +122,20 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         if pp := self._parking_position():
             attributes["parking_address"] = pp.formatted_address
 
-        if render := self.get_renders().get("main"):
+        if render := self.get_renders().get(ViewPoint.MAIN):
             attributes["entity_picture"] = render
-        elif render := self.get_composite_renders().get("unmodified_exterior_front"):
+        elif renders := self.get_composite_renders().get(
+            ViewType.UNMODIFIED_EXTERIOR_FRONT
+        ):
             _LOGGER.debug("Main render not found, choosing composite render instead.")
-            render_list = self.get_composite_renders().get("unmodified_exterior_front")
-            if isinstance(render_list, list) and render_list:
-                for render in render_list:
-                    if isinstance(render, dict) and "exterior_front" in render:
-                        attributes["entity_picture"] = render["exterior_front"]
-                        break
-        else:
+            attributes["entity_picture"] = renders.get(ViewPoint.EXTERIOR_FRONT)
+        elif renders := self.get_composite_renders().get(
+            ViewType.UNMODIFIED_EXTERIOR_SIDE
+        ):
             _LOGGER.debug(
                 "'unmodified_exterior_front' not found, falling back to 'unmodified_exterior_side'."
             )
-            render_list = self.get_composite_renders().get("unmodified_exterior_side")
-            if isinstance(render_list, list) and render_list:
-                for render in render_list:
-                    if isinstance(render, dict) and "exterior_side" in render:
-                        attributes["entity_picture"] = render["exterior_side"]
-                        break
+            attributes["entity_picture"] = renders.get(ViewPoint.EXTERIOR_SIDE)
         return attributes
 
     @property

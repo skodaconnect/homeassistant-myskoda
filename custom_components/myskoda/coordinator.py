@@ -23,12 +23,14 @@ from myskoda.models.user import User
 
 from .const import (
     API_COOLDOWN_IN_SECONDS,
+    CONF_FCM_TOKEN,
     CONF_POLL_INTERVAL,
     COORDINATORS,
     DEFAULT_FETCH_INTERVAL_IN_MINUTES,
     DOMAIN,
     MAX_STORED_OPERATIONS,
     MAX_STORED_SERVICE_EVENTS,
+    MQTT_FCM_TOKEN_REFRESH_EVERY_ATTEMPTS,
     MQTT_RECONNECT_INTERVAL_IN_SECONDS,
 )
 from .error_handlers import handle_aiohttp_error
@@ -116,8 +118,76 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self.service_events: deque = deque(maxlen=MAX_STORED_SERVICE_EVENTS)
         self.entry: MySkodaConfigEntry = entry
         self._mqtt_connecting: bool = False
+        self._mqtt_retry_attempts: int = 0
         self._mqtt_retry_scheduled: bool = False
         self._startup_called: bool = False
+
+    def _should_refresh_fcm_token(self) -> bool:
+        """Return whether this retry attempt should refresh the FCM token."""
+        if not self.myskoda.fcm_token:
+            return True
+        return (
+            self._mqtt_retry_attempts == 2
+            or self._mqtt_retry_attempts % MQTT_FCM_TOKEN_REFRESH_EVERY_ATTEMPTS == 0
+        )
+
+    def _save_fcm_token(self) -> None:
+        """Persist the current FCM token if it changed."""
+        if not self.myskoda.fcm_token:
+            return
+        if self.myskoda.fcm_token == self.entry.data.get(CONF_FCM_TOKEN):
+            return
+
+        _LOGGER.debug("Saving updated FCM token in configuration.")
+        entry_data = {**self.entry.data}
+        entry_data[CONF_FCM_TOKEN] = self.myskoda.fcm_token
+        self.hass.config_entries.async_update_entry(self.entry, data=entry_data)
+
+    def _schedule_mqtt_retry(self) -> None:
+        """Schedule a retry for the MQTT connection."""
+        if self._mqtt_retry_scheduled:
+            return
+
+        _LOGGER.warning(
+            "Retrying MQTT connection in %s seconds", MQTT_RECONNECT_INTERVAL_IN_SECONDS
+        )
+        async_call_later(
+            self.hass,
+            MQTT_RECONNECT_INTERVAL_IN_SECONDS,
+            self._async_retry_mqtt_connect,
+        )
+        self._mqtt_retry_scheduled = True
+
+    async def _async_retry_mqtt_connect(self, _now=None) -> None:
+        """Attempt MQTT connection and schedule a retry if needed."""
+        self._mqtt_retry_scheduled = False
+
+        if self.myskoda.mqtt or self._mqtt_connecting:
+            return
+
+        self._mqtt_retry_attempts += 1
+
+        if self._should_refresh_fcm_token():
+            _LOGGER.debug(
+                "Refreshing FCM token before MQTT connect for vin %s on attempt %s",
+                self.vin,
+                self._mqtt_retry_attempts,
+            )
+            try:
+                self.myskoda.fcm_token = await self.myskoda.get_and_register_fcm_token()
+            except Exception as exc:
+                _LOGGER.debug("Failed to register FCM Token: %s", exc)
+                self._schedule_mqtt_retry()
+                return
+
+        await self._mqtt_connect()
+        self._save_fcm_token()
+
+        if self.myskoda.mqtt:
+            self._mqtt_retry_attempts = 0
+            return
+
+        self._schedule_mqtt_retry()
 
     async def _async_update_data(self) -> State:
         """Called by parent class during setup and scheduled refresh."""
@@ -144,40 +214,16 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                     self.vin,
                 )
 
-                async def _retry_mqtt(_now=None) -> None:
-                    """Retry loop for MQTT connection."""
-                    if not self.myskoda.mqtt and not self._mqtt_connecting:
-                        await self._mqtt_connect()
-                    if not self.myskoda.mqtt and not self._mqtt_retry_scheduled:
-                        _LOGGER.warning(
-                            "Could not connect to MQTT. Retry in %s seconds",
-                            MQTT_RECONNECT_INTERVAL_IN_SECONDS,
-                        )
-                        async_call_later(
-                            hass, MQTT_RECONNECT_INTERVAL_IN_SECONDS, _retry_mqtt
-                        )
-                        self._mqtt_retry_scheduled = True
-                        return
-                    self._mqtt_retry_scheduled = False
-
                 try:
                     coord = hass.data[DOMAIN][self.entry.entry_id][COORDINATORS][
                         self.vin
                     ]
                     if not coord.myskoda.mqtt and not coord._mqtt_connecting:
                         self.entry.async_create_background_task(
-                            self.hass, coord._mqtt_connect(), "mqtt"
+                            self.hass, coord._async_retry_mqtt_connect(), "mqtt"
                         )
                 except KeyError:
-                    if not self._mqtt_retry_scheduled:
-                        _LOGGER.warning(
-                            "Could not connect to MQTT. Retry in %s seconds",
-                            MQTT_RECONNECT_INTERVAL_IN_SECONDS,
-                        )
-                        async_call_later(
-                            hass, MQTT_RECONNECT_INTERVAL_IN_SECONDS, _retry_mqtt
-                        )
-                        self._mqtt_retry_scheduled = True
+                    self._schedule_mqtt_retry()
 
             async_at_started(
                 hass=self.hass, at_start_cb=_async_finish_startup
@@ -232,6 +278,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             await self.myskoda.enable_mqtt()
             self.myskoda.subscribe_events(self._on_mqtt_event)
         except Exception:
+            self.myskoda.mqtt = None
             pass
         self._mqtt_connecting = False
 

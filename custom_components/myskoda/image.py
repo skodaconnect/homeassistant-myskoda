@@ -1,19 +1,23 @@
 """Images for the MySkoda integration."""
 
-import httpx
 import logging
 
+import httpx
 from homeassistant.components.image import (
+    GET_IMAGE_TIMEOUT,
     ImageEntity,
     ImageEntityDescription,
-    GET_IMAGE_TIMEOUT,
 )
 from homeassistant.const import (
     EntityCategory,
 )
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
+from homeassistant.helpers.typing import (
+    DiscoveryInfoType,  # pyright: ignore [reportAttributeAccessIssue]
+)
+
+from myskoda.models.info import ViewPoint, ViewType
 
 from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
@@ -115,25 +119,20 @@ class MainRenderImage(MySkodaImage):
 
     @property
     def image_url(self) -> str | None:
-        if render := self.get_renders().get("main"):
+        if render := self.get_renders().get(ViewPoint.MAIN):
             return render
-        elif render := self.get_composite_renders().get("unmodified_exterior_front"):
+        elif renders := self.get_composite_renders().get(
+            ViewType.UNMODIFIED_EXTERIOR_FRONT
+        ):
             _LOGGER.debug("Main render not found, choosing composite render instead.")
-            render_list = self.get_composite_renders().get("unmodified_exterior_front")
-            if isinstance(render_list, list) and render_list:
-                for render in render_list:
-                    if isinstance(render, dict) and "exterior_front" in render:
-                        return render["exterior_front"]
-
-        else:
+            return renders.get(ViewPoint.EXTERIOR_FRONT)
+        elif renders := self.get_composite_renders().get(
+            ViewType.UNMODIFIED_EXTERIOR_SIDE
+        ):
             _LOGGER.debug(
                 "'unmodified_exterior_front' not found, falling back to 'unmodified_exterior_side'."
             )
-            render_list = self.get_composite_renders().get("unmodified_exterior_side")
-            if isinstance(render_list, list) and render_list:
-                for render in render_list:
-                    if isinstance(render, dict) and "exterior_side" in render:
-                        return render["exterior_side"]
+            return renders.get(ViewPoint.EXTERIOR_SIDE)
 
     @property
     def extra_state_attributes(self) -> dict:
