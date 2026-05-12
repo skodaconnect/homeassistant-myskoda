@@ -6,16 +6,16 @@ import logging
 from typing import Any
 
 import voluptuous as vol
-
 from aiohttp.client_exceptions import ClientResponseError
-
 from homeassistant.config_entries import (
     ConfigFlow as BaseConfigFlow,
+)
+from homeassistant.config_entries import (
     ConfigFlowResult,
     OptionsFlow,
 )
-from homeassistant.core import callback, HomeAssistant
-from homeassistant.exceptions import HomeAssistantError, ConfigEntryNotReady
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.schema_config_entry_flow import (
     SchemaCommonFlowHandler,
@@ -24,27 +24,28 @@ from homeassistant.helpers.schema_config_entry_flow import (
     SchemaOptionsFlowHandler,
 )
 from homeassistant.util.ssl import get_default_context
+
 from myskoda import MySkoda
 from myskoda.auth.authorization import (
     AuthorizationError,
-    NotAuthorizedError,
     AuthorizationFailedError,
+    MarketingConsentError,
+    NotAuthorizedError,
     TermsAndConditionsError,
     TokenExpiredError,
-    MarketingConsentError,
 )
 
 from .const import (
-    DOMAIN,
     CONF_PASSWORD,
     CONF_POLL_INTERVAL,
-    CONF_POLL_INTERVAL_MIN,
     CONF_POLL_INTERVAL_MAX,
+    CONF_POLL_INTERVAL_MIN,
+    CONF_READONLY,
+    CONF_REFRESH_TOKEN,
     CONF_SPIN,
     CONF_TRACING,
     CONF_USERNAME,
-    CONF_READONLY,
-    CONF_REFRESH_TOKEN,
+    DOMAIN,
 )
 from .coordinator import MySkodaConfigEntry
 
@@ -75,13 +76,17 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
         async_get_clientsession(hass), get_default_context(), mqtt_enabled=False
     )
 
-    if data.get(CONF_REFRESH_TOKEN):
-        try:
-            await hub.connect_with_refresh_token(refresh_token=data[CONF_REFRESH_TOKEN])
-        except (TokenExpiredError, AuthorizationFailedError):
-            await hub.connect(data[CONF_USERNAME], data[CONF_PASSWORD])
-    else:
-        await hub.connect(data[CONF_USERNAME], data[CONF_PASSWORD])
+    connect_kwargs = {
+        "email": data[CONF_USERNAME],
+        "password": data[CONF_PASSWORD],
+        "refresh_token": data.get(CONF_REFRESH_TOKEN),
+    }
+    try:
+        await hub.connect(**connect_kwargs)
+    except (TokenExpiredError, AuthorizationFailedError):
+        connect_kwargs.pop("refresh_token")
+        await hub.connect(**connect_kwargs)
+
     await hub.disconnect()
 
 
