@@ -216,7 +216,8 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
 
                 if not self.myskoda.mqtt and not self._mqtt_connecting:
                     self.entry.async_create_background_task(
-                        self.hass, self._async_retry_mqtt_connect(), "mqtt")
+                        self.hass, self._async_retry_mqtt_connect(), "mqtt"
+                    )
 
             async_at_started(
                 hass=self.hass, at_start_cb=_async_finish_startup
