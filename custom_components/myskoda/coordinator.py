@@ -214,14 +214,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                     self.vin,
                 )
 
-                try:
-                    coord = self.entry.runtime_data[self.vin]
-                    if not coord.myskoda.mqtt and not coord._mqtt_connecting:
-                        self.entry.async_create_background_task(
-                            self.hass, coord._async_retry_mqtt_connect(), "mqtt"
-                        )
-                except KeyError:
-                    self._schedule_mqtt_retry()
+                if not self.myskoda.mqtt and not self._mqtt_connecting:
+                    self.entry.async_create_background_task(
+                        self.hass, self._async_retry_mqtt_connect(), "mqtt")
 
             async_at_started(
                 hass=self.hass, at_start_cb=_async_finish_startup
