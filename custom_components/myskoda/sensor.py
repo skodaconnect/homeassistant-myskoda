@@ -31,7 +31,7 @@ from myskoda.models.driving_range import EngineType
 from myskoda.models.event import OperationStatus
 from myskoda.models.info import CapabilityId
 
-from .const import COORDINATORS, DOMAIN, OUTSIDE_TEMP_MAX_BOUND, OUTSIDE_TEMP_MIN_BOUND
+from .const import OUTSIDE_TEMP_MAX_BOUND, OUTSIDE_TEMP_MIN_BOUND
 from .coordinator import MySkodaConfigEntry
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
@@ -82,7 +82,7 @@ async def async_setup_entry(
             LastTripAverageSpeed,
             LastTripAverageFuelConsumption,
         ],
-        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
+        coordinators=config.runtime_data,
         async_add_entities=async_add_entities,
     )
 

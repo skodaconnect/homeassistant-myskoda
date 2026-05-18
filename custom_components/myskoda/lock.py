@@ -22,7 +22,6 @@ from myskoda.mqtt import OperationFailedError
 
 from .const import (
     API_COOLDOWN_IN_SECONDS,
-    COORDINATORS,
     CONF_SPIN,
     DOMAIN,
     CONF_READONLY,
@@ -45,7 +44,7 @@ async def async_setup_entry(
         available_entities=[
             DoorLock,
         ],
-        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
+        coordinators=config.runtime_data,
         async_add_entities=async_add_entities,
     )
 

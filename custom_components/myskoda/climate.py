@@ -44,7 +44,6 @@ from .const import (
     API_COOLDOWN_IN_SECONDS,
     CONF_READONLY,
     CONF_SPIN,
-    COORDINATORS,
     DOMAIN,
 )
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
@@ -62,7 +61,7 @@ async def async_setup_entry(
 ) -> None:
     add_supported_entities(
         available_entities=[MySkodaClimate, AuxiliaryHeater],
-        coordinators=hass.data[DOMAIN][entry.entry_id][COORDINATORS],
+        coordinators=entry.runtime_data,
         async_add_entities=async_add_entities,
     )
 

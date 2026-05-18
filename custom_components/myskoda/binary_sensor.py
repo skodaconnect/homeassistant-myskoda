@@ -22,7 +22,6 @@ from myskoda.models.info import CapabilityId
 from myskoda.models.status import DoorWindowState, Status
 from myskoda.models.vehicle_connection_status import VehicleConnectionStatus
 
-from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaConfigEntry
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
@@ -59,7 +58,7 @@ async def async_setup_entry(
             VehicleInMotion,
             VehicleReachable,
         ],
-        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
+        coordinators=config.runtime_data,
         async_add_entities=async_add_entities,
     )
 

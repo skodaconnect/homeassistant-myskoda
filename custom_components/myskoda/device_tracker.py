@@ -25,7 +25,6 @@ from myskoda.models.position import (
     PositionType,
 )
 
-from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
@@ -42,7 +41,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     add_supported_entities(
         available_entities=[DeviceTracker],
-        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
+        coordinators=config.runtime_data,
         async_add_entities=async_add_entities,
     )
 
