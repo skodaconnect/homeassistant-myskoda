@@ -44,7 +44,6 @@ from .const import (
     API_COOLDOWN_IN_SECONDS,
     CONF_READONLY,
     CONF_SPIN,
-    COORDINATORS,
     DOMAIN,
 )
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
@@ -62,7 +61,7 @@ async def async_setup_entry(
 ) -> None:
     add_supported_entities(
         available_entities=[MySkodaClimate, AuxiliaryHeater],
-        coordinators=hass.data[DOMAIN][entry.entry_id][COORDINATORS],
+        coordinators=entry.runtime_data,
         async_add_entities=async_add_entities,
     )
 
@@ -169,6 +168,22 @@ class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
         finally:
             self._operation_in_progress = False
 
+    async def _start_ventilation(self) -> None:
+        self._ensure_not_readonly()
+        self._operation_in_progress = True
+        try:
+            await self.coordinator.myskoda.start_ventilation(self.vehicle.info.vin)
+        finally:
+            self._operation_in_progress = False
+
+    async def _stop_ventilation(self) -> None:
+        self._ensure_not_readonly()
+        self._operation_in_progress = True
+        try:
+            await self.coordinator.myskoda.stop_ventilation(self.vehicle.info.vin)
+        finally:
+            self._operation_in_progress = False
+
     async def _set_target_temperature(self, temperature: float) -> None:
         self._ensure_not_readonly()
         self._operation_in_progress = True
@@ -187,14 +202,27 @@ class MySkodaClimate(MySkodaClimateEntity):
         key="climate",
         translation_key="climate",
     )
-    _attr_supported_features = (
-        ClimateEntityFeature.TARGET_TEMPERATURE
-        | ClimateEntityFeature.TURN_ON
-        | ClimateEntityFeature.TURN_OFF
-    )
+
+    def _is_ventilation_only(self) -> bool:
+        """Return True for vehicles that support ventilation but not full air conditioning."""
+        return self.has_all_capabilities(
+            [CapabilityId.ACTIVE_VENTILATION]
+        ) and not self.has_all_capabilities([CapabilityId.AIR_CONDITIONING])
+
+    @property
+    def supported_features(self) -> ClimateEntityFeature:  # noqa: D102
+        if self._is_ventilation_only():
+            return ClimateEntityFeature.TURN_ON | ClimateEntityFeature.TURN_OFF
+        return (
+            ClimateEntityFeature.TARGET_TEMPERATURE
+            | ClimateEntityFeature.TURN_ON
+            | ClimateEntityFeature.TURN_OFF
+        )
 
     @property
     def hvac_modes(self) -> list[HVACMode]:  # noqa: D102
+        if self._is_ventilation_only():
+            return [HVACMode.FAN_ONLY, HVACMode.OFF]
         return [HVACMode.HEAT_COOL, HVACMode.OFF]
 
     @property
@@ -203,6 +231,10 @@ class MySkodaClimate(MySkodaClimateEntity):
             return hvac_mode
 
         if ac := self._air_conditioning():
+            if self._is_ventilation_only():
+                if ac.state == AirConditioningState.VENTILATION:
+                    return HVACMode.FAN_ONLY
+                return HVACMode.OFF
             if (
                 ac.state != AirConditioningState.OFF
                 and ac.state != AirConditioningState.HEATING_AUXILIARY
@@ -216,10 +248,12 @@ class MySkodaClimate(MySkodaClimateEntity):
             return hvac_action
 
         if ac := self._air_conditioning():
-            if ac.state == "HEATING":
+            if ac.state == AirConditioningState.HEATING:
                 return HVACAction.HEATING
-            if ac.state == "COOLING":
+            if ac.state == AirConditioningState.COOLING:
                 return HVACAction.COOLING
+            if ac.state == AirConditioningState.VENTILATION:
+                return HVACAction.FAN
             return HVACAction.OFF
 
     @property
@@ -237,6 +271,24 @@ class MySkodaClimate(MySkodaClimateEntity):
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_hvac_mode(self, hvac_mode: HVACMode):  # noqa: D102
+        if self._is_ventilation_only():
+            self._set_optimistic_data(OptimisticAttribute.HVAC_MODE, hvac_mode)
+            if hvac_mode == HVACMode.FAN_ONLY:
+                _LOGGER.info("Starting ventilation.")
+                try:
+                    await self._start_ventilation()
+                except (ClientResponseError, OperationFailedError) as exc:
+                    self._unset_optimistic_data(OptimisticAttribute.HVAC_MODE)
+                    _LOGGER.error("Failed to start ventilation: %s", exc)
+            else:
+                _LOGGER.info("Stopping ventilation.")
+                try:
+                    await self._stop_ventilation()
+                except (ClientResponseError, OperationFailedError) as exc:
+                    _LOGGER.error("Failed to stop ventilation: %s", exc)
+            _LOGGER.info("HVAC mode set to %s.", hvac_mode)
+            return
+
         if not (ac := self._air_conditioning()):
             return
 
@@ -256,11 +308,9 @@ class MySkodaClimate(MySkodaClimateEntity):
             _LOGGER.info("Starting Air conditioning.")
             try:
                 await self._start_air_conditioning(target_temperature.temperature_value)
-
             except (ClientResponseError, OperationFailedError) as exc:
                 self._unset_optimistic_data(OptimisticAttribute.HVAC_MODE)
                 _LOGGER.error("Failed to start air conditioning: %s", exc)
-
         else:
             _LOGGER.info("Stopping Air conditioning.")
             try:
@@ -270,7 +320,10 @@ class MySkodaClimate(MySkodaClimateEntity):
         _LOGGER.info("HVAC mode set to %s.", hvac_mode)
 
     async def async_turn_on(self):  # noqa: D102
-        await self.async_set_hvac_mode(HVACMode.HEAT_COOL)
+        if self._is_ventilation_only():
+            await self.async_set_hvac_mode(HVACMode.FAN_ONLY)
+        else:
+            await self.async_set_hvac_mode(HVACMode.HEAT_COOL)
 
     async def async_turn_off(self):  # noqa: D102
         await self.async_set_hvac_mode(HVACMode.OFF)
@@ -278,7 +331,6 @@ class MySkodaClimate(MySkodaClimateEntity):
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_temperature(self, **kwargs):  # noqa: D102
         temp = kwargs[ATTR_TEMPERATURE]
-        # Ensure the temperature stays within range
         if temp < self.min_temp:
             temp = self.min_temp
         elif temp > self.max_temp:
@@ -292,15 +344,10 @@ class MySkodaClimate(MySkodaClimateEntity):
             self._unset_optimistic_data(OptimisticAttribute.TARGET_TEMPERATURE)
             _LOGGER.error("Failed to set target temperature: %s", exc)
 
-    def required_capabilities(self) -> list[CapabilityId]:
-        return [CapabilityId.AIR_CONDITIONING]
-
-    def is_supported(self) -> bool:
-        all_capabilities_present = all(
-            self.vehicle.has_capability(cap) for cap in self.required_capabilities()
+    def is_supported(self) -> bool:  # noqa: D102
+        return self.has_any_capability(
+            [CapabilityId.AIR_CONDITIONING, CapabilityId.ACTIVE_VENTILATION]
         )
-
-        return all_capabilities_present
 
 
 class AuxiliaryHeater(MySkodaClimateEntity):

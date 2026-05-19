@@ -19,7 +19,6 @@ from homeassistant.helpers.typing import (
 
 from myskoda.models.info import ViewPoint, ViewType
 
-from .const import COORDINATORS, DOMAIN
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 
@@ -35,16 +34,12 @@ async def async_setup_entry(
     """Set up the image platform."""
 
     entities = []
-    for vin in hass.data[DOMAIN][config.entry_id][COORDINATORS]:
+    for vin, coordinator in config.runtime_data.items():
         for SensorClass in [
             MainRenderImage,
             LightStatusImage,
         ]:
-            entities.append(
-                SensorClass(
-                    hass.data[DOMAIN][config.entry_id][COORDINATORS][vin], vin, hass
-                )
-            )
+            entities.append(SensorClass(coordinator, vin, hass))
 
     async_add_entities(entities)
 

@@ -8,7 +8,6 @@ from myskoda.models.fixtures import Endpoint
 from typing import Any
 
 
-from .const import DOMAIN, COORDINATORS
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
@@ -25,9 +24,9 @@ async def async_get_device_diagnostics(
             "error": error_message,
         }
 
-    coordinator: MySkodaDataUpdateCoordinator = hass.data[DOMAIN][
-        config_entry.entry_id
-    ][COORDINATORS][vin]
+    coordinator: MySkodaDataUpdateCoordinator | None = config_entry.runtime_data.get(
+        vin
+    )
 
     if not coordinator:
         error_message = f"No coordinator found for VIN: {vin}"
@@ -66,7 +65,7 @@ async def async_get_config_entry_diagnostics(
     hass: HomeAssistant, config_entry: MySkodaConfigEntry
 ) -> dict[str, Any]:
     """Return diagnostics for all vehicles in the config entry."""
-    coordinators = hass.data[DOMAIN][config_entry.entry_id][COORDINATORS]
+    coordinators = config_entry.runtime_data
     results = []
 
     for vin, coordinator in coordinators.items():
