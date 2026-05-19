@@ -205,7 +205,9 @@ class MySkodaClimate(MySkodaClimateEntity):
 
     def _is_ventilation_only(self) -> bool:
         """Return True for vehicles that support ventilation but not full air conditioning."""
-        return self.has_all_capabilities([CapabilityId.ACTIVE_VENTILATION]) and not self.has_all_capabilities([CapabilityId.AIR_CONDITIONING])
+        return self.has_all_capabilities(
+            [CapabilityId.ACTIVE_VENTILATION]
+        ) and not self.has_all_capabilities([CapabilityId.AIR_CONDITIONING])
 
     @property
     def supported_features(self) -> ClimateEntityFeature:  # noqa: D102
@@ -343,7 +345,9 @@ class MySkodaClimate(MySkodaClimateEntity):
             _LOGGER.error("Failed to set target temperature: %s", exc)
 
     def is_supported(self) -> bool:  # noqa: D102
-        return self.has_any_capability([CapabilityId.AIR_CONDITIONING, CapabilityId.ACTIVE_VENTILATION])
+        return self.has_any_capability(
+            [CapabilityId.AIR_CONDITIONING, CapabilityId.ACTIVE_VENTILATION]
+        )
 
 
 class AuxiliaryHeater(MySkodaClimateEntity):
