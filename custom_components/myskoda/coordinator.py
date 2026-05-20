@@ -32,13 +32,24 @@ from .const import (
     MAX_STORED_SERVICE_EVENTS,
     MQTT_FCM_TOKEN_REFRESH_EVERY_ATTEMPTS,
     MQTT_RECONNECT_INTERVAL_IN_SECONDS,
+    SLOW_FETCH_INTERVAL_IN_HOURS,
 )
 from .error_handlers import handle_aiohttp_error
 
 _LOGGER = logging.getLogger(__name__)
 
 type RefreshFunction = Callable[[], Coroutine[None, None, None]]
-type MySkodaConfigEntry = ConfigEntry[dict[Vin, MySkodaDataUpdateCoordinator]]
+
+
+@dataclass
+class VehicleCoordinators:
+    """Container for all domain coordinators for a single VIN."""
+
+    primary: "MySkodaDataUpdateCoordinator"
+    slow: "MySkodaSlowCoordinator"
+
+
+type MySkodaConfigEntry = ConfigEntry[dict[Vin, VehicleCoordinators]]
 
 
 class MySkodaDebouncer(Debouncer):
@@ -225,7 +236,7 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             return State(vehicle, user, config, self.operations, self.service_events)
 
         # Regular update
-        _LOGGER.debug("Performing scheduled refresh of all data for vin %s", self.vin)
+        _LOGGER.debug("Performing scheduled refresh of primary data for vin %s", self.vin)
 
         # Refresh user data. This is allowed to fail if we already have this in state.
         try:
@@ -237,9 +248,17 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                     f"Error getting user data from MySkoda API: {err}"
                 ) from err
 
-        # Refresh vehicle data.
+        # Refresh only primary-domain endpoints (fast-changing data).
+        # Slow-changing data (trips, maintenance, health, info) is handled by
+        # MySkodaSlowCoordinator on a longer interval.
         try:
-            await self.myskoda.refresh_vehicle(self.vin)
+            await self.myskoda.refresh_charging(self.vin)
+            await self.myskoda.refresh_status(self.vin)
+            await self.myskoda.refresh_air_conditioning(self.vin)
+            await self.myskoda.refresh_auxiliary_heating(self.vin)
+            await self.myskoda.refresh_positions(self.vin)
+            await self.myskoda.refresh_driving_range(self.vin)
+            await self.myskoda.refresh_departure_info(self.vin)
         except ClientResponseError as err:
             handle_aiohttp_error("vehicle", err, self.hass, self.entry)
         except ClientError as err:
@@ -285,9 +304,68 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 self.operations[request_id] = event
                 while len(self.operations) > MAX_STORED_OPERATIONS:
                     self.operations.popitem(last=False)
+            # Push update so entities reflect the new operation status immediately.
+            # Data-level updates (vehicle state) flow through _on_myskoda_update instead.
+            self.async_set_updated_data(self.data)
         if isinstance(event, ServiceEvent):
             self.service_events.appendleft(event)
-        self.async_set_updated_data(self.data)
+
+    def _unsub_refresh(self):
+        return
+
+
+class MySkodaSlowCoordinator(DataUpdateCoordinator[State]):
+    """Coordinator for slow-changing vehicle data (trips, maintenance, health, info).
+
+    Polls on a fixed interval defined by SLOW_FETCH_INTERVAL_IN_HOURS. Does not
+    subscribe to MQTT events: slow data does not need real-time updates.
+    """
+
+    data: State
+
+    def __init__(
+        self, hass: HomeAssistant, entry: MySkodaConfigEntry, myskoda: MySkoda, vin: str
+    ) -> None:
+        super().__init__(
+            hass,
+            _LOGGER,
+            name=f"{DOMAIN}_slow",
+            update_interval=timedelta(hours=SLOW_FETCH_INTERVAL_IN_HOURS),
+            always_update=False,
+        )
+        self.hass = hass
+        self.vin = vin
+        self.myskoda = myskoda
+        self.entry = entry
+
+    async def _async_update_data(self) -> State:
+        if self.entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
+            # Data is pre-populated from the primary coordinator's initial fetch.
+            # Return it as-is to avoid redundant API calls at startup.
+            if self.data:
+                return self.data
+
+        _LOGGER.debug("Performing scheduled refresh of slow data for vin %s", self.vin)
+
+        try:
+            await self.myskoda.refresh_trip_statistics(self.vin)
+            await self.myskoda.refresh_single_trip_statistics(self.vin)
+            await self.myskoda.refresh_maintenance(self.vin)
+            await self.myskoda.refresh_maintenance_report(self.vin)
+            await self.myskoda.refresh_health(self.vin)
+            await self.myskoda.refresh_info(self.vin)
+        except ClientResponseError as err:
+            handle_aiohttp_error("vehicle (slow)", err, self.hass, self.entry)
+        except ClientError as err:
+            raise UpdateFailed(f"Error getting slow data from MySkoda API: {err}") from err
+
+        return State(
+            deepcopy(self.myskoda.vehicle(self.vin)),
+            self.data.user,
+            self.data.config,
+            OrderedDict(),
+            deque(),
+        )
 
     def _unsub_refresh(self):
         return

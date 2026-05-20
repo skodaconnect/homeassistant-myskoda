@@ -39,7 +39,7 @@ from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
 
 from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, DOMAIN
-from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
+from .coordinator import MySkodaConfigEntry, VehicleCoordinators
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
@@ -80,8 +80,8 @@ async def async_setup_entry(
 class MySkodaSwitch(MySkodaEntity, SwitchEntity):
     """Base class for all switches in the MySkoda integration."""
 
-    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str):
-        super().__init__(coordinator, vin)
+    def __init__(self, coordinators: VehicleCoordinators, vin: str):
+        super().__init__(coordinators, vin)
         self._is_enabled: bool = True
 
     def is_supported(self) -> bool:

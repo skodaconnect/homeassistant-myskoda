@@ -190,6 +190,8 @@ class ServiceEvent(MySkodaSensor):
 class SoftwareVersion(MySkodaSensor):
     """Current software version of a vehicle."""
 
+    coordinator_domain = "slow"
+
     entity_description = SensorEntityDescription(
         key="software_version",
         translation_key="software_version",
@@ -534,6 +536,8 @@ class TargetBatteryPercentage(ChargingSensor):
 class Mileage(MySkodaSensor):
     """The vehicle's mileage (total kilometers driven)."""
 
+    coordinator_domain = "slow"
+
     entity_description = SensorEntityDescription(
         key="milage",
         state_class=SensorStateClass.TOTAL_INCREASING,
@@ -587,6 +591,8 @@ class Mileage(MySkodaSensor):
 class InspectionInterval(MySkodaSensor):
     """The number of days before next inspection."""
 
+    coordinator_domain = "slow"
+
     entity_description = SensorEntityDescription(
         key="inspection",
         device_class=SensorDeviceClass.DURATION,
@@ -604,6 +610,8 @@ class InspectionInterval(MySkodaSensor):
 class InspectionIntervalKM(MySkodaSensor):
     """The number of kilometers before inspection is due."""
 
+    coordinator_domain = "slow"
+
     entity_description = SensorEntityDescription(
         key="inspection_in_km",
         device_class=SensorDeviceClass.DISTANCE,
@@ -620,6 +628,8 @@ class InspectionIntervalKM(MySkodaSensor):
 
 class OilServiceIntervalDays(MySkodaSensor):
     """The number of days before oil service is due."""
+
+    coordinator_domain = "slow"
 
     entity_description = SensorEntityDescription(
         key="oil_service_in_days",
@@ -640,6 +650,8 @@ class OilServiceIntervalDays(MySkodaSensor):
 
 class OilServiceIntervalKM(MySkodaSensor):
     """The number of kilometers before oil service is due."""
+
+    coordinator_domain = "slow"
 
     entity_description = SensorEntityDescription(
         key="oil_service_in_km",
@@ -829,6 +841,8 @@ class AuxHeaterTimeLeft(MySkodaSensor):
 
 
 class TripStatisticSensor(MySkodaSensor):
+    coordinator_domain = "slow"
+
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.TRIP_STATISTICS]
 
