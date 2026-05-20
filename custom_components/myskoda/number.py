@@ -23,7 +23,7 @@ from aiohttp import ClientResponseError
 from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
 
-from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, COORDINATORS, DOMAIN
+from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, DOMAIN
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
@@ -40,7 +40,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     add_supported_entities(
         available_entities=[ChargeLimit, AuxiliaryHeaterDuration],
-        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
+        coordinators=config.runtime_data,
         async_add_entities=async_add_entities,
     )
 

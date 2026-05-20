@@ -24,6 +24,7 @@ from myskoda import (
 from myskoda.models.departure import DepartureTimer
 from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
+from myskoda.models.common import Vin
 from myskoda.myskoda import TRACE_CONFIG
 from myskoda.auth.authorization import (
     CSRFError,
@@ -38,7 +39,6 @@ from .const import (
     CONF_REFRESH_TOKEN,
     CONF_USERNAME,
     CONF_VINLIST,
-    COORDINATORS,
     DOMAIN,
     SERVICE_SET_DEPARTURE_TIMER,
 )
@@ -68,7 +68,10 @@ SERVICE_SET_DEPARTURE_TIMER_SCHEMA = vol.Schema(
     {
         vol.Required("device_id"): str,
         vol.Required("timer"): vol.Schema(
-            {vol.Required("id"): vol.In([1, 2, 3])},
+            {
+                vol.Required("id"): vol.In([1, 2, 3]),
+                vol.Required("enabled"): bool,
+            },
             extra=vol.ALLOW_EXTRA,
         ),
     }
@@ -197,7 +200,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
     async_delete_tnc_issue(hass, entry.entry_id)
     async_delete_spin_issue(hass, entry.entry_id)
 
-    coordinators: dict[str, MySkodaDataUpdateCoordinator] = {}
+    coordinators: dict[Vin, MySkodaDataUpdateCoordinator] = {}
     cached_vins: list = entry.data.get(CONF_VINLIST, [])
 
     try:
@@ -232,8 +235,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
         await coordinator.async_config_entry_first_refresh()
         coordinators[vin] = coordinator
 
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = {COORDINATORS: coordinators}
+    entry.runtime_data = coordinators
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
@@ -253,9 +255,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
 async def async_unload_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> bool:
     """Unload a config entry."""
 
-    coordinators: dict[str, MySkodaDataUpdateCoordinator] = hass.data[DOMAIN][
-        entry.entry_id
-    ].get(COORDINATORS, {})
+    coordinators: dict[Vin, MySkodaDataUpdateCoordinator] = entry.runtime_data
     for coord in coordinators.values():
         if entry.data.get(CONF_REFRESH_TOKEN):
             current_refresh_token = await coord.myskoda.get_refresh_token()
@@ -272,14 +272,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> 
             entry_data[CONF_FCM_TOKEN] = coord.myskoda.fcm_token
             hass.config_entries.async_update_entry(entry, data=entry_data)
         await coord.myskoda.disconnect()
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    if unload_ok:
-        hass.data[DOMAIN].pop(entry.entry_id)
-        # Remove service when the last MySkoda config entry is unloaded
-        if not hass.data.get(DOMAIN):
-            hass.services.async_remove(DOMAIN, SERVICE_SET_DEPARTURE_TIMER)
-
-    return unload_ok
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
 
 async def _async_update_listener(hass: HomeAssistant, entry: MySkodaConfigEntry):

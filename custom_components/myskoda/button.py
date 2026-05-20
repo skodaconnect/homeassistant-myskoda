@@ -20,7 +20,7 @@ from myskoda.mqtt import OperationFailedError
 
 from aiohttp import ClientResponseError
 
-from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, COORDINATORS, DOMAIN
+from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, DOMAIN
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
@@ -37,7 +37,7 @@ async def async_setup_entry(
     """Set up the button platform."""
     add_supported_entities(
         available_entities=[HonkFlash, Flash, WakeUp],
-        coordinators=hass.data[DOMAIN][config.entry_id][COORDINATORS],
+        coordinators=config.runtime_data,
         async_add_entities=async_add_entities,
     )
 

@@ -1,7 +1,6 @@
 """Constants for the MySkoda integration."""
 
 DOMAIN = "myskoda"
-COORDINATORS = "coordinators"
 
 # Timing information
 DEFAULT_FETCH_INTERVAL_IN_MINUTES = 30
