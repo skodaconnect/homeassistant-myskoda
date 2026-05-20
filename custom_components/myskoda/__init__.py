@@ -102,10 +102,9 @@ async def _async_handle_set_departure_timer(
 
     # Find coordinator for this VIN
     coordinator: MySkodaDataUpdateCoordinator | None = None
-    for entry_data in hass.data.get(DOMAIN, {}).values():
-        coordinators = entry_data.get(COORDINATORS, {})
-        if vin in coordinators:
-            coordinator = coordinators[vin]
+    for entry in hass.config_entries.async_entries(DOMAIN):
+        if vin in entry.runtime_data:
+            coordinator = entry.runtime_data[vin]
             break
 
     if coordinator is None:
