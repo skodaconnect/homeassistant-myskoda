@@ -236,7 +236,9 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             return State(vehicle, user, config, self.operations, self.service_events)
 
         # Regular update
-        _LOGGER.debug("Performing scheduled refresh of primary data for vin %s", self.vin)
+        _LOGGER.debug(
+            "Performing scheduled refresh of primary data for vin %s", self.vin
+        )
 
         # Refresh user data. This is allowed to fail if we already have this in state.
         try:
@@ -357,7 +359,9 @@ class MySkodaSlowCoordinator(DataUpdateCoordinator[State]):
         except ClientResponseError as err:
             handle_aiohttp_error("vehicle (slow)", err, self.hass, self.entry)
         except ClientError as err:
-            raise UpdateFailed(f"Error getting slow data from MySkoda API: {err}") from err
+            raise UpdateFailed(
+                f"Error getting slow data from MySkoda API: {err}"
+            ) from err
 
         return State(
             deepcopy(self.myskoda.vehicle(self.vin)),
