@@ -136,13 +136,6 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
                 "'unmodified_exterior_front' not found, falling back to 'unmodified_exterior_side'."
             )
             attributes["entity_picture"] = renders.get(ViewPoint.EXTERIOR_SIDE)
-        if err := self._pos_error():
-            if err.type == ErrorType.VEHICLE_IN_MOTION:
-                attributes["motion_detected"] = True
-            else:
-                attributes["motion_detected"] = False
-        else:
-            attributes["motion_detected"] = False
         return attributes
 
     @property
