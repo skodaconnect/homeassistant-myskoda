@@ -25,7 +25,7 @@ from myskoda.models.position import (
     PositionType,
 )
 
-from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
+from .coordinator import MySkodaConfigEntry, VehicleCoordinators
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
@@ -49,14 +49,14 @@ async def async_setup_entry(
 class DeviceTracker(MySkodaEntity, TrackerEntity):
     """GPS device tracker for MySkoda."""
 
-    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:  # noqa: D107
-        title = coordinator.data.vehicle.info.specification.title
+    def __init__(self, coordinators: VehicleCoordinators, vin: str) -> None:  # noqa: D107
+        title = coordinators.primary.data.vehicle.info.specification.title
         self.entity_description = TrackerEntityDescription(
             name=title,
             key=f"{vin}_device_tracker",
             translation_key="device_tracker",
         )
-        super().__init__(coordinator, vin)
+        super().__init__(coordinators, vin)
 
     def _positions(self) -> Positions | None:
         return self.vehicle.positions

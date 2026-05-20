@@ -24,7 +24,7 @@ from myskoda.models.info import CapabilityId
 from myskoda.mqtt import OperationFailedError
 
 from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, DOMAIN
-from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
+from .coordinator import MySkodaConfigEntry, VehicleCoordinators
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
@@ -53,8 +53,8 @@ class MySkodaNumber(MySkodaEntity, NumberEntity):
 
     _assumed_value: float | None = None
 
-    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str):
-        super().__init__(coordinator, vin)
+    def __init__(self, coordinators: VehicleCoordinators, vin: str):
+        super().__init__(coordinators, vin)
 
     def is_supported(self) -> bool:
         all_capabilities_present = all(
