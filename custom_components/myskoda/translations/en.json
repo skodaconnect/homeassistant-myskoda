@@ -371,5 +371,21 @@
         "readonly_mode": {
             "message": "Read-only mode enabled. Command operations are disabled."
         }
+    },
+    "services": {
+        "set_departure_timer": {
+            "name": "Set departure timer",
+            "description": "Configure a departure timer on the vehicle.",
+            "fields": {
+                "device_id": {
+                    "name": "Device",
+                    "description": "The MySkoda vehicle to configure."
+                },
+                "timer": {
+                    "name": "Timer configuration",
+                    "description": "Full departure timer object (id, enabled, type, time, charging, climatisation, recurringOn/oneOffDay, targetBatteryStateOfChargeInPercent, preferredChargingTimes)."
+                }
+            }
+        }
     }
 }

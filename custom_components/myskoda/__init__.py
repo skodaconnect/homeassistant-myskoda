@@ -4,11 +4,16 @@ from __future__ import annotations
 
 import logging
 
+import voluptuous as vol
 from aiohttp import ClientResponseError, InvalidUrlClientError
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
-from homeassistant.helpers import entity_registry as er
+from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.exceptions import (
+    ConfigEntryAuthFailed,
+    ConfigEntryNotReady,
+    ServiceValidationError,
+)
+from homeassistant.helpers import device_registry as dr, entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.util.ssl import get_default_context
 
@@ -16,6 +21,9 @@ from myskoda import (
     AuthorizationFailedError,
     MySkoda,
 )
+from myskoda.models.departure import DepartureTimer
+from myskoda.models.info import CapabilityId
+from myskoda.mqtt import OperationFailedError
 from myskoda.models.common import Vin
 from myskoda.myskoda import TRACE_CONFIG
 from myskoda.auth.authorization import (
@@ -32,6 +40,7 @@ from .const import (
     CONF_USERNAME,
     CONF_VINLIST,
     DOMAIN,
+    SERVICE_SET_DEPARTURE_TIMER,
 )
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
 from .error_handlers import handle_aiohttp_error
@@ -54,6 +63,72 @@ PLATFORMS: list[Platform] = [
     Platform.LOCK,
     Platform.BUTTON,
 ]
+
+SERVICE_SET_DEPARTURE_TIMER_SCHEMA = vol.Schema(
+    {
+        vol.Required("device_id"): str,
+        vol.Required("timer"): vol.Schema(
+            {
+                vol.Required("id"): vol.In([1, 2, 3]),
+                vol.Required("enabled"): bool,
+            },
+            extra=vol.ALLOW_EXTRA,
+        ),
+    }
+)
+
+
+async def _async_handle_set_departure_timer(
+    hass: HomeAssistant, call: ServiceCall
+) -> None:
+    """Handle the set_departure_timer service call."""
+    device_id: str = call.data["device_id"]
+    timer_data: dict = call.data["timer"]
+
+    # Resolve device VIN
+    dev_reg = dr.async_get(hass)
+    device = dev_reg.async_get(device_id)
+    if device is None:
+        raise ServiceValidationError(f"Device '{device_id}' not found")
+
+    vin: str | None = next(
+        (ident[1] for ident in device.identifiers if ident[0] == DOMAIN),
+        None,
+    )
+    if vin is None:
+        raise ServiceValidationError(
+            f"Device '{device_id}' VIN not found. Set up the {DOMAIN} integration again"
+        )
+
+    # Find coordinator for this VIN
+    coordinator: MySkodaDataUpdateCoordinator | None = None
+    for entry in hass.config_entries.async_entries(DOMAIN):
+        if vin in entry.runtime_data:
+            coordinator = entry.runtime_data[vin]
+            break
+
+    if coordinator is None:
+        raise ServiceValidationError(f"No coordinator found for VIN '{vin}'")
+
+    # Check capability
+    if not coordinator.data.vehicle.has_capability(CapabilityId.DEPARTURE_TIMERS):
+        raise ServiceValidationError(
+            f"Vehicle '{vin}' does not support departure timers"
+        )
+
+    # Parse timer from dict
+    try:
+        timer = DepartureTimer.from_dict(timer_data)
+    except (TypeError, ValueError, KeyError) as exc:
+        raise ServiceValidationError(f"Invalid timer configuration: {exc}") from exc
+
+    # All seems good. Send to vehicle
+    try:
+        await coordinator.myskoda.set_departure_timer(vin, timer)
+    except (ClientResponseError, OperationFailedError) as exc:
+        raise ServiceValidationError(f"Failed to set departure timer: {exc}") from exc
+
+    await coordinator.async_request_refresh()
 
 
 def myskoda_instantiate(
@@ -162,6 +237,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
     entry.runtime_data = coordinators
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    if not hass.services.has_service(DOMAIN, SERVICE_SET_DEPARTURE_TIMER):
+        hass.services.async_register(
+            DOMAIN,
+            SERVICE_SET_DEPARTURE_TIMER,
+            lambda call: _async_handle_set_departure_timer(hass, call),
+            schema=SERVICE_SET_DEPARTURE_TIMER_SCHEMA,
+        )
+
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
 
     return True

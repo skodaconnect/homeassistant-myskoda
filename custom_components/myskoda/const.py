@@ -28,3 +28,6 @@ MAX_STORED_SERVICE_EVENTS = 2
 # Santiy boundaries
 OUTSIDE_TEMP_MIN_BOUND = -50
 OUTSIDE_TEMP_MAX_BOUND = 60
+
+# Services
+SERVICE_SET_DEPARTURE_TIMER = "set_departure_timer"

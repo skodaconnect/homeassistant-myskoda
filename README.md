@@ -84,6 +84,46 @@ This happens independently for each entity.
 #### Entities using assumed state (Climate)
 When making a change in these entities (e.g. changing the target temperature) the entity will remain available and show the new value immediately **even if the value isn't applied in the API and car yet**. This uses the [assumed state](https://www.home-assistant.io/blog/2016/02/12/classifying-the-internet-of-things/#classifiers) entity classifier.
 
+### Services
+
+#### set_departure_timer
+Configure a departure timer on the vehicle. The vehicle must support the `DEPARTURE_TIMERS` capability.
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `device_id` | Yes | The MySkoda vehicle device ID |
+| `timer.id` | Yes | Timer slot: `1`, `2`, or `3` |
+| `timer.enabled` | Yes | `true` to activate, `false` to deactivate |
+| `timer.type` | No | `ONE_OFF` or `RECURRING` |
+| `timer.time` | No | Departure time in `HH:MM` format |
+| `timer.charging` | No | Enable charging before departure |
+| `timer.climatisation` | No | Enable climatisation before departure |
+| `timer.recurringOn` | No | List of weekdays for `RECURRING` type (e.g. `[MONDAY, FRIDAY]`) |
+| `timer.oneOffDay` | No | Single weekday for `ONE_OFF` type |
+| `timer.targetBatteryStateOfChargeInPercent` | No | Target charge level (0–100) |
+
+Example:
+
+```yaml
+action: myskoda.set_departure_timer
+data:
+  device_id: "abc123def456"
+  timer:
+    id: 1
+    enabled: true
+    type: RECURRING
+    time: "07:00"
+    charging: true
+    climatisation: true
+    recurringOn:
+      - MONDAY
+      - TUESDAY
+      - WEDNESDAY
+      - THURSDAY
+      - FRIDAY
+    targetBatteryStateOfChargeInPercent: 80
+```
+
 ### New Vehicles
 If you become the owner of an additional vehicle and that gets added to the same MySkoda account: Congrats!
 In order for the integration to discover this new vehicle, you will need to reload the integration or restart HomeAssistant
