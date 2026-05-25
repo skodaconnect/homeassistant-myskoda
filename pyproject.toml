@@ -12,7 +12,7 @@ requires-python = ">=3.13.2,<3.15"
 dependencies = ["homeassistant>=2025.3.2", "myskoda>=2.11.0"]
 
 [dependency-groups]
-dev = ["homeassistant-stubs>=2025.3.2", "ruff ~=0.15.0", "pyright ~=1.1.400"]
+dev = ["homeassistant-stubs>=2025.3.2", "ruff~=0.15.14", "pyright ~=1.1.400"]
 
 [tool.pyright]
 reportIncompatibleVariableOverride = "none"
