@@ -98,7 +98,9 @@ class StatusImage(MySkodaImage):
         """Handle updated data from the coordinator."""
         if status := self.vehicle.status:
             if ts := status.car_captured_timestamp:
-                threshold = datetime.now(UTC) + timedelta(hours=CACHE_CLOCK_SKEW_TOLERANCE_IN_HOURS)
+                threshold = datetime.now(UTC) + timedelta(
+                    hours=CACHE_CLOCK_SKEW_TOLERANCE_IN_HOURS
+                )
                 if ts > threshold:
                     _LOGGER.warning(
                         "Timestamp %s is more than %sh ahead; possible vehicle clock issue.",
