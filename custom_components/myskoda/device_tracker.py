@@ -2,7 +2,7 @@
 
 import logging
 
-from homeassistant.components.device_tracker.config_entry import (
+from homeassistant.components.device_tracker import (
     TrackerEntity,
     TrackerEntityDescription,
 )
