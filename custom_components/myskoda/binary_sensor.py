@@ -136,7 +136,8 @@ class Locked(StatusBinarySensor):
     @property
     def is_on(self) -> bool | None:  # noqa: D102
         if status := self._status():
-            return not status.overall.locked == DoorLockedState.LOCKED
+            if (locked := status.overall.locked) != DoorLockedState.UNKNOWN:
+                return locked != DoorLockedState.LOCKED
 
 
 class DoorsLocked(StatusBinarySensor):
@@ -151,7 +152,8 @@ class DoorsLocked(StatusBinarySensor):
     @property
     def is_on(self) -> bool | None:  # noqa: D102
         if status := self._status():
-            return not status.overall.doors_locked == DoorLockedState.LOCKED
+            if (locked := status.overall.doors_locked) != DoorLockedState.UNKNOWN:
+                return locked != DoorLockedState.LOCKED
 
 
 class DoorsOpen(StatusBinarySensor):

@@ -223,13 +223,10 @@ Refer to [docs/design.md](docs/design.md).
 ## FAQ
 
 #### Is there a sensor to indicate the vehicle is moving?
-There is not but the device tracker will report `vehicle_in_motion`. If you need a binary sensor you can create a [template sensor](https://www.home-assistant.io/integrations/template/). Example:
 
-```python
-{% if states('device_tracker.skoda_enyaq_position') == 'vehicle_in_motion' %}
-True
-{% endif %}
-```
+Yes. Use the `binary_sensor.<vehicle>_in_motion` entity.
+
+> **Deprecated:** Checking the device tracker state against `vehicle_in_motion` is deprecated and will be removed in a future release. Use the binary sensor instead.
 
 #### Why does toggling a switch make it unavailable?
 See [Operations](#operations-switches-buttons-and-numbers).
