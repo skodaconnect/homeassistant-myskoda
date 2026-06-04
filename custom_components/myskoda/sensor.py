@@ -199,6 +199,8 @@ class SoftwareVersion(MySkodaSensor):
 
     @property
     def native_value(self):  # noqa: D102
+        if sus := self.vehicle.software_update_status:
+            return sus.current_software_version
         return self.vehicle.info.software_version
 
     def required_capabilities(self) -> list[CapabilityId]:
