@@ -30,7 +30,6 @@ from .const import (
     DOMAIN,
     MAX_STORED_OPERATIONS,
     MAX_STORED_SERVICE_EVENTS,
-    MQTT_FCM_TOKEN_REFRESH_EVERY_ATTEMPTS,
     MQTT_RECONNECT_INTERVAL_IN_SECONDS,
 )
 from .error_handlers import handle_aiohttp_error
@@ -122,15 +121,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self._mqtt_retry_scheduled: bool = False
         self._startup_called: bool = False
 
-    def _should_refresh_fcm_token(self) -> bool:
-        """Return whether this retry attempt should refresh the FCM token."""
-        if not self.myskoda.fcm_token:
-            return True
-        return (
-            self._mqtt_retry_attempts == 2
-            or self._mqtt_retry_attempts % MQTT_FCM_TOKEN_REFRESH_EVERY_ATTEMPTS == 0
-        )
-
     def _save_fcm_token(self) -> None:
         """Persist the current FCM token if it changed."""
         if not self.myskoda.fcm_token:
@@ -166,25 +156,11 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             return
 
         self._mqtt_retry_attempts += 1
-
-        if self._should_refresh_fcm_token():
-            _LOGGER.debug(
-                "Refreshing FCM token before MQTT connect for vin %s on attempt %s",
-                self.vin,
-                self._mqtt_retry_attempts,
-            )
-            try:
-                self.myskoda.fcm_token = await self.myskoda.get_and_register_fcm_token()
-            except Exception as exc:
-                _LOGGER.debug("Failed to register FCM Token: %s", exc)
-                self._schedule_mqtt_retry()
-                return
-
         await self._mqtt_connect()
-        self._save_fcm_token()
 
         if self.myskoda.mqtt:
             self._mqtt_retry_attempts = 0
+            self._save_fcm_token()
             return
 
         self._schedule_mqtt_retry()
