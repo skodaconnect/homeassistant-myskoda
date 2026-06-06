@@ -226,8 +226,6 @@ Refer to [docs/design.md](docs/design.md).
 
 Yes. Use the `binary_sensor.<vehicle>_in_motion` entity.
 
-> **Deprecated:** Checking the device tracker state against `vehicle_in_motion` is deprecated and will be removed in a future release. Use the binary sensor instead.
-
 #### Why does toggling a switch make it unavailable?
 See [Operations](#operations-switches-buttons-and-numbers).
 
