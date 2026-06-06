@@ -155,16 +155,6 @@
                 "name": "Lisälämmitin"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Sijainti",
-                "state": {
-                    "home": "Kotona",
-                    "not_home": "Poissa kotoa",
-                    "vehicle_in_motion": "Liikkeellä"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Valojen tila kuva"

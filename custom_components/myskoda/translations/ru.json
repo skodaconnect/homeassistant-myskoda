@@ -114,16 +114,6 @@
                 "name": "Вспомогательный обогреватель"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Местоположение",
-                "state": {
-                    "home": "Дома",
-                    "not_home": "Не дома",
-                    "vehicle_in_motion": "Обнаружено движение"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Изображение статуса автомобиля светлое"
