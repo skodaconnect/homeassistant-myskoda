@@ -154,16 +154,6 @@
                 "name": "Tillsatsvärmare"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Position",
-                "state": {
-                    "home": "Hemma",
-                    "not_home": "Borta",
-                    "vehicle_in_motion": "Rörelse upptäckt"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Ljusstatus för fordonet"

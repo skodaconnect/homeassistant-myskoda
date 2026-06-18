@@ -154,16 +154,6 @@
                 "name": "Încălzitor auxiliar"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Poziție",
-                "state": {
-                    "home": "Acasă",
-                    "not_home": "Plecat",
-                    "vehicle_in_motion": "Vehicul în mișcare"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Stare lumină vehicul"

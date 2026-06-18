@@ -154,16 +154,6 @@
                 "name": "Ogrzewanie postojowe"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Położenie",
-                "state": {
-                    "home": "Dom",
-                    "not_home": "Poza domem",
-                    "vehicle_in_motion": "Wykryto ruch"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Render statusu świateł pojazdu"

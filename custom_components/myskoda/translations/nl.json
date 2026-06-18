@@ -114,16 +114,6 @@
                 "name": "Standverwarming"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Positie",
-                "state": {
-                    "home": "Thuis",
-                    "not_home": "Afwezig",
-                    "vehicle_in_motion": "In beweging"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Voertuigstatus"
