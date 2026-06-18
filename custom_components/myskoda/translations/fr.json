@@ -98,16 +98,6 @@
                 "name": "Chauffage auxiliaire"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Position",
-                "state": {
-                    "home": "Maison",
-                    "not_home": "Absent",
-                    "vehicle_in_motion": "Mouvement détecté"
-                }
-            }
-        },
         "image": {
             "render_vehicle_main": {
                 "name": "Illustration du véhicule"

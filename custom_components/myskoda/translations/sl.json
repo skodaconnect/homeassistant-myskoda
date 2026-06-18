@@ -104,16 +104,6 @@
                 "name": "Ogrevanje na mestu"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Položaj",
-                "state": {
-                    "home": "Doma",
-                    "not_home": "Odsoten",
-                    "vehicle_in_motion": "Zaznano premikanje"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Slika vozila – svetila"

@@ -104,16 +104,6 @@
                 "name": "Tilleggsvarmer"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Posisjon",
-                "state": {
-                    "home": "Hjemme",
-                    "not_home": "Borte",
-                    "vehicle_in_motion": "Bevegelse oppdaget"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Lysstatus i visning av kjøretøyet"

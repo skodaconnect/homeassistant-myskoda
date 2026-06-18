@@ -104,16 +104,6 @@
                 "name": "Aquecedor auxiliar"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Posição",
-                "state": {
-                    "home": "Em casa",
-                    "not_home": "Ausente",
-                    "vehicle_in_motion": "Moção detectada"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Renderização do estado da luz do veículo"

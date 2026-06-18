@@ -104,16 +104,6 @@
                 "name": "Zuheizer"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Standort",
-                "state": {
-                    "home": "Zuhause",
-                    "not_home": "Abwesend",
-                    "vehicle_in_motion": "Bewegung erkannt"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Lichtansicht des Fahrzeugs"
