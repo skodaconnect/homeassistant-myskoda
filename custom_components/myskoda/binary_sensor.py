@@ -436,7 +436,7 @@ class VehicleInMotion(VehicleConnectionBinarySensor):
     )
 
     def _positions(self) -> Positions | None:
-        if vehicle_positions := self.vehicle.positions
+        if vehicle_positions := self.vehicle.positions:
             return vehicle_positions
 
     def _motion_detection(self) -> Error | None:
