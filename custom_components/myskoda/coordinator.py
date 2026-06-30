@@ -194,15 +194,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 )
                 raise UpdateFailed("Failed to retrieve initial data during setup")
 
-            try:
-                vehicle.software_update_status = (
-                    await self.myskoda.get_software_update_status(self.vin)
-                )
-            except Exception as err:  # noqa: BLE001
-                _LOGGER.debug(
-                    "Software update status not available for %s: %s", self.vin, err
-                )
-
             async def _async_finish_startup(hass: HomeAssistant) -> None:
                 """Tasks to execute when we have finished starting up."""
                 _LOGGER.debug(
