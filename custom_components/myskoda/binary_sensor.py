@@ -435,10 +435,28 @@ class VehicleInMotion(VehicleConnectionBinarySensor):
         translation_key="vehicle_in_motion",
     )
 
+    def _positions(self) -> Positions | None:
+        if vehicle_positions := self.vehicle.positions
+            return vehicle_positions
+
+    def _motion_detection(self) -> Error | None:
+        if pos := self._positions():
+            if pos.errors:
+                return next(
+                    err for err in pos.errors if err.type == ErrorType.VEHICLE_IN_MOTION
+                )
+
     @property
     def is_on(self) -> bool | None:
         if cs := self._connection_status():
             return cs.in_motion
+        if motion_error := self._motion_detection():
+            return motion_error.type == ErrorType.VEHICLE_IN_MOTION
+
+    def is_supported(self) -> bool:  # noqa: D102
+        return self.has_any_capability(
+            [CapabilityId.PARKING_POSITION, CapabilityId.READINESS]
+        )
 
 
 class VehicleBatteryProtection(VehicleConnectionBinarySensor):
