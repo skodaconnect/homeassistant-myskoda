@@ -20,6 +20,12 @@ from myskoda.models.common import (
 )
 from myskoda.models.info import CapabilityId
 from myskoda.models.status import DoorWindowState, Status
+from myskoda.models.position import (
+    Error,
+    ErrorType,
+    Positions,
+)
+
 from myskoda.models.vehicle_connection_status import VehicleConnectionStatus
 
 from .coordinator import MySkodaConfigEntry
