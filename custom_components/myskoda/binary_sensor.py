@@ -458,6 +458,8 @@ class VehicleInMotion(VehicleConnectionBinarySensor):
             return cs.in_motion
         if motion_error := self._motion_detection():
             return motion_error.type == ErrorType.VEHICLE_IN_MOTION
+        if pos := self._positions:
+            return False
 
     def is_supported(self) -> bool:  # noqa: D102
         return self.has_any_capability(
