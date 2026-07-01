@@ -8,17 +8,20 @@ from homeassistant.components.binary_sensor import (
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import DiscoveryInfoType  # pyright: ignore [reportAttributeAccessIssue]
+from homeassistant.helpers.typing import (
+    DiscoveryInfoType,  # pyright: ignore [reportAttributeAccessIssue]
+)
 
 from myskoda import common
 from myskoda.models.air_conditioning import AirConditioning
 from myskoda.models.common import (
+    ChargerLockedState,
     DoorLockedState,
     OnOffState,
     OpenState,
-    ChargerLockedState,
 )
 from myskoda.models.info import CapabilityId
+from myskoda.models.position import ErrorType
 from myskoda.models.status import DoorWindowState, Status
 from myskoda.models.vehicle_connection_status import VehicleConnectionStatus
 
@@ -426,8 +429,12 @@ class VehicleReachable(VehicleConnectionBinarySensor):
             return not cs.unreachable
 
 
-class VehicleInMotion(VehicleConnectionBinarySensor):
-    """Vehicle in motion status."""
+class VehicleInMotion(MySkodaBinarySensor):
+    """Vehicle in motion status.
+
+    Prefer using the newer connection_status which explicitly reports the vehicle is in motion.
+    Fall back to positions errors.
+    """
 
     entity_description = BinarySensorEntityDescription(
         key="vehicle_in_motion",
@@ -435,10 +442,20 @@ class VehicleInMotion(VehicleConnectionBinarySensor):
         translation_key="vehicle_in_motion",
     )
 
+    def is_supported(self) -> bool:
+        return self.has_any_capability(
+            [CapabilityId.READINESS, CapabilityId.PARKING_POSITION]
+        )
+
     @property
     def is_on(self) -> bool | None:
-        if cs := self._connection_status():
-            return cs.in_motion
+        if connection_status := self.vehicle.connection_status:
+            return connection_status.in_motion
+
+        if positions := self.vehicle.positions:
+            if any(e.type is ErrorType.VEHICLE_IN_MOTION for e in positions.errors):
+                return True
+            return False
 
 
 class VehicleBatteryProtection(VehicleConnectionBinarySensor):
