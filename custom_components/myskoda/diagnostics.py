@@ -8,7 +8,7 @@ from myskoda.models.fixtures import Endpoint
 from typing import Any
 
 
-from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
+from .coordinator import MySkodaConfigEntry, VehicleCoordinators
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,19 +24,17 @@ async def async_get_device_diagnostics(
             "error": error_message,
         }
 
-    coordinator: MySkodaDataUpdateCoordinator | None = config_entry.runtime_data.get(
-        vin
-    )
+    vehicle_coords: VehicleCoordinators | None = config_entry.runtime_data.get(vin)
 
-    if not coordinator:
+    if not vehicle_coords:
         error_message = f"No coordinator found for VIN: {vin}"
         _LOGGER.error(error_message)
         return {
             "error": error_message,
         }
 
+    coordinator = vehicle_coords.primary
     try:
-        # Fetch diagnostics data from the MySkoda API
         specs = coordinator.data.vehicle.info.specification
         description = (
             f"Fixtures for {specs.model} {specs.trim_level} {specs.model_year}"
@@ -65,18 +63,11 @@ async def async_get_config_entry_diagnostics(
     hass: HomeAssistant, config_entry: MySkodaConfigEntry
 ) -> dict[str, Any]:
     """Return diagnostics for all vehicles in the config entry."""
-    coordinators = config_entry.runtime_data
     results = []
 
-    for vin, coordinator in coordinators.items():
-        if not coordinator:
-            error_message = f"No coordinator found for VIN: {vin}"
-            _LOGGER.error(error_message)
-            results.append({"error": error_message})
-            continue
-
+    for vin, vehicle_coords in config_entry.runtime_data.items():
+        coordinator = vehicle_coords.primary
         try:
-            # Fetch diagnostics data from the MySkoda API
             specs = coordinator.data.vehicle.info.specification
             description = (
                 f"Fixtures for {specs.model} {specs.trim_level} {specs.model_year}"
@@ -89,7 +80,6 @@ async def async_get_config_entry_diagnostics(
                 Endpoint.ALL,
             )
 
-            # Append the successful data
             results.append({"fixtures": json.loads(result.to_json())})
 
         except Exception as e:
