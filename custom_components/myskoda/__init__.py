@@ -242,7 +242,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
         hass.services.async_register(
             DOMAIN,
             SERVICE_SET_DEPARTURE_TIMER,
-            lambda call: _async_handle_set_departure_timer(hass, call),
+            _async_handle_set_departure_timer,
             schema=SERVICE_SET_DEPARTURE_TIMER_SCHEMA,
         )
 
