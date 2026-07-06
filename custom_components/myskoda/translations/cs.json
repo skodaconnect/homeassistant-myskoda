@@ -114,16 +114,6 @@
                 "name": "Nezávislé topení"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Poloha",
-                "state": {
-                    "home": "Doma",
-                    "not_home": "Pryč",
-                    "vehicle_in_motion": "Zjištěn pohyb"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Znázornění stavu vozidla"

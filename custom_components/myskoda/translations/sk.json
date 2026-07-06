@@ -105,16 +105,6 @@
                 "name": "Nezávislé kúrenie"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Poloha",
-                "state": {
-                    "home": "Doma",
-                    "not_home": "Preč",
-                    "vehicle_in_motion": "Zistený pohyb"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Stav vozidla"

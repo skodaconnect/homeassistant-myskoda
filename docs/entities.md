@@ -166,11 +166,9 @@ Number entities become temporarily unavailable when modified, until the API oper
 
 | Key              | Name     | Capability required | Notes                                                      |
 |------------------|----------|---------------------|------------------------------------------------------------|
-| `device_tracker` | Position | PARKING_POSITION    | Reports deprecated `vehicle_in_motion` state while the vehicle is moving |
+| `device_tracker` | Position | PARKING_POSITION    | Attributes give additional information |
 
-Location is exposed as a device tracker. While the vehicle is moving the Skoda API does not return GPS coordinates; the tracker will report the `vehicle_in_motion` state instead of a location.
-
-> **Deprecated:** Checking `vehicle_in_motion` as the tracker state is deprecated. Use `binary_sensor.<vehicle>_in_motion` instead.
+Location of the car is exposed as a device tracker. While the vehicle is moving the Skoda API does not return GPS coordinates.
 
 The entity exposes the following extra state attributes:
 

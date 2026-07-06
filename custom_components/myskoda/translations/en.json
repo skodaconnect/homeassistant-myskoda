@@ -115,16 +115,6 @@
                 "name": "Auxiliary Heater"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Position",
-                "state": {
-                    "home": "Home",
-                    "not_home": "Away",
-                    "vehicle_in_motion": "Motion detected"
-                }
-            }
-        },
         "image": {
             "render_light_3x": {
                 "name": "Light Status Render of Vehicle"

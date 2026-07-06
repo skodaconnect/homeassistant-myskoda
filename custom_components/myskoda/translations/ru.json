@@ -3,7 +3,8 @@
         "abort": {
             "already_configured": "Устройство уже настроено",
             "reauth_successful": "Повторная аутентификация выполнена.",
-            "no_entry": "Не удалось найти конфигурацию MySkoda. Пожалуйста, проверьте свои журналы и откройте проблему на GitHub."
+            "no_entry": "Не удалось найти конфигурацию MySkoda. Пожалуйста, проверьте свои журналы и откройте проблему на GitHub.",
+            "reconfigure_successful": "Перестройка прошла успешно."
         },
         "error": {
             "cannot_connect": "Не удалось подключиться",
@@ -28,6 +29,14 @@
                     "password": "Пароль"
                 },
                 "description": "Введите учетные данные из вашего приложения MySkoda."
+            },
+            "reconfigure": {
+                "data": {
+                    "email": "E-mail адрес",
+                    "password": "Пароль"
+                },
+                "description": "Обновить свои учетные данные MySkoda.",
+                "title": "Перенастроить MySkoda"
             }
         }
     },
@@ -103,16 +112,6 @@
             },
             "auxiliary_heater": {
                 "name": "Вспомогательный обогреватель"
-            }
-        },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Местоположение",
-                "state": {
-                    "home": "Дома",
-                    "not_home": "Не дома",
-                    "vehicle_in_motion": "Обнаружено движение"
-                }
             }
         },
         "image": {

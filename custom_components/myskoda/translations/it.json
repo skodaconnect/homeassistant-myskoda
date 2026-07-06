@@ -98,16 +98,6 @@
                 "name": "Riscaldamento Ausiliario"
             }
         },
-        "device_tracker": {
-            "device_tracker": {
-                "name": "Posizione",
-                "state": {
-                    "home": "Casa",
-                    "not_home": "Assente",
-                    "vehicle_in_motion": "Movimento rilevato"
-                }
-            }
-        },
         "image": {
             "render_vehicle_main": {
                 "name": "Immagine del veicolo"

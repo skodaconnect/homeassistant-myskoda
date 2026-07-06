@@ -2,7 +2,7 @@
 
 import logging
 
-from homeassistant.components.device_tracker.config_entry import (
+from homeassistant.components.device_tracker import (
     TrackerEntity,
     TrackerEntityDescription,
 )
@@ -91,27 +91,28 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
         if pp := self._vehicle_parking_position():
             return pp.parking_position
 
+    def _gps_coordinates(self):
+        if self._pos_error():
+            return None
+        if position := self._vehicle_position():
+            return position.gps_coordinates
+        if pp := self._parking_position():
+            return pp.gps_coordinates
+        return None
+
     @property
     def source_type(self) -> SourceType:  # noqa: D102
         return SourceType.GPS
 
     @property
     def latitude(self) -> float | None:  # noqa: D102
-        position = self._vehicle_position()
-        if position is None:
-            if pp := self._parking_position():
-                return pp.gps_coordinates.latitude
-            return None
-        return position.gps_coordinates.latitude
+        if coords := self._gps_coordinates():
+            return coords.latitude
 
     @property
     def longitude(self) -> float | None:  # noqa: D102
-        position = self._vehicle_position()
-        if position is None:
-            if pp := self._parking_position():
-                return pp.gps_coordinates.longitude
-            return None
-        return position.gps_coordinates.longitude
+        if coords := self._gps_coordinates():
+            return coords.longitude
 
     @property
     def extra_state_attributes(self) -> dict:
@@ -136,12 +137,6 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
             )
             attributes["entity_picture"] = renders.get(ViewPoint.EXTERIOR_SIDE)
         return attributes
-
-    @property
-    def location_name(self) -> str | None:
-        if err := self._pos_error():
-            if err.type == ErrorType.VEHICLE_IN_MOTION:
-                return "vehicle_in_motion"
 
     @property
     def battery_level(self) -> int | None:
