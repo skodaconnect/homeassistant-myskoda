@@ -109,7 +109,15 @@
         },
         "climate": {
             "climate": {
-                "name": "Air Conditioning"
+                "name": "Air Conditioning",
+                "state_attributes": {
+                    "preset_mode": {
+                        "state": {
+                            "none": "Normal",
+                            "camping": "Camping"
+                        }
+                    }
+                }
             },
             "auxiliary_heater": {
                 "name": "Auxiliary Heater"
@@ -205,6 +213,9 @@
             },
             "service_event": {
                 "name": "Last Service Event"
+            },
+            "camping_mode_ends_at": {
+                "name": "Camping Mode Ends"
             },
             "software_version": {
                 "name": "Software Version"
