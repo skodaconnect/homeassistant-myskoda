@@ -364,6 +364,34 @@
             }
         }
     },
+    "services": {
+        "set_charging_profile_time": {
+            "name": "Set charging profile time",
+            "description": "Updates one preferred charging time window of a charging profile (location).",
+            "fields": {
+                "device_id": {
+                    "name": "Charging profile",
+                    "description": "The charging profile (location) device to update."
+                },
+                "id": {
+                    "name": "Time window ID",
+                    "description": "The ID of an existing preferred charging time window on this profile to update."
+                },
+                "enabled": {
+                    "name": "Enabled",
+                    "description": "Whether this charging time window should be active."
+                },
+                "start_time": {
+                    "name": "Start time",
+                    "description": "The time the charging window starts."
+                },
+                "end_time": {
+                    "name": "End time",
+                    "description": "The time the charging window ends."
+                }
+            }
+        }
+    },
     "issues": {
         "new_tandc": {
             "title": "Review new consents and T/C for MySkoda",
@@ -401,6 +429,15 @@
         },
         "camping_no_target_temperature": {
             "message": "Cannot start camping mode without a target temperature."
+        },
+        "charging_profile_not_found": {
+            "message": "The selected device is not a MySkoda charging profile."
+        },
+        "charging_time_not_found": {
+            "message": "This charging profile has no preferred charging time window with the given ID."
+        },
+        "charging_time_update_failed": {
+            "message": "Failed to update the charging profile time window."
         }
     }
 }

@@ -72,6 +72,26 @@ This integration interacts with the Skoda API in the same way the official MySko
 
 Refer to [docs/entities.md](docs/entities.md) for the full list of all entities created by the integration.
 
+### Actions
+
+#### `myskoda.set_charging_profile_time`
+Updates one preferred charging time window of a charging profile (location, e.g. "Home"). Each configured charging profile is exposed as its own device, nested under the vehicle device; target that device with `device_id`.
+
+The `id` must match an existing time window on that profile (visible as an attribute on its `Preferred Charging Times` sensor) — you cannot create new time windows this way, only update existing ones.
+
+```yaml
+action: myskoda.set_charging_profile_time
+target:
+  device_id: <id of a charging profile device>
+data:
+  id: 1
+  enabled: true
+  start_time: "20:00"
+  end_time: "06:00"
+```
+
+This action is disabled in [read-only mode](#read-only-mode).
+
 ### Operations
 
 #### Entities becoming temporarily unavailable (Switches, Buttons and Numbers)
