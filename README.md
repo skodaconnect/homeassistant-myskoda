@@ -258,6 +258,9 @@ You can help us translate your MySkoda integration into your language!
 Just [join our Crowdin project](https://crowdin.com/project/homeassistant-myskoda/invite?h=1c4f8152c707b666f570b9cb68678ece2227331).
 If your desired language is not available, please [open an issue](https://github.com/skodaconnect/homeassistant-myskoda/issues/new/choose) and let us know about it!
 
+## License
+This project is licensed under the [MIT License](LICENSE). The names of the current authors can be found in `pyproject.toml`.
+
 ## Disclaimer
 This Homeassistant integration uses an unofficial API client for the Skoda API and is not affiliated with, endorsed by, or associated with Skoda Auto or any of its subsidiaries.
 
