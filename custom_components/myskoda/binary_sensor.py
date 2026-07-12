@@ -26,8 +26,8 @@ from myskoda.models.status import DoorWindowState, Status
 from myskoda.models.vehicle_connection_status import VehicleConnectionStatus
 
 from .coordinator import MySkodaConfigEntry
-from .entity import MySkodaEntity
-from .utils import add_supported_entities
+from .entity import MySkodaChargingProfileEntity, MySkodaEntity
+from .utils import add_supported_charging_profile_entities, add_supported_entities
 
 
 async def async_setup_entry(
@@ -61,6 +61,11 @@ async def async_setup_entry(
             VehicleInMotion,
             VehicleReachable,
         ],
+        coordinators=config.runtime_data,
+        async_add_entities=async_add_entities,
+    )
+    add_supported_charging_profile_entities(
+        available_entities=[ChargingProfileActive],
         coordinators=config.runtime_data,
         async_add_entities=async_add_entities,
     )
@@ -471,3 +476,20 @@ class VehicleBatteryProtection(VehicleConnectionBinarySensor):
     def is_on(self) -> bool | None:
         if cs := self._connection_status():
             return cs.battery_protection_limit_on
+
+
+class ChargingProfileActive(MySkodaChargingProfileEntity, BinarySensorEntity):
+    """Whether this charging profile is currently active for the vehicle's position."""
+
+    entity_description = BinarySensorEntityDescription(
+        key="charging_profile_active",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        translation_key="charging_profile_active",
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        profiles = self.coordinator.data.charging_profiles
+        if not profiles or not profiles.current_vehicle_position_profile:
+            return False
+        return profiles.current_vehicle_position_profile.id == self.profile_id

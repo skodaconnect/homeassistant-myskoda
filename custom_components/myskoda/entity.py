@@ -4,6 +4,7 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from myskoda import Vehicle
+from myskoda.models.chargingprofiles import ChargingProfile
 from myskoda.models.event import OperationEvent
 from myskoda.models.info import CapabilityId, ViewPoint, ViewType
 
@@ -100,3 +101,52 @@ class MySkodaEntity(CoordinatorEntity):
                 render.view_point: render.url for render in cr.layers
             }
         return composite_renders
+
+
+class MySkodaChargingProfileEntity(MySkodaEntity):
+    """Base class for entities representing a single charging profile (location).
+
+    Each configured charging location is exposed as its own device, linked to
+    the vehicle device via `via_device`.
+    """
+
+    profile_id: int
+
+    def __init__(
+        self,
+        coordinator,
+        vin: str,
+        profile_id: int,
+    ) -> None:  # noqa: D107
+        self.profile_id = profile_id
+        super().__init__(coordinator, vin)
+        self._attr_unique_id = (
+            f"{vin}_charging_profile_{profile_id}_{self.entity_description.key}"
+        )
+
+    @property
+    def charging_profile(self) -> ChargingProfile | None:
+        """Return the charging profile this entity represents, if it still exists."""
+        profiles = self.coordinator.data.charging_profiles
+        if not profiles:
+            return None
+        for profile in profiles.charging_profiles:
+            if profile.id == self.profile_id:
+                return profile
+        return None
+
+    @property
+    def available(self) -> bool:  # noqa: D102
+        return super().available and self.charging_profile is not None
+
+    @property
+    def device_info(self) -> DeviceInfo:  # noqa: D102
+        name = self.charging_profile.name if self.charging_profile else None
+        return {
+            "identifiers": {(DOMAIN, f"{self.vin}_charging_profile_{self.profile_id}")},
+            "name": name or f"Charging Profile {self.profile_id}",
+            "via_device": (DOMAIN, self.vehicle.info.vin),
+        }
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CHARGING_PROFILES]

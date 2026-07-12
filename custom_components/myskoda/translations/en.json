@@ -52,6 +52,9 @@
             "charger_lock": {
                 "name": "Charge Lock"
             },
+            "charging_profile_active": {
+                "name": "Active"
+            },
             "doors_lock": {
                 "name": "Doors Locked"
             },
@@ -270,6 +273,30 @@
             },
             "last_trip_average_fuel_consumption": {
                 "name": "Last Trip Average Fuel Consumption"
+            },
+            "charging_profile_target_state_of_charge": {
+                "name": "Target State of Charge"
+            },
+            "charging_profile_minimum_state_of_charge": {
+                "name": "Minimum State of Charge"
+            },
+            "charging_profile_max_charging_current": {
+                "name": "Max Charging Current",
+                "state": {
+                    "maximum": "Maximum",
+                    "reduced": "Reduced"
+                }
+            },
+            "charging_profile_auto_unlock_plug": {
+                "name": "Unlock Plug when Charged",
+                "state": {
+                    "permanent": "Permanent",
+                    "on": "On",
+                    "off": "Off"
+                }
+            },
+            "charging_profile_charging_times": {
+                "name": "Preferred Charging Times"
             }
         },
         "switch": {

@@ -24,3 +24,45 @@ def add_supported_entities(
                     entities.append(sensor)
 
     async_add_entities(entities, update_before_add=True)
+
+
+def add_supported_charging_profile_entities(
+    available_entities: list[
+        Callable[[MySkodaDataUpdateCoordinator, Vin, int], MySkodaEntity]
+    ],
+    coordinators: dict[Vin, MySkodaDataUpdateCoordinator],
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Register one set of entities per configured charging profile (location).
+
+    Charging profiles can be added by the user at any time (e.g. a new
+    charging location saved in the MySkoda app), so this keeps watching each
+    coordinator for profile IDs it hasn't seen yet and adds their entities
+    without requiring a restart.
+    """
+    known_profile_ids: dict[Vin, set[int]] = {vin: set() for vin in coordinators}
+
+    def _add_new_profiles(vin: Vin, coordinator: MySkodaDataUpdateCoordinator) -> None:
+        profiles = coordinator.data.charging_profiles
+        if not profiles:
+            return
+
+        new_entities = []
+        for profile in profiles.charging_profiles:
+            if profile.id in known_profile_ids[vin]:
+                continue
+            known_profile_ids[vin].add(profile.id)
+
+            for EntityClass in available_entities:
+                entity = EntityClass(coordinator, vin, profile.id)
+                if not entity.is_forbidden() and entity.is_supported():
+                    new_entities.append(entity)
+
+        if new_entities:
+            async_add_entities(new_entities, update_before_add=True)
+
+    for vin, coordinator in coordinators.items():
+        _add_new_profiles(vin, coordinator)
+        coordinator.async_add_listener(
+            lambda vin=vin, coordinator=coordinator: _add_new_profiles(vin, coordinator)
+        )
