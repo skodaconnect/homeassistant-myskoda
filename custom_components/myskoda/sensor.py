@@ -195,6 +195,7 @@ class CampingModeEndsAt(MySkodaSensor):
         key="camping_mode_ends_at",
         translation_key="camping_mode_ends_at",
         device_class=SensorDeviceClass.TIMESTAMP,
+        icon="mdi:tent",
     )
 
     @property
