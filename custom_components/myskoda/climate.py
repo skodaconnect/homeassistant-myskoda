@@ -10,6 +10,7 @@ from homeassistant.components.climate import (
     ClimateEntityDescription,
 )
 from homeassistant.components.climate.const import (
+    PRESET_NONE,
     ClimateEntityFeature,
     HVACAction,
     HVACMode,
@@ -52,6 +53,8 @@ from .utils import add_supported_entities
 
 _LOGGER = logging.getLogger(__name__)
 
+PRESET_CAMPING = "camping"
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -72,6 +75,7 @@ class OptimisticAttribute(StrEnum):
     TARGET_TEMPERATURE = "target_temperature"
     HVAC_MODE = "hvac_mode"
     HVAC_ACTION = "hvac_action"
+    PRESET_MODE = "preset_mode"
 
 
 class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
@@ -168,6 +172,24 @@ class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
         finally:
             self._operation_in_progress = False
 
+    async def _start_camping(self, temperature: float) -> None:
+        self._ensure_not_readonly()
+        self._operation_in_progress = True
+        try:
+            await self.coordinator.myskoda.start_camping(
+                self.vehicle.info.vin, temperature
+            )
+        finally:
+            self._operation_in_progress = False
+
+    async def _stop_camping(self) -> None:
+        self._ensure_not_readonly()
+        self._operation_in_progress = True
+        try:
+            await self.coordinator.myskoda.stop_camping(self.vehicle.info.vin)
+        finally:
+            self._operation_in_progress = False
+
     async def _start_ventilation(self) -> None:
         self._ensure_not_readonly()
         self._operation_in_progress = True
@@ -209,15 +231,35 @@ class MySkodaClimate(MySkodaClimateEntity):
             [CapabilityId.ACTIVE_VENTILATION]
         ) and not self.has_all_capabilities([CapabilityId.AIR_CONDITIONING])
 
+    def _supports_camping(self) -> bool:
+        """Return True if the vehicle exposes camping mode."""
+        return (
+            self.has_all_capabilities([CapabilityId.CAMPING_MODE])
+            and not self._is_ventilation_only()
+        )
+
+    def _is_camping_active(self) -> bool:
+        """Return the current camping state (optimistic value first, then cached AC state)."""
+        if (
+            preset := self._optimistic_data.get(OptimisticAttribute.PRESET_MODE)
+        ) is not None:
+            return preset == PRESET_CAMPING
+        if (ac := self._air_conditioning()) and ac.camping_mode is not None:
+            return ac.camping_mode.enabled
+        return False
+
     @property
     def supported_features(self) -> ClimateEntityFeature:  # noqa: D102
         if self._is_ventilation_only():
             return ClimateEntityFeature.TURN_ON | ClimateEntityFeature.TURN_OFF
-        return (
+        features = (
             ClimateEntityFeature.TARGET_TEMPERATURE
             | ClimateEntityFeature.TURN_ON
             | ClimateEntityFeature.TURN_OFF
         )
+        if self._supports_camping():
+            features |= ClimateEntityFeature.PRESET_MODE
+        return features
 
     @property
     def hvac_modes(self) -> list[HVACMode]:  # noqa: D102
@@ -255,6 +297,22 @@ class MySkodaClimate(MySkodaClimateEntity):
             if ac.state == AirConditioningState.VENTILATION:
                 return HVACAction.FAN
             return HVACAction.OFF
+
+    @property
+    def preset_modes(self) -> list[str] | None:  # noqa: D102
+        if self._supports_camping():
+            return [PRESET_NONE, PRESET_CAMPING]
+        return None
+
+    @property
+    def preset_mode(self) -> str | None:  # noqa: D102
+        if not self._supports_camping():
+            return None
+        if preset := self._optimistic_data.get(OptimisticAttribute.PRESET_MODE):
+            return preset
+        if (ac := self._air_conditioning()) and ac.camping_mode is not None:
+            return PRESET_CAMPING if ac.camping_mode.enabled else PRESET_NONE
+        return PRESET_NONE
 
     @property
     def target_temperature(self) -> None | float:  # noqa: D102
@@ -311,11 +369,23 @@ class MySkodaClimate(MySkodaClimateEntity):
             except (ClientResponseError, OperationFailedError) as exc:
                 self._unset_optimistic_data(OptimisticAttribute.HVAC_MODE)
                 _LOGGER.error("Failed to start air conditioning: %s", exc)
+        elif self._supports_camping() and self._is_camping_active():
+            # Camping keeps the AC running; a plain _stop_air_conditioning would not
+            # end it, so call _stop_camping instead.
+            self._set_optimistic_data(OptimisticAttribute.PRESET_MODE, PRESET_NONE)
+            _LOGGER.info("Camping mode active, stopping camping mode.")
+            try:
+                await self._stop_camping()
+            except (ClientResponseError, OperationFailedError) as exc:
+                self._unset_optimistic_data(OptimisticAttribute.HVAC_MODE)
+                self._unset_optimistic_data(OptimisticAttribute.PRESET_MODE)
+                _LOGGER.error("Failed to stop camping mode: %s", exc)
         else:
             _LOGGER.info("Stopping Air conditioning.")
             try:
                 await self._stop_air_conditioning()
             except (ClientResponseError, OperationFailedError) as exc:
+                self._unset_optimistic_data(OptimisticAttribute.HVAC_MODE)
                 _LOGGER.error("Failed to stop air conditioning: %s", exc)
         _LOGGER.info("HVAC mode set to %s.", hvac_mode)
 
@@ -327,6 +397,43 @@ class MySkodaClimate(MySkodaClimateEntity):
 
     async def async_turn_off(self):  # noqa: D102
         await self.async_set_hvac_mode(HVACMode.OFF)
+
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
+    async def async_set_preset_mode(self, preset_mode: str) -> None:  # noqa: D102
+        if not self._supports_camping():
+            return
+
+        if preset_mode == PRESET_CAMPING:
+            if not (ac := self._air_conditioning()) or not (
+                target_temperature := ac.target_temperature
+            ):
+                raise ServiceValidationError(
+                    translation_domain=DOMAIN,
+                    translation_key="camping_no_target_temperature",
+                )
+            self._set_optimistic_data(OptimisticAttribute.PRESET_MODE, preset_mode)
+            self._set_optimistic_data(OptimisticAttribute.HVAC_MODE, HVACMode.HEAT_COOL)
+            _LOGGER.info("Starting camping mode.")
+            try:
+                await self._start_camping(target_temperature.temperature_value)
+            except (ClientResponseError, OperationFailedError) as exc:
+                self._unset_optimistic_data(OptimisticAttribute.PRESET_MODE)
+                self._unset_optimistic_data(OptimisticAttribute.HVAC_MODE)
+                _LOGGER.error("Failed to start camping mode: %s", exc)
+        elif preset_mode == PRESET_NONE:
+            if self._is_camping_active():
+                self._set_optimistic_data(OptimisticAttribute.PRESET_MODE, preset_mode)
+                self._set_optimistic_data(OptimisticAttribute.HVAC_MODE, HVACMode.OFF)
+                _LOGGER.info("Stopping camping mode.")
+                try:
+                    await self._stop_camping()
+                except (ClientResponseError, OperationFailedError) as exc:
+                    self._unset_optimistic_data(OptimisticAttribute.PRESET_MODE)
+                    self._unset_optimistic_data(OptimisticAttribute.HVAC_MODE)
+                    _LOGGER.error("Failed to stop camping mode: %s", exc)
+        else:
+            _LOGGER.warning("Unsupported preset mode: %s", preset_mode)
+        _LOGGER.info("Preset mode set to %s.", preset_mode)
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
     async def async_set_temperature(self, **kwargs):  # noqa: D102

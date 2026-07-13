@@ -48,6 +48,7 @@ async def async_setup_entry(
         available_entities=[
             AddBlueRange,
             BatteryPercentage,
+            CampingModeEndsAt,
             ChargeType,
             ChargingPower,
             ChargingRate,
@@ -185,6 +186,26 @@ class ServiceEvent(MySkodaSensor):
         attributes["history"] = filtered[1:]
 
         return attributes
+
+
+class CampingModeEndsAt(MySkodaSensor):
+    """Report when camping mode will automatically end."""
+
+    entity_description = SensorEntityDescription(
+        key="camping_mode_ends_at",
+        translation_key="camping_mode_ends_at",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        icon="mdi:tent",
+    )
+
+    @property
+    def native_value(self) -> datetime | None:
+        """Return when camping mode ends, if active."""
+        if (ac := self.vehicle.air_conditioning) and ac.camping_mode is not None:
+            return ac.camping_mode.ends_at
+
+    def required_capabilities(self) -> list[CapabilityId]:
+        return [CapabilityId.CAMPING_MODE]
 
 
 class SoftwareVersion(MySkodaSensor):
