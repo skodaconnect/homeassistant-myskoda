@@ -404,29 +404,35 @@ class MySkodaClimate(MySkodaClimateEntity):
             return
 
         if preset_mode == PRESET_CAMPING:
-            if not (ac := self._air_conditioning()):
-                _LOGGER.debug(
-                    "Cannot start camping mode: air conditioning unavailable."
+            if not (ac := self._air_conditioning()) or not (
+                target_temperature := ac.target_temperature
+            ):
+                raise ServiceValidationError(
+                    translation_domain=DOMAIN,
+                    translation_key="camping_no_target_temperature",
                 )
-                return
-            if not (target_temperature := ac.target_temperature):
-                _LOGGER.debug("Cannot start camping mode: no target temperature set.")
-                return
             self._set_optimistic_data(OptimisticAttribute.PRESET_MODE, preset_mode)
+            self._set_optimistic_data(OptimisticAttribute.HVAC_MODE, HVACMode.HEAT_COOL)
             _LOGGER.info("Starting camping mode.")
             try:
                 await self._start_camping(target_temperature.temperature_value)
             except (ClientResponseError, OperationFailedError) as exc:
                 self._unset_optimistic_data(OptimisticAttribute.PRESET_MODE)
+                self._unset_optimistic_data(OptimisticAttribute.HVAC_MODE)
                 _LOGGER.error("Failed to start camping mode: %s", exc)
-        elif self._is_camping_active():
-            self._set_optimistic_data(OptimisticAttribute.PRESET_MODE, preset_mode)
-            _LOGGER.info("Stopping camping mode.")
-            try:
-                await self._stop_camping()
-            except (ClientResponseError, OperationFailedError) as exc:
-                self._unset_optimistic_data(OptimisticAttribute.PRESET_MODE)
-                _LOGGER.error("Failed to stop camping mode: %s", exc)
+        elif preset_mode == PRESET_NONE:
+            if self._is_camping_active():
+                self._set_optimistic_data(OptimisticAttribute.PRESET_MODE, preset_mode)
+                self._set_optimistic_data(OptimisticAttribute.HVAC_MODE, HVACMode.OFF)
+                _LOGGER.info("Stopping camping mode.")
+                try:
+                    await self._stop_camping()
+                except (ClientResponseError, OperationFailedError) as exc:
+                    self._unset_optimistic_data(OptimisticAttribute.PRESET_MODE)
+                    self._unset_optimistic_data(OptimisticAttribute.HVAC_MODE)
+                    _LOGGER.error("Failed to stop camping mode: %s", exc)
+        else:
+            _LOGGER.warning("Unsupported preset mode: %s", preset_mode)
         _LOGGER.info("Preset mode set to %s.", preset_mode)
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))

@@ -371,6 +371,9 @@
     "exceptions": {
         "readonly_mode": {
             "message": "Read-only mode enabled. Command operations are disabled."
+        },
+        "camping_no_target_temperature": {
+            "message": "Cannot start camping mode without a target temperature."
         }
     }
 }
