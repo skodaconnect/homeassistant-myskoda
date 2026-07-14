@@ -127,7 +127,7 @@ class MySkodaChargingProfileEntity(MySkodaEntity):
     @property
     def charging_profile(self) -> ChargingProfile | None:
         """Return the charging profile this entity represents, if it still exists."""
-        profiles = self.coordinator.data.charging_profiles
+        profiles = self.vehicle.charging_profiles
         if not profiles:
             return None
         for profile in profiles.charging_profiles:

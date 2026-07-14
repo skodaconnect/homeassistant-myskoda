@@ -61,7 +61,7 @@ def _resolve_charging_profile(
         if not coordinator or not coordinator.data:
             continue
 
-        profiles = coordinator.data.charging_profiles
+        profiles = coordinator.data.vehicle.charging_profiles
         if not profiles:
             continue
 

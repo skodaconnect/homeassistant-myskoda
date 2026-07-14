@@ -18,10 +18,8 @@ from homeassistant.helpers.start import async_at_started
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from myskoda import MySkoda, Vehicle
-from myskoda.models.chargingprofiles import ChargingProfiles
 from myskoda.models.common import Vin
 from myskoda.models.event import BaseEvent, OperationEvent, ServiceEvent
-from myskoda.models.info import CapabilityId
 from myskoda.models.user import User
 
 from .const import (
@@ -85,7 +83,6 @@ class State:
     config: Config
     operations: Operations
     service_events: ServiceEvents
-    charging_profiles: ChargingProfiles | None = None
 
 
 class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
@@ -123,25 +120,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         self._mqtt_retry_attempts: int = 0
         self._mqtt_retry_scheduled: bool = False
         self._startup_called: bool = False
-
-    async def _fetch_charging_profiles(
-        self, vehicle: Vehicle
-    ) -> ChargingProfiles | None:
-        """Fetch charging profiles for the vehicle, if the capability is supported."""
-        if not vehicle.has_capability(CapabilityId.CHARGING_PROFILES):
-            return None
-
-        try:
-            return await self.myskoda.get_charging_profiles(self.vin)
-        except ClientResponseError as err:
-            handle_aiohttp_error("charging profiles", err, self.hass, self.entry)
-        except ClientError as err:
-            _LOGGER.warning(
-                "Error getting charging profiles from MySkoda API for vin %s: %s",
-                self.vin,
-                err,
-            )
-        return None
 
     def _save_fcm_token(self) -> None:
         """Persist the current FCM token if it changed."""
@@ -205,8 +183,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 )
                 raise UpdateFailed("Failed to retrieve initial data during setup")
 
-            charging_profiles = await self._fetch_charging_profiles(vehicle)
-
             async def _async_finish_startup(hass: HomeAssistant) -> None:
                 """Tasks to execute when we have finished starting up."""
                 _LOGGER.debug(
@@ -228,7 +204,6 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
                 config,
                 self.operations,
                 self.service_events,
-                charging_profiles,
             )
 
         # Regular update
@@ -252,18 +227,12 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
         except ClientError as err:
             raise UpdateFailed(f"Error getting update from MySkoda API: {err}") from err
 
-        charging_profiles = (
-            await self._fetch_charging_profiles(self.data.vehicle)
-            or self.data.charging_profiles
-        )
-
         return State(
             self.data.vehicle,
             self.data.user,
             self.data.config,
             self.operations,
             self.service_events,
-            charging_profiles,
         )
 
     async def _on_myskoda_update(self, vin: str) -> None:

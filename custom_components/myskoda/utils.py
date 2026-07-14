@@ -43,7 +43,7 @@ def add_supported_charging_profile_entities(
     known_profile_ids: dict[Vin, set[int]] = {vin: set() for vin in coordinators}
 
     def _add_new_profiles(vin: Vin, coordinator: MySkodaDataUpdateCoordinator) -> None:
-        profiles = coordinator.data.charging_profiles
+        profiles = coordinator.data.vehicle.charging_profiles
         if not profiles:
             return
 

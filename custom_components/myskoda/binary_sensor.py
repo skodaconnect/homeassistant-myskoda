@@ -489,7 +489,7 @@ class ChargingProfileActive(MySkodaChargingProfileEntity, BinarySensorEntity):
 
     @property
     def is_on(self) -> bool | None:  # noqa: D102
-        profiles = self.coordinator.data.charging_profiles
+        profiles = self.vehicle.charging_profiles
         if not profiles or not profiles.current_vehicle_position_profile:
             return False
         return profiles.current_vehicle_position_profile.id == self.profile_id
