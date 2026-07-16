@@ -9,7 +9,7 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.13.2,<3.15"
-dependencies = ["homeassistant>=2025.3.2", "myskoda>=2.15.0,<2.16"]
+dependencies = ["homeassistant>=2025.3.2", "myskoda>=2.16.1,<2.17"]
 
 [dependency-groups]
 dev = ["homeassistant-stubs>=2025.3.2", "ruff>=0.15.21,<0.16", "pyright>=1.1.411,<1.2"]
