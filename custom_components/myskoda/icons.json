@@ -208,9 +208,6 @@
             "charging_profile_auto_unlock_plug": {
                 "default": "mdi:lock-clock"
             },
-            "charging_profile_charging_times": {
-                "default": "mdi:calendar-clock"
-            },
             "outside_temperature": {
                 "default": "mdi:thermometer"
             }
@@ -313,6 +310,18 @@
                 }
             },
             "ac_timer_3": {
+                "default": "mdi:timer-cancel",
+                "state": {
+                    "on": "mdi:timer-check"
+                }
+            },
+            "charging_profile_time": {
+                "default": "mdi:calendar-clock",
+                "state": {
+                    "on": "mdi:calendar-check"
+                }
+            },
+            "charging_profile_timer": {
                 "default": "mdi:timer-cancel",
                 "state": {
                     "on": "mdi:timer-check"

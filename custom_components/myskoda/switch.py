@@ -40,8 +40,8 @@ from myskoda.mqtt import OperationFailedError
 
 from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, DOMAIN
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
-from .entity import MySkodaEntity
-from .utils import add_supported_entities
+from .entity import MySkodaChargingTimeEntity, MySkodaChargingTimerEntity, MySkodaEntity
+from .utils import add_supported_charging_time_entities, add_supported_entities
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -72,6 +72,18 @@ async def async_setup_entry(
             ACTimer2,
             ACTimer3,
         ],
+        coordinators=config.runtime_data,
+        async_add_entities=async_add_entities,
+    )
+    add_supported_charging_time_entities(
+        available_entities=[ChargingTimeSwitch],
+        entry_selector=lambda profile: profile.preferred_charging_times,
+        coordinators=config.runtime_data,
+        async_add_entities=async_add_entities,
+    )
+    add_supported_charging_time_entities(
+        available_entities=[ChargingTimerSwitch],
+        entry_selector=lambda profile: profile.timers,
         coordinators=config.runtime_data,
         async_add_entities=async_add_entities,
     )
@@ -784,3 +796,103 @@ class ACTimer3(ACTimerSwitch):
 
     def __init__(self, coordinator, vin, **kwargs):
         super().__init__(coordinator, vin, timer_id=3, **kwargs)
+
+
+class ChargingTimeSwitch(MySkodaChargingTimeEntity, MySkodaSwitch):
+    """Enable/disable a single preferred charging time window of a charging profile."""
+
+    entity_description = SwitchEntityDescription(
+        key="charging_profile_time",
+        device_class=SwitchDeviceClass.SWITCH,
+        translation_key="charging_profile_time",
+        entity_category=EntityCategory.CONFIG,
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if times := self.charging_time:
+            return times.enabled
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:  # noqa: D102
+        if times := self.charging_time:
+            return {
+                "id": times.id,
+                "start_time": times.start_time.isoformat(),
+                "end_time": times.end_time.isoformat(),
+            }
+        return {}
+
+    @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))
+    async def _async_turn_on_off(self, turn_on: bool):
+        """Internal method to have a central location for the Throttle."""
+        myskoda = self.coordinator.myskoda
+        action = "on" if turn_on else "off"
+        if times := self.charging_time:
+            times.enabled = turn_on
+            try:
+                await self._flip_switch(
+                    myskoda.set_preferred_charging_times(
+                        self.vin, self.profile_id, times
+                    )
+                )
+            except (ClientResponseError, OperationFailedError) as exc:
+                _LOGGER.error(
+                    "Failed to turn charging time %s %s: %s", self.entry_id, action, exc
+                )
+        else:
+            _LOGGER.error(
+                "Failed to turn charging time %s %s: Charging time not found",
+                self.entry_id,
+                action,
+            )
+        _LOGGER.info("Charging time %s successfully turned %s", self.entry_id, action)
+
+    async def async_turn_off(self, **kwargs):  # noqa: D102
+        await self._async_turn_on_off(turn_on=False)
+
+    async def async_turn_on(self, **kwargs):  # noqa: D102
+        await self._async_turn_on_off(turn_on=True)
+
+
+class ChargingTimerSwitch(MySkodaChargingTimerEntity, MySkodaSwitch):
+    """Show a single charging timer of a charging profile.
+
+    Read-only: unlike preferred charging times, the MySkoda API has no
+    endpoint to update charging timers, so toggling raises an error.
+    """
+
+    entity_description = SwitchEntityDescription(
+        key="charging_profile_timer",
+        device_class=SwitchDeviceClass.SWITCH,
+        translation_key="charging_profile_timer",
+        entity_category=EntityCategory.CONFIG,
+    )
+
+    @property
+    def is_on(self) -> bool | None:  # noqa: D102
+        if timer := self.charging_timer:
+            return timer.enabled
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:  # noqa: D102
+        if timer := self.charging_timer:
+            return {
+                "id": timer.id,
+                "time": timer.time.isoformat(),
+                "type": timer.type.value.lower(),
+                "recurring_on": [day.value.lower() for day in timer.recurring_on],
+            }
+        return {}
+
+    async def async_turn_off(self, **kwargs):  # noqa: D102
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="charging_timer_not_writable",
+        )
+
+    async def async_turn_on(self, **kwargs):  # noqa: D102
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="charging_timer_not_writable",
+        )

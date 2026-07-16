@@ -97,7 +97,6 @@ async def async_setup_entry(
             ChargingProfileMinimumStateOfCharge,
             ChargingProfileMaxChargingCurrent,
             ChargingProfileAutoUnlockPlug,
-            ChargingProfileChargingTimes,
         ],
         coordinators=config.runtime_data,
         async_add_entities=async_add_entities,
@@ -1106,53 +1105,3 @@ class ChargingProfileAutoUnlockPlug(MySkodaChargingProfileSensor):
     def native_value(self) -> str | None:  # noqa: D102
         if profile := self.charging_profile:
             return profile.settings.auto_unlock_plug_when_charged.value.lower()
-
-
-class ChargingProfileChargingTimes(MySkodaChargingProfileSensor):
-    """Summary of the preferred charging time windows configured for this profile."""
-
-    entity_description = SensorEntityDescription(
-        key="charging_profile_charging_times",
-        translation_key="charging_profile_charging_times",
-        entity_category=EntityCategory.DIAGNOSTIC,
-    )
-
-    @property
-    def native_value(self) -> int | None:  # noqa: D102
-        if profile := self.charging_profile:
-            return sum(1 for times in profile.preferred_charging_times if times.enabled)
-
-    @property
-    def extra_state_attributes(self) -> dict[str, Any]:
-        """Returns the full charging time windows, timers and location for this profile."""
-        profile = self.charging_profile
-        if not profile:
-            return {}
-
-        attributes: dict[str, Any] = {
-            "preferred_charging_times": [
-                {
-                    "id": times.id,
-                    "enabled": times.enabled,
-                    "start_time": times.start_time.isoformat(),
-                    "end_time": times.end_time.isoformat(),
-                }
-                for times in profile.preferred_charging_times
-            ],
-            "timers": [
-                {
-                    "id": timer.id,
-                    "enabled": timer.enabled,
-                    "time": timer.time.isoformat(),
-                    "type": timer.type.value.lower(),
-                    "recurring_on": [day.value.lower() for day in timer.recurring_on],
-                }
-                for timer in profile.timers
-            ],
-        }
-
-        if profile.location:
-            attributes["latitude"] = profile.location.latitude
-            attributes["longitude"] = profile.location.longitude
-
-        return attributes

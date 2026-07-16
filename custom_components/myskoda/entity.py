@@ -4,7 +4,11 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from myskoda import Vehicle
-from myskoda.models.chargingprofiles import ChargingProfile
+from myskoda.models.chargingprofiles import (
+    ChargingProfile,
+    ChargingTimers,
+    ChargingTimes,
+)
 from myskoda.models.event import OperationEvent
 from myskoda.models.info import CapabilityId, ViewPoint, ViewType
 
@@ -150,3 +154,81 @@ class MySkodaChargingProfileEntity(MySkodaEntity):
 
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.CHARGING_PROFILES]
+
+
+class MySkodaChargingTimeEntity(MySkodaChargingProfileEntity):
+    """Base class for entities representing a single preferred charging time window.
+
+    Nested one level below the charging profile (location) device.
+    """
+
+    entry_id: int
+
+    def __init__(
+        self,
+        coordinator,
+        vin: str,
+        profile_id: int,
+        entry_id: int,
+    ) -> None:  # noqa: D107
+        self.entry_id = entry_id
+        super().__init__(coordinator, vin, profile_id)
+        self._attr_unique_id = (
+            f"{vin}_charging_profile_{profile_id}_charging_time_{entry_id}_"
+            f"{self.entity_description.key}"
+        )
+        self._attr_translation_placeholders = {"id": str(entry_id)}
+
+    @property
+    def charging_time(self) -> ChargingTimes | None:
+        """Return the charging time window this entity represents, if it still exists."""
+        profile = self.charging_profile
+        if not profile:
+            return None
+        for times in profile.preferred_charging_times:
+            if times.id == self.entry_id:
+                return times
+        return None
+
+    @property
+    def available(self) -> bool:  # noqa: D102
+        return super().available and self.charging_time is not None
+
+
+class MySkodaChargingTimerEntity(MySkodaChargingProfileEntity):
+    """Base class for entities representing a single charging timer of a profile.
+
+    Nested one level below the charging profile (location) device.
+    """
+
+    entry_id: int
+
+    def __init__(
+        self,
+        coordinator,
+        vin: str,
+        profile_id: int,
+        entry_id: int,
+    ) -> None:  # noqa: D107
+        self.entry_id = entry_id
+        super().__init__(coordinator, vin, profile_id)
+        self._attr_unique_id = (
+            f"{vin}_charging_profile_{profile_id}_charging_timer_{entry_id}_"
+            f"{self.entity_description.key}"
+        )
+        self._attr_translation_placeholders = {"id": str(entry_id)}
+
+    @property
+    def charging_timer(self) -> ChargingTimers | None:
+        """Return the charging timer this entity represents, if it still exists."""
+        profile = self.charging_profile
+        if not profile:
+            return None
+        for timer in profile.timers:
+            if timer.id == self.entry_id:
+                return timer
+        return None
+
+    @property
+    def available(self) -> bool:  # noqa: D102
+        return super().available and self.charging_timer is not None
