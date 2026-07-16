@@ -30,4 +30,4 @@ OUTSIDE_TEMP_MAX_BOUND = 60
 CACHE_CLOCK_SKEW_TOLERANCE_IN_HOURS = 4
 
 # Services / Actions
-SERVICE_SET_CHARGING_PROFILE_TIME = "set_charging_profile_time"
+SERVICE_SET_PREFERRED_CHARGING_TIME = "set_preferred_charging_time"

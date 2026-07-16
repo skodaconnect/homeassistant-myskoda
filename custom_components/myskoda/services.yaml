@@ -1,4 +1,4 @@
-set_charging_profile_time:
+set_preferred_charging_time:
   fields:
     device_id:
       required: true

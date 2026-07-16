@@ -11,12 +11,12 @@ from homeassistant.helpers import config_validation as cv, device_registry as dr
 from myskoda.models.chargingprofiles import ChargingProfile, ChargingTimes
 from myskoda.mqtt import OperationFailedError
 
-from .const import CONF_READONLY, DOMAIN, SERVICE_SET_CHARGING_PROFILE_TIME
+from .const import CONF_READONLY, DOMAIN, SERVICE_SET_PREFERRED_CHARGING_TIME
 from .coordinator import MySkodaDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
-SERVICE_SET_CHARGING_PROFILE_TIME_SCHEMA = vol.Schema(
+SERVICE_SET_PREFERRED_CHARGING_TIME_SCHEMA = vol.Schema(
     {
         vol.Required("device_id"): cv.string,
         vol.Required("id"): vol.All(vol.Coerce(int), vol.Range(min=1)),
@@ -73,8 +73,8 @@ def _resolve_charging_profile(
     return None
 
 
-async def _async_handle_set_charging_profile_time(call: ServiceCall) -> None:
-    """Handle the set_charging_profile_time action."""
+async def _async_handle_set_preferred_charging_time(call: ServiceCall) -> None:
+    """Handle the set_preferred_charging_time action."""
     resolved = _resolve_charging_profile(call.hass, call.data["device_id"])
     if not resolved:
         raise ServiceValidationError(
@@ -124,7 +124,7 @@ def async_setup_actions(hass: HomeAssistant) -> None:
     """
     hass.services.async_register(
         DOMAIN,
-        SERVICE_SET_CHARGING_PROFILE_TIME,
-        _async_handle_set_charging_profile_time,
-        schema=SERVICE_SET_CHARGING_PROFILE_TIME_SCHEMA,
+        SERVICE_SET_PREFERRED_CHARGING_TIME,
+        _async_handle_set_preferred_charging_time,
+        schema=SERVICE_SET_PREFERRED_CHARGING_TIME_SCHEMA,
     )

@@ -297,6 +297,12 @@
             },
             "ac_timer_3": {
                 "name": "Klimaanlagen Timer 3"
+            },
+            "charging_profile_time": {
+                "name": "Ladezeit {id}"
+            },
+            "charging_profile_timer": {
+                "name": "Lade-Timer {id}"
             }
         },
         "button": {

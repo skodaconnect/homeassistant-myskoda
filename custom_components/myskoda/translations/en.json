@@ -350,6 +350,12 @@
             },
             "ac_timer_3": {
                 "name": "Air-conditioning Timer 3"
+            },
+            "charging_profile_time": {
+                "name": "Charging Time {id}"
+            },
+            "charging_profile_timer": {
+                "name": "Charging Timer {id}"
             }
         },
         "button": {
@@ -365,8 +371,8 @@
         }
     },
     "services": {
-        "set_charging_profile_time": {
-            "name": "Set charging profile time",
+        "set_preferred_charging_time": {
+            "name": "Set preferred charging time",
             "description": "Updates one preferred charging time window of a charging profile (location).",
             "fields": {
                 "device_id": {
@@ -438,6 +444,9 @@
         },
         "charging_time_update_failed": {
             "message": "Failed to update the charging profile time window."
+        },
+        "charging_timer_not_writable": {
+            "message": "Charging timers cannot be changed via Home Assistant."
         }
     }
 }
