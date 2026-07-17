@@ -7,6 +7,7 @@
 | `adblue_range`                                        | AdBlue Range                               | km         | STATE, FUEL_STATUS                | Not shown for electric vehicles            |
 | `aux_estimated_time_left_to_reach_target_temperature` | Heater Time to reach target temperature    | min        | AUXILIARY_HEATING                 |                                            |
 | `battery_percentage`                                  | Battery Percentage                         | %          | CHARGING                          | Dynamic icon tracks charge level           |
+| `camping_mode_ends_at`                                | Camping Mode Ends                          | timestamp  | CAMPING_MODE                      | When camping mode auto-ends                |
 | `car_captured`                                        | Last Updated                               | timestamp  | STATE                             | See [Last Updated sensor](#last-updated-sensor) |
 | `charge_type`                                         | Charge Type                                |            | CHARGING                          | AC, DC                                     |
 | `charging_power`                                      | Charging Power                             | kW         | CHARGING, EXTENDED_CHARGING_SETTINGS |                                         |

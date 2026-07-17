@@ -103,7 +103,11 @@ class DoorLock(MySkodaLock):
             match status.overall.doors_locked:
                 case DoorLockedState.LOCKED:
                     return True
-                case DoorLockedState.UNLOCKED:
+                case (
+                    DoorLockedState.UNLOCKED
+                    | DoorLockedState.OPENED
+                    | DoorLockedState.TRUNK_OPENED
+                ):
                     return False
 
     @Throttle(timedelta(seconds=API_COOLDOWN_IN_SECONDS))

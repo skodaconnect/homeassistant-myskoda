@@ -138,12 +138,5 @@ class DeviceTracker(MySkodaEntity, TrackerEntity):
             attributes["entity_picture"] = renders.get(ViewPoint.EXTERIOR_SIDE)
         return attributes
 
-    @property
-    def battery_level(self) -> int | None:
-        if self.has_all_capabilities([CapabilityId.CHARGING]):
-            if status := self._status():
-                if status.battery.state_of_charge_in_percent is not None:
-                    return min(status.battery.state_of_charge_in_percent, 100)
-
     def required_capabilities(self) -> list[CapabilityId]:
         return [CapabilityId.PARKING_POSITION]
