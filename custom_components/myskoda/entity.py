@@ -11,6 +11,7 @@ from .const import DOMAIN
 from .coordinator import (
     MySkodaDataUpdateCoordinator,
     ServiceEvents,
+    VehicleCoordinators,
 )
 
 
@@ -19,13 +20,15 @@ class MySkodaEntity(CoordinatorEntity):
 
     vin: str
     coordinator: MySkodaDataUpdateCoordinator
+    coordinator_domain: str = "primary"
     _attr_has_entity_name = True
 
     def __init__(
         self,
-        coordinator,
+        coordinators: VehicleCoordinators,
         vin: str,
     ) -> None:  # noqa: D107
+        coordinator = getattr(coordinators, self.coordinator_domain)
         super().__init__(coordinator)
         self.vin = vin
         self.coordinator = coordinator

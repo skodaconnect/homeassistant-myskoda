@@ -33,7 +33,13 @@ from .const import (
     CONF_VINLIST,
     DOMAIN,
 )
-from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
+from .coordinator import (
+    MySkodaConfigEntry,
+    MySkodaDataUpdateCoordinator,
+    MySkodaSlowCoordinator,
+    State,
+    VehicleCoordinators,
+)
 from .error_handlers import handle_aiohttp_error
 from .issues import (
     async_create_tnc_issue,
@@ -124,7 +130,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
     async_delete_tnc_issue(hass, entry.entry_id)
     async_delete_spin_issue(hass, entry.entry_id)
 
-    coordinators: dict[Vin, MySkodaDataUpdateCoordinator] = {}
+    coordinators: dict[Vin, VehicleCoordinators] = {}
     cached_vins: list = entry.data.get(CONF_VINLIST, [])
 
     try:
@@ -155,9 +161,25 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
             hass.config_entries.async_update_entry(entry, data=new_data)
 
     for vin in vehicles:
-        coordinator = MySkodaDataUpdateCoordinator(hass, entry, myskoda, vin)
-        await coordinator.async_config_entry_first_refresh()
-        coordinators[vin] = coordinator
+        primary = MySkodaDataUpdateCoordinator(hass, entry, myskoda, vin)
+        await primary.async_config_entry_first_refresh()
+
+        slow = MySkodaSlowCoordinator(hass, entry, myskoda, vin)
+        # Pre-populate slow coordinator with data already fetched by primary so
+        # that startup doesn't trigger a redundant round of API calls.
+        # _async_update_data detects this pre-populated state and returns early.
+        slow.async_set_updated_data(
+            State(
+                primary.data.vehicle,
+                primary.data.user,
+                primary.data.config,
+                primary.data.operations,
+                primary.data.service_events,
+            )
+        )
+        # Must call first_refresh to schedule the recurring 4-hour update timer.
+        await slow.async_config_entry_first_refresh()
+        coordinators[vin] = VehicleCoordinators(primary=primary, slow=slow)
 
     entry.runtime_data = coordinators
 
@@ -170,8 +192,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> b
 async def async_unload_entry(hass: HomeAssistant, entry: MySkodaConfigEntry) -> bool:
     """Unload a config entry."""
 
-    coordinators: dict[Vin, MySkodaDataUpdateCoordinator] = entry.runtime_data
-    for coord in coordinators.values():
+    coordinators: dict[Vin, VehicleCoordinators] = entry.runtime_data
+    for vehicle_coords in coordinators.values():
+        coord = vehicle_coords.primary
         if entry.data.get(CONF_REFRESH_TOKEN):
             current_refresh_token = await coord.myskoda.get_refresh_token()
             if current_refresh_token != entry.data[CONF_REFRESH_TOKEN]:

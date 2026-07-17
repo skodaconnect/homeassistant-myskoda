@@ -47,7 +47,7 @@ from .const import (
     CONF_SPIN,
     DOMAIN,
 )
-from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
+from .coordinator import MySkodaConfigEntry, VehicleCoordinators
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
@@ -83,9 +83,9 @@ class MySkodaClimateEntity(MySkodaEntity, ClimateEntity):
 
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
 
-    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:  # noqa: D107
+    def __init__(self, coordinators: VehicleCoordinators, vin: str) -> None:  # noqa: D107
         super().__init__(
-            coordinator,
+            coordinators,
             vin,
         )
         ClimateEntity.__init__(self)
@@ -465,9 +465,9 @@ class AuxiliaryHeater(MySkodaClimateEntity):
         translation_key="auxiliary_heater",
     )
 
-    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str) -> None:  # noqa: D107
+    def __init__(self, coordinators: VehicleCoordinators, vin: str) -> None:  # noqa: D107
         super().__init__(
-            coordinator,
+            coordinators,
             vin,
         )
         self._is_enabled: bool = bool(self.coordinator.entry.options.get(CONF_SPIN))

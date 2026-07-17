@@ -21,7 +21,7 @@ from myskoda.mqtt import OperationFailedError
 from aiohttp import ClientResponseError
 
 from .const import API_COOLDOWN_IN_SECONDS, CONF_READONLY, DOMAIN
-from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
+from .coordinator import MySkodaConfigEntry, VehicleCoordinators
 from .entity import MySkodaEntity
 from .utils import add_supported_entities
 
@@ -48,8 +48,8 @@ class MySkodaButton(MySkodaEntity, ButtonEntity):
     Base class for all button entities in the MySkoda integration.
     """
 
-    def __init__(self, coordinator: MySkodaDataUpdateCoordinator, vin: str):
-        super().__init__(coordinator, vin)
+    def __init__(self, coordinators: VehicleCoordinators, vin: str):
+        super().__init__(coordinators, vin)
         self._is_enabled: bool = True
 
     def _ensure_not_readonly(self):
