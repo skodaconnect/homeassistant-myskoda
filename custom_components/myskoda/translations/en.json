@@ -375,5 +375,21 @@
         "camping_no_target_temperature": {
             "message": "Cannot start camping mode without a target temperature."
         }
+    },
+    "services": {
+        "set_departure_timer": {
+            "name": "Set departure timer",
+            "description": "Configure a departure timer on the vehicle.",
+            "fields": {
+                "device_id": {
+                    "name": "Device",
+                    "description": "The MySkoda vehicle to configure."
+                },
+                "timer": {
+                    "name": "Timer configuration",
+                    "description": "Full departure timer object (id, enabled, type, time, charging, climatisation, recurringOn/oneOffDay, targetBatteryStateOfChargeInPercent, preferredChargingTimes)."
+                }
+            }
+        }
     }
 }

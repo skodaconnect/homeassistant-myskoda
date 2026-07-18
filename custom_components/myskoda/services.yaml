@@ -1,0 +1,45 @@
+set_departure_timer:
+  name: Set departure timer
+  description: >-
+    Configure a departure timer on the vehicle. Accepts a full timer
+    configuration as a YAML/JSON object. The vehicle must support the
+    DEPARTURE_TIMERS capability.
+  fields:
+    device_id:
+      name: Device
+      description: The MySkoda vehicle to configure.
+      required: true
+      selector:
+        device:
+          integration: myskoda
+    timer:
+      name: Timer configuration
+      description: >-
+        Departure timer object. Required: id (1-3), enabled (bool).
+        Optional: type (ONE_OFF|RECURRING), time (HH:MM), charging (bool),
+        climatisation (bool), oneOffDay (MONDAY…SUNDAY for ONE_OFF),
+        recurringOn (list of MONDAY…SUNDAY for RECURRING),
+        targetBatteryStateOfChargeInPercent (0–100),
+        preferredChargingTimes (list of {id, enabled, startTime, endTime}).
+      required: true
+      example:
+        id: 1
+        enabled: true
+        type: RECURRING
+        time: "07:00"
+        charging: true
+        climatisation: true
+        recurringOn:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+        targetBatteryStateOfChargeInPercent: 80
+        preferredChargingTimes:
+          - id: 1
+            enabled: true
+            startTime: "00:00"
+            endTime: "06:00"
+      selector:
+        object: {}
