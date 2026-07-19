@@ -52,6 +52,9 @@
             "charger_lock": {
                 "name": "Charge Lock"
             },
+            "charging_profile_active": {
+                "name": "Active"
+            },
             "doors_lock": {
                 "name": "Doors Locked"
             },
@@ -270,6 +273,27 @@
             },
             "last_trip_average_fuel_consumption": {
                 "name": "Last Trip Average Fuel Consumption"
+            },
+            "charging_profile_target_state_of_charge": {
+                "name": "Target State of Charge"
+            },
+            "charging_profile_minimum_state_of_charge": {
+                "name": "Minimum State of Charge"
+            },
+            "charging_profile_max_charging_current": {
+                "name": "Max Charging Current",
+                "state": {
+                    "maximum": "Maximum",
+                    "reduced": "Reduced"
+                }
+            },
+            "charging_profile_auto_unlock_plug": {
+                "name": "Unlock Plug when Charged",
+                "state": {
+                    "permanent": "Permanent",
+                    "on": "On",
+                    "off": "Off"
+                }
             }
         },
         "switch": {
@@ -323,6 +347,12 @@
             },
             "ac_timer_3": {
                 "name": "Air-conditioning Timer 3"
+            },
+            "charging_profile_time": {
+                "name": "Charging Time {id}"
+            },
+            "charging_profile_timer": {
+                "name": "Charging Timer {id}"
             }
         },
         "button": {
@@ -334,6 +364,34 @@
             },
             "wakeup": {
                 "name": "Wake Up Car"
+            }
+        }
+    },
+    "services": {
+        "set_preferred_charging_time": {
+            "name": "Set preferred charging time",
+            "description": "Updates one preferred charging time window of a charging profile (location).",
+            "fields": {
+                "device_id": {
+                    "name": "Charging profile",
+                    "description": "The charging profile (location) device to update."
+                },
+                "id": {
+                    "name": "Time window ID",
+                    "description": "The ID of an existing preferred charging time window on this profile to update."
+                },
+                "enabled": {
+                    "name": "Enabled",
+                    "description": "Whether this charging time window should be active."
+                },
+                "start_time": {
+                    "name": "Start time",
+                    "description": "The time the charging window starts."
+                },
+                "end_time": {
+                    "name": "End time",
+                    "description": "The time the charging window ends."
+                }
             }
         }
     },
@@ -374,6 +432,18 @@
         },
         "camping_no_target_temperature": {
             "message": "Cannot start camping mode without a target temperature."
+        },
+        "charging_profile_not_found": {
+            "message": "The selected device is not a MySkoda charging profile."
+        },
+        "charging_time_not_found": {
+            "message": "This charging profile has no preferred charging time window with the given ID."
+        },
+        "charging_time_update_failed": {
+            "message": "Failed to update the charging profile time window."
+        },
+        "charging_timer_not_writable": {
+            "message": "Charging timers cannot be changed via Home Assistant."
         }
     }
 }

@@ -16,6 +16,12 @@
                     "on": "mdi:lock-open"
                 }
             },
+            "charging_profile_active": {
+                "default": "mdi:map-marker-radius-outline",
+                "state": {
+                    "on": "mdi:map-marker-radius"
+                }
+            },
             "doors_locked": {
                 "default": "mdi:car-door-lock",
                 "state": {
@@ -190,6 +196,18 @@
             "target_battery_percentage": {
                 "default": "mdi:percent"
             },
+            "charging_profile_target_state_of_charge": {
+                "default": "mdi:battery-charging-high"
+            },
+            "charging_profile_minimum_state_of_charge": {
+                "default": "mdi:battery-low"
+            },
+            "charging_profile_max_charging_current": {
+                "default": "mdi:current-ac"
+            },
+            "charging_profile_auto_unlock_plug": {
+                "default": "mdi:lock-clock"
+            },
             "outside_temperature": {
                 "default": "mdi:thermometer"
             }
@@ -292,6 +310,18 @@
                 }
             },
             "ac_timer_3": {
+                "default": "mdi:timer-cancel",
+                "state": {
+                    "on": "mdi:timer-check"
+                }
+            },
+            "charging_profile_time": {
+                "default": "mdi:calendar-clock",
+                "state": {
+                    "on": "mdi:calendar-check"
+                }
+            },
+            "charging_profile_timer": {
                 "default": "mdi:timer-cancel",
                 "state": {
                     "on": "mdi:timer-check"

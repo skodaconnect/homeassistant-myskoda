@@ -26,15 +26,20 @@ from homeassistant.helpers.typing import (
 )
 
 from myskoda.models import charging
-from myskoda.models.charging import Charging, ChargingStatus
+from myskoda.models.charging import (
+    Charging,
+    ChargingStatus,
+    MaxChargeCurrent,
+    PlugUnlockMode,
+)
 from myskoda.models.driving_range import EngineType
 from myskoda.models.event import OperationStatus
 from myskoda.models.info import CapabilityId
 
 from .const import OUTSIDE_TEMP_MAX_BOUND, OUTSIDE_TEMP_MIN_BOUND
 from .coordinator import MySkodaConfigEntry
-from .entity import MySkodaEntity
-from .utils import add_supported_entities
+from .entity import MySkodaChargingProfileEntity, MySkodaEntity
+from .utils import add_supported_charging_profile_entities, add_supported_entities
 
 
 async def async_setup_entry(
@@ -82,6 +87,16 @@ async def async_setup_entry(
             LastTripTravelTime,
             LastTripAverageSpeed,
             LastTripAverageFuelConsumption,
+        ],
+        coordinators=config.runtime_data,
+        async_add_entities=async_add_entities,
+    )
+    add_supported_charging_profile_entities(
+        available_entities=[
+            ChargingProfileTargetStateOfCharge,
+            ChargingProfileMinimumStateOfCharge,
+            ChargingProfileMaxChargingCurrent,
+            ChargingProfileAutoUnlockPlug,
         ],
         coordinators=config.runtime_data,
         async_add_entities=async_add_entities,
@@ -1017,3 +1032,75 @@ class LastTripAverageFuelConsumption(TripStatisticSensor):
         if stats := self.vehicle.single_trip_statistics:
             if stats.daily_trips and stats.daily_trips[0].trips:
                 return stats.daily_trips[0].trips[0].average_fuel_consumption
+
+
+class MySkodaChargingProfileSensor(MySkodaChargingProfileEntity, SensorEntity):
+    """Base class for sensors representing a single charging profile (location)."""
+
+
+class ChargingProfileTargetStateOfCharge(MySkodaChargingProfileSensor):
+    """Target state of charge configured for this charging profile."""
+
+    entity_description = SensorEntityDescription(
+        key="charging_profile_target_state_of_charge",
+        translation_key="charging_profile_target_state_of_charge",
+        native_unit_of_measurement=PERCENTAGE,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: D102
+        if profile := self.charging_profile:
+            return profile.settings.target_state_of_charge_in_percent
+
+
+class ChargingProfileMinimumStateOfCharge(MySkodaChargingProfileSensor):
+    """Minimum battery state of charge configured for this charging profile."""
+
+    entity_description = SensorEntityDescription(
+        key="charging_profile_minimum_state_of_charge",
+        translation_key="charging_profile_minimum_state_of_charge",
+        native_unit_of_measurement=PERCENTAGE,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    )
+
+    @property
+    def native_value(self) -> int | None:  # noqa: D102
+        if profile := self.charging_profile:
+            return profile.settings.min_battery_state_of_charge.minimum_battery_state_of_charge_in_percent
+
+
+class ChargingProfileMaxChargingCurrent(MySkodaChargingProfileSensor):
+    """Maximum charging current configured for this charging profile."""
+
+    entity_description = SensorEntityDescription(
+        key="charging_profile_max_charging_current",
+        translation_key="charging_profile_max_charging_current",
+        device_class=SensorDeviceClass.ENUM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    )
+
+    _attr_options = [current.value.lower() for current in MaxChargeCurrent]
+
+    @property
+    def native_value(self) -> str | None:  # noqa: D102
+        if profile := self.charging_profile:
+            return profile.settings.max_charging_current.value.lower()
+
+
+class ChargingProfileAutoUnlockPlug(MySkodaChargingProfileSensor):
+    """Whether the plug is automatically unlocked once charged, for this profile."""
+
+    entity_description = SensorEntityDescription(
+        key="charging_profile_auto_unlock_plug",
+        translation_key="charging_profile_auto_unlock_plug",
+        device_class=SensorDeviceClass.ENUM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    )
+
+    _attr_options = [mode.value.lower() for mode in PlugUnlockMode]
+
+    @property
+    def native_value(self) -> str | None:  # noqa: D102
+        if profile := self.charging_profile:
+            return profile.settings.auto_unlock_plug_when_charged.value.lower()

@@ -220,6 +220,27 @@
             },
             "outside_temperature": {
                 "name": "Außentemperatur"
+            },
+            "charging_profile_target_state_of_charge": {
+                "name": "Zielbatteriestand"
+            },
+            "charging_profile_minimum_state_of_charge": {
+                "name": "Mindestbatteriestand"
+            },
+            "charging_profile_max_charging_current": {
+                "name": "Ladestrombegrenzung",
+                "state": {
+                    "maximum": "Maximal",
+                    "reduced": "Reduziert"
+                }
+            },
+            "charging_profile_auto_unlock_plug": {
+                "name": "Auto-entsperrendes AC-Kabel",
+                "state": {
+                    "permanent": "Dauerhaft",
+                    "on": "An",
+                    "off": "Aus"
+                }
             }
         },
         "switch": {
@@ -273,6 +294,12 @@
             },
             "ac_timer_3": {
                 "name": "Klimaanlagen Timer 3"
+            },
+            "charging_profile_time": {
+                "name": "Ladezeit {id}"
+            },
+            "charging_profile_timer": {
+                "name": "Lade-Timer {id}"
             }
         },
         "button": {

@@ -10,6 +10,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
+from homeassistant.helpers.typing import ConfigType
 from homeassistant.util.ssl import get_default_context
 
 from myskoda import (
@@ -34,6 +35,7 @@ from .const import (
     DOMAIN,
 )
 from .coordinator import MySkodaConfigEntry, MySkodaDataUpdateCoordinator
+from .device_action import async_setup_actions
 from .error_handlers import handle_aiohttp_error
 from .issues import (
     async_create_tnc_issue,
@@ -54,6 +56,17 @@ PLATFORMS: list[Platform] = [
     Platform.LOCK,
     Platform.BUTTON,
 ]
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Set up the MySkoda integration (called once per HA run).
+
+    Registers actions here rather than in `async_setup_entry`, since this
+    hook always fires exactly once regardless of the number of config
+    entries, avoiding double-registration or lingering-after-unload issues.
+    """
+    async_setup_actions(hass)
+    return True
 
 
 def myskoda_instantiate(

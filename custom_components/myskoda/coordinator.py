@@ -198,7 +198,13 @@ class MySkodaDataUpdateCoordinator(DataUpdateCoordinator[State]):
             async_at_started(
                 hass=self.hass, at_start_cb=_async_finish_startup
             )  # Schedule post-setup tasks
-            return State(vehicle, user, config, self.operations, self.service_events)
+            return State(
+                vehicle,
+                user,
+                config,
+                self.operations,
+                self.service_events,
+            )
 
         # Regular update
         _LOGGER.debug("Performing scheduled refresh of all data for vin %s", self.vin)
