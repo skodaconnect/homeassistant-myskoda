@@ -77,7 +77,7 @@ Refer to [docs/entities.md](docs/entities.md) for the full list of all entities 
 #### `myskoda.set_preferred_charging_time`
 Updates one preferred charging time window of a charging profile (location, e.g. "Home"). Each configured charging profile is exposed as its own device, nested under the vehicle device; target that device with `device_id`.
 
-The `id` must match an existing time window on that profile (visible as an attribute on its `Preferred Charging Times` sensor) — you cannot create new time windows this way, only update existing ones.
+The `id` must match an existing time window on that profile (visible as an attribute on its `Preferred Charging Times` switch) — you cannot create new time windows this way, only update existing ones.
 
 ```yaml
 action: myskoda.set_preferred_charging_time
