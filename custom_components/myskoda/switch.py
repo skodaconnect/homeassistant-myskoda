@@ -1,6 +1,7 @@
 """Switches for the MySkoda integration."""
 
 import logging
+from copy import copy
 from datetime import timedelta
 from typing import Any, Coroutine
 
@@ -829,11 +830,13 @@ class ChargingTimeSwitch(MySkodaChargingTimeEntity, MySkodaSwitch):
         myskoda = self.coordinator.myskoda
         action = "on" if turn_on else "off"
         if times := self.charging_time:
-            times.enabled = turn_on
+            # work on copy so that the coordinator's state is not changed
+            payload = copy(times)
+            payload.enabled = turn_on
             try:
                 await self._flip_switch(
                     myskoda.set_preferred_charging_times(
-                        self.vin, self.profile_id, times
+                        self.vin, self.profile_id, payload
                     )
                 )
             except (ClientResponseError, OperationFailedError) as exc:
