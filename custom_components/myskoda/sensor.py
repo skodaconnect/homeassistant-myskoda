@@ -1044,7 +1044,6 @@ class ChargingProfileTargetStateOfCharge(MySkodaChargingProfileSensor):
     entity_description = SensorEntityDescription(
         key="charging_profile_target_state_of_charge",
         translation_key="charging_profile_target_state_of_charge",
-        device_class=SensorDeviceClass.BATTERY,
         native_unit_of_measurement=PERCENTAGE,
         entity_category=EntityCategory.DIAGNOSTIC,
     )
