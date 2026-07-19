@@ -294,9 +294,6 @@
                     "on": "On",
                     "off": "Off"
                 }
-            },
-            "charging_profile_charging_times": {
-                "name": "Preferred Charging Times"
             }
         },
         "switch": {

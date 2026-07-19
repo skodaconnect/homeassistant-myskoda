@@ -241,9 +241,6 @@
                     "on": "An",
                     "off": "Aus"
                 }
-            },
-            "charging_profile_charging_times": {
-                "name": "Bevorzugte Ladezeiten"
             }
         },
         "switch": {
