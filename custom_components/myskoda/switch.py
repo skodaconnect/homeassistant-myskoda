@@ -880,12 +880,16 @@ class ChargingTimerSwitch(MySkodaChargingTimerEntity, MySkodaSwitch):
     @property
     def extra_state_attributes(self) -> dict[str, Any]:  # noqa: D102
         if timer := self.charging_timer:
-            return {
+            attr = {
                 "id": timer.id,
                 "time": timer.time.isoformat(),
                 "type": timer.type.value.lower(),
-                "recurring_on": [day.value.lower() for day in timer.recurring_on],
             }
+            if timer.recurring_on is not None:
+                attr["recurring_on"] = [day.value.lower() for day in timer.recurring_on]
+            if timer.one_off_day is not None:
+                attr["one_off_day"] = timer.one_off_day.value.lower()
+            return attr
         return {}
 
     async def async_turn_off(self, **kwargs):  # noqa: D102
