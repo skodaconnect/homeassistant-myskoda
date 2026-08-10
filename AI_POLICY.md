@@ -38,8 +38,12 @@ If an AI tool leaves a comment on your contribution, treat it as you would any o
 
 Contributions that do not follow this policy will be closed. Repeated violations may result in being blocked from contributing to OHF projects. If you believe your contribution was closed in error, you are welcome to reach out to a maintainer to discuss.
 
----
+## MySkoda specific additions
 
-The canonical version of this policy is published at
-<https://developers.home-assistant.io/docs/ai_policy>. In case of differences,
-the published version applies.
+(Copied from the amazing [FastAPI](https://fastapi.tiangolo.com) project.)
+
+You are encouraged to use all the tools you want to do your work and contribute as efficiently as possible, this includes AI (LLM) tools, etc. Nevertheless, contributions should have meaningful human intervention, judgement, context, etc.
+
+If the **human effort** put in a PR, e.g. writing LLM prompts, is **less** than the **effort we would need to put** to **review it**, please **don't** submit the PR.
+
+Think of it this way: we can already write LLM prompts or run automated tools ourselves, and that would be faster than reviewing external PRs.
