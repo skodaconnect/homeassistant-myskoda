@@ -162,3 +162,12 @@ This file gives repository-specific guidance to coding agents working in `homeas
 - Mention when a helper script appears stale or inconsistent with current tooling.
 - If you add tests, document the exact `uv run pytest ...` command you used.
 - If you cannot run a validation step, say so plainly and explain why.
+
+## AI Policy
+
+This project follows the [Open Home Foundation AI Policy](AI_POLICY.md).
+Autonomous contributions are not accepted: a human must review, understand,
+and be able to explain every change before it is submitted. Do not open
+issues or pull requests autonomously, and do not post comments on behalf of
+a user without their review. Any such submission will be removed and deemed
+a waste of environmental resources.
