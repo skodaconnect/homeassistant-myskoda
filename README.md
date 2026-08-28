@@ -5,8 +5,27 @@
 
 # Home Assistant MySkoda Integration :house_with_garden: :satellite: :car:
 
-A [Home Assistant](https://www.home-assistant.io/) integration for Skoda vehicles based on the official MySkoda App.
+A [Home Assistant](https://www.home-assistant.io/) integration for Škoda vehicles based on the official MyŠkoda App.
 
+## :warning: END OF LIFE ANNOUNCEMENT :warning:
+
+**This integration will stop working in October 2026.**
+
+Škoda has released a [new and official **public** API](https://public.api.connect.skoda-auto.cz/docs) and has been working on a **new Home Assistant integration**. The new integration is expected to ship with Home Assistant 2026.10.
+
+As a result the current API will stop working for unofficial third-party clients such as this integration This is expected to happen later in October, after the new release of the new integration.
+
+We have been in contact with Škoda about all of this and are collaborating on the new integration. As we focus our free time on this new work there will be little time left to respond to any new and existing issues in this project.
+
+Many many thanks to everyone who has contributed to this project over the years. Thank you @Prior99 for helping get this project off the ground. Thanks to the maintainers @WebSpider and @dvx76. Thank you also @FarFar and @robinostlund for your work on skodaconnect/homeassistant-skodaconnect, on which this project was based.
+
+Below you can find the official Škoda announcement which was posted in the [Škoda EV Lounge group](https://www.facebook.com/groups/skodaevlounge).
+
+![](docs/skoda_announcement.png)
+
+---
+
+- [:warning: END OF LIFE ANNOUNCEMENT :warning:](#warning-end-of-life-announcement-warning)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
   - [Configuration](#configuration)
@@ -14,6 +33,7 @@ A [Home Assistant](https://www.home-assistant.io/) integration for Skoda vehicle
   - [Limitations](#limitations)
   - [Additional Configuration](#additional-configuration)
   - [Available Entities](#available-entities)
+  - [Actions](#actions)
   - [Operations](#operations)
   - [New Vehicles](#new-vehicles)
   - [Configuration](#configuration-1)
@@ -27,6 +47,7 @@ A [Home Assistant](https://www.home-assistant.io/) integration for Skoda vehicle
 - [FAQ](#faq)
 - [Contributing](#contributing)
   - [Translations](#translations)
+- [License](#license)
 - [Disclaimer](#disclaimer)
 
 ## Getting Started
