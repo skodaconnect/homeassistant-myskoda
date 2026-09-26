@@ -51,6 +51,9 @@
             "charger_lock": {
                 "name": "Блокировка зарядки"
             },
+            "charging_profile_active": {
+                "name": "Активный"
+            },
             "doors_lock": {
                 "name": "Двери заблокированы"
             },
@@ -108,7 +111,15 @@
         },
         "climate": {
             "climate": {
-                "name": "Кондиционер"
+                "name": "Кондиционер",
+                "state_attributes": {
+                    "preset_mode": {
+                        "state": {
+                            "none": "Обычный",
+                            "camping": "Кемпинг"
+                        }
+                    }
+                }
             },
             "auxiliary_heater": {
                 "name": "Вспомогательный обогреватель"
@@ -205,6 +216,9 @@
             "service_event": {
                 "name": "Последнее сервисное событие"
             },
+            "camping_mode_ends_at": {
+                "name": "Завершение режима кемпинг"
+            },
             "software_version": {
                 "name": "Версия ПО"
             },
@@ -258,6 +272,27 @@
             },
             "last_trip_average_fuel_consumption": {
                 "name": "Средний расход топлива последней поездки"
+            },
+            "charging_profile_target_state_of_charge": {
+                "name": "Целевой уровень зарядки"
+            },
+            "charging_profile_minimum_state_of_charge": {
+                "name": "Минимальное состояние зарядки"
+            },
+            "charging_profile_max_charging_current": {
+                "name": "Максимальный ток зарядки",
+                "state": {
+                    "maximum": "Максимум",
+                    "reduced": "Сниженный"
+                }
+            },
+            "charging_profile_auto_unlock_plug": {
+                "name": "Разблокировать зарядку если заряжен",
+                "state": {
+                    "permanent": "Постоянный",
+                    "on": "Подключено",
+                    "off": "Отключено"
+                }
             }
         },
         "switch": {
@@ -311,6 +346,12 @@
             },
             "ac_timer_3": {
                 "name": "Кондиционирование таймер 3"
+            },
+            "charging_profile_time": {
+                "name": "Время зарядки {id}"
+            },
+            "charging_profile_timer": {
+                "name": "Таймер зарядки {id}"
             }
         },
         "button": {
@@ -322,6 +363,34 @@
             },
             "wakeup": {
                 "name": "Разбудить машину"
+            }
+        }
+    },
+    "services": {
+        "set_preferred_charging_time": {
+            "name": "Установить предпочтительное время зарядки",
+            "description": "Обновляет предпочтительное окно времени зарядки на основе профиля (местоположения).",
+            "fields": {
+                "device_id": {
+                    "name": "Профиль зарядки",
+                    "description": "Обновление профиля (местоположения) заряжаемого устройства."
+                },
+                "id": {
+                    "name": "Код времени окна",
+                    "description": "ID существующего предпочтительного окна зарядки для обновления профиля."
+                },
+                "enabled": {
+                    "name": "Включено",
+                    "description": "Должно ли это окно зарядки быть включенным."
+                },
+                "start_time": {
+                    "name": "Время начала",
+                    "description": "Время запуска окна зарядки."
+                },
+                "end_time": {
+                    "name": "Время завершения",
+                    "description": "Время окончания окна зарядки."
+                }
             }
         }
     },
@@ -359,6 +428,21 @@
     "exceptions": {
         "readonly_mode": {
             "message": "Режим \"Только чтение\" включен. Операции с командами управления отключены."
+        },
+        "camping_no_target_temperature": {
+            "message": "Невозможно запустить режим кемпинга без целевой температуры."
+        },
+        "charging_profile_not_found": {
+            "message": "Выбранное устройство не является профилем зарядки MySkoda."
+        },
+        "charging_time_not_found": {
+            "message": "Этот профиль зарядки не имеет предпочтительного окна времени зарядки с указанным ID."
+        },
+        "charging_time_update_failed": {
+            "message": "Не удалось обновить окно времени профиля зарядки."
+        },
+        "charging_timer_not_writable": {
+            "message": "Таймеры зарядки не могут быть изменены с помощью Home Assistant."
         }
     }
 }
