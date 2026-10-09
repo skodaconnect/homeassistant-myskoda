@@ -2079,7 +2079,7 @@ wheels = [
 
 [[package]]
 name = "myskoda"
-version = "2.17.0"
+version = "2.17.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiofiles" },
@@ -2092,9 +2092,9 @@ dependencies = [
     { name = "pyjwt", version = "2.12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4f/e1/c011f082aa7f8f335ba836f1fc3da5c6b6f3c5469c6b8fce1de870562226/myskoda-2.17.0.tar.gz", hash = "sha256:378427a78c9946bc86e69e07e5e6b28fdcd523710d238e68300eb34cc999148c", size = 422661, upload-time = "2026-08-18T20:12:26.703Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/62/83/f9275d98bed3ffdc543c1f8407aa6ac7f8bde814f62254f5734346210a9b/myskoda-2.17.1.tar.gz", hash = "sha256:8c8d779599367f1516169594a68860c2d5637b6e89beb4dfb752234131bf17a5", size = 915696, upload-time = "2026-08-29T08:48:20.706Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d4/40/0f5fc980b7eb8d628a9f36ccd3d2e38d88e942cb2b6eeab53561f51d9d61/myskoda-2.17.0-py3-none-any.whl", hash = "sha256:06ca508c314f1f17f6d7d2c41e51d060d4c4bc4e04376bb6b44738a4c5ba6394", size = 93689, upload-time = "2026-08-18T20:12:25.387Z" },
+    { url = "https://files.pythonhosted.org/packages/b9/02/3e59074d10681e0ceb2444501a5cb173c9651ce4c5691b31966716518fd6/myskoda-2.17.1-py3-none-any.whl", hash = "sha256:c3173bd419d0043840f8ea6e6dfa4d256966e60ad9fced4099ba942c0d763d5b", size = 94015, upload-time = "2026-08-29T08:48:19.401Z" },
 ]
 
 [[package]]
