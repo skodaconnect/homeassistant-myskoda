@@ -3,7 +3,8 @@
         "abort": {
             "already_configured": "Zariadenie už je nakonfigurované",
             "reauth_successful": "Opätovné overenie bolo úspešné.",
-            "no_entry": "Nepodarilo sa nájsť konfiguráciu MySkoda. Skontrolujte vaše logy, prosím, a otvorte problém na GitHube."
+            "no_entry": "Nepodarilo sa nájsť konfiguráciu MySkoda. Skontrolujte vaše logy, prosím, a otvorte problém na GitHube.",
+            "reconfigure_successful": "Rekonfigurácia bola úspešná."
         },
         "error": {
             "cannot_connect": "Nepodarilo sa pripojiť",
@@ -28,6 +29,14 @@
                     "password": "Heslo"
                 },
                 "description": "Zadajte prihlasovacie údaje z aplikácie MySkoda."
+            },
+            "reconfigure": {
+                "data": {
+                    "email": "Emailová adresa",
+                    "password": "Heslo"
+                },
+                "description": "Aktualizujte svoje prihlasovacie údaje do MySkoda.",
+                "title": "Rekonfigurovať MySkoda"
             }
         }
     },
@@ -41,6 +50,9 @@
             },
             "charger_lock": {
                 "name": "Zámka nabíjania"
+            },
+            "charging_profile_active": {
+                "name": "Aktívny"
             },
             "doors_lock": {
                 "name": "Zámok dverí"
@@ -99,7 +111,15 @@
         },
         "climate": {
             "climate": {
-                "name": "Klimatizácia"
+                "name": "Klimatizácia",
+                "state_attributes": {
+                    "preset_mode": {
+                        "state": {
+                            "none": "Normálny",
+                            "camping": "Kempovanie"
+                        }
+                    }
+                }
             },
             "auxiliary_heater": {
                 "name": "Nezávislé kúrenie"
@@ -196,6 +216,9 @@
             "service_event": {
                 "name": "Posledný servis"
             },
+            "camping_mode_ends_at": {
+                "name": "Režim kempovania končí"
+            },
             "software_version": {
                 "name": "Verzia softvéru"
             },
@@ -222,6 +245,54 @@
             },
             "outside_temperature": {
                 "name": "Vonkajšia teplota"
+            },
+            "overall_mileage": {
+                "name": "Celkom prejdené"
+            },
+            "overall_travel_time": {
+                "name": "Celkový čas cesty"
+            },
+            "overall_average_speed": {
+                "name": "Celková priemerná rýchlosť"
+            },
+            "overall_average_electric_consumption": {
+                "name": "Celková priemerná spotreba elektriny"
+            },
+            "overall_average_fuel_consumption": {
+                "name": "Celková priemerná spotreba paliva"
+            },
+            "last_trip_mileage": {
+                "name": "Dĺžka poslednej cesty"
+            },
+            "last_trip_travel_time": {
+                "name": "Trvanie poslednej cesty"
+            },
+            "last_trip_average_speed": {
+                "name": "Priemerná rýchlosť poslednej cesty"
+            },
+            "last_trip_average_fuel_consumption": {
+                "name": "Priemerná spotreba na poslednej ceste"
+            },
+            "charging_profile_target_state_of_charge": {
+                "name": "Cieľový stav dobíjania"
+            },
+            "charging_profile_minimum_state_of_charge": {
+                "name": "Minimálny stav dobitia"
+            },
+            "charging_profile_max_charging_current": {
+                "name": "Maximálny nabíjací prúd",
+                "state": {
+                    "maximum": "Maximum",
+                    "reduced": "Znížený"
+                }
+            },
+            "charging_profile_auto_unlock_plug": {
+                "name": "Odomknúť konektor po nabití",
+                "state": {
+                    "permanent": "Trvale",
+                    "on": "Zap.",
+                    "off": "Vyp."
+                }
             }
         },
         "switch": {
@@ -275,6 +346,12 @@
             },
             "ac_timer_3": {
                 "name": "Časovač klimatizácie 3"
+            },
+            "charging_profile_time": {
+                "name": "Čas nabíjania {id}"
+            },
+            "charging_profile_timer": {
+                "name": "Časovač nabíjania {id}"
             }
         },
         "button": {
@@ -286,6 +363,34 @@
             },
             "wakeup": {
                 "name": "Zobudiť auto"
+            }
+        }
+    },
+    "services": {
+        "set_preferred_charging_time": {
+            "name": "Nastavte preferovaný čas nabíjania",
+            "description": "Aktualizuje jedno preferované časové okno nabíjania v rámci nabíjacieho profilu (miesta).",
+            "fields": {
+                "device_id": {
+                    "name": "Nabíjací profil",
+                    "description": "Nabíjací profil (umiestnenie) zariadenia, ktoré sa má aktualizovať."
+                },
+                "id": {
+                    "name": "ID časového okna",
+                    "description": "ID existujúceho preferovaného časového okna nabíjania v tomto profile, ktoré sa má aktualizovať."
+                },
+                "enabled": {
+                    "name": "Zapnuté",
+                    "description": "Či by malo byť toto časové okno pre nabíjanie aktívne."
+                },
+                "start_time": {
+                    "name": "Čas začatia",
+                    "description": "Čas, kedy začína časové okno nabíjania."
+                },
+                "end_time": {
+                    "name": "Čas ukončenia",
+                    "description": "Čas, kedy končí časové okno nabíjania."
+                }
             }
         }
     },
@@ -323,6 +428,21 @@
     "exceptions": {
         "readonly_mode": {
             "message": "Režim len na čítanie je povolený. Operácie príkazov sú zakázané."
+        },
+        "camping_no_target_temperature": {
+            "message": "Bez zadania cieľovej teploty nie je možné spustiť režim kempovania."
+        },
+        "charging_profile_not_found": {
+            "message": "Vybrané zariadenie nie je profilom nabíjania v aplikácii MySkoda."
+        },
+        "charging_time_not_found": {
+            "message": "Tento profil nabíjania nemá pri danom ID žiadne preferované časové okno pre nabíjanie."
+        },
+        "charging_time_update_failed": {
+            "message": "Nepodarilo sa aktualizovať časové okno profilu nabíjania."
+        },
+        "charging_timer_not_writable": {
+            "message": "Časovače nabíjania nie je možné nastaviť prostredníctvom Home Assistant."
         }
     }
 }
