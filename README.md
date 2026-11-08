@@ -9,23 +9,30 @@ A [Home Assistant](https://www.home-assistant.io/) integration for Škoda vehicl
 
 ## :warning: END OF LIFE ANNOUNCEMENT :warning:
 
-**This integration will stop working in October 2026.**
+**This integration will stop working soon.**
 
-Škoda has released a [new and official **public** API](https://public.api.connect.skoda-auto.cz/docs) and has been working on a **new Home Assistant integration**. The new integration is expected to ship with Home Assistant 2026.10.
+The [official Škoda integration](https://www.home-assistant.io/integrations/skoda/) in Home Assistant Core is available since 2026.11.0. It uses a [new and official **public** API](https://public.api.connect.skoda-auto.cz/docs).
 
-As a result the current API will stop working for unofficial third-party clients such as this integration This is expected to happen later in October, after the new release of the new integration.
+Please keep in mind the first release of a new core integration is always intentionally limited in functionality. New features will be added over time. Škoda also provided an [FAQ related to the new integration](docs/skoda_ha_integration_faq.md).
 
-We have been in contact with Škoda about all of this and are collaborating on the new integration. As we focus our free time on this new work there will be little time left to respond to any new and existing issues in this project.
+- [Create new and review existing feature requests.](https://github.com/orgs/home-assistant/discussions?discussions_q=is%3Aopen+label%3A%22integration%3A+skoda%22)
+- [Create new and review existing issues](https://github.com/home-assistant/core/issues?q=is%3Aissue+label%3A%22integration%3A+skoda%22)
+
+Below you can find the latest Škoda announcement which was posted in the [Škoda EV Lounge group](https://www.facebook.com/groups/skodaevlounge).
+
+![](docs/skoda_announcement_2.png)
+---
+
+As a result the current API will stop working for unofficial third-party clients such as this integration.
+
+As we focus our free time on this new work there will be little time left to respond to any new and existing issues in this project.
 
 Many many thanks to everyone who has contributed to this project over the years. Thank you @Prior99 for helping get this project off the ground. Thanks to the maintainers @WebSpider and @dvx76. Thank you also @FarFar and @robinostlund for your work on skodaconnect/homeassistant-skodaconnect, on which this project was based.
-
-Below you can find the official Škoda announcement which was posted in the [Škoda EV Lounge group](https://www.facebook.com/groups/skodaevlounge).
-
-![](docs/skoda_announcement.png)
 
 ---
 
 - [:warning: END OF LIFE ANNOUNCEMENT :warning:](#warning-end-of-life-announcement-warning)
+- [](#)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
   - [Configuration](#configuration)
